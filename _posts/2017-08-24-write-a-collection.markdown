@@ -2,7 +2,7 @@
 layout: single
 title:  "Write a collection"
 date:   2017-08-24 19:57:11 +0100
-categories: Collection
+categories: ProgrammingSkills
 ---
 **前言**  
 記得在6月份面試的時候，有考到自己寫Stack時，應該注意什麼地方，不過那時候很緊張，只有說到使用array來建構stack會有極限值或空值的問題，後來想想，其實還有element被pop之後的記憶體問題。剛好最近在看書複習時，書中只有簡單將top index - 1來限制可取得的element，導致即使array[index]的值被return後，array[index]實際上還是存在於記憶體中。

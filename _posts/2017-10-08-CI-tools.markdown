@@ -1,0 +1,90 @@
+---
+layout: single
+title:  "新手入門 - Gitlab Continuous Integration & Deployment"
+date:   2017-10-08 14:18:11 +0100
+categories: UsefulTools
+---
+## 前言
+之前雖然有聽聞過CI(Continuous Integration)相關工具，但是一直沒有好好認真地研究，畢竟都是一個人寫，總認為自己也不太需要用到CI。直到最近開始上班了，看到了公司如何使用CI來進行build package流程，頓時覺得這工具實在很便利～而因為公司也早已經有完整架構，因此雖然看得到介面，卻還是不太清楚實際上到底是如何運作的，所以就趁雙十連假期間，決定自己來實際嘗試一下整個CI運作流程。  
+
+## 涉及內容
+1. Gitlab CI
+2. Docker
+
+## Gitlab底下的CI流程
+![Gitlab process](https://docs.gitlab.com/ee/ci/img/cicd_pipeline_infograph.png)
+<p style = "font-size:small;"> (Image reference: https://docs.gitlab.com/ee/ci/) </p>
+
+>GitLab offers a continuous integration service. If you add a **.gitlab-ci.yml file** to the root directory of your repository, and configure your GitLab project to use a **Runner**, then each commit or push, triggers your **CI pipeline**.
+
+Gitlab的流程其實蠻容易懂：  
+**(1)** 每次用戶更新程式碼(commit or push)的時候，  
+**(2)** Gitlab就會自動觸發用戶在.gitlab-ci.yml所設定好的工作流程，  
+**(3)** 並且在指定的Runner上搭建虛擬測試環境並且執行這些工作。  
+這整個流程中我覺得最重要的是如何寫好.gitlab-ci.yml這份文件，畢竟所謂的自動化測試和自動化package，其實都是依賴這份文件的流程在運作啊！由於現在IDE很方便，所以很多指令都只需要操作UI即可完成，所以該如何將這些指令寫出來，並且能在command-line模式中執行，是使用CI工具中最具挑戰的環節，這樣也能了解為什麼公司在徵求CI工程師時，具備Linux shell相關經驗是最基本條件了。  
+
+## 設定Gitlab CI
+### 1.建立Project
+在 Gitlab 中建一個Project，然後上傳code (廢話)
+### 2.設定Runner (選填)
+Runner顧名思義就是會執行.gitlab-ci.yml文件內指令的環境了。雖然在Gitlab流程中會指引用戶註冊一個Runner，不過如果只是用來一般測試，又沒有多餘的機器來當Runner，其實可以使用 Gitlab 所提供的 **Shared Runner** 就好。    
+不過，什麼時候會需要用到自己設定的Runner呢？根據官方的建議，像是當工作流程中需要一些特別認證時，就需要自己設定好一台Runner來執行。或是code可能需要連結很多外部library，如果使用標準 Shared Runner ，每次測試前就需要花點時間配置環境，那倒不如直接在local先預裝好這些library。
+>Specific Runners are useful for jobs that have **special requirements or for projects with a specific demand.** If a job has certain requirements, you can set up the specific Runner with this in mind, while not having to do this for all Runners. For example, if you want to **deploy a certain project**, you can setup a specific Runner to have the right credentials for this. The usage of tags may be useful in this case. Specific Runners process jobs using a FIFO queue.
+
+#### [ Shared Runners ]
+當建立好Project，就會自動有六組Shared Runner可以使用。可以在Project介面底下的 **[Settings]** -> **[CI/CD]** -> **[Runners settings]** 找到它們。
+![GitLab - SharedRunner]({{ site.url }}/assets/images/GitLab-CI-Shared-Runner.png)  
+在Runner底下會看到一排Tag，這個是代表Runner中預設的功能，在 .gitlab-ci.yml 中設定想要的Runner Tag，這樣在執行工作時就會由這台Runner執行，讓專案可以有適當的環境。
+
+#### [ Specific Runners ]
+如果想要設定一台Specific Runners，讓每次工作都可以在這台Runner上執行，那就必須要經過幾個設定和安裝步驟才可以。  
+1. 安裝GitLab Runner  
+[GitLab - Install GitLab Runner](http://docs.gitlab.com/runner/install/)  
+首先要先安裝 GitLab Runner ，這樣 GitLab CI 才可以發送工作任務和將結果傳回到 GitLab 。安裝方式可以直接看官網安裝方式，這個安裝步驟相對簡單，途中的一些設定也可以事後改，所以不用擔心。另外，GitLab Runner也有搭配的指令可以使用，在進行一些進階設定時會用到，在安裝時也可以搭配參考一下。  
+[GitLab - GitLab Runner Commands](https://docs.gitlab.com/runner/commands/README.html)  
+![GitLab - SharedRunner]({{ site.url }}/assets/images/GitLab-CI-Runner.png)  
+安裝和註冊好之後，就可以在 **[Runners settings]** 中看到你所設定的Runner了！
+
+2. 安裝Executors  
+接著， GitLab Runner 會透過 Executors 來執行工作。Executors簡單來說就是虛擬執行環境，像是大家很常聽到的 VirtualBox ，或是這幾年來很熱門的 Docker。而在安裝 GitLab Runner 的時候，會發現是預設 Docker 的，既然如此，那就毫不猶豫地選擇 Docker 了！（對這個實在不是很熟Orz）  
+[Docker —— 從入門到實踐](https://philipzheng.gitbooks.io/docker_practice/content/) - 想直接進行實作，可以參考這個內容  
+[Use the Docker command line](https://docs.docker.com/engine/reference/commandline/cli/) - Docker官方的command介紹，如果上面有看不懂的指令，可以在這邊找答案
+
+3. 在 Docker 中建立專案所需的image  
+安裝好 Docker ，再來就是使用 Docker 來建立所需要的虛擬環境。因為這打起來又會太長一篇，所以就先簡單帶過。實際實作辦法可以參考上面連結中的 **使用鏡像** 和 **啟動容器** 章節。舉例來說，因為我的專案是用c++寫成的，所以我就先 pull Docker 官方提供的標準 gcc 環境 image，然後根據這個 image 來啟動 container ，並且在這個 container 中下載安裝我需要的 library ，最後使用 commit 來建立出新的 image。
+
+4. 修改 **config.toml**   
+再來，最重要的是該如何讓 Gitlab Runner 來讀取local端的 image 建立出正確的虛擬環境。因為 Gitlab Runner 在執行時，是預設所有的 image 都由 Docker 中 pull 下來的，這樣就代表即使本機端已經有設定好 image ，Gitlab Runner 在執行時還是會出現沒有該 image 檔的錯誤，因此要調整一下 config 內容，多加個一行就好，這樣就可以讀取本機端的 image。  
+![GitLab - Config]({{ site.url }}/assets/images/GitLab-CI-Config.png)  
+[GitLab - Using Docker images](https://docs.gitlab.com/ce/ci/docker/using_docker_images.html) - 詳細修改方式可以參考這篇說明
+>By default, the executor will only pull images from Docker Hub, but this can be configured in the gitlab-runner/config.toml by setting the Docker pull policy to allow using local images.
+
+### 撰寫.gitlab-ci.yml文件
+最後，就是在本機端 Project 根目錄中，新建 .gitlab-ci.yml 檔案，然後 push 上 Gitlab！簡單範例如下：
+```yaml
+# Use local docker image
+image: gamecontainer:latest
+
+test:
+  stage: test
+  # The sample command of building the program.
+  script:
+    - cd CI/
+    - cmake CMakeLists.txt
+    - make
+    - ./bin/UnitTest
+  # The build will only run when develop branch updates.
+  only:
+    - develop
+  # Target runner.
+  tags:
+    - mac
+```
+簡單來說，當 Gitlab Runner 收到工作任務之後，會先根據你指定的 image 來配置虛擬執行環境，然後將你在 GitLab 中的專案 clone 下來，接著執行在 script 中所寫入的流程。像是範例中，當專案下載好之後，會執行CMakeLists.txt和make來compile C++。
+[GitLab - Configuration of your jobs with .gitlab-ci.yml](https://docs.gitlab.com/ee/ci/yaml/) - 關於更多 .gitlab-ci.yml 規範可以參考這篇文章。
+### 結果圖
+執行列表
+![GitLab - Config]({{ site.url }}/assets/images/GitLab-CI-Pipeline.png)  
+
+詳細執行內容（以 Google unit test 為例）
+![GitLab - Config]({{ site.url }}/assets/images/GitLab-CI-Pipeline-Result.png)  

@@ -2,7 +2,7 @@
 layout: single
 title:  "Jekyll"
 date:   2017-08-24 10:55:11 +0100
-categories: Jekyll
+categories: UsefulTools
 ---
 這是第一次用`Jekyll`寫紀錄，雖然我Project是使用Jekyll的概念來開發的，不過實際上我並沒有真的使用它過，主要原因是怕自己想法會因為這樣而被定型，所以當初在開發的時候，只有參考Jekyll網站上的流程圖而已。現在Project的Prototype已完成，就來使用一下，看有什麼可以改進的地方。就整體架構來說，其實差沒有很多，不過Jekyll在程式上分得更細，提供相當多的參數供開發者設定，以及很有彈性而且完整的template render，這些都是值得我後續學習。
 
