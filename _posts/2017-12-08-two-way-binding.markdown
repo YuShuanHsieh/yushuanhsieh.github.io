@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Angular1 - Two way data binding"
+title:  "AngularJS - Two way data binding"
 date:   2017-12-08 21:00:00 +0800
 categories: WebDevelopment
 ---
