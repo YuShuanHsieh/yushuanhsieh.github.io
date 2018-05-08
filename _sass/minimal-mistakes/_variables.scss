@@ -55,12 +55,13 @@ $lighter-gray               : mix(#fff, $gray, 90%) !default;
 
 $body-color                 : #fff !default;
 $background-color           : #fff !default;
-$code-background-color      : #fafafa !default;
+$code-background-color      : rgba(236, 218, 179, 0.253) !default;
 $code-background-color-dark : $light-gray !default;
 $text-color                 : $dark-gray !default;
 $border-color               : $lighter-gray !default;
+$border-color-opacity       : rgba(91, 124, 141, 0.678) !default;
 
-$primary-color              : #7a8288 !default;
+$primary-color              : #5B7C8D !default;
 $success-color              : #62c462 !default;
 $warning-color              : #f89406 !default;
 $danger-color               : #ee5f5b !default;
