@@ -88,6 +88,7 @@ array[5] = 6; // 宣告 Array indexed property 5 的值為 6
 2. 避免讓 Array object 產生空缺，造成 HOLEY Elements。例如不要使用 new Array，盡量不要使用 Array index 來直接插入值。
 3. 在處理 Array object 時，使用 `for of` `foreach` 等方式。
 4. 使用 Array 來產生 array object，而不是自己產生 array-like 的 object，以便讓引擎可以根據 Array prototype 的 methods 來進行效能提升。
+
 ```javascript
 // Array 是一個 property name 為 indexed number 的 object，所以所謂的 Array-like object 就是：
 const array = {
@@ -96,6 +97,7 @@ const array = {
   3: 'name3'
 }
 ```
+
 # Reference
 1. https://v8project.blogspot.tw/2017/09/elements-kinds-in-v8.html
 2. https://www.youtube.com/watch?v=EhpmNyR2Za0
