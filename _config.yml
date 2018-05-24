@@ -79,7 +79,7 @@ analytics:
 author:
   name             : "Yu-Shuan"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              :
+  bio              : "focus"
   location         : "Taiwan"
   email            :
   uri              :
