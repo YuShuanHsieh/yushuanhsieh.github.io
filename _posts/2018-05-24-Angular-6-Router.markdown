@@ -9,7 +9,7 @@ categories: WebDevelopment
 
 # Router Navigation
 ## Overview
-![router.png](quiver-image-url/69D060F8CC6E9B36187E40CB5286CD48.png =537x161)
+![router.png]({{ site.url }}/assets/images/router.png)
 
 首先，先來說一下大致流程，當使用者點擊設有 `routerLink` attribute 超連結時（或是在 component 裡面 trigger router navigation），設置的連結會先經過分析步驟，然後透過 Router 找出對應的 Component，再將此 Component 呈現在設置好 `<router-outlet></router-outlet>`  的地方。
 
