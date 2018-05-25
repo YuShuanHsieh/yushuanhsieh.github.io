@@ -77,25 +77,25 @@ analytics:
 
 # Site Author
 author:
-  name             : "Yu-Shuan"
+  name             : "Yu-Shuan 謝小徹"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "focus"
+  bio              : "focusing on programming optimization and web/app development."
   location         : "Taiwan"
-  email            :
-  uri              :
+  email            : "cjamhe01385@gmail.com"
+  uri              : "https://yushuanhsieh.github.io/"
   bitbucket        :
   codepen          :
   dribbble         :
   flickr           :
-  facebook         :
+  facebook         : "謝小徹 cjamhe01385"
   foursquare       :
-  github           :
+  github           : "https://github.com/YuShuanHsieh"
   gitlab           :
   google_plus      :
   keybase          :
   instagram        :
   lastfm           :
-  linkedin         :
+  linkedin         : "https://www.linkedin.com/in/yu-shuan-hsieh-96994491/"
   pinterest        :
   soundcloud       :
   stackoverflow    : # "123456/username" (the last part of your profile url, e.g. http://stackoverflow.com/users/123456/username)
