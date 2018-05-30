@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Angular - <ng-template> & <ng-container>"
+title:  "Angular - ng-template & ng-container"
 date:   2018-05-29 12:00:00 +0800
 categories: WebDevelopment
 ---
@@ -36,6 +36,9 @@ categories: WebDevelopment
 > You can access a `TemplateRef` via a directive placed on a <ng-template> element (or directive prefixed with *) and have the TemplateRef for this Embedded View injected into the constructor of the directive using the TemplateRef Token. 
 
 引入 `TemplateRef` 之後，事情就簡單多啦，只要判斷 @input 的 condition 是否為 true，是的話就在 viewContainerRef 中插入 templateRef，這樣呈現就會是我們想要的結果。
+
+### 小結
+`<ng-template>` 提供我們定義 template 的方式，而放置在 `<ng-template>` 的 directive 可以透過 TemplateRef 取得定義的 template。
 
 ## ng-container
 說完 `<ng-template>`，再來談談 `<ng-container>`，其實 `<ng-container>` 比 `<ng-template>` 更單純，就是一個放置 DOM 的容器。而同樣地， `<ng-container>` 這個 Tag 並不會顯示在 Html DOM 上，僅供 Angular 辨認使用，所以也不用想在上面加入各種 CSS Style。
@@ -99,6 +102,6 @@ NgTemplateOutlet 並用啊！為什麼沒有提到這個？**
 ```
 
 ## Reference
-1.https://angular.io/guide/structural-directives
+1. https://angular.io/guide/structural-directives
 2. https://www.youtube.com/watch?v=PTwKhxLZ3jI
 3. https://ithelp.ithome.com.tw/users/20020617/ironman/1263
