@@ -78,7 +78,7 @@ analytics:
 # Site Author
 author:
   name             : "Yu-Shuan 謝小徹"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/profile.jpg"
   bio              : "focusing on programming optimization and web/app development."
   location         : "Taiwan"
   email            : "cjamhe01385@gmail.com"
