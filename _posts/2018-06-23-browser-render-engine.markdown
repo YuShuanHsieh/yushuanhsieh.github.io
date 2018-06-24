@@ -19,6 +19,7 @@ categories: WebDevelopment
 </head>
 <body>
   My Website
+  <script src="./main.js"></script>
 </body>
 </html>
 ```
@@ -51,13 +52,15 @@ HTML parser 會將 HTML 檔案解析成樹狀結構的 `DOM`。相同地， CSS 
 從上面的流程可以知道，瀏覽器從 server 取得檔案到將頁面渲染完成，需要好幾個步驟，而一般使用者又會預期網頁在四秒內就要能呈現完成，到底該如何處理這些流程，會是重要的問題。
 
 ### Main Thread
-首先，HTML / CSS Parsing 到組成 Render Tree 以及 Paint 這整個主要流程，都是由 `Main Single Thread` 來處理。而這也意味著只要有其中一個流程需要執行比較長的時間，就會讓整個畫面停滯住。舉例來說，如果我寫了一個樣式設定複雜的 CSS 檔案，當瀏覽器在進行 parsing 時，就需要花費比較多時間將 CSS 轉換成樹狀結構的 CSSOM，而這處理期間，使用者只會看到頁面可能呈現一片空白，必須等到整個 Render Tree 出來並且被繪製，才會看到完整頁面。
+首先，從 HTML Download 到組成 Render Tree 以及 Paint 這整個主要流程，都是由 `Main Single Thread` 來處理。而這也意味著只要有其中一個流程需要外部資源或是執行比較長的時間，就會讓整個畫面停滯住(Render-Blocking)。舉例來說，HTML 中有一個從 server 端引入的 CSS 檔案，由於 CSSOM 在 Render Tree 中是必要的，所以 Main Thread 會被暫停住，等待 CSS 檔案下載完畢後進入 CSS Parsing ，而這處理期間，使用者可能會看到頁面呈現一片空白（或是不完整畫面），必須等到整個 Render Tree 出來並且被繪製，才會看到完整頁面。
 
-根據上面所述，這對使用者來說可能不會是好的體驗，因此現在瀏覽器會盡可能地提早將頁面繪製出來，即使**這個頁面並不是完整頁面**。理論上來說，繪製的流程必須等到 Render Tree 建構完成之後才會發生，不過瀏覽器實際在執行時會讓第一次繪製在 Render Tree 建構完成之前發生。
+根據上面所述，這對使用者來說可能不會是好的體驗，因此現在瀏覽器會盡可能地提早將頁面繪製出來，即使**這個頁面並不是完整頁面**。理論上來說，繪製的流程必須等到 Render Tree 建構完成之後才會發生，不過瀏覽器實際在執行時會讓第一次繪製在 Render Tree 建構完整之前發生。
 
 ![rendering-engine-2.png]({{ site.url }}/assets/images/rendering-engine-2.png)
 
-但即使如此，網站還是要等到整個渲染出來才有其意義在，所以雖然瀏覽器會提前將部分畫面顯示出來，還是不影響本節所要討論的重點：**當 HTML / CSS Parsing 以及 JavaScript 執行或是在處理版面配置繪製時，都需要佔用 Main Thread，進而影響頁面顯示時間。**
+即使如此，網站還是要等到整個渲染出來才有其意義在，所以雖然瀏覽器會提前將部分畫面顯示出來，但只是為了提高用戶體驗，不影響本節所要討論的重點：**當 HTML / CSS Parsing 以及 JavaScript 執行或是在處理版面配置繪製時，都需要佔用 Main Thread，進而延長頁面顯示所需的時間。**
+
+當然我們可以透過一些手段來加快 Main Thread 的流程，例如使用 `<script async>` 的非同步載入檔案來避免 Main Thread 被暫停住，或是盡可能地只先載入必要內容。不過這邊只先大概說明，後續文章會進行比較完整的補充。
 
 ### Compositor Thread
 [Compositor Thread Architecture](https://dev.chromium.org/developers/design-documents/compositor-thread-architecture)
