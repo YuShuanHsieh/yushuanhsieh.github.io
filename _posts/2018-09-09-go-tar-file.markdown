@@ -20,7 +20,7 @@ categories: Go
 ### 1. Create a Tar.Writer
 在打包檔案時，首要先做的就是建立一個 tar file 的 writer，後續才能將需要打包的檔案 file 和 header 寫入到 tar file 中。
 
-```Go
+```go
 // 建立一個 tar file 的檔案位置.
 target := filepath.Join(tarPath, fmt.Sprintf("%s.tar", tarName))
 // 根據上面所建立的檔案位置來創建檔案. (回傳值為 *io.File，實作了 io.writer interface)
@@ -35,7 +35,7 @@ tarWriter := tar.NewWriter(tarfile)
 ### 2.讀取要打包的檔案
 接下來，我們要一一讀取需要打包的檔案們，以便後續將這些檔案寫入到 tar.Writer 中。透過標準函式庫 `filepath.Walk()` 就能輕鬆走訪各 folder 底下的檔案群。
 
-```Go
+```go
 source := "<source folder>"
 
 // Check source is existing.
@@ -53,14 +53,14 @@ filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 ### 3. 將要打包的檔案寫入到 tar.Writer 中
 上面有提到，在打包 file 時，需要包含其對應的 `header`，因此我們可以透過 `tar.FileInfoHeader` 的幫助來去擷取 `io.File` 內的資訊，然後得到我們所要的 `header`。
 
-```Go
+```go
 header, err := tar.FileInfoHeader(info, info.Name())
 // func FileInfoHeader(fi os.FileInfo, link string) (*Header, error)
 // 這邊的 link 是提供給 file mode 為 ModeSymlink 時使用。
 // 詳細可以參考 https://en.wikipedia.org/wiki/Symbolic_link
 ```
 
-```Go
+```go
 // 這邊要特別注意的是， io.File Name 不包含路徑，所以如果你的檔案是放在其他子 folder 底下，要記得重新設定 `header.name`。如果沒有重新設定的話，就不會放到對應 folder 底下啦。
 header.Name = filepath.Join(baseDir, strings.TrimPrefix(path, source))
 // strings.TrimPrefix(path, source) 這個用意是為了去除 source path
@@ -68,7 +68,7 @@ header.Name = filepath.Join(baseDir, strings.TrimPrefix(path, source))
 
 有了 `header` 之後，就把它寫入 tar.Writer 吧！
 
-```Go
+```go
 if err := tarWriter.WriteHeader(header); err != nil {
 	return err
 }
@@ -76,7 +76,7 @@ if err := tarWriter.WriteHeader(header); err != nil {
 
 寫入了 `header` 之後，再把 file 內容也寫進去。
 
-```Go
+```go
 // 打開檔案
 file, err := os.Open(path)
 if err != nil {
@@ -90,14 +90,14 @@ _, err = io.Copy(tarWriter, file)
 ### 4. 關閉 tar.Writer 
 當把所有檔案和 `header` 寫到 tar file 之後，就可以把 tar.Writer 和 file stream 關掉。
 
-```Go
+```go
 tarfile.Close()
 tarWriter.Close()
 ```
 
 ## Source Code
 
-```Go
+```go
 // Archive Create a tar file with multiple resources
 func Archive(sources []string, tarPath, tarName string) error {
 
