@@ -121,8 +121,8 @@ napi_value hello_word (napi_env env, napi_callback_info info) {
   // 不過 napi_value 無法直接被 c/c++ code 使用，所以要再使用 N-API，來獲得實際的值
   char str1[100], str2[100];
   size_t str_size;
-  napi_get_value_string_utf8(env, args[0], str1, MAX_STRING_LENGTH, &str_size);
-  napi_get_value_string_utf8(env, args[1], str2, MAX_STRING_LENGTH, &str_size);
+  napi_get_value_string_utf8(env, args[0], str1, NAPI_AUTO_LENGTH, &str_size);
+  napi_get_value_string_utf8(env, args[1], str2, NAPI_AUTO_LENGTH, &str_size);
   
   printf("%s, %s \n", str1, str2); // output: Hello, world
   
