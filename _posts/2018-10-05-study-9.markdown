@@ -1,0 +1,72 @@
+---
+layout: single
+title:  "9月份自我學習日誌回顧"
+date:   2018-10-05 08:00:00 +0800
+categories: WebDevelopment
+---
+## 9月份目標
+- 把 Effective Go 看完
+- 複習 JavaScript 概念，釐清各細節
+- 工作上用到的 Protocol 相關知識
+
+## 目標回顧
+### 1. 把 Effective Go 看完
+
+已看完，印象比較深刻的部分包含：
+#### [The difference between `new` and `make`](https://golang.org/doc/effective_go.html?#allocation_new)
+ > `New` - It's a built-in function that allocates memory, but unlike its namesakes in some other languages it does not initialize the memory, it only zeros it. 
+
+> `make` - It creates slices, maps, and channels only, and it returns an initialized (not zeroed) value of type T (not *T). The reason for the distinction is that these three types represent, under the covers, references to data structures that must be initialized before use. 
+
+#### [Go Slices: usage and internals](https://blog.golang.org/go-slices-usage-and-internals)
+之前也曾經寫過關於 Go Slice 和 Array 不同之處(https://yushuanhsieh.github.io/go/go-fundamental-array/)，我覺得這挺重要的，所以多複習一下。
+
+#### [The init function](https://golang.org/doc/effective_go.html?#init)
+> `init` is called after all the variable declarations in the package have evaluated their initializers, and those are evaluated only after all the imported packages have been initialized.
+
+執行順序很重要： All imported packages initialized -> variables in the packages initialized -> init function
+
+#### [Embedding interface and struct](https://golang.org/doc/effective_go.html?#embedding)
+> Go does not provide the typical, type-driven notion of subclassing, but it does have the ability to “borrow” pieces of an implementation by embedding types within a struct or interface.
+
+#### [Share by communicating](https://golang.org/doc/effective_go.html?#sharing)
+> Do not communicate by sharing memory; instead, share memory by communicating.
+
+有寫 Go 的可能都知道 `Goroutines` 和 `Channels` 怎麼寫，不過這邊主要是在說概念，讓開發者更清楚其用意。
+
+### 2.複習 JavaScript 概念，釐清各細節
+
+複習 JavaScript 原因是因為平常太常寫 JavaScript 了，反而忽略一些細節，所以特別買了 [JavaScript for impatient programmers](http://exploringjs.com/impatient-js/) 這本電子書來看。雖然書的名稱很寫實，不過內容卻寫的很不錯，有涵蓋到各概念以及 ES6 部分，值得一看。
+
+### 3. 工作上用到的 Protocol 相關知識
+目前常用到的 Protocol 包含 `MQTT` / `HTTP` / `WEB Socket` / `Modbus` 等，這個月主要著重在整個 Overview 概念上，並且有看一點 Protocol 實作細節，像是 MQTT, Modbus message format 等。之後學習會比較深入在 Protocol 原理細節，讓自己對於 Protocol 有更完整的理解。
+
+## 每日學習紀錄
+- 9/30: `Message Queue` concept
+- 9/29: Dig into `MQTT`
+- 9/28: Effective Go - Share by communicating, `Channel`
+- 9/27: `IPC`, `RPC`, communication between thread.
+- 9/26: `Node-Red` unsubscribe, connected state, C memory pointer
+- 9/25: Effective Go - `Embeded interface`
+- 9/22 ~ 9/24 中秋節放假。
+- 9/21: `N-API` safe thread function call and basic concept about `V8`
+- 9/20: `N-API` practice with Node-Red
+- 9/19: `MQTT` broker / `N-API`
+- 9/18: OS book 120 - 129 Process concept / Go Effective Go Allocation and init function
+- 9/17: `Node-Red` concept
+- 9/16: Go - return Channel function
+- 9/15: Go lib - `bufio` / Understand the basic concept of I/O system call unix
+- 9/14: Design Pattern - `State Pattern` and implement with Go / Tag Service
+- 9/13: JavaScript: Functions / Linux system, network, tty.
+- 9/12: OS chapter 2 (v1)
+- 9/11: Go - `Http Chuncked data` and Closenotify channel / context.Context
+- 9/10: Go - Go channel
+- 9/09: Go - Understand archive/tar lib and modify the lib (New Post: https://yushuanhsieh.github.io/go/go-tar-file/)
+- 9/08: Go - `encoding/json` practice
+- 9/07: Go - Implement Web Socket with go 
+- 9/06: Go - Dig into `Web socket` protocol
+- 9/05: Go - `Web socket` concept
+- 9/04: Go - command line lib.
+- 9/03: Go - standard lib practices.
+- 9/02: Http upload file and parse files
+- 9/01: Go sync.waitGroup, tar and copy files with Go libs. Drone.CI
