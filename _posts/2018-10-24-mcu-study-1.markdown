@@ -1,0 +1,74 @@
+---
+layout: single
+title:  "[自學]微處理機系統實驗 - Nucleo-64 development board"
+date:   2018-10-24 08:00:00 +0800
+categories: MCU
+---
+## 前言：
+在英國的時候，學校大多專注在純軟開發課程上，例如敏捷開發(Agile Development), Web Development, database 等。其中有一堂課令我印象深刻，就是用 logic Unit, MUX 零件自組 16 Instruction Processor，然後自己手動按 Clock 去 fetch / execute instrction，透過這樣的學習，讓我更清楚整個電腦實際運作 Code 的流程。
+
+自從經過這樣的學習後，對於 Processor 總是有種幻想，雖然回到台灣之後都是在做純軟工作，不過還是很希望可以接觸到更多相關知識。幸好，在交大課程找到 `微處理機系統實驗` 和 `嵌入式系統設計概論與實作` 這兩堂課程，其中**曹孝櫟教授**教的非常詳細又很有重點，讓我瞬間變他的腦粉啊 <3
+
+由於學的很開心，也收穫很多，就來記錄一下學習過程。
+
+## 課程連結
+
+
+## Nucleo-64 development board
+這堂課是使用 `Nucleo` 系列板子，Processor 是 `ARM Cortex-4M`，所以就也買了類似的開發板來玩玩。我是從 [物聯網科技](https://www.taiwaniot.com.tw/) 這邊買的，寄件速度快，有可以超商取貨，材料種類又多，很推薦這個網站。
+
+至於開發板，我是買 [NUCLEO-F411RE](https://www.taiwaniot.com.tw/product/nucleo-f411re-stm32f411re-mbed)，記憶體配置和課程所用的開發板略有不同，但是說明手冊差不多，這樣在看課程時比較好做對照。因為是菜鳥初買板子，不知道開發板沒有附上 mini USB 轉接線，所以又匆忙跑去買 QQ。另外就是其他電子零件像是 LED 燈 / 顯示模組 / 排線 / keypad 等也都是課程會用到，需要另外買，不過都很便宜，所以可以一次補齊。
+
+### 電子元件項目整理
+- NUCLEO-F411RE 開發板 (可以使用 Arduino 周邊模組)
+- mini USB 轉 USB 線
+- 排線數條
+- MAX7219 8 位 LED 模組 
+- Arduino 4×4 keypad
+
+其他像是單個 LED 燈 / Button 等，因為開發板本來就有內建一個，所以就不買。
+
+## Setup Dev Environment
+### 開發工具
+#### Software - SW4STM32
+課程上使用 `SW4STM32` 這個開發工具做開發，因為我是用 macbook，而它剛好有支援 macbook 不過官方手冊也有提供像是 `TrueSTUDIO` 等開發工具教學，所以也可以改用其他工具來開發。
+
+不過安裝這軟體需要一個小技巧，如果你剛從官網下載完檔案，會是一個 `install_sw4stm32_macos_64bits-v2.6.run` 的 file，此時透過 bash shell 在 terminal 執行：
+
+```
+/bin/bash install_sw4stm32_macos_64bits-v2.6.run
+```
+
+就會解壓縮，並執行 jar 檔案來安裝這套軟體了。(仔細看 `install_sw4stm32_macos_64bits-v2.6.run` 這個 file，可以看到 bash 指令和一大串資料，所以才可以使用 bash 來執行)
+
+### Debugger
+#### ST-LINK/V2
+這個開發板本身有內建 `ST-LINK/V2`，這是提供給 `STM8` 和 `STM32` Debug 工具。透過 ST-LINK/V2 ，在執行 debug 模式時，就可以監看包含 General 和 I/O 的 Register 狀況，並且可以知道自己寫的程式正不正確。
+
+> 在 NUCLEO-F411RE 內建的 ST-LINK/V2 僅提供 `SWD (Serial Wire Debug)`Interface 去連接 STM32 Processor，但如果是外接的 ST-LINK/V2，就可以多支援 `JTAG (Joint Test Action Group)`。
+
+`ST-LINK/V2` Debugger 的串接流程如下：
+
+#### OpenOCD
+在 Debug 之前，必須先安裝 `OpenOCD` 軟體。OpenOCD 主要用來連接 ST-LINK 進而實現 debug 行為，當使用者在按下 Debug 按鈕，會啟動 OpenOCD ，它先進行設定來透過 USB 連接到 ST-LINK，然後使用 `3333` port 以便與 GDB 交換訊息。 此外還會使用 `4444` port 來接收使用者所下的指令。
+
+如果查看 openOCD 的文件，會發現它需要一些 configuation 文件來進行設定，不過如果使用 `SW4STM32` ，那使用者在選擇 device 型號階段，這樣的設定文件就會由系統自動設定完成。
+
+此外，我們在安裝 `SW4STM32` 軟體時，會發現 `ST-LINK Server` 這個選擇性的軟體安裝， `ST-LINK Server` 可以用來將 debug inforation 傳給多個 Client，如此一來就可以同時使用不同軟體來接收 debug info。不過，在單純 Debug 情況下，其實這軟體沒有必要，因此不一定要安裝。
+
+#### ST-LINK/V2 Connection Status
+最後，要怎樣知道 ST-LINK/V2 已經和 PC 連接完成了呢？開發板上有一個 `LD1` 的 LED 燈，可以讓我們知道 ST-LINK/V2 和 PC 的連接狀況。通常可能會遇到 LD1 燈顯示**紅色閃爍**，代表它正在連接或是還沒有連接。如果連接成功，會**持續亮紅色燈不閃爍**。透過這樣的方式，我們就可以很快地知道連接狀態了！
+
+> • Slow blinking Red/Off: at power-on before USB initialization
+• Fast blinking Red/Off: after the first correct communication between the PC and
+ST-LINK/V2-1 (enumeration)
+• Red LED On: when the initialization between the PC and ST-LINK/V2-1 is complete
+• Green LED On: after a successful target communication initialization
+• Blinking Red/Green: during communication with target
+• Green On: communication finished and successful
+• Orange On: Communication failure
+
+## Reference
+- [微處理機系統實驗 Microprocessor System Lab](http://ocw.nctu.edu.tw/course_detail.php?bgid=9&gid=0&nid=572)
+- [NUCLEO-F411RE](https://www.st.com/en/evaluation-tools/nucleo-f411re.html)
+- [Setting up a GCC/Eclipse toolchain for STM32Nucleo ](https://www.carminenoviello.com/2015/01/07/setting-gcceclipse-toolchain-stm32nucleo-part-2/)
