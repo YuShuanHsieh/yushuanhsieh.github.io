@@ -17,12 +17,12 @@ categories: MCU
 ## Nucleo-64 development board
 這堂課是使用 `Nucleo` 系列板子，Processor 是 `ARM Cortex-4M`，所以就也買了類似的開發板來玩玩。我是從 [物聯網科技](https://www.taiwaniot.com.tw/) 這邊買的，寄件速度快，有可以超商取貨，材料種類又多，很推薦這個網站。
 
-至於開發板，我是買 [NUCLEO-F411RE](https://www.taiwaniot.com.tw/product/nucleo-f411re-stm32f411re-mbed)，記憶體配置和課程所用的開發板略有不同，但是說明手冊差不多，這樣在看課程時比較好做對照。因為是菜鳥初買板子，不知道開發板沒有附上 mini USB 轉接線，所以又匆忙跑去買 QQ。另外就是其他電子零件像是 LED 燈 / 顯示模組 / 排線 / keypad 等也都是課程會用到，需要另外買，不過都很便宜，所以可以一次補齊。
+至於開發板，我是買 [NUCLEO-F411RE](https://www.taiwaniot.com.tw/product/nucleo-f411re-stm32f411re-mbed)，記憶體配置和課程所用的開發板略有不同，但是說明手冊差不多，這樣在看課程時比較好做對照。因為是菜鳥初買板子，不知道開發板沒有附上 mini USB 轉接線，所以又匆忙跑去買 QQ。另外就是其他電子零件像是 LED 燈 / 顯示模組 / 杜邦線 / keypad 等也都是課程會用到，需要另外買，不過都很便宜，所以可以一次補齊。
 
 ### 電子元件項目整理
 - NUCLEO-F411RE 開發板 (可以使用 Arduino 周邊模組)
 - mini USB 轉 USB 線
-- 排線數條
+- 杜邦線數條
 - MAX7219 8 位 LED 模組 
 - Arduino 4×4 keypad
 
@@ -31,9 +31,9 @@ categories: MCU
 ## Setup Dev Environment
 ### 開發工具
 #### Software - SW4STM32
-課程上使用 `SW4STM32` 這個開發工具做開發，因為我是用 macbook，而它剛好有支援 macbook 不過官方手冊也有提供像是 `TrueSTUDIO` 等開發工具教學，所以也可以改用其他工具來開發。
+課程上使用 `SW4STM32` 這個開發工具做開發，因為我是用 macbook，而它剛好有支援 macbook 安裝。另外，官方手冊也有提供像是 `TrueSTUDIO` 等開發工具教學，所以也可以改用其他工具來開發。
 
-不過安裝這軟體需要一個小技巧，如果你剛從官網下載完檔案，會是一個 `install_sw4stm32_macos_64bits-v2.6.run` 的 file，此時透過 bash shell 在 terminal 執行：
+不過安裝 SW4STM32 軟體需要一個小技巧，如果你剛從官網下載完檔案，會是一個 `install_sw4stm32_macos_64bits-v2.6.run` 的 file，此時需透過 bash shell 在 terminal 執行：
 
 ```
 /bin/bash install_sw4stm32_macos_64bits-v2.6.run
@@ -48,11 +48,12 @@ categories: MCU
 > 在 NUCLEO-F411RE 內建的 ST-LINK/V2 僅提供 `SWD (Serial Wire Debug)`Interface 去連接 STM32 Processor，但如果是外接的 ST-LINK/V2，就可以多支援 `JTAG (Joint Test Action Group)`。
 
 `ST-LINK/V2` Debugger 的串接流程如下：
+![openocd.png]({{ site.url }}/assets/images/openocd.png)
 
 #### OpenOCD
-在 Debug 之前，必須先安裝 `OpenOCD` 軟體。OpenOCD 主要用來連接 ST-LINK 進而實現 debug 行為，當使用者在按下 Debug 按鈕，會啟動 OpenOCD ，它先進行設定來透過 USB 連接到 ST-LINK，然後使用 `3333` port 以便與 GDB 交換訊息。 此外還會使用 `4444` port 來接收使用者所下的指令。
+從上圖可知，在執行 Debug 之前，必須先安裝 `OpenOCD` 軟體。OpenOCD 主要用來連接 ST-LINK 進而實現 debug 行為，當使用者在按下 Debug 按鈕，會啟動 OpenOCD ，它先進行設定以透過 USB 連接到 STM32 上的 ST-LINK，然後使用 `3333` port 與 GDB 交換訊息。 此外還會使用 `4444` port 來接收使用者所下的指令。（意思是，使用者可以連接到這個 port，接著輸入來查看 STM32 processor 執行情形）
 
-如果查看 openOCD 的文件，會發現它需要一些 configuation 文件來進行設定，不過如果使用 `SW4STM32` ，那使用者在選擇 device 型號階段，這樣的設定文件就會由系統自動設定完成。
+上面有提到，在啟動 openOCD 時，它需要先進行設定，才可以正確地把程式放到 processor 上。而這個設定檔會包含像是 processor 型號等，不過如果使用 `SW4STM32` ，那使用者在選擇 device 型號階段，這樣的設定文件就會由系統自動設定完成。
 
 此外，我們在安裝 `SW4STM32` 軟體時，會發現 `ST-LINK Server` 這個選擇性的軟體安裝， `ST-LINK Server` 可以用來將 debug inforation 傳給多個 Client，如此一來就可以同時使用不同軟體來接收 debug info。不過，在單純 Debug 情況下，其實這軟體沒有必要，因此不一定要安裝。
 
