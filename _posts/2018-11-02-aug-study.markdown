@@ -1,0 +1,47 @@
+---
+layout: single
+title:  "10月份自我學習日誌回顧"
+date:   2018-11-02 08:00:00 +0800
+categories: MCU
+---
+## 前言
+這次十月份的學習方向和預設有點不太一樣，主要是因為某天在因緣際會之下，接觸到交大開放式課程 `微處理機系統實驗 Microprocessor System Lab.`，覺得實在是太有趣了，所以就欲罷不能的聽下去，順便把一些相關教學材料也買齊，好好學一下 MCU 。可以預知，接下來會繼續上曹孝櫟老師的 `嵌入式系統設計概論與實作 Introduction to Embedded Systems Design and Implementation` ，剛好本身也是在 IOT 產業，每天都要接觸到  Embedded Systems，這老師說的很好，讓我學習到很多 :D
+
+
+## 預設目標
+1. Protocol proctise MQTT and modbus
+2. Operating System Book
+3. Implementation: C (c-example) 
+
+## 每日學習內容
+- 10/31: Review STM32 Timer Configuration - OSI -> PLL -> SYSCLK, AHB, APB
+- 10/30: USART - 1
+- 10/29: LCD lecture - 字形檔 / display mem addr / cg rom / cg ram
+- 10/28: Implement 7 segment LED and Interrupt and Exception 2
+- 10/27: Interrupt and Exception 1
+- 10/26: How to use Advanced Timer and Counter
+- 10/25: Basic Timer concept and how to calculate correct time period. The concept of general timer and advanced timer
+- 10/24: Got a board and practice basic I/O output. and blog post.
+- 10/23: The algorithm of page replacement. Memory - map file (such as 顯示卡)
+- 10/22: Virtual Memory - Demand Page / GPIO Input setting and DIP Switch
+- 10/21: STM32 General purpose I/O configuration, memory map
+- 10/20: Qemu enviorment / ARM STM 32 base assembly language
+- 10/19: Page Table - Outer table, Hashtable / Modbus slave daemon implement
+- 10/18: Parse Modbus Slave Data
+- 10/17: Page Table and Mapping. (Page, Offset, Page Size, Byte Address)
+- 10/16: Swap (mid-term scheduler) / Memory allocation - page, frame | Modbus slave data format parse
+- 10/15: Implement sjf scheduler
+- 10/14 : Process Syncchoronization
+- 10/13: Implement Hashmap with a effective way / C unit test using Check framework.
+- 10/12: Process Syncchoronization 204 - 207
+- 10/11: C Source code trace: How to use & and FNV hash fun. The effective way to create hashmap. 
+- 10/10: EDF scheduling, Share scheduling, Linux CFS  scheduling.
+- 10/9: Protocol packet format study
+- 10/8: Real-time Process Schedulers / C - How to use define # and ## 
+- 10/7: thread_pool
+- 10/6: C - pthread / sem_wait / pthread_cond_wait
+- 10/5: 星期五，休息
+- 10/4: CPU scheduler concept
+- 10/3: something you should note about using threads. Signal / thread pools
+- 10/2: multi thread - thread content, models, and Pthread.
+- 10/1: `RPC` concept (book 154 -160) / Linux `Netcat` / `Stub` class
