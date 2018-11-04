@@ -28,9 +28,9 @@ categories: MCU
 
 其他像是單個 LED 燈 / Button 等，因為開發板本來就有內建 User Button 和 LED2，所以就不買。
 
-## Setup Dev Environment
-### 開發工具
-#### SW4STM32 (IDE)
+## Dev Environment
+### IDE
+#### SW4STM32
 課程上是使用 [SWSTM32](http://www.openstm32.org/HomePage) IDE 來開發， `SW4STM32` 是 ST 基於 `Eclipse` 所發展的 IDE，它結合 openOCD 和 GDB 發揮出強大的 debug 功能。官方手冊也有提供像是 `TrueSTUDIO` 等教學，所以也可以改用其他 IDE 來開發。
 
 安裝 SW4STM32 軟體需要一點小技巧，如果你剛從官網下載完檔案，會是一個 `install_sw4stm32_macos_64bits-v2.6.run` 的 file，此時需透過 bash shell 在 terminal 執行：
@@ -41,6 +41,7 @@ categories: MCU
 
 就會解壓縮，並執行 jar 檔案來安裝這套軟體了。(仔細看 `install_sw4stm32_macos_64bits-v2.6.run` 這個 file，可以看到 bash 指令和一大串資料，所以才可以使用 bash 來執行)
 
+### Debugger
 #### ST-LINK/V2
 此開發板本身有內建 `ST-LINK/V2`，這是提供給 `STM8` 和 `STM32` 的 hardware Debugger。透過 ST-LINK/V2，在執行 debug 模式時，就可以得知 General 和 I/O Registers 狀況，並且知道自己寫的程式正不正確。
 
@@ -49,10 +50,10 @@ categories: MCU
 `ST-LINK/V2` Debugger 的串接流程如下：
 ![openocd.png]({{ site.url }}/assets/images/openocd.png)
 
-#### OpenOCD
-從上圖可知，在執行 Debug 之前，必須先安裝 [OpenOCD](http://openocd.org/) 軟體。OpenOCD 主要用來連接 ST-LINK 進而實現 debug 行為，當使用者在按下 Debug 按鈕，會啟動 OpenOCD ，它先進行設定以透過 USB 連接到 STM32 上的 ST-LINK，然後使用 `3333` port 與 GDB 交換訊息。 此外還會使用 `4444` port 來接收使用者所下的指令。（意思是，使用者可以連接到 4444 port，接著輸入特定指令來查看 STM32 processor 執行情形）
+#### OpenOCD and GDB
+有了 `ST-LINK/V2` ，我們可能還需要軟體層的 Debugger 來協助偵錯。目前大家常使用到的 Debugger 是 GDB，此外還需要一個中介層來連結 `ST-LINK/V2` 與 `GDB`，在 `SW4STM32` 是使用開放軟體 [OpenOCD](http://openocd.org/) 。當使用者在按下 Debug 按鈕，會啟動 OpenOCD ，它先進行設定以透過 USB 連接到 STM32 上的 ST-LINK，然後使用 `3333` port 與 GDB 交換訊息。 此外還會使用 `4444` port 來接收使用者所下的指令。（意思是，使用者可以連接到 4444 port，接著輸入特定指令來查看 STM32 processor 執行情形）
 
-上面有提到，在啟動 openOCD 時，它需要先進行設定，才可以正確地把程式下放到 processor 上。而這個設定檔會包含像是 processor 型號等，不過如果使用 `SW4STM32` ，那使用者在選擇 device 型號階段，這樣的設定文件就會由系統自動設定完成。
+上面有提到，在啟動 openOCD 時，它需要先進行設定，才可以正確地把程式下放到 processor 上。而這個設定檔會包含像是 processor 型號等，不過如果使用 `SW4STM32` ，使用者在選擇 device 型號階段，這樣的設定文件就會由系統自動設定完成。
 
 一個標準 openOCD 的 .cfg 內容如下：
 
@@ -80,19 +81,25 @@ set CONNECT_UNDER_RESET 1
 source [find target/stm32f4x.cfg]
 ```
 
-話說，我們在執行安裝 `SW4STM32` 軟體流程時，會發現 `ST-LINK Server` 這個選擇性的軟體安裝， `ST-LINK Server` 可以用來將 debug inforation 傳給多個 Client，如此一來就可以同時使用不同軟體來接收 debug info。不過，在一般情況下，這軟體沒有很必要，因此不一定要安裝。
+話說，我們在執行安裝 `SW4STM32` 軟體流程時，會發現 `ST-LINK Server` 這個選擇性的軟體安裝， `ST-LINK Server` 可以用來將 debug information 傳給多個 Client，如此一來就可以同時使用不同軟體來接收 debug info。不過，在一般情況下，這軟體沒有很必要，因此不一定要安裝。
 
 ### Check ST-LINK/V2 Connection Status
 最後，要怎樣知道 ST-LINK/V2 已經和 PC 連接完成了呢？開發板上有一個 `LD1` 的 LED 燈，可以讓我們知道 ST-LINK/V2 和 PC 的連接狀況。通常可能會遇到 LD1 燈顯示**紅色閃爍**，代表它正在連接或是還沒有連接。如果連接成功，會**持續亮紅色燈不閃爍**。透過這樣的方式，我們就可以很快地知道連接狀態了！
 
 #### The LED1 Status
 • Slow blinking Red/Off: at power-on before USB initialization
+
 • Fast blinking Red/Off: after the first correct communication between the PC and
 ST-LINK/V2-1 (enumeration)
+
 • Red LED On: when the initialization between the PC and ST-LINK/V2-1 is complete
+
 • Green LED On: after a successful target communication initialization
+
 • Blinking Red/Green: during communication with target
+
 • Green On: communication finished and successful
+
 • Orange On: Communication failure
 
 ## Reference
