@@ -1,0 +1,78 @@
+---
+layout: single
+title:  "Node-Red - Node 坑坑紀錄"
+date:   2018-11-15 08:00:00 +0800
+categories: MCU
+---
+## 前言
+最近工作接觸到 Node-RED，需要建立專屬的 Node，而在這過程中遇到蠻多坑的，所以特別紀錄一下。
+
+## 相關技術
+1. [Node.js](https://nodejs.org/en/) v10.11.0
+2. [node-gyp](https://github.com/nodejs/node-gyp) 
+3. docker
+4. arm cross compile
+5. Node-RED node development
+
+## 坑坑相連
+
+### 1. Node-RED docker version & Node.js version
+#### 問題點
+沒有先確認官方 [Node-RED docker](https://hub.docker.com/r/nodered/node-red-docker/) 所內含的 Node.js 版本，導致所建立的 node 無法在官方 Node-RED docker 中運行。
+
+#### 說明
+目前官方所提供的 Node-RED docker 中， 並沒有提供內建 Node.js 10.x 版本 (目前最高只提供到 Node.js 8.x)，而我的開發環境是使用 Node.js 10.11.0 版本，更不巧的是我又用到 Node.js 10.11.0 才有的 N-API functions，因此導致 node 在運行時直接出現 segmentation fault Error 訊息。
+
+#### 解決辦法
+不要直接使用官方所提供的 Node-RED docker，而是使用 `arm32v7/node:10.11.0-stretch` 作為 base image，然後另外建一個 Node.js 10.11.0 版本的 Node-RED image。不過這樣做的缺點是，arm32v7/node:10.11.0-stretch 的 image size 超肥，需要在建立 image 過程中刪除一些非必要的檔案，才能讓 image size 維持在要求大小之內。
+
+### 2. Node-RED Node compile to ARM architecture
+#### 問題點
+node-gyp 是一個 cross-platform command-line tool，不過要記得下 `--arch` option，才能編成正確的 node。
+
+#### 說明
+我們會運行 Node-RED 的平台架構為 `arm32`，其中又需要使用到 C (N-API) 去對接我方 C lib，所以 Node 中就包含 C code，結果一時忘記 C 在 compile 時需要對應到不同的平台，導致 Node 又無法正確運行啦～只能說這真的是太粗心犯的錯誤，平常只 compile C 會記得確認 cross-compile 問題，現在只是結合 Node.js 就熊熊忘記了。
+
+#### 解決辦法
+`node-gyp --arch arm configure build`
+順便說明一下，目前支援的 architecture 包含 `arm`, `arm64`, `ia32`, `mips`, `mipsel`, `ppc`, `ppc64`, `s390`, `s390x`, `x32`, and `x64`。可參見 [Node.js process_arch](https://nodejs.org/docs/latest-v10.x/api/process.html#process_process_arch)
+
+### 3. Create a dynamic select options
+#### 問題點
+由於 Node html 輸入欄位 (input, select..etc) 的附值由 Node-RED 所操控，所以當透過 async 方式從 server 取得資料，並且動態增減 select option 欄位時，會需要透過額外的手段來設定值。
+
+#### 說明
+如果想要讓使用者可以編輯 Node-RED Node 的 Property，我們在編寫 html 時需要遵照 Node-RED 規則，將 html 輸入欄位設定為 `node-input-<propertyname>`，例如 `node-input-tag`，如此一來， Node-RED 會自動將該 property 當前的值放入對應的欄位中。
+
+> For each of the properties in the defaults array, it looks for an `<input>` element with an id set to `node-input-<propertyname>`. This input is then automatically populated with the current value of the property. When the edit dialog is okayed, the property takes whatever value is in the input.
+
+![node-red-1.png]({{ site.url }}/assets/images/node-red-1.png)
+
+不過如此一來會發生問題，因為 selection options 是透過 async 的方式建立，所以當 Node-RED 在附值給 select 的時候，options 還沒有建立，因此就無法正確地選取到 option。
+
+#### 解決方式
+利用其他欄位來記錄當前值，然後在建立出 options 後，再給 select 附上正確的值。
+
+1. 先建立兩個欄位
+
+```html
+<select type="text" id="node-input-example">
+<input type="text" id="node-input-example-select">
+```
+
+2. 透過 Jquery 來抓取 `node-input-example` 的值
+
+```javascript
+const value = $("node-input-example").val();
+```
+
+3. 當使用 async 方式將 options 建立完之後，重新附值。
+
+```javascript
+$("node-input-example-select").val(value);
+```
+
+雖然流程很簡單，不過因為不太熟 Node-RED 流程，所以花了一些時間來查看原因。
+
+## 結論
+雖然寫 WEB 寫一段時間，不過換寫其他平台用的 Plugin，卻還是需要花時間來知道整個 APP 的流程和建立方式，尤其 Node-RED 還是使用 JQuery，對於用久 Frameworok 的我來說還真有點不太習慣。總而言之，透過這次專案，大概了解 Node-RED 該如何寫啦，也算是一個不錯的學習。
