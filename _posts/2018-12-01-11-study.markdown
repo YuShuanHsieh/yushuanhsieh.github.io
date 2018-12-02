@@ -1,0 +1,53 @@
+---
+layout: single
+title:  "11月份自我學習回顧"
+date:   2018-12-01 08:00:00 +0800
+categories: Study
+---
+## 前言
+這個月學習內容主要集中在 `Embedded System` 和 `Network`，說來慚愧，雖然大學有修網際網路，但是過了這麼久，很多知識都還給老師了。因為目前在網通廠工作，常常會接觸到 Application Layer Protocol 和使用 UNIX Socket，所以趁這機會再一次把網路課程複習一下，混搭上個月沒有學完的 `Embedded System`。
+
+遂一算也快要年底了，這個月發生一些事情，這些過程警示自己的能力還要繼續加強，不能因為在工作上已經逐漸上手了，而導致學習速度慢了下來。現在學習上，新事物和基礎理論強化各佔半，希望能在吸收新知識同時，也能把過去學習到但是遺忘掉的理論補起來，讓自己在使用這些新技術也能充分了解其背後含義。
+
+## 學習回顧
+`Embedded System`
+- Build a linux kernel 和 simple linux service
+這個月在 Embedded System 進展到 build linux kernel， linux 版本上選擇了 `Alpine v3.8`，size 極小和重視 security 的 linux system。規劃在熟悉了 alpine 整體架構後。會細看它如何去修改這些 kernel 去實現安全化的機制。Service 部分，目前是採用 Alpine 打包成 package 的方式，然後將 package 一起 build 到 kernel 中。不過這些內容比較偏實作面，理論基礎上對於 kernel space 和 user space 的細節和運用場景還需要再加強。
+
+`Network`
+- Network 課程內容是聽清大開放課程 `計算機網路概論`。覺得每位教授的上課方式不同，這位教授講解的蠻清楚，把網路上會遇到的問題點和解決方式都有說明。這個月集中在上 `Transport Layer`，印象比較深的像是 `TCP congestion control 和 flow control implemenation`，這些細節實作對我來說是比較陌生的。
+
+## 學習日誌
+
+因為趕工作進度或是身體不適所以提早睡的關係，11月總共有 6 天沒有念到書。
+
+- 11/30: 聚餐。
+- 11/29: Handshaking, network congestion control.
+- 11/28: TCP sender and receiver state management.
+- 11/27: build and install alpine linux in 樹莓派. TCP: estimate time and Dev Time
+- 11/26: TCP: byte stream, segment format, sequence number, special bits.
+- 11/25: Transport layer: reliable data transport
+- 11/24: Network overview (connection-riented, connectionless), TDM, FDM
+- 11/23: RabbitMQ, AMQP protocol and compare the RabbitMQ with mosqitto
+- 11/22: Process control block
+- 11/21: Deadlock
+- 11/20: The difference of Linux user space and kernel space. mapping device driver
+- 11/19: AWS VPC configuration, Software interrupt. (trap system call)
+- 11/18: 身體不適。
+- 11/17: ARM architecture
+- 11/16: BSP thumb instruction (code density) 
+- 11/15: a node-RED post
+- 11/14: Node-RED issues
+- 11/13: 身體不適。
+- 11/12: Node-red cross-compile problem and system call
+- 11/11: Network basic concept (MTU 1500 bytes), TCP/IP layers. Docker network bridge
+- 11/10: OS: deadlock - cycle resource request, resource allocate graph, how to prevent deadlock and how to avoid deadlock
+- 11/09: 趕工作進度。
+- 11/08: Codility practice and SSL
+- 11/07: Codility array / demo test. Leetcode prime number, 
+- 11/06: The process of general bootloader and trigger OS (bootloader -> copy OS and root files to RAM run OS)
+- 11/05: The bootloader of Linux Pi (bootcode -> loader.bin(RAM))
+- 11/04: 趕工作進度。
+- 11/03: Intro of Embedded System. cross-compiler (Review)
+- 11/02: The procedure of config USART Rx, Tx. ADC and DAC
+- 11/01: 趕工作進度。

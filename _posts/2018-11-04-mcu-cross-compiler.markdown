@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[自學] 微處理機系統實驗 - Cross Compiler"
+title:  "Microprocessor System Lab. - Cross Compiler"
 date:   2018-11-04 08:00:00 +0800
 categories: MCU
 ---

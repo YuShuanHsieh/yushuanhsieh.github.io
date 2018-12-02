@@ -1,13 +1,13 @@
 ---
 layout: single
-title:  "[自學]微處理機系統實驗 - Nucleo-64 development board"
+title:  "Microprocessor System Lab. - Nucleo-64 development board"
 date:   2018-10-24 08:00:00 +0800
 categories: MCU
 ---
 ## 前言：
 在英國的時候，學校大多專注在純軟開發課程上，例如敏捷開發(Agile Development), Web Development, database 等。其中有一堂課令我印象深刻，就是用 logic Unit, MUX 零件自組 16 Instruction Processor，然後自己手動按 Clock 去 fetch / execute instrction，透過這樣的學習，讓我更清楚整個電腦實際運作 Code 的流程。
 
-自從經過這樣的學習後，對於 Processor 總是有種幻想，雖然回到台灣之後都是在做純軟工作，不過還是很希望可以接觸到更多相關知識。幸好，在交大課程找到 `微處理機系統實驗` 和 `嵌入式系統設計概論與實作` 這兩堂課程，其中**曹孝櫟教授**教的非常詳細又很有重點，讓我瞬間變他的腦粉啊 <3
+自從經過這樣的學習後，對於 Processor 總是有種幻想，雖然回到台灣之後都是在做純軟工作，不過還是很希望可以接觸到更多相關知識（在台灣這些都是資工基本課程，可惜我大學是偏資管，並沒有機會能修到這些課）。幸好，在交大課程找到 `微處理機系統實驗` 和 `嵌入式系統設計概論與實作` 這兩堂課程，其中**曹孝櫟教授**教的非常詳細又很有重點，讓我瞬間變他的腦粉啊 <3
 
 由於學的很開心，也收穫很多，就來記錄一下學習過程。
 
