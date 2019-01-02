@@ -1,0 +1,48 @@
+---
+layout: single
+title:  "2018/12月份自我學習回顧"
+date:   2019-01-01 08:00:00 +0800
+categories: Study
+---
+## 前言
+其實可以看到，我從 11 月開始發文量變少（雖然本來就不多XD），主要是因為目前在複習一些理論課程，我又是手寫筆記派，所以自然地就比較少用 blog 記錄，反而是都寫成筆記，不但能強化當下的記憶，也方便日後複習。
+![12-study]({{ site.url }}/assets/images/12-study.jpg)  
+
+## 學習回顧
+### Network Principle
+本月份主力衝刺在 Network 基本概念，這個月複習 `Network Layer` 和 `Data Link Layer`，雖然對於其中所使用到的 algorithm implementation 方式不熟悉，不過至少找回了概念，之後在 trace network protocol code 的時候也會更有方向。 
+
+## 學習日誌
+本月份總共 **9** 天沒有唸書，因為剛好遇到跨年連假和公司年末要趕專案進度，所以減少了晚上自修的時間。
+
+- 12/01: 生日！正式邁入而立之年
+- 12/02: Implement TCP cong control (additive increase, multiplicate increase), TCP slow start, Refinement - three dup ACKs and timeout
+- 12/03: Golang slice review and string (immutable) to bytes
+- 12/04: 趕工作進度
+- 12/05: Network Layer - service model, connection and connection-less
+- 12/06: 經痛
+- 12/07: Network Layer - virtual circuit (create a path to dest) forward table, datagram (only dest 32bit data) and router table.
+- 12/08: ICMP protocol, Input and output queue, IP fragmentation
+- 12/09: Subnets, DHCP protocol
+- 12/10: 趕工作進度
+- 12/11: NAT concept ICMP protocol
+- 12/12: IPv6 features - fixed header, no fragmentation, tunnel
+- 12/13: Forwarding table algorithm
+- 12/14: 趕工作進度
+- 12/15: Routing algorithm - Link State(On2) and should know all node in network
+- 12/16: Routing algorithm - Distance Vector and broadcast the path table to another routers. AS (atomic system) inter - AS and intra - AS
+- 12/17: Routing protocol - RIP routing info protocol | OSPF open shortest path first | IGRP (only for scisco)
+- 12/18: Boder Gateway Protocol (Prefix + attribute), routes selection
+- 12/19: Broadcast and multicast with tree
+- 12/20: 醫生說要多休息，不然感冒會惡化，因此提早睡
+- 12/21: Reverse path forwarding, pruning forwarding tree, shard-tree (NP-complete, impractical) , DVMRP and IGMP protocol, PIM protocol
+- 12/22: Golang code style, Data link layer intro (principle) service for framing, NIC adaptor, Adaptor communication, error checking (bits)
+- 12/23: Channel partition - FDMA / TDMA, Random access protocol - ALOHA, CSMA and CSMA/CD, Taking turn MAC protocol (polling and token pass)
+- 12/24: [Mutation Testing](https://medium.com/@johnmcclean/lambdas-are-not-functional-programming-63533ce2eb74) , MAC address and ARP (Address resolution protocol), The process of send data from A node to B node (datagram -> broadcast to get MAC -> if no target then send to default router)
+- 12/25: 聖誕節聚餐
+- 12/26: The process of CSMA/CD. 
+- 12/27: CSMA/CD - Exponential Back off, efficiency, Manchester encoding. Physical layer device - hub. (only broadcast signal). [線上直播 - Linux 核心設計: 多核處理器和 spinlock](https://www.facebook.com/events/328827744626986/)
+- 12/28: Switch table and self learning, Interconnecting switches. The difference of switch and router
+- 12/29: Application layer
+- 12/30: 跨年連假
+- 12/31: 跨年連假
