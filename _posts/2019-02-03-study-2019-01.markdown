@@ -1,0 +1,61 @@
+---
+layout: single
+title:  "2019/01月份自我學習回顧"
+date:   2019-02-03 08:00:00 +0800
+categories: WebDevelopment
+---
+## 前言
+
+又到了每個月檢討念書進度的日子了，這次 2019 新的一年有蠻多人生大轉變，像是離職換了一個新的工作環境，以及脫離媽寶身份，跑去新竹生活等。 Moxa 算是我轉職後第一份的正式工作，而在這一年中其實學到很多經驗，但是也對一些流程和開發方式有些疑問。我很想要根據這些問題提出自己的見解，可惜經驗少，又沒有其他公司經驗可以參考，因此總有很想要提出改善，卻又不知道該如何改善的感覺。
+
+而在年底時，剛好有這個機會可以去趨勢工作，在考量趨勢科技是一家成熟軟體公司的情況下，雖然目前開發經驗還累積不足，但還是決定前往了。我不能説決定是不是正確的，但是我覺得人生就是充滿各種契機，只要在過程中很努力的學習，相信最後都還是值得的結果。
+
+話又說回來，這次學習主軸又拉回前端，並且參雜一點 Network 理論。這次學習是以 React 以及相關 lib 為主，而 network 則是清大開放課程的 **區域網路**，之前上完這位教授的網路概論，覺得收穫良多，所以繼續上教授的另一門課程。
+
+此外，這次在學習紀錄上則是採用 **91哥** 所提到的 `Trello` + `Calendar Plugin`，不過比較不方便的是因為每天紀錄都要開一張卡，寫 blog 時不好統整，因此又自己寫了一個小工具，可以讓這些 Card 擷取並轉換成自己的格式。
+
+![12-study]({{ site.url }}/assets/images/study-2019-01.jpg)  
+
+## 學習回顧
+
+### React
+
+由於已經學習過一個框架，所以在學習另一個框架的時候，就把重點擺在它的實作原理和在應用時應該要注意的事項。像是 Lifecycle 一定要知道（React 16 版本）還有 render 時的流程，要如何避免它會 over render。甚至當這些畫面沒有如你預期更新時。可能是哪些流程出了問題等。
+
+當然主流的 libs 也不可少，例如 redux, redux middleware, formik, and react-router 等。測試部分 React 就是用 Jest，不過因為本來就是用它來實作 test case，所以就沒有重複學。
+
+## 學習日誌
+
+本月份共 **3** 天沒有唸書，主要是因為在處理搬家事宜，因為是很臨時的要搬下去，所以花了些時間在搬家上。
+
+- 2019 January 1 - HTTP (non-persistent and persistent), HTTP message general format
+- 2019 January 2 - Application layer
+- 2019 January 3 - DNS. How it work and protocol
+- 2019 January 4 - 尾牙
+- 2019 January 5 - 搬家事宜
+- 2019 January 6 - The structure of DNS(top-level, hierarchical). 'UPDATE' DNS db, Resource Record(RR)
+- 2019 January 7 - Basic concept of React
+- 2019 January 8 - Main concept of React: Render Elements, The process of React render DOM. Components and props, State in component and lifecycle function.
+- 2019 January 9 - Main concept of React: `Handle event`, `Conditional Rendering`, `List and Keys`, `Forms` and practice
+- 2019 January 10 - Main concept of React: ` Lifting State Up`, `Composition vs Inheritance`, `Thinking In React` and practice.
+- 2019 January 11 - Advanced Guide: `Context`, `Error Boundaries`, `Forwarding Refs`
+- 2019 January 12 - Deep into `Context` API. `Fragments`, `Higher-Order Components`
+- 2019 January 13 - Advanced Guide: `JSX In Depth`, `Optimizing Performance with webpack`.
+- 2019 January 14 - `React-redux` and `Redux-observable` (Epic) . Review the concept of `Redux`. Linux Kernel: 中斷處理和現代架構考量
+- 2019 January 15 - React - React router with Redux. Read - 透過製作 Babel-plugin 初訪 AST
+- 2019 January 16 - Local Network course
+- 2019 January 17 - Interview post and react redux post
+- 2019 January 18 - React Fiber
+- 2019 January 19 - Side project for Trello / 搬家
+- 2019 January 20 - Side Project for Trello / 搬家 / JS Proxy object
+- 2019 January 21 - React Component API Document
+- 2019 January 22 - Network - Physical Layer
+- 2019 January 23 - New Post - Redux State 被異常更新
+- 2019 January 24 - React - MATERIAL UI / Create-React-App API
+- 2019 January 25 - Article: You Probably Don't Need Derived State
+- 2019 January 26 - 處理搬家事宜
+- 2019 January 27 - React - A Cartoon Intro to React Fiber – Lin Clark / Front-Trends 2017
+- 2019 January 28 - [react-thunk] and [immutable] libs
+- 2019 January 29 - History and auth component
+- 2019 January 30 - 1. React-bootstrap, Joi, AbortController
+- 2019 January 31 - Formik with bootstrap, normalizer
