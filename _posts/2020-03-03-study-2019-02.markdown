@@ -1,0 +1,94 @@
+---
+layout: single
+title:  "2019/02月份自我學習回顧"
+date:   2019-03-03 08:00:00 +0800
+categories: WebDevelopment
+---
+![study-2019-02]({{ site.url }}/assets/images/study-2019-02.png)
+ 
+## 前言
+這個月大多在適應新的生活環境，第一次來新竹工作，不意外地在新手村落腳。在還沒來新竹之前，就聽聞過新竹可能是個比台北無聊的地方，那時候覺得反正我生活也很宅，不是 coding 就是買化妝品，只要有舒適的套房和康是美就可以存活了，但是實際上沒有我想的這麼簡單XD 畢竟新竹的社群活動真的少很多，讓假日少了一些樂趣。既然沒有實體活動，只能在線上多參與一些活動或是多看別人分享的文章了。
+
+本月份學習內容除了加強 React 之外，也開始加入多一點 Golang 內容，不意外的話，之後工作使用語言應該會是 JavaScript 和 Golang，所以先安排階段性的練習，在之後專案中也能比較快上手。
+
+## 學習回顧
+
+### React
+React 在大致上用過一輪主流的 libs 後，開始慢慢把學習重心放在 source code 研究。例如 build form 常用的 `formlik`，看一下他是怎樣透過簡單的 `loadash.toPath` function 取得 value，讓 formlik 可以用在複雜的 nested form 上。另外也研究 `react-bootsrap` 和 `material UI` 中 styled component 架構，希望對於往後開發相關 component 有幫助。
+
+React hooks 自從釋出後也是大家寫文章的熱門主題，因此本月份也有針對 hooks 實作原理來寫介紹。
+
+### Front-end
+其他 Front-end 技術，像是 V8 engine,  HTML5 Drag and Drop API Document, JavaScript review 也是本月份學習內容。主要是希望在學習框架同時，也能不斷地複習 Front-End 技術原理。在學習過程中，有發現我比較少去看 HTML5 的官方 Spec，因此之後也會加入一些關於 Spec 研讀，這樣在應用同時，也可以知道詳細的規範內容。
+
+### Golang
+Golang 的學習方式是編寫 side project，邊讀一些 golang weekly 分享文章。其中我覺得比較重要的是對於 Golang codeing style 的修正，之前在寫時可能會比較隨性的寫，不過最近開始研究 source code 和看相關 coding style 推薦文章，希望可以讓自己的 code 變得更易閱讀。引用 jserv 說的話:
+> 就算是自己開發，也是過去的自己，現在的自己，未來的自己三個人。
+
+## 學習日誌
+本月份總共 **4** 天沒有唸書。
+
+- 2019/2/1 - Formik with redux actions. Practice how to route to different path
+- 2019/2/2 - 休假 -去花博
+- 2019/2/3 - 休假 -去花博
+- 2019/2/4 - Golang article practice
+- 2019/2/5 - Side-project for transform Trello
+- 2019/2/5 - IEEE 802.3 CSMA/CD network
+- 2019/2/6 - React Hooks
+- 2019/2/6 - AWS - Deployment
+- 2019/2/7 - AWS - CodeDeploy with Travis
+- 2019/2/7 - Golang project - test, error pattern, cmd to control server
+- 2019/2/8 - 跟爸媽和朋友聚餐
+- 2019/2/9 - Network: MII, CS (convert), Base4T, 8B6T, 3-level encoding, Collision
+- 2019/2/9 - JavaScript weekly article
+- 2019/2/12 - Formik (prevent array over-render)
+- 2019/2/13 - Network Programming with golang
+- 2019/2/14 - 情人節不能寫 Code
+- 2019/2/15 - Golang Weekly
+- 2019/2/16 - HTML Drop and Drag API Document Study
+- 2019/2/17 - ReactPortal
+- 2019/2/17 - SASS function and map-get
+- 2019/2/18 - Source code - formik
+- 2019/2/18 - react-bootsrtap Document - table, modal
+- 2019/2/19 - Source code trace - Formik, angular SelectionModel
+- 2019/2/20 - (Side Project)write a selection model libs
+- 2019/2/20 - Articles
+- 2019/2/21 - ES10 and javascript object concept review
+- 2019/2/22 - Implement SQL database (driver) in 100 lines of Go
+- 2019/2/22 - The concept of MongoDB
+- 2019/2/23 - Review the concept of JavaScript
+- 2019/2/24 - React hooks - source code trace
+- 2019/2/24 - Side Project - Use React Hooks to create select model
+- 2019/2/25 - Redis vs. MongoDB: Comparing In-Memory Databases with Percona Memory Engine
+- 2019/2/26 - Unit test: jest with enzyme
+- 2019/2/26 - Comparison of Gin, Iris, and Beego
+- 2019/2/27 - React - Async Rendering
+- 2019/2/27 - Understanding Repaint and Reflow in JavaScript
+- 2019/2/28 - React Hooks with memorizedState
+
+## Articles
+
+1. [Learn Go with tests - Error types](https://dev.to/quii/learn-go-with-tests---error-types-4ng9?utm_campaign=Master%20the%20World%20of%20Golang&utm_medium=email&utm_source=Revue%20newsletter) 2. [Slimming Down Your Docker Images](https://towardsdatascience.com/slimming-down-your-docker-images-275f0ca9337e)
+2. [A Go Func Scheduler With A Cap](https://medium.com/@sdeoras/a-go-func-scheduler-with-a-cap-360383f14875)
+3. [第4講 IEEE 802.3 CSMA/CD network](http://ocw.nthu.edu.tw/ocw/index.php?page=chapter&cid=14&chid=268&video_url=http%3A%2F%2Focw.nthu.edu.tw%2Fvideosite%2Findex.php%3Fop%3Dwatch%26id%3D295%26filename%3DLAN_C04_256k.wmv%26type%3Dview%26old%3D1%26cid%3D14%26chid%3D268)
+4. [React Today and Tomorrow and 90% Cleaner React With Hooks](https://www.youtube.com/watch?v=dpw9EHDh2bM)
+5. [Comprehensive AWS EC2 Deployment with TravisCI Guide](https://medium.com/@itsdavidthai/comprehensive-aws-ec2-deployment-with-travisci-guide-7cafa9c754fc)
+6. [New JavaScript Features That Will Change How You Write Regex](https://www.smashingmagazine.com/2019/02/regexp-features-regular-expressions/)
+7. [V8 release v7.3](https://v8.dev/blog/v8-release-73)
+8. [Network Programming with Go](https://ipfs.io/ipfs/QmfYeDhGH9bZzihBUDEQbCbTc5k5FZKURMUoUvfmc27BwL/index.html)
+9. [Golang Datastructures: Trees](https://ieftimov.com/golang-datastructures-trees) 
+10. [Event-loop with golang](https://colobu.com/2017/11/29/event-loop-networking-in-Go/)
+11. [Network blocking and non-blocking](https://segmentfault.com/a/1190000003063859)
+12. [HTML Living Standard](https://html.spec.whatwg.org/multipage/dnd.html#dom-datatransfer-setdata) 
+13. [HTML Drag and Drop API ](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
+14. [ WAI-ARIA Modal Authoring Practices](https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal)
+15. [Diving Deeper in JavaScripts Objects](https://blog.bitsrc.io/diving-deeper-in-javascripts-objects-318b1e13dc12)
+16. [For vs forEach() vs for/in vs for/of in JavaScript](http://thecodebarbarian.com/for-vs-for-each-vs-for-in-vs-for-of-in-javascript.html)
+17. [JavaScript Loading Priorities in Chrome](https://addyosmani.com/blog/script-priorities/) 
+18. [阅读源码后，来讲讲React Hooks是怎么实现的 ](https://juejin.im/post/5bdfc1c4e51d4539f4178e1f)
+19. [Redis vs. MongoDB: Comparing In-Memory Databases with Percona Memory Engine](https://scalegrid.io/blog/comparing-in-memory-databases-redis-vs-mongodb-percona-memory-engine/)
+20. [enzyme](https://github.com/airbnb/enzyme)
+21. [Understanding Repaint and Reflow in JavaScript](https://blog.usejournal.com/what-the-heck-is-repaint-and-reflow-in-the-browser-b2d0fb980c08)
+22. [React Hooks with memoizedState](https://yushuanhsieh.github.io/webdevelopment/react-hooks/)
+23. [window.requestIdleCallback()](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback) 
+24. [Channel Messaging API](https://developer.mozilla.org/en-US/docs/Web/API/Channel_Messaging_API)
