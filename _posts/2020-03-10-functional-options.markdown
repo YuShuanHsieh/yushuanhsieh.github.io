@@ -4,10 +4,10 @@ title:  "Functional options pattern in GO"
 date:   2019-03-10 08:00:00 +0800
 categories: WebDevelopment
 ---
-![study-2019-02]({{ site.url }}/assets/images/functional-options.png)
-
 ## 前言
 之所以使用 `Functional options` 的契機，是因為用到 gRPC 的 New Server API，發現他是用 `functional options` 來讓使用者調整 Server 預設配置，這樣的作法不但兼具了擴充性和可用性，也能避免一些使用者誤用。而除了看 source code 來學習如何實作之外，也找起相關文章，進而發現原來早在 2014 年就有人發表過類似教學文，實在是太孤陋寡聞了～
+
+![study-2019-02]({{ site.url }}/assets/images/functional-options.png)
 
 趁著這次機會，把相關文章的重點整理出來，讓大家在寫類似 API 時，也能做個參考。
 
