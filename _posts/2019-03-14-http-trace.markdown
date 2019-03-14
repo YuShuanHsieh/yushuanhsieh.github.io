@@ -5,11 +5,11 @@ date:   2019-03-14 08:00:00 +0800
 categories: WebDevelopment
 ---
 ## 前言
-在撰寫 HTTP handler 測試程式時，除了測試 response 結果是否如預期之外，我們還需要知道過程中需要耗費多少時間（request latency）。市面上有一些 libraries (e.g `opencensus`) 能提供相關的 HTTP 事件 trace，不過仔細看會發現他們大多也是整合 golang 本身提供的 `http/trace` 來實現追蹤功能，因此我們就直接來了解 `http/trace` 的運作原理和應用方式，再結合 `http/httptest`，讓 handler  test 更完整。
+在撰寫 HTTP request test 測試程式時，除了測試 response 結果是否如預期之外，我們還需要知道過程中需要耗費多少時間（request latency）。市面上有一些 libraries (e.g `opencensus`) 能提供相關的 HTTP 事件 trace，不過仔細看會發現他們大多也是整合 golang 本身提供的 `httptrace` 來實現追蹤功能，因此我們就直接來了解 `httptrace` 的運作原理和應用方式，再結合 `http/httptest`，讓 handler  test 更完整。
 
 ## Request 處理流程
 
-在說明 `http/trace` 之前，由於 request test 中是藉由 http package 來發起的 ，所以先來了解一下 golang 中，透過 `http` package 的 client 處理 http request 的流程。
+在說明 `httptrace` 之前，由於 request test 中是藉由 http package 來發起的 ，所以先來了解一下 golang 中，透過 `http` package 的 client 處理 http request 的流程。
 
 ### New Request
 首先我們透過 `http.Get` 發出 request， 過程中會經由 NewRequest  產出 request instance 並交由 client.Do(request) method 處理。
@@ -114,7 +114,7 @@ httptrace 主要提供 HTTP client requests 的事件中追蹤，package 中包�
 15. `Wait100Continue func()`
 16. `WroteRequest func(WroteRequestInfo)` - called with the result of writing the request and any body
 
-蠻多節點可以追蹤的，就看使用者自己的需求啦～
+蠻多節點可以追蹤的，就看使用者自己的需求。
 
 ## 實作
 了解上述的流程之後，我們就可以實際實作一次，在 request test 中追蹤 http request 流程了! 假設我們要追蹤 `GotConn` 到 `GotFirstResponseByte` 這段時間。
@@ -174,8 +174,51 @@ res, err := http.DefaultTransport.RoundTrip(req)
 上面是包含 client 發 request 階段，所以別忘了要先啟動 server，測試才可以正常執行。
 
 ```go
-server = httptest.NewServer(handler) // Your test handler
+server := httptest.NewServer(handler) // Your test handler
 ```
+
+## Demo code
+
+```
+import (
+  "time"
+  "net/http"
+  "net/http/httptest"
+  "net/http/httptrace"
+  "testing"
+)
+
+type Tracer struct {
+	start       time.Time
+	end         time.Time
+	latency     time.Duration
+}
+
+func (l *Tracer) GotConn(connInfo httptrace.GotConnInfo) {
+	l.start = time.Now()
+}
+
+func (l *Tracer) GotFirstResponseByte() {
+	l.end = time.Now()
+	l.latency = l.end.Sub(l.start)
+}
+
+trace := &httptrace.ClientTrace{
+	GotConn: tracer.GotConn,
+	GotFirstResponseByte: tracer.GotFirstResponseByte,
+}
+
+func TestRequest(t *testing.T) {
+  // handler := your handler
+  server := httptest.NewServer(handler) // New test server
+  req, _ := http.NewRequest("POST", server.URL, bytes.NewReader(data))
+  req = req.WithContext(httptrace.WithClientTrace(req.Context(), trace))
+  res, err := http.DefaultTransport.RoundTrip(req)
+  // check your response
+  server.Close()
+}
+```
+
 
 ## References:
 - https://golang.org/pkg/net/http/httptrace/
