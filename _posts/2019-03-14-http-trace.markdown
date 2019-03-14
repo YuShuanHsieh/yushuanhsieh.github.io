@@ -179,7 +179,7 @@ server := httptest.NewServer(handler) // Your test handler
 
 ## Demo code
 
-```
+```go
 import (
   "time"
   "net/http"
