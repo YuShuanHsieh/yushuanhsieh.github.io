@@ -1,0 +1,60 @@
+---
+layout: single
+title:  "2019/03月份自我學習回顧"
+date:   2019-04-03 08:00:00 +0800
+categories: WebDevelopment
+---
+![study]({{ site.url }}/assets/images/golang-meetup.jpeg)
+## 前言
+最近這一個月工作慢慢步上軌道，心情有比較踏實些。剛開始來的時候，實在不太確定自己能幫上什麼忙，不過這個月漸漸地有任務可以做，並且也和其他組員一起合作開發，感覺在團隊中可以發揮自己的價值:) 另外，這個月比較大的轉變是完全負責 back-end ，之前還想說可能會接觸到 React ，所以花了一些時間在看 React 原理，不過目前確定會都以 Go 和 Device application 開發為主，因此後續就會把學習重心放在 Back-end。話雖如此，自己還是有加入公司的 front-end 學習群，跟著裡面的大神們一起念 React Core ，畢竟過去一年蠻大比例是使用 JavaScript 開發，要放棄也是蠻可惜的。 
+
+## 學習回顧
+### Go
+這次很難得地可以參加Go Taipei 社群，分享使用 Go 的開發經驗，過程中花蠻多時間在整理簡報，除了擷取 Practical Go 中實際碰過的案例，也找了些其他跟專案維護相關的文章一並分享。原本以為應該不會太難的，沒想到實際整理起來卻花了快一個禮拜的時間，自己也從各種 references 中發掘更多討論相關議題的文章，收穫良多。在實際分享過後，反而會更積極地參加活動，因為這些分享都是工程師利用私下時間來整理的，如果能踴躍支持，就是給予他們最大的鼓勵吧XD
+
+另外，由於專案中使用到 gRPC ，所以也花了時間在這部分的 source code 研究，特別是在 client retry 部分，想了解在不使用 iinterceptor 的情況下，能不能滿足目前需要 retry 的場景。此外還有 Http 這些標準 package 的複習等，尤其是公司蠻重視 test 這塊，所以也花時間在看 Httptest 和 Httptrace 等。
+
+### 其他
+除了學習 Go 和相關 Tools，還想要把CS基本理論再複習一次。所以有在追 jersv 的直撥課程，並且也規劃在下週開始看離散數學等。我覺得實際工作後再回去看這些理論，真的覺得自己吸收更多～
+
+## 學習日誌
+本月份扣除準備分享簡報和參加社群活動的時間，總共有 **3** 天沒有唸書。
+
+2019/3/1 - window.requestIdleCallback() and Channel Messaging API
+2019/3/1 - Side Project - trello transform refactor
+2019/3/3 - Idiomatic Go Resources
+2019/3/3 - Styled Component with CSS in JS / SCSS / CSS Module
+2019/3/4 - Golang - gRPC implementation
+2019/3/4 - React - refactor with Hooks
+2019/3/6 - Refactor side project - trello transform
+2019/3/7 - Trace code - gRPC project
+2019/3/8 - Context propagation over HTTP in Go
+2019/3/8 - Debugging Latency
+2019/3/9 - Proposal: Secure the Public Go Module Ecosystem with the Go Notary
+2019/3/9 - 整理 maintainable golang styles
+2019/3/10 - funcational options (example: gRPC)
+2019/3/10 - Defer overhead in go
+2019/3/11 - Trace source code - io.Reader, buf, ReadFrom, byte.minRead
+2019/3/12 - HTTP unit testing - httptest, httptrace, with gin framework
+2019/3/13 - Write a post - use httptrace to test request latency
+2019/3/14 - Post - HTTP httptrace (published)
+2019/3/15 - Go Weekly study
+2019/3/17 - 你所不知道的C語言：指標篇 - 1
+2019/3/18 - 你所不知道的C語言：指標篇 - 2
+2019/3/18 - Maintainable Go presentation
+2019/3/19 - Maintainable Go presentation
+2019/3/20 - Maintainable Go presentation
+2019/3/21 - ORM - how the libs [gorm] works
+2019/3/21 - Maintainable Go presentation
+2019/3/22 - Some cases about memory leak from goroutine
+2019/3/22 - How to close channel gracefully
+2019/3/23 - Go for Industrial Programming
+2019/3/24 - Maintainable Go presentation
+2019/3/24 - Dependency Injection
+2019/3/25 - Maintainable Go presentation
+2019/3/26 - Go 社群聚會
+2019/3/27 - Unix domain sockets in Go
+2019/3/28 - Go gRPC retry
+2019/3/29 - Line 社群聚會
+2019/3/30 - gRPC - retry source code trace (ClientConn, picker_wrapper)
+2019/3/31 - Go Weekly Study
