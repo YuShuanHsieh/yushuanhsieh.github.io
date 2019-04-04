@@ -20,41 +20,41 @@ categories: WebDevelopment
 ## 學習日誌
 本月份扣除準備分享簡報和參加社群活動的時間，總共有 **3** 天沒有唸書。
 
-2019/3/1 - window.requestIdleCallback() and Channel Messaging API
-2019/3/1 - Side Project - trello transform refactor
-2019/3/3 - Idiomatic Go Resources
-2019/3/3 - Styled Component with CSS in JS / SCSS / CSS Module
-2019/3/4 - Golang - gRPC implementation
-2019/3/4 - React - refactor with Hooks
-2019/3/6 - Refactor side project - trello transform
-2019/3/7 - Trace code - gRPC project
-2019/3/8 - Context propagation over HTTP in Go
-2019/3/8 - Debugging Latency
-2019/3/9 - Proposal: Secure the Public Go Module Ecosystem with the Go Notary
-2019/3/9 - 整理 maintainable golang styles
-2019/3/10 - funcational options (example: gRPC)
-2019/3/10 - Defer overhead in go
-2019/3/11 - Trace source code - io.Reader, buf, ReadFrom, byte.minRead
-2019/3/12 - HTTP unit testing - httptest, httptrace, with gin framework
-2019/3/13 - Write a post - use httptrace to test request latency
-2019/3/14 - Post - HTTP httptrace (published)
-2019/3/15 - Go Weekly study
-2019/3/17 - 你所不知道的C語言：指標篇 - 1
-2019/3/18 - 你所不知道的C語言：指標篇 - 2
-2019/3/18 - Maintainable Go presentation
-2019/3/19 - Maintainable Go presentation
-2019/3/20 - Maintainable Go presentation
-2019/3/21 - ORM - how the libs [gorm] works
-2019/3/21 - Maintainable Go presentation
-2019/3/22 - Some cases about memory leak from goroutine
-2019/3/22 - How to close channel gracefully
-2019/3/23 - Go for Industrial Programming
-2019/3/24 - Maintainable Go presentation
-2019/3/24 - Dependency Injection
-2019/3/25 - Maintainable Go presentation
-2019/3/26 - Go 社群聚會
-2019/3/27 - Unix domain sockets in Go
-2019/3/28 - Go gRPC retry
-2019/3/29 - Line 社群聚會
-2019/3/30 - gRPC - retry source code trace (ClientConn, picker_wrapper)
-2019/3/31 - Go Weekly Study
+1. 2019/3/1 - window.requestIdleCallback() and Channel Messaging API
+2. 2019/3/1 - Side Project - trello transform refactor
+3. 2019/3/3 - Idiomatic Go Resources
+4. 2019/3/3 - Styled Component with CSS in JS / SCSS / CSS Module
+5. 2019/3/4 - Golang - gRPC implementation
+6. 2019/3/4 - React - refactor with Hooks
+7. 2019/3/6 - Refactor side project - trello transform
+8. 2019/3/7 - Trace code - gRPC project
+9. 2019/3/8 - Context propagation over HTTP in Go
+10. 2019/3/8 - Debugging Latency
+11. 2019/3/9 - Proposal: Secure the Public Go Module Ecosystem with the Go Notary
+12. 2019/3/9 - 整理 maintainable golang styles
+13. 2019/3/10 - funcational options (example: gRPC)
+14. 2019/3/10 - Defer overhead in go
+15. 2019/3/11 - Trace source code - io.Reader, buf, ReadFrom, byte.minRead
+16. 2019/3/12 - HTTP unit testing - httptest, httptrace, with gin framework
+17. 2019/3/13 - Write a post - use httptrace to test request latency
+18. 2019/3/14 - Post - HTTP httptrace (published)
+19. 2019/3/15 - Go Weekly study
+20. 2019/3/17 - 你所不知道的C語言：指標篇 - 1
+21. 2019/3/18 - 你所不知道的C語言：指標篇 - 2
+22. 2019/3/18 - Maintainable Go presentation
+23. 2019/3/19 - Maintainable Go presentation
+24. 2019/3/20 - Maintainable Go presentation
+25. 2019/3/21 - ORM - how the libs [gorm] works
+26. 2019/3/21 - Maintainable Go presentation
+27. 2019/3/22 - Some cases about memory leak from goroutine
+28. 2019/3/22 - How to close channel gracefully
+29. 2019/3/23 - Go for Industrial Programming
+30. 2019/3/24 - Maintainable Go presentation
+31. 2019/3/24 - Dependency Injection
+32. 2019/3/25 - Maintainable Go presentation
+33. 2019/3/26 - Go 社群聚會
+34. 2019/3/27 - Unix domain sockets in Go
+35. 2019/3/28 - Go gRPC retry
+36. 2019/3/29 - Line 社群聚會
+37. 2019/3/30 - gRPC - retry source code trace (ClientConn, picker_wrapper)
+38. 2019/3/31 - Go Weekly Study
