@@ -20,25 +20,26 @@ client := system.NewSysManagerClient(conn)
 stream, err := client.GetInfo(ctx, &system.Reqs{})
 ```
 
-透過 source code trace 來瞧瞧過程中發生什麼事情～
+首先， Client 需要透過 **Name Resolver** 解析 Dial 中的 target string 來取得 Server 正確的 IP Address，以利後續建立 connection。例如使用 DNS Name Resolver，就可以透過 `conn, err := grpc.Dial("dns:///your.target.name:8888")` 這種 Domain name 的方式來發送 RPCs。
+
+關於 Name Resolution 部分可以參閱 [官方文件](https://github.com/grpc/grpc/blob/master/doc/naming.md) 說明。
 
 ```go
 // Notice: 部分 source code 被移除
 
 func Dial(target string, opts ...DialOption) (*ClientConn, error) {
-	return DialContext(context.Background(), target, opts...)
+  return DialContext(context.Background(), target, opts...)
 }
 
 func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *ClientConn, err error) {
   if cc.dopts.resolverBuilder == nil {
-		// Only try to parse target when resolver builder is not already set.
-		cc.parsedTarget = parseTarget(cc.target)
-		grpclog.Infof("parsed scheme: %q", cc.parsedTarget.Scheme)
-		cc.dopts.resolverBuilder = resolver.Get(cc.parsedTarget.Scheme)
-		if cc.dopts.resolverBuilder == nil {
-			// If resolver builder is still nil, the parsed target's scheme is
-			// not registered. Fallback to default resolver and set Endpoint to
-			// the original target.
+	  cc.parsedTarget = parseTarget(cc.target)
+	  grpclog.Infof("parsed scheme: %q", cc.parsedTarget.Scheme)
+	  cc.dopts.resolverBuilder = resolver.Get(cc.parsedTarget.Scheme)
+	  if cc.dopts.resolverBuilder == nil {
+		  // If resolver builder is still nil, the parsed target's scheme is
+		  // not registered. Fallback to default resolver and set Endpoint to
+		  // the original target.
 			grpclog.Infof("scheme %q not registered, fallback to default scheme", cc.parsedTarget.Scheme)
 			cc.parsedTarget = resolver.Target{
 				Scheme:   resolver.GetDefaultScheme(),
@@ -49,7 +50,6 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 		}
 	}
 	
-	// Important:
 	// Build the resolver.
 	rWrapper, err := newCCResolverWrapper(cc)
 	if err != nil {
@@ -58,12 +58,16 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 }
 ```
 
-首先， Client 需要透過 **Name Resolver** 解析 Dial 中的 target string 來取得 Server 正確的 IP Address，以利後續建立 connection。Name Resolver 是 gRPC 實現 load-balancing 的主角之一，例如使用 DNS Resolver，就可以透過 `conn, err := grpc.Dial("www.example.com:8888")` 這種 Domain name 的方式來發送 gRPC。
-
-在沒有指定 `resolverBuilder` 情況下， gRPC 會使用預設 `passthrough resolver` 去解析名稱(passthrough 其實就是很單純地把 target 再返回來，因此僅適用於簡單應用或是測試)。
+在沒有指定 `Resolver Builder` 情況下， grpc-go 會使用預設 `passthrough resolver` 去解析名稱。(passthrough 其實就是很單純地把 target 再返回來，因此僅適用於簡單應用或是測試。另外在 gRPC 文件中有提到，預設是使用 DNS，不過 grpc-go 卻是用 passthrough @@)。
 
 ```go
 func newCCResolverWrapper(cc *ClientConn) (*ccResolverWrapper, error) {
+  ccr := &ccResolverWrapper{
+    cc:     cc,
+    addrCh: make(chan []resolver.Address, 1),
+    scCh:   make(chan string, 1),
+  }
+  // Create a resolver from resolver builder
   ccr.resolver, err = rb.Build(cc.parsedTarget, ccr, resolver.BuildOption{DisableServiceConfig: cc.dopts.disableServiceConfig})
 }
 
@@ -82,14 +86,14 @@ func (r *passthroughResolver) start() {
 }
 
 func (ccr *ccResolverWrapper) UpdateState(s resolver.State) {
-  //  ccr.cc is ClientConn
+  // ccr.cc is ClientConn
   ccr.cc.updateResolverState(s)
 }
 ```
 
-當 Name Resolver 解析完名稱之後，會透過 watcher 通知 `Balancer` 最新的 Addresses。
+當 Name Resolver 解析完名稱之後，會透過 balancer wrapper 產生的 watcher 通知 `Balancer` 最新的 Addresses。
 
-**Balancer** 同樣是也是 gRPC load-balacing 要角，它最主要負責 Handle connection 和 addresses 的變化，以及在後續 transport 階段決定該選擇哪個 connection。
+**Balancer** 是 gRPC 實現 load-balacing 要角，它最主要負責 Handle connection 和 addresses 的狀態變化（例如當 Addresses 更新時則更新連線），以及在後續 transport 階段決定該選擇哪個 server connection。
 
 > **Balancer** takes input from gRPC, manages SubConns, and collects and aggregates the connectivity states. It also generates and updates the Picker used by gRPC to pick SubConns for RPCs.
 
@@ -136,9 +140,9 @@ func newCCBalancerWrapper(cc *ClientConn, b balancer.Builder, bopts balancer.Bui
 }
 ```
 
-而 `Balancer Wrapper` 則是扮演 clientConn 和 balancer 的中間角色，它會開啟一個 `watcher` 來監控 update event。
-
 ```go
+// watcher balancer functions sequentially, so the balancer can be implemented
+// lock-free.
 func (ccb *ccBalancerWrapper) watcher() {
   for {
 		select {
@@ -159,12 +163,12 @@ func (ccb *ccBalancerWrapper) watcher() {
 }
 ```
 
-這邊以 pick first balancer 為例，觀察 Balancer 處理 resolved addresses 行為。
+grpc-go 內有實作幾個 balancer ，這邊以 pick first balancer 為例，觀察 Balancer Handle resolved addresses 行為。
 
 ```go
 type pickfirstBalancer struct {
-	cc balancer.ClientConn // 這邊是指 balancer_conn_wrapper
-	sc balancer.SubConn // 維護一條 subConn
+	cc balancer.ClientConn
+	sc balancer.SubConn
 }
 
 func (b *pickfirstBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) {
@@ -187,7 +191,7 @@ func (b *pickfirstBalancer) HandleResolvedAddrs(addrs []resolver.Address, err er
 }
 ```
 
-上面可以看到如果沒有 subConn ，則會透過 `balancer_conn_wrapper` 新建一條 SubConn，並且觸發 Connnect。
+上面可以看到如果沒有 subConn ，則會透過 `balancer_conn_wrapper` 通知 ClientConn 新建一條 SubConn，接著觸發 Connnect。
 
 ```go
 func (ac *addrConn) connect() error {
@@ -198,7 +202,7 @@ func (ac *addrConn) connect() error {
 	go ac.resetTransport()
 }
 ```
-
+此時就會另起 goroutine 來正式與 Server 建立連線。
 ![gRPC-Dial-2.png]({{ site.url }}/assets/images/gRPC-Dial-2.png)
 
 ```go
