@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "gRPC Client 與 Server 連線流程"
+title:  "grpc-go source code trace - gRPC client 與 server 建立連線過程"
 date:   2019-04-05 08:00:00 +0800
 categories: WebDevelopment
 ---
@@ -11,26 +11,22 @@ categories: WebDevelopment
 grpc-go v1.19.1
 
 ## grpc.Dial 的背後
-以下是 client 向 server 發送 request 的基本方式。
+以下是 client 向 server 連線的基本方式。
 
 ```go
 conn, err := grpc.Dial(serverIpAddress, grpc.WithInsecure())
-ctx := context.Background()
-client := system.NewSysManagerClient(conn)
-stream, err := client.GetInfo(ctx, &system.Reqs{})
+
+func Dial(target string, opts ...DialOption) (*ClientConn, error) {
+  return DialContext(context.Background(), target, opts...)
+}
 ```
 
-首先， Client 需要透過 **Name Resolver** 解析 Dial 中的 target string 來取得 Server 正確的 IP Address，以利後續建立 connection。例如使用 DNS Name Resolver，就可以透過 `conn, err := grpc.Dial("dns:///your.target.name:8888")` 這種 Domain name 的方式來發送 RPCs。
+首先， Client 需要透過 **Name Resolver** 解析 Dial 中的 `target string` 來取得 Server 正確的 IP Addresses 和 port，以利後續建立 connection。例如使用 DNS Name Resolver，就可以透過 `conn, err := grpc.Dial("dns:///your.target.name:8888")` 這種 Domain name 的方式來發送 RPCs。
 
 關於 Name Resolution 部分可以參閱 [官方文件](https://github.com/grpc/grpc/blob/master/doc/naming.md) 說明。
 
 ```go
 // Notice: 部分 source code 被移除
-
-func Dial(target string, opts ...DialOption) (*ClientConn, error) {
-  return DialContext(context.Background(), target, opts...)
-}
-
 func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *ClientConn, err error) {
   if cc.dopts.resolverBuilder == nil {
 	  cc.parsedTarget = parseTarget(cc.target)
@@ -50,7 +46,6 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 		}
 	}
 	
-	// Build the resolver.
 	rWrapper, err := newCCResolverWrapper(cc)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build resolver: %v", err)
@@ -58,7 +53,9 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 }
 ```
 
-在沒有指定 `Resolver Builder` 情況下， grpc-go 會使用預設 `passthrough resolver` 去解析名稱。(passthrough 其實就是很單純地把 target 再返回來，因此僅適用於簡單應用或是測試。另外在 gRPC 文件中有提到，預設是使用 DNS，不過 grpc-go 卻是用 passthrough @@)。
+`Resolver` 是一個 interface，使用者可以根據需求來註冊不同實作的 resolver，例如 `etcd-io/etcd` 。而在沒有指定 resolver 情況下（我們可以使用 URI scheme 來選擇特定 resolver， e.g. `etcd://` ）， grpc-go 會使用預設 `passthrough resolver` 去解析名稱。(passthrough 其實就是很單純地把 target 再返回來，因此僅適用於簡單應用或是測試。另外在 gRPC 文件中有提到，預設是使用 DNS，不過 grpc-go 卻是用 passthrough)。
+
+想參考第三方實作 resolver ，可參見 [etcd clientv3 resolver](https://github.com/etcd-io/etcd/blob/master/clientv3/balancer/resolver/endpoint/endpoint.go)
 
 ```go
 func newCCResolverWrapper(cc *ClientConn) (*ccResolverWrapper, error) {
@@ -70,7 +67,11 @@ func newCCResolverWrapper(cc *ClientConn) (*ccResolverWrapper, error) {
   // Create a resolver from resolver builder
   ccr.resolver, err = rb.Build(cc.parsedTarget, ccr, resolver.BuildOption{DisableServiceConfig: cc.dopts.disableServiceConfig})
 }
+```
 
+以下以 default 的 passthrough resolver 來說明接下去的流程。
+
+```go
 // Default use passthrough Builder.
 func (*passthroughBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOption) (resolver.Resolver, error) {
   r := &passthroughResolver{
@@ -81,25 +82,25 @@ func (*passthroughBuilder) Build(target resolver.Target, cc resolver.ClientConn,
 }
 
 func (r *passthroughResolver) start() {
-  // r.cc is ccResolverWrapper
+  // 直接返回使用者輸入的 target
 	r.cc.UpdateState(resolver.State{Addresses: []resolver.Address{{Addr: r.target.Endpoint}}})
 }
 
 func (ccr *ccResolverWrapper) UpdateState(s resolver.State) {
-  // ccr.cc is ClientConn
+  // 透過 wrapper 通知 ClientConn 更新 State
   ccr.cc.updateResolverState(s)
 }
 ```
 
-當 Name Resolver 解析完名稱之後，會透過 balancer wrapper 產生的 watcher 通知 `Balancer` 最新的 Addresses。
+當 Name Resolver 解析完 target 之後，會透過 balancer wrapper 產生的 watcher 通知 `Balancer` 最新的 Addresses。
 
-**Balancer** 是 gRPC 實現 load-balacing 要角，它最主要負責 Handle connection 和 addresses 的狀態變化（例如當 Addresses 更新時則更新連線），以及在後續 transport 階段決定該選擇哪個 server connection。
+![gRPC-Dial-1.png]({{ site.url }}/assets/images/gRPC-Dial-1.png)
+
+**Balancer** 是 gRPC 實現 load-balacing 要角，它最主要負責 Handle connection 和 addresses 的狀態變化（例如當 Addresses 更新時則更新連線），以及在後續 transport 階段決定該選擇哪個 server connection(又稱為 balancer policy)。 gRPC Load Balance 採用 [External Load Balancing Service](https://github.com/grpc/grpc/blob/master/doc/load-balancing.md#external-load-balancing-service)，讓使用者可以選擇其他實作的 Balancer。
 
 > **Balancer** takes input from gRPC, manages SubConns, and collects and aggregates the connectivity states. It also generates and updates the Picker used by gRPC to pick SubConns for RPCs.
 
 > **SubConn** represents a gRPC sub connection. Each sub connection contains a list of addresses. gRPC will try to connect to them (in sequence), and stop trying the remainder once one connection is successful.
-
-![gRPC-Dial-1.png]({{ site.url }}/assets/images/gRPC-Dial-1.png)
 
 ```go
 func (cc *ClientConn) updateResolverState(s resolver.State) error {
@@ -134,11 +135,14 @@ func newCCBalancerWrapper(cc *ClientConn, b balancer.Builder, bopts balancer.Bui
 		done:             make(chan struct{}),
 		subConns:         make(map[*acBalancerWrapper]struct{}),
 	}
-	go ccb.watcher() // Create a watcher for name resolved events.
+	// Create a watcher for name resolved events.
+	go ccb.watcher() 
 	ccb.balancer = b.Build(ccb, bopts)
 	return ccb
 }
 ```
+
+以下擷取 watcher 接收 resolver Update 的後續處理：
 
 ```go
 // watcher balancer functions sequentially, so the balancer can be implemented
@@ -163,7 +167,7 @@ func (ccb *ccBalancerWrapper) watcher() {
 }
 ```
 
-grpc-go 內有實作幾個 balancer ，這邊以 pick first balancer 為例，觀察 Balancer Handle resolved addresses 行為。
+這邊以簡單地 pick first balancer 為例，觀察 Balancer Handle resolved addresses 實際行為。
 
 ```go
 type pickfirstBalancer struct {
@@ -204,6 +208,8 @@ func (ac *addrConn) connect() error {
 ```
 此時就會另起 goroutine 來正式與 Server 建立連線。
 ![gRPC-Dial-2.png]({{ site.url }}/assets/images/gRPC-Dial-2.png)
+
+`resetTransport` 是一個無限循環的迴圈，意味著如果 Server 端異常導致 disconnect 時，client 端會重新嘗試連線，直到連線成功或是 `connectivity.Shutdown` 為止。
 
 ```go
 func (ac *addrConn) resetTransport() {
@@ -270,8 +276,6 @@ func (ac *addrConn) resetTransport() {
 		hcancel()
 }
 ```
-
-`resetTransport` 是一個無限循環的迴圈，意味著如果 Server 端異常導致 disconnect 時，client 端會重新嘗試連線，直到連線成功或是 `connectivity.Shutdown` 為止。
 
 如果在一開始的 `grpc.Dial` 額外設置 `grpc.WithBlock`，則會等到確認 `connectivity.Ready` 後才會返回。不然在預設狀態下是 non-blocking ，讓 Client 在等待連線成功之餘可以做更多事情。
 
