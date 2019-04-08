@@ -279,5 +279,12 @@ func (ac *addrConn) resetTransport() {
 
 如果在一開始的 `grpc.Dial` 額外設置 `grpc.WithBlock`，則會等到確認 `connectivity.Ready` 後才會返回。不然在預設狀態下是 non-blocking ，讓 Client 在等待連線成功之餘可以做更多事情。
 
+最後可以透過實驗來觀察 gRPC log，對流程有更深刻的了解。只要加入 environment variable
+`GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info`
+
+就會看到在無法與 server 連線的情況下， client 會不斷地進行反覆重新連線行為。
+
+![gRPC-Dial-3.png]({{ site.url }}/assets/images/gRPC-Dial-3.png)
+
 ## References
 1. https://github.com/grpc/grpc/blob/master/doc/load-balancing.md
