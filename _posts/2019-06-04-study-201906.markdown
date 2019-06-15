@@ -36,43 +36,48 @@ categories: WebDevelopment
 
 5 月份共 **5** 天沒有唸書
 
--2019/5/1 你所不知道的 C 語言：動態連結器和執行時期行為篇 - 40 mins
--2019/5/3 Go presentation - Go tool present and compile server connection
--2019/5/4 Discrete mathematics - Valid argument forms
--2019/5/5 你所不知道的C語言: Stream I/O, EOF 和例外處理 - 補完之前沒跟到的進度
--2019/5/7 Linux 核心設計: 朝向硬即時的核心變革(上)
--2019/5/6 Discrete mathematics - Axiom/Lemma/Corollary/Theorem/Conjecture
--2019/5/8 Discrete mathematics - Indirect proofsDM(A)
--2019/5/9 Discrete mathematics - Indirect proofsDM(B)
--2019/5/10 Blog - Debugging performance issues in Go programs
--2019/5/11 Golang - memory allocators (span, heap, central, cache)
--2019/5/12 Data structure study - LinkedHashMap source code trace.
--2019/5/13 B Trees and B+ Trees. How they useful in Database
--2019/5/13 Discrete mathematics - Prove by cases
--2019/5/14 B tree and implementation
--2019/5/15 Linux 核心設計: 朝向硬即時的核心變革 (下)
--2019/5/16 Discrete mathematics - Pi mnemonicDM
--2019/5/18 Golang Weekly post
--2019/5/18 GopherCon 2017: Mitchell Hashimoto - Advanced Testing with Go
--2019/5/19 高性能队列——Disruptor
--2019/5/19 Discrete mathematics - 習題練習
--2019/5/23 Discrete mathematics- Mathematical InductionDM L11A
--2019/5/21 Go 學習筆記 - concurrency and reflect
--2019/5/24 Discrete mathematics- Mathematical InductionDM L11B
--2019/5/25 Golang Weekly Post
--2019/5/27 Linux 核心設計: 檔案系統概念及實作手法 (線上講座)
--2019/5/29 Computex Forum AIOT
--2019/5/30 Linux 核心設計: 檔案系統概念及實作手法 (Review) - file linking, linux file system model
--2019/5/30 Discrete mathematics- 習題 1-4 量化推導
--2019/5/31 Discrete mathematics- 習題練習，推論證明
+- 2019/5/1 你所不知道的 C 語言：動態連結器和執行時期行為篇 - 40 mins
+- 2019/5/3 Go presentation - Go tool present and compile server connection
+- 2019/5/4 Discrete mathematics - Valid argument forms
+- 2019/5/5 你所不知道的C語言: Stream I/O, EOF 和例外處理 - 補完之前沒跟到的進度
+- 2019/5/7 Linux 核心設計: 朝向硬即時的核心變革(上)
+- 2019/5/6 Discrete mathematics - Axiom/Lemma/Corollary/Theorem/Conjecture
+- 2019/5/8 Discrete mathematics - Indirect proofsDM(A)
+- 2019/5/9 Discrete mathematics - Indirect proofsDM(B)
+- 2019/5/10 Blog - Debugging performance issues in Go programs
+- 2019/5/11 Golang - memory allocators (span, heap, central, cache)
+- 2019/5/12 Data structure study - LinkedHashMap source code trace.
+- 2019/5/13 B Trees and B+ Trees. How they useful in Database
+- 2019/5/13 Discrete mathematics - Prove by cases
+- 2019/5/14 B tree and implementation
+- 2019/5/15 Linux 核心設計: 朝向硬即時的核心變革 (下)
+- 2019/5/16 Discrete mathematics - Pi mnemonicDM
+- 2019/5/18 Golang Weekly post
+- 2019/5/18 GopherCon 2017: Mitchell Hashimoto - Advanced Testing with Go
+- 2019/5/19 高性能队列——Disruptor
+- 2019/5/19 Discrete mathematics - 習題練習
+- 2019/5/23 Discrete mathematics- Mathematical InductionDM L11A
+- 2019/5/21 Go 學習筆記 - concurrency and reflect
+- 2019/5/24 Discrete mathematics- Mathematical InductionDM L11B
+- 2019/5/25 Golang Weekly Post
+- 2019/5/27 Linux 核心設計: 檔案系統概念及實作手法 (線上講座)
+- 2019/5/29 Computex Forum AIOT
+- 2019/5/30 Linux 核心設計: 檔案系統概念及實作手法 (Review) - file linking, linux file system model
+- 2019/5/30 Discrete mathematics- 習題 1-4 量化推導
+- 2019/5/31 Discrete mathematics- 習題練習，推論證明
 
 ## Articles
--[Debugging performance issues in Go programs](https://software.intel.com/en-us/blogs/2014/05/10/debugging-performance-issues-in-go-programs)
--[High Performance Go](https://qconsf.com/sf2017/system/files/presentation-slides/high_performance_go.pdf)
--[Garbage Collection In Go : Part I - Semantics](https://www.ardanlabs.com/blog/2018/12/garbage-collection-in-go-part1-semantics.html)
--[B Trees and B+ Trees. How they useful in Database](https://www.youtube.com/watch?v=aZjYr87r1b8)
--[Context should go away for Go 2](https://faiface.github.io/post/context-should-go-away-go2/)
--[TableDrivenTests](https://github.com/golang/go/wiki/TableDrivenTests)
--[GopherCon 2017: Mitchell Hashimoto - Advanced Testing with Go](https://www.youtube.com/watch?v=8hQG7QlcLBk)
--[Golang: Concurrency: Monitors and Mutexes, A (light) Survey](https://medium.com/dm03514-tech-blog/golang-monitors-and-mutexes-a-light-survey-84f04f9b7c09)
--[REST API Error Handling in Go: Behavioral Type Assertion](https://medium.com/ki-labs-engineering/rest-api-error-handling-in-go-behavioral-type-assertion-509d93636afd)
+- [Debugging performance issues in Go programs](https://software.intel.com/en-us/blogs/2014/05/10/debugging-performance-issues-in-go-programs)
+- [High Performance Go](https://qconsf.com/sf2017/system/files/presentation-slides/high_performance_go.pdf)
+- [Garbage Collection In Go : Part I - Semantics](https://www.ardanlabs.com/blog/2018/12/garbage-collection-in-go-part1-semantics.html)
+- [B Trees and B+ Trees. How they useful in Database](https://www.youtube.com/watch?v=aZjYr87r1b8)
+- [Context should go away for Go 2](https://faiface.github.io/post/context-should-go-away-go2/)
+- [TableDrivenTests](https://github.com/golang/go/wiki/TableDrivenTests)
+- [GopherCon 2017: Mitchell Hashimoto - Advanced Testing with Go](https://www.youtube.com/watch?v=8hQG7QlcLBk)
+- [Golang: Concurrency: Monitors and Mutexes, A (light) Survey](https://medium.com/dm03514-tech-blog/golang-monitors-and-mutexes-a-light-survey-84f04f9b7c09)
+- [REST API Error Handling in Go: Behavioral Type Assertion](https://medium.com/ki-labs-engineering/rest-api-error-handling-in-go-behavioral-type-assertion-509d93636afd)
+
+## Study Counts
+- Others:18
+- Linux:6
+- Back-End:7

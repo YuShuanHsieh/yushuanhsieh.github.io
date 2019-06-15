@@ -51,3 +51,10 @@ categories: WebDevelopment
 - 2019/4/28 - Cgo dump pre-compile files
 - 2019/4/29 - GopherChina - Go concurrency in practice
 - 2019/4/30 - Discrete mathematics - Mathematical arguments and functional proposition with De Morgen's Law
+
+## Articles
+- [gRPC Name Resolution](https://github.com/grpc/grpc/blob/master/doc/naming.md)
+- [Load Balance](https://github.com/grpc/grpc/blob/master/doc/load-balancing.md)
+- [gRPC Client 與 Server 連線流程](https://yushuanhsieh.github.io/webdevelopment/gRPC-Dial)
+- [The Lost Art of Structure Packing](http://www.catb.org/esr/structure-packing/#_padding)
+- [Next level Go testing](https://scene-si.org/2019/04/15/next-level-go-testing/)
