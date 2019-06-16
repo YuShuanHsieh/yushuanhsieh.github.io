@@ -6,7 +6,6 @@ categories: WebDevelopment
 ---
 ![study]({{ site.url }}/assets/images/side-project.png)
 ## 前言
-
 用 Trello 紀錄自己的每日學習進度也好一陣子了，雖然 Trello board 搭配 plugin `Calendar` 很好用，但是卻有資訊分散在各張卡的問題。因此為了便於在月末寫當月學習報告，以及整理所有曾經讀過的 article/post link，就開發了一個小工具 `trello-transform` 來從 trello cards 中擷取資訊。其實這個 side project 寫了有一段時間了，之前曾經立志要寫一個有前後端的小網站，這樣不會寫 code 的人也可以使用，但是後來就有點擱置了 XD 原因是我把這個功能寫成一個小框架，以因應每個人紀錄習慣不同，不過這樣的調整就需要會寫一點 code 並知道如何修改，對於不會寫 code 的人來說，可能便利性就沒這麼高。另外就是寫成網頁反而不利於我寫 blog，基於這個 side project 本來就是希望先滿足自己需求，因此後來目標就改成就先以 cli tool 實作為主。
 
 現在這個 side project 成為我每個月必使用的工具，用來擷取學習日誌和 links，除了寫 blog 之外，後續還可以很方便地回顧之前看過的文章，可以說是目前寫過最實用的 project XD 
@@ -24,7 +23,9 @@ categories: WebDevelopment
 ### Accumulator
 
 Accumulator 目的是在進行 card loop 的時候，累加處理過後的結果。因為結果的值可能是各種不同 type struct，所以就使用 interface。另外，最後的值根據不同 struct 可能有不同輸出方式，因此需要實作 `String() string` 來支援 output。
+
 > If an operand implements method String() string, that method will be invoked to convert the object to a string, which will then be formatted as required by the verb (if any).
+
 ```go
 type Accumulator interface {
 	String() string
