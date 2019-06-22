@@ -73,7 +73,7 @@ int tail_recursion_fib(int n, int left, int right)
 
 ## Tail recursion Optimization
 
-之所以採用 `Tail recursion` 寫法的最大原因，是因為很多語言可以透過 compile 將 `Tail recursion` 的效能最佳化，以避免因為執行到 function 而需要為它建立新的 [Stack Frame](https://www.cs.auckland.ac.nz/software/AlgAnim/stacks.html)。
+之所以採用 `Tail recursion` 寫法的主要原因，是因為很多語言可以透過 compile 將 `Tail recursion` 的效能最佳化，以避免因為執行到 function 而需要為它建立新的 [Stack Frame](https://www.cs.auckland.ac.nz/software/AlgAnim/stacks.html)。
 
 ![stack frame](https://www.cs.auckland.ac.nz/software/AlgAnim/fig/stackframe.gif)
 
@@ -94,9 +94,30 @@ int tail(int a, int result)
 
 可以看到在 `Tail recursion Optimization` 部分，只需要把處理過後的數值儲存起來，接著跳轉到同一個 function 最前端重複執行即可。反過來看，如果沒有經過優化的話，那麼就需要耗費 stack 空間為相同的 function 建立新的 stack frame。
 
-## 實驗分析
+## Tail Recursion (Optimization) / Iteration
 
-現在我們就來實驗一下會在有無 `Tail recursion Optimization` 的情況下，會有多少差距。
+看到這裡或許你會覺得很奇怪，這樣透過 `Tail recursion Optimization` 所產生的結果不就跟 `iteration` 差不多嗎？
+
+其實 Iteration 與 Tail Recursion 在大部分情況下可以相互轉換。
+
+> All iterative functions can be converted to recursion because iteration is just a special case of recursion **(tail recursion)**. In functional languages like Scheme, iteration is defined as tail recursion.
+> www.ocf.berkeley.edu
+
+只是差別在於如果沒有經過 Optimization 階段，那麼 Tail Recursion 會需要處理額外的 stack frame，因此比 Iteration 慢。而 Tail recursion Optimization 後，就能有跟 Iteration 相似的表現。
+
+> However, in functional programming languages, tail call elimination is often guaranteed by the language standard, allowing tail recursion to use a similar amount of memory as an equivalent loop.
+> https://en.wikipedia.org/wiki/Tail_call
+
+## 使用 `Tail Recursion` 的時機
+
+1. Language 有支援 Tail Recursion Optimization（如果沒有支援，就有可能讓 stack 空間耗盡）。
+2. 提升 code 的簡潔與可讀性。
+3. 需要操作 recursive data structures 像是 linklist or tree 等
+。
+
+## 效能實驗
+
+簡單實驗一下會在有無 `Tail recursion Optimization` 的情況下，會有多少差距。
 
 ### 機器
 ```
@@ -116,16 +137,17 @@ int tail(int a, int result)
 ```
 
 首先，先把 c file compile 成沒有優化過後的 assembly code file：
+（之所以不用 -O2 來進行 code 優化，是因為透過 -On 會影響很多 assembly code，不好進行評估）
 
 ```
 gcc -S tail.c
 ```
 
-可以看到 assembly code:
+可以獲得 *.s 的 assembly code file。
 
-```asm
+```assembly
 tail_fib:
-        stp     x29, x30, [sp, -32]!
+        stp     x29, x30, [sp, -32] // 移動 stack pointer
         add     x29, sp, 0
         str     w0, [x29, 28]
         str     w1, [x29, 24]
@@ -144,7 +166,7 @@ tail_fib:
         mov     w2, w0
         ldr     w1, [x29, 20]
         mov     w0, w3
-        bl      tail_fib
+        bl      tail_fib // branch 執行 function
 .L3:
         ldp     x29, x30, [sp], 32
         ret
@@ -153,7 +175,8 @@ tail_fib:
         .align  3
 ```
 
-然後簡單把 `bl tail_fib` 改成 goto 到原有 stack frame head 的行為：
+然後參照優化行為，把 `bl tail_fib` 改成 goto 到原有 stack frame head：
+(可參考 Advanced Compiler Design Implementation)
 
 ```asm
 tail_fib:
@@ -178,7 +201,7 @@ tail_fib:
         mov     w2, w0
         ldr     w1, [x29, 20]
         mov     w0, w3
-	b	.L5
+	b	.L5 // 用途類似 x86 的 jmp. 跳至 .L5 避免移動 SP
 .L3:
         ldp     x29, x30, [sp], 32
         ret
@@ -187,7 +210,15 @@ tail_fib:
         .align  3
 ```
 
+雖然是手動調整的，不過可以知道，如果想看出有沒有 `Tail recursion Optimization` 效果，只要查看 assembly code，觀察是否有 `CALL / BL <self name>` ，就可以很快了解。
+
 ### Result
-在 recusion 數量少的情況下，優化後的效率沒有太多變化，不過當到了 recusive function call 多的時候，就會看出兩者之間的時間差距。
+在 recusion 數量少的情況下，效率沒有太多變化，不過當到了 recusive function call 多的時候，就會看出兩者之間的時間差距。
 
 ![study]({{ site.url }}/assets/images/tail-recursion.png)
+
+## References
+
+1. https://en.wikipedia.org/wiki/Tail_call
+2. https://www.cs.auckland.ac.nz/software/AlgAnim/stacks.html
+3. https://www.ocf.berkeley.edu/~shidi/cs61a/wiki/Iteration_vs._recursion
