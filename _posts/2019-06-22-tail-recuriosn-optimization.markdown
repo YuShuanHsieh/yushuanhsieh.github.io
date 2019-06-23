@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Tail Recursion Optimization in Go"
+title:  "Tail Recursion in Go"
 date:   2019-06-14 08:00:00 +0800
 categories: WebDevelopment
 ---
@@ -63,7 +63,7 @@ int tail_recursion_fib(int n, int left, int right)
   {
     return left;
   }
-  return tail_fib(n-1, right, left + right);
+  return tail_recursion_fib(n-1, right, left + right);
 }
 ```
 
@@ -134,7 +134,7 @@ int tail_recursion_fib(int n, int left, int right)
   {
     return left;
   }
-  return tail_fib(n-1, right, left + right);
+  return tail_recursion_fib(n-1, right, left + right);
 }
 ```
 
