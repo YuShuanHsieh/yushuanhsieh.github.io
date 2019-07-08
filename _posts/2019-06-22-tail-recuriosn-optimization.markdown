@@ -210,7 +210,7 @@ tail_fib:
         .align  3
 ```
 
-另外也提供  `x86_64-apple-darwin` 的 assembly code，可以很清楚看出 `Tail Recursion Optimization`。
+另外也提供  `x86_64-apple-darwin` 的 assembly code，可以很清楚看出 `Tail Recursion Optimization`。(說明一下，由於 `aarch64-linux-gnu` 在經過 compiler 優化後變化很大，如果不熟悉 assembly code 的話，可能看不出差異點，所以提供 x86_64-apple-darwin 版本)
 
 Normal
 
