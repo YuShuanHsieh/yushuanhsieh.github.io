@@ -1,0 +1,138 @@
+---
+layout: single
+title:  "2019/07月份自我學習回顧"
+date:   2019-08-08 08:00:00 +0800
+categories: Study
+---
+
+## 前言
+
+時間超快地又到了八月了～七月整個月天氣都蠻悶熱的，加上小套房也不是很通風，想要好好在房間念書就只能一直開冷氣，偶爾再去金山街星巴克當假文青。除了進修之外，還跟公司旅遊補助團去了一趟高雄、台南小旅行，去高雄的那天剛好遇到輕颱大淹水，在開高速公路的時候，風雨交加，旁邊的大遊覽車不斷踩水激起大浪花，整個過程蠻膽戰心驚，深怕一個不注意會發生意外，幸好還是平安回來了。
+
+![study]({{ site.url }}/assets/images/study-2019-07.jpg)
+
+學習部分，七月份其實吸收蠻多內容的，收穫滿滿，可惜因為時間關係，筆記大多很潦草，還不足以登上檯面，就沒有放在 blog 上了。七月份學到最多的就是 Linux kernel 和 network 相關知識，而其中印象讓我深刻的是，我在學習過程中遇到一個不太確定的問題，因此花時間在查閱相關內容並找答案，那時候心中覺得這個答案可能是正確的，但是基於經驗不足的關係，還是去請教了韌體相關的資深同事，結果他給了我一個完全不同方向的答案。這令我蠻訝異的，因為我的確沒想到會不同方向的思考路線，也讓我在後續學習時更加注意各面向的思考。不過會導致這原因，深究起來還是對於 kernel 理論不夠熟悉的緣故，所以在學習中加入了 `Linux kernel development` 書籍，希望能多加深理論基礎。
+
+七月份接觸蠻多種議題，包含工作上的 Security, network package filter, kernel module 等，在過程中多少會擔心自己是不是會迷失了學習方向。不過幸好在最後實作 side project 時，這些學習都有互相應用，整體來說吸收不錯，八月份也會繼續努力 :D
+
+## 預定目標回顧
+
+根據七月初紀錄，七月要完成的目標包含：
+
+#### 1. 使用正規做法來實作 File System (super_block, inodetable, bitmap..)並與 FUSE lib 連接。
+
+這個項目完成50%，包含 disk simulator 和 file system structure，過程中參考蠻多 ext4，希望能一併學習到 ext4 的實作理念。不過後來之所以慢下腳步，是因為做到一半需要 synchronization 相關知識，而在 Linux kernel 中 Locks 的種類分比較細，因此後來注意力就轉移到 synchronization 實作原理和應用上了。目前是打算把 `Linux kernel development` 看完，再回到這個 side project 上繼續實作。
+
+#### 2. Linux 核心設計: `朝向硬即時的核心變革` 複習，目標是看第二次並把基本概念釐清下來，其他細節原理則記下來並再後續安排時間深究。
+
+本來打算複習這個主題，但是由於在實作 file system 時遇到問題，所以就換成複習 `Linux 核心設計: RCU`。複習進度則是 100%，看完影片，也實際寫了 kernel module 進行效能實驗，同時請教同事一些 source code 問題，收穫良多。
+
+#### 3. 離散數學線上課程看到 L25，有時間可以看到 L30。
+
+複習進度是 100%，是看完 L25 沒錯，不過沒有更多進度，實在有點可惜，只能說自己還是花了太多時間在看 code 上，要更多關注數學進修才行。
+
+## 八月份預計進度
+
+1. Go 聯合 meetup 分享講者，準備報告內容
+2. `Linux kernel development` 
+3. 因為工作需要，所以可能必須把一部分心力轉移到 Network protocol 分析。
+4. 離散數學 L30
+
+## 學習日誌
+
+- 2019/7/1 Discrete mathematics- (Counting) Combination & Permutation. ( Combination with unlimited repetitions) L19
+- 2019/7/1 整理 FUSE 相關資料和學習內容(包含部分 virtual file system)
+- 2019/7/1 Linux 核心設計: 記憶體管理 (3) 線上講座
+- 2019/7/2 Linux 核心設計: 記憶體管理 (3) 線上講座 - 複習到(2:09:00)
+- 2019/7/2 The Memory Hierarchy - Cache
+- 2019/7/2 File System Implementation - 1
+- 2019/7/3 Discrete mathematics- L20 Double counting
+- 2019/7/4 Golang runtime asm.c file trace
+- 2019/7/4 Discrete mathematics- Double counting, Pascal's Triangle, Vandermonde's Identity, Set L20
+- 2019/7/5 Discrete mathematics- L21
+- 2019/7/5 side project - tnfs file system (create inode, delete, and bitmap search)
+- 2019/7/6 The Definitive Guide to Linux System Calls (switch stack, register for interrupt)
+- 2019/7/6 futex - fast user-space locking
+- 2019/7/7 Slab and Slob memory allocators.
+- 2019/7/7 Discrete mathematics- Subset & Set Operations_Union, Intersection, Complemen
+- 2019/7/8 Discrete mathematics- Subset & Set Operations_Union, Intersection, Complemen - 21B
+- 2019/7/8 Compiler optimization and the volatile keyword. Objdump to show what's happen.
+- 2019/7/9 Atomic primitives in the kernel
+- 2019/7/9 Golang Mutex implementation
+- 2019/7/9 Discrete mathematics- Proving Set Identities
+- 2019/7/10 A MINIMUM COMPLETE TUTORIAL OF LINUX EXT4 FILE SYSTEM
+- 2019/7/10 Test RWMutex and Mutex
+- 2019/7/11 Session Management and
+User Authentication
+- 2019/7/11 你所不知道的C語言：技巧篇 (線上講座)
+- 2019/7/12 When Prefetching Works, When It Doesn’t, and Why
+- 2019/7/12 Linux 核心設計：RCU 同步機制 (複習)
+- 2019/7/12 Using RCU for linked lists — a case study
+- 2019/7/13 What is RCU, Fundamentally?
+- 2019/7/13 Discrete mathematics- L22B
+- 2019/7/14 Fast reader/writer locks
+- 2019/7/14 Linux 核心設計：RCU 同步機制 (下) 複習
+- 2019/7/15 Linux 核心設計：RCU 同步機制 (下) 複習
+- 2019/7/15 Test RCU performance (write a simple kernel module to test)
+- 2019/7/16 Book: Linux Kernel Development chapter 3 - Process Management
+- 2019/7/16 Test RCU performance
+- 2019/7/17 Book: Linux Kernel Development chapter 4 - Process Scheduler
+- 2019/7/17 Linux 核心設計: 從「棋子還是塞子？ 」探討 Scalability 議題
+- 2019/7/18 員工補助旅遊
+- 2019/7/19 員工補助旅遊
+- 2019/7/20 員工補助旅遊
+- 2019/7/21 員工補助旅遊
+- 2019/7/22 Book: Linux Kernel Development chapter 4 - Process Scheduler (sched_latency_ns, vruntime)
+- 2019/7/22 Linux IP Networking chapter 1 - 3
+- 2019/7/23 Book: Linux Kernel Development chapter 5 - System Calls
+- 2019/7/24 networking side project.
+- 2019/7/24 TCP SYN_REVD, ESTABELLISHED 状态对应的队列
+- 2019/7/25 Trace linux TCP source code to check listen behaviour
+- 2019/7/26 IP fragmentation
+- 2019/7/27 Discrete mathematics-  L23 A,B L24 A,B. pigeonhole principle  homework and functions (injection, surjection, bijection)
+- 2019/7/31 Linux Kernel Networking -Implementation (2014)
+- 2019/7/28 感冒休息
+- 2019/7/29 Linux TCP - SYN Cookie的原理和实现
+- 2019/7/29 Trace code to understand TCP Syn cookie.
+- 2019/7/30 Discrete mathematics- Surjective Functions & Recurrence relation L25
+
+## 學習資源
+
+- [記憶體管理](https://hackmd.io/@sysprog/rJBXOchtE?type=view)
+- [cache 原理和實驗](https://hackmd.io/@EW34LLeXTra2Oikg0WEQ5Q/S14L26-_l?type=view)
+- [关于CPU Cache -- 程序猿需要知道的那些事](http://cenalulu.github.io/linux/all-about-cpu-cache/)
+- [How L1 and L2 CPU Caches Work, and Why They’re an Essential Part of Modern Chips](https://www.extremetech.com/extreme/188776-how-l1-and-l2-cpu-caches-work-and-why-theyre-an-essential-part-of-modern-chips)
+- [Book](http://www.cs.iit.edu/~virgil/cs470/Book/chapter7.pdf)
+- [File System Implementation](http://pages.cs.wisc.edu/~remzi/OSTEP/file-implementation.pdf)
+- [The Definitive Guide to Linux System Calls](https://blog.packagecloud.io/eng/2016/04/05/the-definitive-guide-to-linux-system-calls/)
+- [futex - fast user-space locking](http://man7.org/linux/man-pages/man2/futex.2.html)
+- [一个 Linux 上分析死锁的简单方法](https://www.ibm.com/developerworks/cn/linux/l-cn-deadlock/index.html)
+- [Linux slab 分配器剖析](https://www.ibm.com/developerworks/cn/linux/l-linux-slab-allocator/index.html)
+- [Understanding the Linux Virtual Memory Manager](http://ptgmedia.pearsoncmg.com/images/0131453483/downloads/gorman_book.pdf)
+- [slob: introduce the SLOB allocator](https://lwn.net/Articles/157944/)
+- [Compiler optimization and the volatile keyword](http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0472c/CJAEGDEA.html)
+- [Atomic primitives in the kernel](https://lwn.net/Articles/695257/)
+- [Atomic usage patterns in the kernel](https://lwn.net/Articles/698315/)
+- [Linux内核同步机制之（四）：spin lock](http://www.wowotech.net/kernel_synchronization/spinlock.html)
+- [Operating Systems: Three Easy Pieces](http://pages.cs.wisc.edu/~remzi/OSTEP/)
+- [golang Mutex 实现上的几个巧妙的点](https://my.oschina.net/u/2950272/blog/1831674)
+- [semacquire](https://golang.org/src/runtime/sema.go)
+- [Semaphores](http://pages.cs.wisc.edu/~remzi/OSTEP/threads-sema.pdf)
+- [A MINIMUM COMPLETE TUTORIAL OF LINUX EXT4 FILE SYSTEM](https://metebalci.com/blog/a-minimum-complete-tutorial-of-linux-ext4-file-system/#bitmaps)
+- [Session Management and User Authentication](https://crypto.stanford.edu/cs155old/cs155-spring11/lectures/15-auth-session-mgmt.pdf)
+- [你所不知道的C語言：技巧篇](https://hackmd.io/@sysprog/HyIdoLnjl?fbclid=IwAR3IDjfbHXcyB7m6Ch56h4KFtC_R823AyOu8CED18tLVyA3OD_JqVdCCKeo)
+- [When Prefetching Works, When It Doesn’t, and Why](https://www.cc.gatech.edu/~hyesoon/lee_taco12.pdf)
+- [B06: software-pipelining](https://hackmd.io/@jserv/rks62p1sl?type=view)
+- [Operating Systems: Three Easy Pieces](http://pages.cs.wisc.edu/~remzi/OSTEP/)
+- [Using RCU for linked lists — a case study](https://lwn.net/Articles/610972/)
+- [What is RCU, Fundamentally?](https://lwn.net/Articles/262464/)
+- [Distributed OS](https://os.inf.tu-dresden.de/Studium/DOS/SS2011/06-RCU.pdf)
+- [Implementing threads](http://www.it.uu.se/education/course/homepage/os/vt18/module-4/implementing-threads/)
+- [从几个问题开始理解CFS调度器](http://linuxperf.com/?p=42)
+- [Linux IP Networking](https://www.cs.unh.edu/cnrg/people/gherrin/linux-net.html)
+- [TCP SYN_REVD, ESTABELLISHED 状态对应的队列](https://jaminzhang.github.io/linux/understand-Linux-backlog-and-somaxconn-kernel-arguments/)
+- [線上開放課程-區域網路](http://opencourse.ndhu.edu.tw/course/view.php?id=13)
+- [TCP maximum segment size 是什麼以及是如何決定的](https://medium.com/fcamels-notes/tcp-maximum-segment-size-%E6%98%AF%E4%BB%80%E9%BA%BC%E4%BB%A5%E5%8F%8A%E6%98%AF%E5%A6%82%E4%BD%95%E6%B1%BA%E5%AE%9A%E7%9A%84-b5fd9005702e)
+- [(未看)Network Protocol Breakdown: Ethernet and Go](https://mdlayher.com/blog/network-protocol-breakdown-ethernet-and-go/)
+- [Linux Kernel Networking - Implementation (2014) (18)](https://nscpolteksby.ac.id/ebook/book/computer-engineering/)
+- [SYN Cookie的原理和实现](https://blog.csdn.net/zhangskd/article/details/16986931)
