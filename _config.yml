@@ -186,6 +186,7 @@ gems:
   - jekyll-feed
   - jemoji
   - jekyll-archives
+  - jekyll-toc
 
 # mimic GitHub Pages with --safe
 whitelist:
@@ -195,7 +196,7 @@ whitelist:
   - jekyll-feed
   - jemoji
   - jekyll-archives
-
+  - jekyll-toc
 
 # Archives
 #  Type
@@ -243,7 +244,7 @@ defaults:
     values:
       layout: single
       author_profile: true
-      read_time: false
-      comments: # true
-      share: false
+      read_time: true
+      comments: true
+      share: true
       related: true
