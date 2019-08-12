@@ -5,8 +5,6 @@ date:   2019-08-08 08:00:00 +0800
 categories: 
   - Study
 ---
-{% include toc %}
-
 ## 前言
 時間超快地又到了八月了～七月整個月天氣都蠻悶熱的，加上小套房也不是很通風，想要好好在房間念書就只能一直開冷氣，偶爾再去金山街星巴克當假文青。除了進修之外，還跟公司旅遊補助團去了一趟高雄、台南小旅行，去高雄的那天剛好遇到輕颱大淹水，在開高速公路的時候，風雨交加，旁邊的大遊覽車不斷踩水激起大浪花，整個過程蠻膽戰心驚，深怕一個不注意會發生意外，幸好還是平安回來了。
 
@@ -137,3 +135,4 @@ User Authentication
 - [(未看)Network Protocol Breakdown: Ethernet and Go](https://mdlayher.com/blog/network-protocol-breakdown-ethernet-and-go/)
 - [Linux Kernel Networking - Implementation (2014) (18)](https://nscpolteksby.ac.id/ebook/book/computer-engineering/)
 - [SYN Cookie的原理和实现](https://blog.csdn.net/zhangskd/article/details/16986931)
+{% include toc %}
