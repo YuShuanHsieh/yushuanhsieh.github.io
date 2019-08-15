@@ -163,6 +163,9 @@ kramdown:
   toc_levels: 1..6
   smart_quotes: lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
 
 
 # Sass/SCSS
@@ -179,7 +182,7 @@ timezone: # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 
 # Plugins
-gems:
+plugins:
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-gist
@@ -187,6 +190,7 @@ gems:
   - jemoji
   - jekyll-archives
   - jekyll-toc
+  - jekyll-include-cache
 
 # mimic GitHub Pages with --safe
 whitelist:
