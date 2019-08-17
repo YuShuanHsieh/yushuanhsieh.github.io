@@ -1,0 +1,131 @@
+---
+layout: single
+title:  "semaphore sem_post 在 glibc v2.0 v2.1 之比較"
+date:   2019-08-17 08:00:00 +0800
+categories: 
+  - GNU
+  - C
+---
+
+## 前言
+在翻 `futex` man document 的時候，不小心看到 [Linux Futex的设计与实现](https://blog.csdn.net/jianchaolv/article/details/7544316) 這篇文章。文章中有提到在執行 `sem_post` 的時候，雖然沒有與其他 thread 競爭，還是會用到 fuxtex system call。當然文章中有提到原因，不過看了原因，覺得這看起來很明顯的效能問題，應該會被提出來並改進吧？後來翻了一下目前的 source code ，看到這個是 `GLIBC_2_0` 的版本（那篇文章也很久了，所以能想見當時的版本應該蠻舊的），而現在 `GLIBC_2_1` 就有把這部分改進，因此就來簡單記錄一下差異在哪裡吧～
+
+## Version
+
+glibc 2.29
+
+### GLIBC_2_0 version
+
+```c
+int attribute_compat_text_section __old_sem_post (sem_t *sem)
+{
+  int *futex = (int *) sem;
+  atomic_write_barrier ();
+  (void) atomic_increment_val (futex);
+  int err = lll_futex_wake(futex, 1, LLL_SHARED);
+  if (__builtin_expect (err, 0) < 0)
+    {
+      __set_errno (-err);
+      return -1;
+    }
+  return 0;
+}
+```
+
+從 source code 可以看到，在將 sem value + 1 後，就直接使用 `lll_futex_wake` 呼叫 futex wake system call，其原因在文章內也有提到，是因為當 sem value 加 1 後，當時的機制並無法確認是否有其他 thread 正在 wait。
+
+也因此，才會有原文提到的:
+
+```c
+20533 futex(0xb7db1be8, FUTEX_WAIT, 20534, NULL <unfinished ...> // pthread_join
+20534 futex(0x8049870, FUTEX_WAKE, 1)   = 0 // sem_post
+20533 <... futex resumed> )             = 0
+```
+
+這樣的情形發生。
+
+### GLIBC_2_1 version
+
+```c
+// 這邊假設為 64 bit processor 
+int __new_sem_post (sem_t *sem)
+{
+  struct new_sem *isem = (struct new_sem *) sem;
+  int private = isem->private;
+  uint64_t d = atomic_load_relaxed (&isem->data);
+  do
+    {
+      // SEM_VALUE_MASK = 32
+      // SEM_VALUE_MAX = 2147483647 (Maximum value the semaphore can have)
+      if ((d & SEM_VALUE_MASK) == SEM_VALUE_MAX)
+        {
+          __set_errno (EOVERFLOW);
+          return -1;
+        }
+    }
+  while (!atomic_compare_exchange_weak_release (&isem->data, &d, d + 1));
+  if ((d >> SEM_NWAITERS_SHIFT) > 0)
+    futex_wake (((unsigned int *) &isem->data) + SEM_VALUE_OFFSET, 1, private);
+  return 0;
+}
+```
+
+在新版可以看到，為了解決**無法確認當前是否有其他 threads 正在 wait**的問題， sem value 被分為兩個部分: `nwaiters` and `value`，然後使用 bit shift 來取出 nwaiters number ，只有當 nwaiters > 0 時，才會呼叫 futex_wake 了。
+
+接著就使用原文中的實驗程式，來看一下新版的結果：
+
+```c
+set_tid_address(0x7feb89cd39d0)         = 3771
+set_robust_list(0x7feb89cd39e0, 24)     = 0
+rt_sigaction(SIGRTMIN, {sa_handler=0x7feb898a0bd0, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7feb898ac0e0}, NULL, 8) = 0
+rt_sigaction(SIGRT_1, {sa_handler=0x7feb898a0c60, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7feb898ac0e0}, NULL, 8) = 0
+rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+mmap(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7feb88cfb000
+brk(NULL)                               = 0x5599ebd5e000
+brk(0x5599ebd7f000)                     = 0x5599ebd7f000
+mprotect(0x7feb88cfb000, 4096, PROT_NONE) = 0
+clone(child_stack=0x7feb894faff0, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0x7feb894fb9d0, tls=0x7feb894fb700, child_tidptr=0x7feb894fb9d0) = 3772
+futex(0x7feb894fb9d0, FUTEX_WAIT, 3772, NULLsem value = 0 // pthread_join
+) = 0
+exit_group(0)
+```
+
+可以清楚看到，除了 `pthread_join` 的 futex wait 之外，並沒有發現如同舊版的 futex wake 了。
+
+## 結論
+
+目前看到很多大神的 source code 分析。其實都有點年代了，建議還是要再翻一次當前版本的 source code ，才不會只學到舊觀念，而沒跟上新版本呀！
+
+### 附錄
+
+實驗 source code 
+
+```c
+#include <stdio.h>
+#include <unistd.h>
+#include <semaphore.h>
+#include <pthread.h>
+
+sem_t sem_a;
+void *task1();
+
+int main(void){
+  int ret=0;
+  pthread_t thrd1;
+  sem_init(&sem_a,0,1);
+  ret=pthread_create(&thrd1,NULL,task1,NULL); 
+  pthread_join(thrd1,NULL);
+}
+
+void *task1()
+{
+  int sval = 0;
+  sem_wait(&sem_a); 
+  sleep(1);
+  sem_getvalue(&sem_a,&sval);
+  printf("sem value = %d\n",sval);
+  
+  (&sem_a);
+}
+```
