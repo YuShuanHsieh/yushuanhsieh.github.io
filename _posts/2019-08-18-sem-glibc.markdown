@@ -5,6 +5,8 @@ date:   2019-08-17 08:00:00 +0800
 categories: 
   - GNU
   - C
+toc: true
+toc_icon: "cog"
 ---
 
 ## 前言
@@ -97,9 +99,9 @@ exit_group(0)
 
 目前看到很多大神的 source code 分析。其實都有點年代了，建議還是要再翻一次當前版本的 source code ，才不會只學到舊觀念，而沒跟上新版本呀！
 
-### 附錄
+## 附錄
 
-實驗 source code 
+### 實驗 source code 
 
 ```c
 #include <stdio.h>
