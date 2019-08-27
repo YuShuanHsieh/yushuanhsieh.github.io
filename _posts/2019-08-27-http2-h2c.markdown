@@ -1,0 +1,312 @@
+---
+layout: single
+title:  "Start HTTP/2 running over cleartext TCP"
+date:   2019-08-27 08:00:00 +0800
+categories: 
+  - Network
+  - Go
+toc: true
+toc_icon: "cog"
+---
+![flow]({{ site.url }}/assets/images/h2c-flow.png)
+## 前言
+主流使用 HTTP/2 時都是基於 TLS protocol，不過在 HTTP/2 RFC7540 規範中， HTTP/2 其實也可以直接基於 cleartext TCP 來溝通。這次主要介紹 based on cleartext TCP 的 HTTP/2 server 與 client 實作，後續會再加入 HTTP/2 結合 TLS protocol 的相關內容。
+
+## HTTP/2 Version Identification
+
+在 [RFC7540 3.1](https://httpwg.org/specs/rfc7540.html#versioning) 中有明確定義出 HTTP/2 on TLS protocol or cleartext TCP 的識別號，這個識別主要用於 client 端詢問 server 對於 HTTP/2 的 protocol 支援，以及切換到 HTTP/2 的過程。
+
+### 1. h2
+The string "h2" identifies the protocol where HTTP/2 uses Transport Layer Security (TLS).
+### 2. h2c
+The string "h2c" identifies the protocol where HTTP/2 is run over cleartext TCP.
+
+為了方便辨識，以下會直接以 `h2` `h2c` 代號來表示基於不同 protocol 的 HTTP/2。
+
+而在h2c 部分，有更細節的說明：
+
+> This identifier is used in the **HTTP/1.1 Upgrade header field** and in any place where HTTP/2 over TCP is identified.
+> 
+> The "h2c" string is **reserved from the ALPN identifier** space but describes a protocol that does not use TLS.
+
+Client 與 server 在決定要用什麼 protocol 溝通時，h2 基於 TLS ，因此是採用 `TLS-ALPN(Application-Layer Protocol Negotiation)` 方式；至於 h2c 沒有 TLS ，所以就走 HTTP/1.1 Upgrade 機制，在 request header 中會加入 `Upgrade:h2c`，讓 server 可以根據此來辨識是否支援並且 upgrade。
+
+#### Upgrading from HTTP/2
+
+([RFC7540 8.1.1](https://httpwg.org/specs/rfc7540.html#versioning))雖然 HTTP/1.1 可以透過 `Upgrade` 機制來切換到 HTTP/2 protocol，但是 HTTP/2 卻是明確禁止這樣的行為，也因此無法透過這樣的 upgrade 機制從 HTTP/2 轉換到其他 protocol。
+
+## h2c HTTP/2 Server
+
+在上面內容有提到，h2c HTTP/2 server 要能識別 HTTP/1.1 Upgrade 機制，並且給予適當回應，因此這也是在實作 server 時的首要功能。
+
+### `http.Server` with `h2c handler`
+
+用 Go 建立 h2c server 的方式很簡單，一樣是使用大家熟悉的 `net/http` package `Server.ListenAndServe` 來啟動 server 並接收後續的 request，不過因為必須處理 HTTP/2 型態的 request，所以可以猜到我們需要調整 `Handler` 設定，來讓 server 能了解 HTTP/2 格式的 request。
+
+調整 Handler 的方式，可以透過 `"golang.org/x/net/http2/h2c"` package 來達成目的。使用 `h2c.NewHandler` method 就能產生 `h2cHandler`， h2cHandler 會根據 request 的內容來判斷後續執行方式：
+
+1. **HTTP/2**: 如果讀到 client HTTP/2 Connection Preface([RFC7540-3.5](https://httpwg.org/specs/rfc7540.html#ConnectionHeader)，後面會說明)，就會建立額外的 http2.serverConn，後續 request 將由這新的 connect 來接收處理。
+
+2. **HTTP/1.1 upgrade to HTTP/2 h2c**: 第二種情況則是 request 包含 protocol upgrade 資訊([RFC7540-3.2](https://httpwg.org/specs/rfc7540.html#discover-http))，如果可以 upgrade，就會將 HTTP 內容轉換成 HTTP/2 格式，接著同樣地新建 http2.serverConn 來處理 request。
+
+3. **HTTP**: 如果沒有包含任何 HTTP/2 和 Upgrade 資訊，就當成一般 HTTP request 處理。
+ 
+有了這些概念後，我們就可以知道 h2c server 該如何建立。
+
+### H2c Server Example
+
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+    "net/http"
+
+    "golang.org/x/net/http2"
+    "golang.org/x/net/http2/h2c"
+)
+
+func main() {
+    var h2serv http2.Server
+
+    handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprint(w, "HTTP/2 Server Example")
+    })
+
+    serv := http.Server{
+        Addr:    ":9090",
+        // Create a h2c handler to dispatch incoming requests.
+        Handler: h2c.NewHandler(handler, &h2serv),
+    }
+
+    log.Printf("Start server %s", serv.Addr)
+    if err := serv.ListenAndServe(); err != http.ErrServerClosed {
+        log.Panicln(err)
+    }
+}
+```
+
+在網路上可能會看到以下寫法：
+
+```go
+func main() {
+    var server http2.Server
+
+    l, err := net.Listen("tcp", "localhost:9090")
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    for {
+        conn, err := l.Accept()
+        if err != nil {
+            log.Fatalln(err)
+        }
+
+        server.ServeConn(conn, &http2.ServeConnOpts{
+            Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+                fmt.Fprintf(w, "HTTP/2 Server Example")
+            }),
+        })
+    }
+}
+```
+
+這種 low-level API `l.Accept()` Loop，並且直接使用 `server.ServeConn` 的做法等於省略了 `h2cHandler`  這層判斷，讓 request 直接進入 HTTP/2 格式處理。建議還是使用 `h2c.NewHandler` 作法，讓 server handler 比較有彈性。
+
+## H2c Client
+
+有了 HTTP/2 server 後，就寫個簡單的 client 來進行測試吧！
+
+首先，Client 端發出含有 `Upgrade:h2c` 的 HTTP request 到 server 端，然後確認 response 是否如預期。
+
+### 1. 建立 upgrade request
+
+```go
+req, err := http.NewRequest(http.MethodGet, "http://localhost:9090", nil)
+req.Header.Add("Upgrade", "h2c")
+```
+
+### 2. 加入更多 HTTP/2 upgrade requirement
+
+光有 `Upgrade:h2c` 還不夠，還要有 `HTTP2-Settings` Header Field 以及其內容。
+
+> The content of the HTTP2-Settings header field is the payload of a SETTINGS frame, encoded as a base64url string.
+
+HTTP2-Settings 其實就是 HTTP/2 的 SETTINGS frame([RFC7540 6.5](https://httpwg.org/specs/rfc7540.html#SETTINGS))，其值用來進行溝通期間的參數設定，例如更新 window size 或是 設定 max frame size 等。只不過因為我們起初是發送 HTTP request，所以就將值 encoding 後放入到 `HTTP2-Settings` header field 中。
+
+```go 
+settings := []byte{0, 5, 0, 0xa, 0, 0, 0, 3, 0, 0, 0, 0xfa, 0, 6, 0, 10, 01, 0x40, 0, 4, 0, 10, 0, 0}
+req, _ := http.NewRequest(http.MethodGet, "http://localhost:9000", nil)
+req.Header.Add("Connection", "HTTP2-Settings")
+req.Header.Add("HTTP2-Settings", base64.RawURLEncoding.EncodeToString(settings))
+```
+
+簡單說明一下，settings 的內容是由數個 Identifier (16 bit) +  Value (32 bit) 所組成，其格式定義在 [RFC7540 6.5.1 SETTINGS FORMAT](https://httpwg.org/specs/rfc7540.html#SettingFormat)。
+
+舉例來說：
+```go
+[]byte{0, 5, 0, 0xa, 0, 0}
+// big-endian
+// 0x5 - SETTINGS_MAX_FRAME_SIZE, value - 0xa0000 = 655360
+```
+
+最後，為什麼 upgrade request 需要 `HTTP2-Settings`，在 [RFC7540 3.2.1](https://httpwg.org/specs/rfc7540.html#Http2SettingsHeader) 有解答：
+
+> Providing these values (HTTP2-Settings) in the upgrade request gives a client an opportunity to provide parameters prior to receiving any frames from the server.
+
+### 3. Send upgrade request and get response
+
+Client sample code
+
+```go
+conn, err := net.Dial("tcp", "localhost:9000")
+if err != nil {
+  log.Fatalln(err)
+}
+
+req := newUpgradeRequest()
+
+// send a request
+req.Write(conn)
+
+// get data from server
+buf := bufio.NewReader(conn)
+
+// convert data to HTTP response format. 
+resp, err := http.ReadResponse(buf, req)
+if err != nil {
+	log.Fatalln(err)
+}
+
+if resp.StatusCode != http.StatusSwitchingProtocols {
+	log.Fatalln("server does not support h2c")
+}
+```
+
+為了 re-use `net.Conn` 以及使用 http2.Client，因此就採用 low level API 的方式來發送 HTTP request。
+
+我們從 Wireshark 可以看到結果，在正確設置了 upgrade header 後，就會回應 switching protocols response，而這也正是我們所預期的。
+
+![flow]({{ site.url }}/assets/images/h2c-upgrade-1.png)
+
+而從 Go server Debug tool 來看 (其實就是在 go run server.go 前面加上`GODEBUG=http2debug=2`)
+
+```shell=
+2019/08/27 15:23:33 http2: Framer 0xc0001420e0: wrote SETTINGS len=24, settings: MAX_FRAME_SIZE=655360, MAX_CONCURRENT_STREAMS=250, MAX_HEADER_LIST_SIZE=655680, INITIAL_WINDOW_SIZE=655360
+```
+MAX_FRAME_SIZE value 也有正確被 server 讀取，皆大歡喜！
+
+反之，如果只設置 `Upgrade:"h2c"` 而沒有設置 `HTTP2-Settings` 的情況下：
+
+![flow]({{ site.url }}/assets/images/h2c-upgrade-2.png)
+
+Server 只會把這個 request 當作 HTTP 來處理，就直接回 200 以及對應的 response data 啦～
+
+### 4. Starting HTTP/2 with Prior Knowledge
+
+根據規範指示，當我們收到 101 response，就需要接著發送 connection preface ([RFC7540 3.4](https://httpwg.org/specs/rfc7540.html#known-http)) 以利 server 繼續進行 HTTP/2 connection 建立。
+
+> Upon receiving the 101 response, the client MUST send a **connection preface** (Section 3.5), which includes a SETTINGS frame.
+
+從 h2c.go source code 也可以看到有這樣的確認機制：
+
+```go
+// h2cUpgrade establishes a h2c connection using the HTTP/1 upgrade (Section 3.2).
+func h2cUpgrade(w http.ResponseWriter, r *http.Request) (net.Conn, error) {
+	
+	// more...
+	
+	rw.Write([]byte("HTTP/1.1 101 Switching Protocols\r\n" +
+		"Connection: Upgrade\r\n" +
+		"Upgrade: h2c\r\n\r\n"))
+	rw.Flush()
+
+	// A conforming client will now send an H2 client preface which need to drain
+	// since we already sent this.
+	if err := drainClientPreface(rw); err != nil {
+		return nil, err
+	}
+
+	c := &rwConn{
+		Conn:      conn,
+		Reader:    io.MultiReader(initBytes, rw),
+		BufWriter: newSettingsAckSwallowWriter(rw.Writer),
+	}
+	return c, nil
+}
+```
+
+如果 client 沒有接著發送 `connection preface` 那該連線就無法成立。
+
+因此，我們就繼續實作 client，在收到 101 status code 後，就接著使用 `http2.Transport.NewClientConn` 來建立 client conn 並發送 client connection preface。
+
+```go
+var tr http2.Transport
+http2Conn, err := tr.NewClientConn(conn)
+if err != nil {
+	log.Fatalln(err)
+}
+```
+
+#### http2.Transport.NewClientConn
+
+client connection preface 在 NewClientConn 階段就會發送給 server 端，從 source code 可以看到相關實作。
+
+```go
+func (t *Transport) newClientConn(c net.Conn, singleUse bool) (*ClientConn, error) {
+	cc := &ClientConn{
+		t:                     t,
+		tconn:                 c,
+		readerDone:            make(chan struct{}),
+		nextStreamID:          1,
+		maxFrameSize:          16 << 10,           // spec default
+		initialWindowSize:     65535,              // spec default
+		maxConcurrentStreams:  1000,               // "infinite", per spec. 1000 seems good enough.
+		peerMaxHeaderListSize: 0xffffffffffffffff, // "infinite", per spec. Use 2^64-1 instead.
+		streams:               make(map[uint32]*clientStream),
+		singleUse:             singleUse,
+		wantSettingsAck:       true,
+		pings:                 make(map[[8]byte]chan struct{}),
+	}
+	
+	// skip..
+
+	// send the client connection preface
+	cc.bw.Write(clientPreface)
+	
+	cc.fr.WriteSettings(initialSettings...)
+	cc.fr.WriteWindowUpdate(0, transportDefaultConnFlow)
+	cc.inflow.add(transportDefaultConnFlow + initialWindowSize)
+	cc.bw.Flush()
+	if cc.werr != nil {
+		return nil, cc.werr
+	}
+
+	go cc.readLoop()
+	return cc, nil
+}
+```
+
+### 5. Communicating communications
+
+最後，連線建立完成，可以開始開啟新 stream 並且交換 frames！
+
+```go
+req, _ := http.NewRequest(http.MethodGet, "http://localhost:9000", nil)
+http2Conn.RoundTrip(req)
+```
+
+![flow]({{ site.url }}/assets/images/h2c-upgrade-3.png)
+
+## Sample Codes
+
+### Server 
+
+{%gist YuShuanHsieh/c902a1bd245b9ad52e30f832d2cc9ab3 %}
+
+### Client
+
+{%gist YuShuanHsieh/e249dfe245df7612d7fdd9cb7333ba16 %}
+
