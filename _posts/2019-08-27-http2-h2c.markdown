@@ -193,7 +193,7 @@ if resp.StatusCode != http.StatusSwitchingProtocols {
 
 而從 Go server Debug tool 來看 (其實就是在 go run server.go 前面加上`GODEBUG=http2debug=2`)
 
-```shell=
+```c
 2019/08/27 15:23:33 http2: Framer 0xc0001420e0: wrote SETTINGS len=24, settings: MAX_FRAME_SIZE=655360, MAX_CONCURRENT_STREAMS=250, MAX_HEADER_LIST_SIZE=655680, INITIAL_WINDOW_SIZE=655360
 ```
 MAX_FRAME_SIZE value 也有正確被 server 讀取，皆大歡喜！
