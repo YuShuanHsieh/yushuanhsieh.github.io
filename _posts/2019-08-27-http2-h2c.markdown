@@ -300,6 +300,53 @@ http2Conn.RoundTrip(req)
 
 ![flow]({{ site.url }}/assets/images/h2c-upgrade-3.png)
 
+## 8/31 補充：關於 http2.Transport
+
+在整合 demo code 成為一個完整的 h2c-client 時，發現一個連線 bug。
+
+當 client 發送一個包含 HTTP/2 upgrade 的 HTTP request 時， server 在接收到後，會將其格式轉成 HTTP/2 ，並在後續建立起 HTTP/2 連線時，會把這個資訊放入 buffer 中。HTTP/2 連線建立成功， server 發送完初始 SETTINGS frames 後，就會緊接著將這個 request 處理完並且將 response 回應給 client 端。
+
+此時，這個 response 的 stream ID 為 `0x1` ([RFC 7540 5.1.1](https://httpwg.org/specs/rfc7540.html#StreamIdentifiers))，但是 client 端在接收到 response 後卻會顯示 error， error 內容為收到未預期的 stream ID ，並強制關閉 connection。
+
+查看了一下 client transport source code，發現 transport 在接收 DATA frame 時會檢查 stream ID 是否超出 request 的 stream ID。
+
+```go
+func (rl *clientConnReadLoop) processData(f *DataFrame) error {
+	neverSent := cc.nextStreamID
+	if f.StreamID >= neverSent {
+		// We never asked for this.
+		cc.logf("http2: Transport received unsolicited DATA frame; closing connection")
+		return ConnectionError(ErrCodeProtocol)
+	}
+}
+```
+
+看的出來是 `nextStreamID` 的問題。這時候回去看 `newClientConn` source code，會看到 `nextStreamID` 會被初始化成 `1`，而此時因為 client 端在 HTTP/2 連線建立成功後，還沒有發送任何 request，因此 `nextStreamID` 維持 1，進而造成這樣的錯誤回報。
+
+那麼要如何避免這樣的錯誤發生呢？
+
+一個蠻 tricky 的做法，就是:
+
+```go
+tr := &http2.Transport{AllowHTTP: true}
+```
+
+把 Transport 的 AllowHTTP 設定為 true。雖然根據官方 source code 的說法：
+
+> AllowHTTP, if true, permits HTTP/2 requests using the insecure, plain-text "http" scheme. Note that this does not enable h2c support.
+
+看起來好像跟問題沒有什麼太大關係，不過這樣的設定會更動到 `nextStreamID` 的值。一樣是在 `newClientConn` method：
+
+```go
+if t.AllowHTTP {
+	cc.nextStreamID = 3
+}
+```
+
+因為 nextStreamID 初始值變成 3 了，所以當接收到 response 的 stream ID 為 1 時，判斷就會是正常結果，避免掉上述的問題。
+
+老實說，把 nextStreamID 設置為 3，對我來說是一個蠻 magic number 的行為，code 裡面也沒有解釋為什麼是 3 而不是 4,5,6,7 ... ，不過既然可以解決了，就這樣吧 XD 畢竟 Go 本來的 HTTP2 package 本來就是預設 TLS 行為，這個錯誤只會發生在使用 HTTP/1.1 upgrade 後而已。
+
 ## Sample Codes
 
 ### Server 
