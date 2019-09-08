@@ -7,7 +7,7 @@
 
 # Site Settings
 locale                   : "zh-TW"
-title                    : "Programming & Marketing"
+title                    : "文組工程師"
 title_separator          : "-"
 name                     : "Yu-Shuan"
 description              : "Keep learning, keep running, and keep fighting."
@@ -79,7 +79,7 @@ analytics:
 author:
   name             : "Yu-Shuan 謝小徹"
   avatar           : "/assets/images/profile.jpg"
-  bio              : "focusing on programming optimization and web/app development."
+  bio              : "Gopher. Passion for network and operation system"
   location         : "Taiwan"
   email            : "cjamhe01385@gmail.com"
   uri              : "https://yushuanhsieh.github.io/"
