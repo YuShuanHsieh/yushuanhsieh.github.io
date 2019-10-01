@@ -9,7 +9,6 @@ toc: true
 toc_icon: "cog"
 ---
 ## 前言
-
 在很多程式語言都會看到 memory allocator，也可以看到陸續發表的 allocator 實作方式，例如 microsoft [mimalloc](https://github.com/microsoft/mimalloc)。與其用看 source code 的方式來了解其原理，倒不如從基本學起，並且從實作過程中了解到為什麼他們要這樣設計 allocator。
 
 ## 原因

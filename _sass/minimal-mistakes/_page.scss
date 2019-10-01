@@ -75,7 +75,12 @@
   p,
   li,
   dl {
+    font-weight: 300;
     font-size: 0.8em;
+  }
+
+  li > p {
+    font-size: 16px;
   }
 
   /* paragraph indents */
