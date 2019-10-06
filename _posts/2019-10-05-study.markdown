@@ -1,0 +1,107 @@
+---
+layout: single
+title:  "2019/09 月份自我學習回顧"
+date:   2019-10-05 08:00:00 +0800
+categories: 
+  - Study
+toc: true
+toc_icon: "cog"
+---
+## 前言
+這個月是一個比較多事的月份，主要原因是重新調整了生涯規劃。雖然自己出社會也快要十年了，但是轉職成 Engineer 也才不過這兩年的事情，因此自己還像是一名剛出社會的半新鮮人一樣，到處地探索自己喜歡的事物，不斷地從過程中試圖挖掘出自己的熱情所在。
+
+![img](https://3.bp.blogspot.com/-P5HWaghZ_v0/WSZjCH0uFiI/AAAAAAAAA_Q/8L-I3Qpf8BMDB-9Ub5sC1qzMksiWtOUKQCLcB/s640/IMG_6615.JPG)
+
+很好運的是，我覺得我在這過程中一直有貴人相助，例如我加入 Moxa，再因緣際會地加入趨勢科技，進而進入 Golang 社群開始與其他 co-organizer 辦活動等。老實說，我在群體中一直都是最菜的那位，但是大家給予我很多機會成長，讓我有機會接觸到各種事務，雖然依舊還是很菜，但至少開始有點經驗，知道自己該用什麼方式來找出問題點，在面對新技術的時候，可以從哪個方向下手讓自己快速學習。
+
+要說下一個目標嗎？大概就是希望哪天能憑真實力對戰吧(誤)。目前大家對我的評價大多是認真上進積極，不過這些評價只能代表努力，無法展現出個人能力，希望哪一天可以用真實力來讓人欽佩。
+
+## 預定目標回顧
+不得不說，這個月太多事情煩心，所以目標有點偏移掉了。另外還有自己太過貪心，在學習的時候希望能掌握各個方向，導致稍嫌發散，這是後續需要改進的地方。總而言之，這個月份完成度蠻低的，要調整一下自己學習方向，不能什麼都想要學。
+
+### 1. Linux kernel development (30%)
+上個月預定是要看三章，結果實際上只有看一章《Memory Management》。主要原因是因為看到 Jserv 所貼的 [mimalloc 共筆分享](https://hackmd.io/@jserv/BynrpV0eB)，結果注意力整個被共筆內容吸引過去了。我很喜歡 memory management，之前有看 Golang 的 memory management system，不過感覺自己只是了解大概，並不能具體說明出這樣做法解決什麼問題；再加上 Golang memory management 其實是 TCMalloc 分支版，一直很想了解是基於什麼原因而要做如此改變。
+
+基於這個原因，就產生出一篇[基於 stack 而成的 memory allocator](https://yushuanhsieh.github.io/c/memory%20allocator/stack-memory-allocator/)，接下來希望實作其他 memory allocator，從這些基本實作進而了解到 memory allocator 實作差異的真正用意。
+
+### 2. 演算法進度(2章)和做相關 leetcode (90%)
+主要複習內容包含 sorting analysis 和相關公式證明。覺得寫證明的感覺真的很好，雖然一開始看一堆符號會覺得很痛苦，不過慢慢寫出來，真的有助於了解各個 sorting time complexity。 Leetcode 有寫一兩題，主要跟 divide and conquer 有關。
+
+### 3. DB 相關原理實作和效能分析 (50%)
+這部分其實主要是看 PostgreSQL 的 index 實作和 Explain 出來的結果。最有印象的大概是 PostgreSQL 都是 secondary index，並不會真正改到 underlying data。以及 MVCC 內容等。這部分遺漏的是去看 MVCC 的 source code 來確實了解他是如何定義這些 struct 的，紀錄起來哪天補上XD
+
+### 4. Network 相關會看一下 Netlink, QoS 實作 (50%)
+看完 Netlink document 並進行簡單實作，以及看了一篇關於 generic netlink 的 paper，paper 主要是說明 如何透過 generic netlink 來擴充之前的 netlink 架構。可惜沒有看 QoS 部分。
+
+## 十月份預計進度
+1. 由於生涯規劃，預計會開始學其他新的語言或技術，這部分要等有資訊了才比較好規劃。
+2. 完成 free list 和 thread-based free list，並且繼續看 memory allocator 議題。
+3. 演算法學習，因為要考試了，看來要加強複習了～
+
+## 學習日誌
+- 2019/9/1 Dynamic Programming - 1 | algorithm - Graph -1
+- 2019/9/1 Discrete mathematics- 29A, 29B
+- 2019/9/2 Netlinks - Communicating between the kernel and user-space in Linux using Netlink Sockets
+- 2019/9/2 進階電腦系統理論與實作 - 課程說明
+- 2019/9/2 Cadence: Microservice architecture beyond request/reply
+- 2019/9/3 Go meetup sharing preparing. Perfbook chapter 7
+- 2019/9/3 radix trees
+- 2019/9/5 PostgresQL (MVCC)
+- 2019/9/6 Go presentation preparing
+- 2019/9/4 Go presentation preparing
+- 2019/9/7 Go meetup and sides review.
+- 2019/9/8 Paper: Communicating between the kernel and user-space in Linux using Netlink sockets
+- 2019/9/8 Blog: 8月份學習整理，目標預定
+- 2019/9/9 Design and analysis of algorithm - introduction
+- 2019/9/11 Review algorithem
+- 2019/9/11 PostgresQL concept review - Chapter 11. Indexes
+- 2019/9/12 Study: mimalloc 實作機制和改善 (1) 因為裡面有論文，需要 Study 很多次
+- 2019/9/12 PostgresQL concept review - Chapter 11. Indexes (實驗和測試分析)
+- 2019/9/13 CppCon 2015: std::allocator Is to Allocation what std::vector Is to Vexation
+- 2019/9/13 2019q3 第 1 週測驗題 / Memory access and alignment
+- 2019/9/14 Processor affinity (global free list has poor processor affinity)
+- 2019/9/14 Week1: homework and bit wise practice
+- 2019/9/15 Paper - (2015) Tumbler: An Effective Load Balancing Technique for MultiCPU Multicore Systems
+- 2019/9/15 Side project - stack allocator in C
+- 2019/9/16 Design and analysis of algorithm - introduction 2
+- 2019/9/17 What Every Programmer Should Know About Memory - 1
+- 2019/9/20 What Every Programmer Should Know About Memory - Memory Type
+- 2019/9/21 What Every Programmer Should Know About Memory -Cache Type, Random access and sequential access comparison
+- 2019/9/22 What Every Programmer Should Know About Memory - CPU cache implementation details (multi-thread access) 25-28 p
+- 2019/9/22 TUN/TAP virtual network and how openVPN works - overview
+- 2019/9/23 Design and analysis of algorithm - introduction 3
+- 2019/9/24 Blog: Memory allocator implementation
+- 2019/9/25 Introduction to Lock-free Programming
+- 2019/9/25 CppCon 2014: Herb Sutter "Lock-Free Programming (or, Juggling Razor Blades), Part I"
+- 2019/9/28 Hazard pointers: Safe memory reclamation for lock-free objects
+- 2019/9/26 postgress
+- 2019/9/28 Acquire and Release Semantics (for hazard pointer)
+- 2019/9/30 Design and analysis of algorithm - time complexity analysis, bound of sorting algorithm
+- 2019/9/29 Lock-free experiment / Hazard pointers continuing
+
+## References
+- [Overlapping Subproblems Property in Dynamic Programming](https://www.geeksforgeeks.org/overlapping-subproblems-property-in-dynamic-programming-dp-1/)
+- [Linux, Netlink, and Go - Part 1: netlink](https://mdlayher.com/blog/linux-netlink-and-go-part-1-netlink/)
+- [Network Protocol Breakdown: Ethernet and Go](https://mdlayher.com/blog/network-protocol-breakdown-ethernet-and-go/)
+- [Communicating between the kernel and
+user-space in Linux using Netlink Sockets](https://people.netfilter.org/pablo/netlink/netlink-libmnl-manual.pdf)
+- [Paper!!!](http://people.netfilter.org/pablo/netlink/netlink.pdf)
+- [mimalloc 實作機制和改善](https://hackmd.io/@jserv/BynrpV0eB)
+- [std::allocator Is to Allocation what std::vector Is to Vexation](https://www.youtube.com/watch?v=LIb3L4vKZ7U)
+- [CppCon 2015: Andrei Alexandrescu “std::allocator...”](https://www.youtube.com/watch?v=LIb3L4vKZ7U)
+- [Processor affinity](https://en.wikipedia.org/wiki/Processor_affinity)
+- [Bitwise Operators in C](http://www2.mta.ac.il/~hbinsky/c%20content/Bits.pdf)
+- [解讀計算機編碼](https://hackmd.io/@sysprog/rylUqXLsm)
+- [What Every Programmer Should Know About Memory](https://akkadia.org/drepper/cpumemory.pdf)
+- [現代處理器設計: Cache 原理和實際影響](https://hackmd.io/@jserv/HkW3Dr1Rb)
+- [Memory Allocation](https://hackmd.io/@jserv/B1SRlfeee?type=view#intersec-%E8%A8%98%E6%86%B6%E9%AB%94%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0)
+- [針對多執行緒環境設計的 Memory allocator](https://hackmd.io/@ljP_AG30SzmQE5qO-cjcpQ/HkICAjeJg?type=view#Supermalloc)
+- [C++ and computer architecture](https://github.com/yungyuc/nsd/blob/master/notebook/cpp/cpp.ipynb)
+- [External Memory Algorithms and Data Structures](http://cs.au.dk/~gerth/emF03/)
+- [進階計算機架構 (課程安排和相關素材)](http://wiki.csie.ncku.edu.tw/arch/schedule)
+- [Memory allocator implementation](https://yushuanhsieh.github.io/c/memory%20allocator/stack-memory-allocator/)
+- [Introduction to Lock-free Programming](https://www.youtube.com/watch?v=RWCadBJ6wTk)
+- [Lock-Free 编程](https://www.cnblogs.com/gaochundong/p/lock_free_programming.html#aba_problem)
+- [Hazard Pointer](http://blog.kongfy.com/2017/02/hazard-pointer/)
+- [Hazard Pointer Wiki](https://en.wikipedia.org/wiki/Hazard_pointer)
+- [Time Complexity of building a heap](https://www.geeksforgeeks.org/time-complexity-of-building-a-heap/)
