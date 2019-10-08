@@ -37,9 +37,13 @@ toc_icon: "cog"
 
 首先最重要的調整是聚焦，除了學習工作會接觸到的工具或語言之外，希望能將剩餘重心放在 **Algorithm 分析**和 **Memory management or allocator** 上。
 
-### 1. 其他語言或工具學習。由於生涯規劃，預計會開始學其他新的語言或技術，這部分要等有資訊了才比較好規劃。這部分時間希望佔到 50% 左右。
-### 2. 完成 free list 和 thread-based free list，並且繼續看 memory allocator 議題。
-### 3. 演算法學習。演算法練習著重在求 T(n) 的解，之前學習多著重在了解流程，不過應該要更專注在數學層面上。
+### 1. 其他語言或工具學習
+由於生涯規劃，預計會開始學其他新的語言或技術，這部分要等有資訊了才比較好規劃。這部分時間希望佔到 50% 左右。
+
+### 2. Memory Allocator
+完成 free list 和 thread-based free list，並且繼續看 memory allocator 議題。
+### 3. 演算法學習
+演算法練習著重在求 T(n) 的解，之前學習多著重在了解整個程式流程，不過應該要更專注在數學層面上，用數學方式去求出所耗費的時間。
 
 ## 學習日誌
 - 2019/9/1 Dynamic Programming - 1 | algorithm - Graph -1
