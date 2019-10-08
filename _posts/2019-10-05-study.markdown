@@ -34,9 +34,12 @@ toc_icon: "cog"
 看完 Netlink document 並進行簡單實作，以及看了一篇關於 generic netlink 的 paper，paper 主要是說明 如何透過 generic netlink 來擴充之前的 netlink 架構。可惜沒有看 QoS 部分。
 
 ## 十月份預計進度
-1. 由於生涯規劃，預計會開始學其他新的語言或技術，這部分要等有資訊了才比較好規劃。
-2. 完成 free list 和 thread-based free list，並且繼續看 memory allocator 議題。
-3. 演算法學習，因為要考試了，看來要加強複習了～
+
+首先最重要的調整是聚焦，除了學習工作會接觸到的工具或語言之外，希望能將剩餘重心放在 **Algorithm 分析**和 **Memory management or allocator** 上。
+
+### 1. 其他語言或工具學習。由於生涯規劃，預計會開始學其他新的語言或技術，這部分要等有資訊了才比較好規劃。這部分時間希望佔到 50% 左右。
+### 2. 完成 free list 和 thread-based free list，並且繼續看 memory allocator 議題。
+### 3. 演算法學習。演算法練習著重在求 T(n) 的解，之前學習多著重在了解流程，不過應該要更專注在數學層面上。
 
 ## 學習日誌
 - 2019/9/1 Dynamic Programming - 1 | algorithm - Graph -1
