@@ -191,6 +191,7 @@ plugins:
   - jekyll-archives
   - jekyll-toc
   - jekyll-include-cache
+  - jekyll-youtube
 
 # mimic GitHub Pages with --safe
 whitelist:

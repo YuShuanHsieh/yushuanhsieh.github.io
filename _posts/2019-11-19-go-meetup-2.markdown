@@ -12,11 +12,14 @@ toc_icon: "cog"
 本次主題主要是想針對使用 C 的工程師來說明 Go 語言的特性，因此在內容上可能相對比較抽象，沒有太多 Coding 部分，絕大多數都是在 Go 是用什麼樣的方式來實現他的特色，例如 user-space scheduler。而這場參加的人數竟然有 20 幾位，算是 GDG Hsinchu 開辦以來人數最多的一次，由此可知大家對於偏底層的內容還是很感興趣，希望之後有機會可以討論到更深的主題！
 ![study]({{ site.url }}/assets/images/go-meetup-2.jpg)
 
+
+## Slides
+[Move from C to Go Slides](https://www.slideshare.net/CherrieHsieh/move-from-c-to-go)
+
 ## Move from C to Go - Introduction
 這個 section 其實就是大概介紹 Go 語言十週年慶和 Go 起源，個人覺得最重要的是關於 Go 之後未來的發展，包含：
 
-### Gio - Portable immediate mode GUI programs in Go
-<iframe width="480" height="360" src="https://www.youtube.com/watch?v=9D6eWP4peYM" frameborder="0"> </iframe>
+{% youtube "https://www.youtube.com/watch?v=9D6eWP4peYM" %}
 
 一個 cross-platform 的 UI library ，展現出 Go 未來可能用一個語言實現多個平台應用程式的野心。
 
@@ -26,24 +29,34 @@ toc_icon: "cog"
 ### Edge Computing
 另外就是希望 Go 能夠在未來建立起 Edge Computing 相關的資源和 libraries，目前已經有幾個針對 Edge Computing 的 Go projects，不過未來預計會有更完整的 ecosystem 的，希望到時候對於資源消耗也有更好的改善XD
 
-## Move from C to Go
-
-### Memory Allocation
+## Move from C to Go - Memory Allocation
+### 心得
 這章節以最典型 Array allocation 作為 C 和 Go 差異比較，並帶到 `new` keyword 與 `stack`，更重要的是簡單地介紹了 Go memory allocator 和 goroutine stack 如何實作。
 
 而為了準備這章節，除了對 memory allocator 有更深的瞭解之外，對於 Go 如何處理 stack copy 這段也真的學到不少，看似簡單的 copy 行為，為了要解決 stack 中 pointer 的 re-address 問題，竟然要花這麼多心力，真是令人印象深刻。
 
-### Compiler
+### 推薦文章
+[Allocation efficiency in high-performance Go services](https://segment.com/blog/allocation-efficiency-in-high-performance-go-services/)
+
+## Move from C to Go - Compiler
+### 心得
 老實說準備這章節蠻不踏實的，因為我自己對於 Compiler 也沒有很熟悉，不過覺得既然都要講 compiled language 了，不提到 compiler 好像說不過去，所以就有點硬著頭皮講XD
 
 但準備起來很值得，因為我才去比較了各 compiler 所產生的 elf 檔差異之處，也才了解原來 Go linker 原來為了 runtime 環境做了其他我們沒想到的事情。更了解到基本 Compiler 應該有的架構，收穫很多！希望之後可以再針對這主題深入研究XD
 
-### Scheduler
+### 推薦文章
+[Building a better Go linker](https://docs.google.com/document/d/1D13QhciikbdLtaI67U6Ble5d_1nsI4befEd6_k1z91U/mobilebasic)
+
+## Move from C to Go - Scheduler
+### 心得
 scheduler 是我個人除了 memory management 之外，第二個喜歡探討的主題，尤其是 scheduler 要如何觸發 preempt 和如何進行 load balance，都是我很感興趣的部分。雖然 Go 目前是 non-preemption，不過預計之後版本會有 preempt scheduler，到時候肯定要來看一下跟 linux kernel scheduler 有什麼差異！
 
 另外就是因為 scheduler 所造成的一些 lock issues、以及 Go 如何實現 real-time 問題 (目前有 paper 在說這個)，都是很有趣的題目～
 
 不過這次分享 scheduler 沒有講得很好 > < 導致下面聽眾對於 Go scheduler 運作還是不清楚，這部分應該要再加強說明 scheduler 架構，還有名詞解釋，才能讓不會 Go 的工程師也能快速了解運作流程。
+
+### 推薦文章
+[Scheduling In Go : Part II - Go Scheduler](https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html)
 
 ## 辦活動
 ![study]({{ site.url }}/assets/images/go-meetup-2-2.jpg)

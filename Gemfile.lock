@@ -195,6 +195,8 @@ GEM
       nokogiri (~> 1.9)
     jekyll-watch (2.2.1)
       listen (~> 3.0)
+    jekyll-youtube (1.0.0)
+      jekyll
     jemoji (0.10.2)
       gemoji (~> 3.0)
       html-pipeline (~> 2.2)
@@ -268,6 +270,7 @@ DEPENDENCIES
   jekyll-paginate
   jekyll-sitemap
   jekyll-toc
+  jekyll-youtube
   jemoji
   minimal-mistakes-jekyll (= 4.16.5)
   tzinfo-data

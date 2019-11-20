@@ -30,6 +30,7 @@ group :jekyll_plugins do
    gem 'jekyll-archives'
    gem 'jekyll-toc'
    gem 'jekyll-include-cache'
+   gem "jekyll-youtube"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
