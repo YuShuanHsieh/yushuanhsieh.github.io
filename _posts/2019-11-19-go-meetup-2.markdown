@@ -19,8 +19,7 @@ toc_icon: "cog"
 ## Move from C to Go - Introduction
 這個 section 其實就是大概介紹 Go 語言十週年慶和 Go 起源，個人覺得最重要的是關於 Go 之後未來的發展，包含：
 
-{% youtube "https://www.youtube.com/watch?v=9D6eWP4peYM" %}
-
+### Gio
 一個 cross-platform 的 UI library ，展現出 Go 未來可能用一個語言實現多個平台應用程式的野心。
 
 ### Jupyter
