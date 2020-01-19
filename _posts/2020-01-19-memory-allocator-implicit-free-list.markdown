@@ -8,7 +8,6 @@ toc: true
 toc_icon: "cog"
 ---
 ## 前言
-
 由[前篇](https://yushuanhsieh.github.io/c/memory%20allocator/stack-memory-allocator/)文章可以知道，使用 stack data structure 是最簡單的 memory allocator 入門寫法，但是卻會造成一些問題，例如不能任意順序 free 等。既然如此，我們就換成 list 來實作 memory allocator，解決使用 stack 實作的問題。
 
 除了實作之外，也會討論到幾個實作 allocator 上遇到的問題，例如 sbrk，以及 minimum alignment。
@@ -41,7 +40,7 @@ Block size 應包含 header + payload size (除了最後一個用為終止線的
 
 malloc 應該遵守 alignment 規定：**8 bytes on 32-bit and 16 bytes on 64-bit**。(其原因在下方補充內容中會提及)，所以當我們在計算 block size 時，要加入 alignment 條件，即：
 
-```cpp=
+```c
 #define HEADER_SIZE 8
 #define ALIGNMENT 16
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
