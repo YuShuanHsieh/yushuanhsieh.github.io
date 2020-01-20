@@ -122,7 +122,7 @@ e.g.
 
 原先的 header struct 是
 
-```cpp=
+```c
 typedef struct {
   size_t size;
   size_t allocated;
@@ -135,15 +135,15 @@ typedef struct {
 
 在基本版本的 implicit free list 中，有可能因為 allocate 和 free 的連續操作，造成原先大塊的 block 被拆分成小塊的 blocks，進而導致再次 allocate 大 size 的 object 時會找不到適合的 block。
 
-![study]({{ site.url }}/assets/images/memory-allocator-8.png)
+![study]({{ site.url }}/assets/images/memory-allocator-9.png)
 
 為了解決這個問題，在 free object 步驟時，需要適時合併前後空的 block，以回復成較大的 block。
 
-![study]({{ site.url }}/assets/images/memory-allocator-9.png)
+![study]({{ site.url }}/assets/images/memory-allocator-10.png)
 
 但在合併時會有一個問題，從 block header 中可以知道下一個 block 的 size 和 allocated 狀態，但該如何知道上一個 block header 的值呢？我們可以在 **block 尾端加入 footer**，然後即可透過 `(char *)header - FOOTER_SIZE` 的方式來取得前一個 block 的狀態。
 
-![study]({{ site.url }}/assets/images/memory-allocator-10.png)
+![study]({{ site.url }}/assets/images/memory-allocator-8.png)
 
 ### 3. 改善 - 當 block 為 unallocated 狀態時才加入 footer
 
