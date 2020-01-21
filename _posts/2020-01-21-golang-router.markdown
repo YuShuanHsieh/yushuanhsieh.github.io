@@ -10,10 +10,12 @@ toc_icon: "cog"
 ## 前言
 之前做 API server，制定 route path 時有遇到一些問題，於是就順手看了幾個 HTTP router / web framework 的 router 部分實作方式，並且記錄下來，提供給大家做個參考。
 
-## 需求
+## 問題
 需要加入
+
 1. /stations/instances
 2. /stations/{id}
+
 這兩個 path 對應到不同的 handlers
 
 ## Chi
@@ -158,7 +160,7 @@ package `github.com/gorilla/mux`
 
 最後不可免俗地跑個 Benchmark，基於 [julienschmidt/go-http-routing-benchmark](github.com/julienschmidt/go-http-routing-benchmark) 所測試的結果。老實說 Chi 的表現有點出乎我意料，稍微 trace 一下 code，可能跟部分字串搜尋 loop 與直接使用 recursion 方式來搜尋有關。
 
-```shell=
+```c
 BenchmarkChi_Param               	 2000000	       916 ns/op	     432 B/op	       3 allocs/op
 BenchmarkEcho_Param              	20000000	        67.1 ns/op	       0 B/op	       0 allocs/op
 BenchmarkGin_Param               	20000000	        73.0 ns/op	       0 B/op	       0 allocs/op
