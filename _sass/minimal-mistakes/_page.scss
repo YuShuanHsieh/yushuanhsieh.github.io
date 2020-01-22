@@ -54,7 +54,7 @@
 
 .page__title {
   margin-top: 0;
-  line-height: 1;
+  font-weight: 300;
 
   & + .page__meta {
     margin-top: -0.5em;
@@ -68,8 +68,9 @@
 
 .page__content {
   h2 {
-    padding-bottom: 0.5em;
-    border-bottom: 1px solid $border-color;
+    padding-left: 0.5em;
+    border-left: 5px solid #0092ca;
+    font-weight: 400;
   }
 
   p,
