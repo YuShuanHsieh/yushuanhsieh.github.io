@@ -162,7 +162,7 @@ package `github.com/gorilla/mux`
 
 ## Benchmark
 
-最後不可免俗地跑個 Benchmark，基於 [julienschmidt/go-http-routing-benchmark](github.com/julienschmidt/go-http-routing-benchmark) 所測試的結果。老實說 Chi 的表現有點出乎我意料，除了 recursion 因素之外，推測還與 context reuse 方式有關，可參考 [chi/tree.go](https://github.com/go-chi/chi/blob/master/tree.go#L374)。
+最後不可免俗地跑個 Benchmark，基於 [julienschmidt/go-http-routing-benchmark](https://github.com/julienschmidt/go-http-routing-benchmark) 所測試的結果。老實說 Chi 的表現有點出乎我意料，除了 recursion 因素之外，推測還與 context reuse 方式有關，可參考 [chi/tree.go](https://github.com/go-chi/chi/blob/master/tree.go#L374)。
 
 ```c
 BenchmarkChi_Param               	 2000000	       916 ns/op	     432 B/op	       3 allocs/op
