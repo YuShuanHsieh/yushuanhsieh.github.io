@@ -426,8 +426,8 @@ zh-TW: &DEFAULT_ZH_HANT
   skip_content               :
   skip_footer                :
   page                       : "頁面"
-  pagination_previous        : "較舊"
-  pagination_next            : "較新"
+  pagination_previous        : "較新"
+  pagination_next            : "較舊"
   breadcrumb_home_label      : "首頁"
   breadcrumb_separator       : "/"
   menu_label                 : "切換選單"
