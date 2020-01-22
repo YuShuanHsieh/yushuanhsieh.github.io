@@ -16,7 +16,7 @@ toc_icon: "cog"
 1. /stations/instances
 2. /stations/{id}
 
-這兩個 path 對應到不同的 handlers
+這兩個 path 對應到不同的 handlers。
 
 ## Chi
 package `github.com/go-chi/chi`
@@ -38,7 +38,7 @@ package `github.com/go-chi/chi`
 
 ![study]({{ site.url }}/assets/images/router-chi.png)
 
-為什麼要將 nodes 分類插入呢？因為就 path match 的嚴謹程度而言是 Static > Regexp > Param > CatchAll，因此如果先分類好， router 在進行尋找的時候，就會先從 Static 分類開始找起，以符合使用者預期的行為。
+為什麼要將 nodes 分類插入呢？因為就 path match 的嚴謹程度而言是 Static > Regexp > Param > CatchAll，因此如果先分類好， router 在進行尋找的時候，就會先從 Static 分類 (index = 0) 開始找起，以符合使用者預期的行為。
 
 不過這樣做也會有個小問題，就是沒有用到的 bucket 會空著。(因為 node children 是 **array** 型態呈現)
 
@@ -54,6 +54,8 @@ typ nodeTyp
 children [ntCatchAll + 1]nodes
 }
 ```
+
+另外一個問題是， Chi 在 search 的時候是使用 recursion 方式，這點對於效率與記憶體使用上都會有所影響。其他多數的 router 在 search tree 的時候是使用 iteration，只有在一些必要的部分才使用 recursion。
 
 ## Echo
 
@@ -73,7 +75,7 @@ echo 的 node type 只有三種：
 
 ![study]({{ site.url }}/assets/images/router-echo.png)
 
-echo 的 node children 是 **slice** 型態，而 slice 內的 node 順序是根據插入先後來決定的，當要尋找 node 的時候，echo 也是會按照 skind > pkind > akind 的順序去找，不過由於 children 插入時並沒有分類，因此必須要 loop children 篩選出 type priority 高的 node，這裡是與 chi 明顯的差異處。
+echo 的 node children 是 **slice** 型態，而 slice 內的 node 順序是根據插入先後來決定的，當要尋找 node 的時候，echo 也是會按照 skind > pkind > akind 的順序去找，不過由於 children 插入時並沒有預先分類，因此必須要 loop children 篩選出 type priority 高的 node，這裡是與 chi 明顯的差異處。
 
 ```go
 // from echo/router.go
@@ -92,6 +94,8 @@ type (
 	children      []*node
 )
 ```
+
+但即使如此，整體上 echo 的 search algorithm 還是寫的很不錯，在 Benchmark 上有優異的表現。
 
 ## gin
 
@@ -158,7 +162,7 @@ package `github.com/gorilla/mux`
 
 ## Benchmark
 
-最後不可免俗地跑個 Benchmark，基於 [julienschmidt/go-http-routing-benchmark](github.com/julienschmidt/go-http-routing-benchmark) 所測試的結果。老實說 Chi 的表現有點出乎我意料，稍微 trace 一下 code，可能跟部分字串搜尋 loop 與直接使用 recursion 方式來搜尋有關。
+最後不可免俗地跑個 Benchmark，基於 [julienschmidt/go-http-routing-benchmark](github.com/julienschmidt/go-http-routing-benchmark) 所測試的結果。老實說 Chi 的表現有點出乎我意料，除了 recursion 因素之外，推測還與 context reuse 方式有關，可參考 [chi/tree.go](https://github.com/go-chi/chi/blob/master/tree.go#L374)。
 
 ```c
 BenchmarkChi_Param               	 2000000	       916 ns/op	     432 B/op	       3 allocs/op
