@@ -160,6 +160,63 @@ package `github.com/gorilla/mux`
 
 因此也可以知道，gorilla mux 在搜尋上的速度一定是較慢，但可以搭配想要的 matcher，彈性也是蠻高的。
 
+## 補充：Context Pool
+
+除了 path 搜尋速度之外，各大 router libraries 也會針對 context 做額外的效能提升。最明顯的就是使用 `sync.Pool` 來避免當每個 request 進來的時候，需要新建立一個 context 給 handler 使用。當短時間有大量 request 進出時，如果動態分配太多 context，會造成 Garbage Collection 的壓力，進而觸發清理而影響效能。使用 `sync.Pool` 的好處是可以重複使用閒置的 context，以減少此類問題發生。
+
+以 Echo source code 為例，可以看到 context 從 pool 中取出和放回。
+
+```go
+func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// Acquire context
+	c := e.pool.Get().(*context)
+	c.Reset(r, w)
+
+	h := NotFoundHandler
+
+	if e.premiddleware == nil {
+		e.findRouter(r.Host).Find(r.Method, getPath(r), c)
+		h = c.Handler()
+		h = applyMiddleware(h, e.middleware...)
+	} else {
+		h = func(c Context) error {
+			e.findRouter(r.Host).Find(r.Method, getPath(r), c)
+			h := c.Handler()
+			h = applyMiddleware(h, e.middleware...)
+			return h(c)
+		}
+		h = applyMiddleware(h, e.premiddleware...)
+	}
+
+	// Execute chain
+	if err := h(c); err != nil {
+		e.HTTPErrorHandler(err, c)
+	}
+
+	// Release context
+	e.pool.Put(c)
+}
+```
+
+另外， Echo 更有趣的地方是，它在新建 context 的時候，會建立一個可以容納最大 params 數的 string slice(`pvalues`)，這樣就可以將 params 值放入 context 而不觸發 slice expansion。
+
+```go
+func (e *Echo) NewContext(r *http.Request, w http.ResponseWriter) Context {
+	return &context{
+		request:  r,
+		response: NewResponse(w, e),
+		store:    make(Map),
+		echo:     e,
+		pvalues:  make([]string, *e.maxParam),
+		handler:  NotFoundHandler,
+	}
+}
+```
+
+Chi 則是有使用 sync.Pool，不過 context 的 params 會是一個 0 size 的 string slice，而在需要放入 params 值再使用 `append` 來插入到 params slice。雖然可能會觸發 slice expansion，不過如果 params 數很少，是不太會有明顯地效能影響。
+
+有一點要特別注意的是，`sync.Pool` 不是每個場景都很適用的，例如：它會在 GC trigger 時候，把 pool 內的 object 清除，因此不適合放需要長時間保留的 object。還有就是即使使用 `sync.Pool` 也有可能降低效能，可以參考 [Go: Understand the Design of Sync.Pool](https://medium.com/a-journey-with-go/go-understand-the-design-of-sync-pool-2dde3024e277)，文章中有例子講解和實作原理。
+
 ## Benchmark
 
 最後不可免俗地跑個 Benchmark，基於 [julienschmidt/go-http-routing-benchmark](https://github.com/julienschmidt/go-http-routing-benchmark) 所測試的結果。老實說 Chi 的表現有點出乎我意料，除了 recursion 因素之外，推測還與 context reuse 方式有關，可參考 [chi/tree.go](https://github.com/go-chi/chi/blob/master/tree.go#L374)。
