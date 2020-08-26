@@ -38,7 +38,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2020-08-04T08:00:00+08:00" />
+<meta property="og:updated_time" content="2020-08-25T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -136,6 +136,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -147,6 +148,26 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -177,26 +198,6 @@
                     </p>
                 </div>
             </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/" class="title">Escape analysis issues of strings builder</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-06-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-06-24</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/" class="title">Go string to slice 議題</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-06-01 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-06-01</time>
-                    </p>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
@@ -212,6 +213,82 @@
     
     
     
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2020-08-25-comp790-lab1/"
+    >
+    
+      
+        
+          <span class="title-cat">Operating System</span>
+        
+      
+    Operating System Implementation Lab1 - The Stack</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">前言 課程 Operating System Implementation，Lab1 x86 Assembly and Bootloader 是個簡單的實作開場(Lab 源自於 MIT 課程)，不過其中卻有蠻多學習的地方。這次來記錄一下 Lab 1 中的 The Stack 實作部分，實作過程中除了需要用 gdb 之外，也需要搭配 asm code。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="">
+  <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/operating-system/"> Operating System </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-08-25-comp790-lab1/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2020-08-24-comp790-tool/"
+    >
+    
+      
+        
+          <span class="title-cat">Operating System</span>
+        
+      
+    Operating System Implementation Lab 環境建置</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">前言 由於下學期要上計算機結構的課程，所以趁著開課之前來複習一下 OS。這次看的課程是 UNC Operating System Implementation，基本上這課程也是引用 MIT 知名的 JOS 實作，再加上清楚明瞭的 Slides，光是一堂課就能有蠻多地收穫。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="">
+  <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/operating-system/"> Operating System </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-08-24-comp790-tool/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
     <article
       class="article article-type-page"
       itemscope
@@ -528,82 +605,6 @@
 </span>
 
         <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-04-29-hugo-symlinks/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2020-04-22-discourse-deployment/"
-    >
-    
-      
-        
-          <span class="title-cat">Go</span>
-        
-      
-    Discourse Forums Deployment</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">這兩天在試著部署 Discourse －目前主流的 forum open porject。雖然它有 cloud 版本可以用，不過因為基於一些因素，我們打算先自行部署，給團隊成員實際試用測試過後，再來看是否要使用官方提供的 Cloud 付費版本。而在部署的過程中發現蠻多問題的，所以也一併記錄下來，給想要自行部署的人參考。</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/" class="">
-  <time datetime="2020-04-22 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-04-22</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/go/"> Go </a>
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-04-22-discourse-deployment/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2020-04-15-transfer-sh-refactor/"
-    >
-    
-      
-        
-          <span class="title-cat">Go</span>
-        
-      
-    Trace transfer.sh open project</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">因為工作需求，需要一個透過 cli 就可以 upload 和 download 的工具，剛好 open project transfer.sh 有提供類似的功能，不過我們有額外的需求，包含每個 request 都要能 fiter IP 和執行 HTTP Basic Auth 驗證，因此就有這個機會來分析一下 transfer.</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/" class="">
-  <time datetime="2020-04-15 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-04-15</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/go/"> Go </a>
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-04-15-transfer-sh-refactor/#comments" class="article-comment-link">Comments</a></span>
       </p>
     </article></div>
   

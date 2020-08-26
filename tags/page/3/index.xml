@@ -11,6 +11,26 @@
     
     
     <item>
+      <title>使用 React-Redux 注意事項和運作原理</title>
+      <link>https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/</link>
+      <pubDate>Thu, 17 Jan 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/</guid>
+      <description>前言 網路上有很多關於如何使用 redux and react-redux 的教學文章，所以在這邊就不寫如何去應用，而是會著重在一些可能會忽略的細節以及大概的 實作原理。其實這些細節都寫在官網上，不過一般在教學文章內較少著墨，所以特別摘錄出來，讓大家在使用 react-redux 時能注意到可能會發生的問題。
+mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapStateToProps，由於這個 function 關係到 component props，所以就容易產生沒有發生 render 或是 render 次數過多的問題。</description>
+    </item>
+    
+    <item>
+      <title>2018/12月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-01-01-12-study/</link>
+      <pubDate>Tue, 01 Jan 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-01-01-12-study/</guid>
+      <description>前言 其實可以看到，我從 11 月開始發文量變少（雖然本來就不多XD），主要是因為目前在複習一些理論課程，我又是手寫筆記派，所以自然地就比較少用 blog 記錄，反而是都寫成筆記，不但能強化當下的記憶，也方便日後複習。 ![12-study]({{ site.url }}/assets/images/12-study.jpg)
+學習回顧 Network Principle 本月份主力衝刺在 Network 基本概念，這個月複習 Network Layer 和 Data Link Layer，雖然對於其中所使用到的 algorithm implementation 方式不熟悉，不過至少找回了概念，之後在 trace network protocol code 的時候也會更有方向。</description>
+    </item>
+    
+    <item>
       <title>11月份自我學習回顧</title>
       <link>https://yushuanhsieh.github.io/post/2018-12-01-11-study/</link>
       <pubDate>Sat, 01 Dec 2018 08:00:00 +0800</pubDate>
@@ -172,24 +192,6 @@ The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然
       
       <guid>https://yushuanhsieh.github.io/post/2018-05-16-javascript-optimization-property/</guid>
       <description>Properties Access in V8 前言 傳統的 JavaScript 引擎，在抓取 object 內的 property 位置時，常常是利用 object 內的 hash table 來取得對應 property (通常稱為 dictionary )。不過這樣需要花費搜尋時間，相對來說效率就不是太好。也因此在現代的 JavaScript 引擎，會根據 object 內的 property 架構來進行不同方式的效能處理，避免一直使用 hash table，而是改採其他更有效率的結構，來達成快速得到 property 的目的。</description>
-    </item>
-    
-    <item>
-      <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Elements</title>
-      <link>https://yushuanhsieh.github.io/post/2018-05-15-javascript-optimization-elements/</link>
-      <pubDate>Tue, 15 May 2018 12:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-05-15-javascript-optimization-elements/</guid>
-      <description>前言 JavaScript 是種弱型態語言，而 JavaScript Engine (V8) 透過對於 JavaScript object 的型態強化來提升 JavaScript 執行效率。</description>
-    </item>
-    
-    <item>
-      <title>JavaScript - Pass Params Into Functions</title>
-      <link>https://yushuanhsieh.github.io/post/2018-05-07-javascript-basic-concept/</link>
-      <pubDate>Mon, 07 May 2018 12:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-05-07-javascript-basic-concept/</guid>
-      <description>前言 這篇文章起源於我為了瞭解瀏覽器的運作原理，以利針對瀏覽器進行效能優化時，所延伸出來的基礎文章。剛開始學習切入點是 Chrome 的 V8 JavaScript Engine，看到有一位作者仔細地說明 V8 Engine 如何 Compile JavaScript 的流程，進而引發我對 JavaScript Memory Allocation 的興趣。此外，剛好最近也在用 TypeScript 寫類 static type object，所以想更清楚知道使用 TypeScript 這個 pre-processor，在瀏覽器中會怎樣提高 JavaScript Compile 的性能。</description>
     </item>
     
   </channel>

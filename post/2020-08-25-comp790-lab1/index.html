@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Operating System Implementation Lab1 - The Stack - 文組工程師
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="前言 課程 Operating System Implementation，Lab1 x86 Assembly and Bootloader 是個簡單的實作開場(Lab 源自於 MIT 課程)，不過其中卻有蠻多學習的地方。這次來記錄一下 Lab 1 中的 The Stack 實作部分，實作過程中除了需要用 gdb 之外，也需要搭配 asm code。" />
+  <meta name="generator" content="Hugo 0.71.0 with theme pure" />
+  <title>Operating System Implementation Lab1 - The Stack - 文組工程師</title>
+  
+  
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  
+    
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="Operating System Implementation Lab1 - The Stack" />
+<meta property="og:description" content="前言 課程 Operating System Implementation，Lab1 x86 Assembly and Bootloader 是個簡單的實作開場(Lab 源自於 MIT 課程)，不過其中卻有蠻多學習的地方。這次來記錄一下 Lab 1 中的 The Stack 實作部分，實作過程中除了需要用 gdb 之外，也需要搭配 asm code。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" />
+<meta property="article:published_time" content="2020-08-25T08:00:00+08:00" />
+<meta property="article:modified_time" content="2020-08-25T08:00:00+08:00" />
+<meta itemprop="name" content="Operating System Implementation Lab1 - The Stack">
+<meta itemprop="description" content="前言 課程 Operating System Implementation，Lab1 x86 Assembly and Bootloader 是個簡單的實作開場(Lab 源自於 MIT 課程)，不過其中卻有蠻多學習的地方。這次來記錄一下 Lab 1 中的 The Stack 實作部分，實作過程中除了需要用 gdb 之外，也需要搭配 asm code。">
+<meta itemprop="datePublished" content="2020-08-25T08:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2020-08-25T08:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="1209">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Operating System Implementation Lab1 - The Stack"/>
+<meta name="twitter:description" content="前言 課程 Operating System Implementation，Lab1 x86 Assembly and Bootloader 是個簡單的實作開場(Lab 源自於 MIT 課程)，不過其中卻有蠻多學習的地方。這次來記錄一下 Lab 1 中的 The Stack 實作部分，實作過程中除了需要用 gdb 之外，也需要搭配 asm code。"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">Software Engineer</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Taiwan</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="Type something..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title"> Categories</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/coscup/" class="category-list-link">coscup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/game/" class="category-list-link">game</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/gnu/" class="category-list-link">gnu</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/go/" class="category-list-link">go</a><span class="category-list-count">13</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/google-cloud-platform/" class="category-list-link">google-cloud-platform</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/kubernetes/" class="category-list-link">kubernetes</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
+        </ul>
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-04-coscup-go/" class="title">COSCUP 2020 - Goroutine stack and local variable allocation in Go</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-06-25-study-05/" class="title">2020/05 月份自我學習回顧</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-06-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-06-25</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<main class="main" role="main"><div class="content">
+  <article id="single-" class="article article-type-single" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2020-08-25-comp790-lab1/"
+    >
+    
+      
+        
+          <span class="title-cat">Operating System</span>
+        
+      
+    Operating System Implementation Lab1 - The Stack</a>
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="article-date">
+  <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/operating-system/"> Operating System </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/post/2020-08-25-comp790-lab1/#comments"
+            class="article-comment-link">Comments</a></span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <h2 id="前言">前言</h2>
+<p>課程 <a href="https://www.cs.unc.edu/~porter/courses/comp790/s20/index.html">Operating System Implementation</a>，Lab1 <a href="https://www.cs.unc.edu/~porter/courses/comp790/s20/lab1.html">x86 Assembly and Bootloader</a> 是個簡單的實作開場(Lab 源自於 MIT 課程)，不過其中卻有蠻多學習的地方。這次來記錄一下 Lab 1 中的 <strong>The Stack</strong> 實作部分，實作過程中除了需要用 gdb 之外，也需要搭配 asm code。</p>
+<h2 id="實作內容">實作內容</h2>
+<p>在教學程式中，會呼叫 test_backtrace(5)，接著跑 recursion 直到碰到終止條件為止。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">i386_init</span>(<span style="color:#66d9ef">void</span>)
+{
+    test_backtrace(<span style="color:#ae81ff">5</span>);
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">test_backtrace</span>(<span style="color:#66d9ef">int</span> x)
+{
+    cprintf(<span style="color:#e6db74">&#34;entering test_backtrace %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, x);
+    <span style="color:#66d9ef">if</span> (x <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
+        test_backtrace(x<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+    <span style="color:#66d9ef">else</span>
+        mon_backtrace(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+    cprintf(<span style="color:#e6db74">&#34;leaving test_backtrace %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, x);
+}
+</code></pre></div><p>我們的目標，就是實作 <code>mon_backtrace</code>，追蹤進入 test_backtrace function 以及 recursion 的過程。</p>
+<p><img src="/posts/os-lab1_1.png" alt="hugo"></p>
+<h2 id="x86-base-pointer--stack-frame">x86 Base Pointer &amp; Stack Frame</h2>
+<p>而在這實作中，我們使用一個 register:</p>
+<h3 id="rbpbp">RBP(BP)</h3>
+<blockquote>
+<p>Stack Base Pointer register (BP). Used to point to the base of the stack.</p>
+</blockquote>
+<p>來作為我們取得其他資訊的基點。</p>
+<p>不過在實作之前，需要了解基本的 x86_64 stack frame 架構，參考 <a href="https://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64.html">Stack frame layout on x86-64</a>，可以有個基本概念：</p>
+<p><img src="https://eli.thegreenplace.net/images/2011/08/x64_frame_nonleaf.png" alt="x86_64 stack frame"></p>
+<p>從圖中知道 function params、return address、local variables 在 stack 中的記憶體相對位置，所以透過位移，就可以得到對應數值。</p>
+<p>接著我們透過 asm code 來了解 RBP 數值變化。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#ae81ff">8004200058</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">55</span>                   	push   <span style="color:#f92672">%</span>rbp
+<span style="color:#ae81ff">8004200059</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">48</span> <span style="color:#ae81ff">89</span> e5             	mov    <span style="color:#f92672">%</span>rsp,<span style="color:#f92672">%</span>rbp
+<span style="color:#ae81ff">800420005</span>c:	<span style="color:#ae81ff">48</span> <span style="color:#ae81ff">83</span> ec <span style="color:#ae81ff">10</span>          	sub    <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0x10</span>,<span style="color:#f92672">%</span>rsp
+<span style="color:#ae81ff">8004200060</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">89</span> <span style="color:#ae81ff">7</span>d fc             	mov    <span style="color:#f92672">%</span>edi,<span style="color:#f92672">-</span><span style="color:#ae81ff">0x4</span>(<span style="color:#f92672">%</span>rbp)
+cprintf(<span style="color:#e6db74">&#34;entering test_backtrace %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, x);
+<span style="color:#ae81ff">8004200063</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">8</span>b <span style="color:#ae81ff">45</span> fc             	mov    <span style="color:#f92672">-</span><span style="color:#ae81ff">0x4</span>(<span style="color:#f92672">%</span>rbp),<span style="color:#f92672">%</span>eax
+<span style="color:#ae81ff">8004200066</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">89</span> c6                	mov    <span style="color:#f92672">%</span>eax,<span style="color:#f92672">%</span>esi
+<span style="color:#ae81ff">8004200068</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">48</span> bf c0 <span style="color:#ae81ff">93</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">04</span> <span style="color:#ae81ff">80</span> 	movabs <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0x80042093c0</span>,<span style="color:#f92672">%</span>rdi
+<span style="color:#ae81ff">800420006f</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> 
+<span style="color:#ae81ff">8004200072</span><span style="color:#f92672">:</span>	b8 <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span>       	mov    <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0x0</span>,<span style="color:#f92672">%</span>eax
+<span style="color:#ae81ff">8004200077</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">48</span> ba ad <span style="color:#ae81ff">15</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">04</span> <span style="color:#ae81ff">80</span> 	movabs <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0x80042015ad</span>,<span style="color:#f92672">%</span>rdx
+<span style="color:#ae81ff">800420007</span>e:	<span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> 
+<span style="color:#ae81ff">8004200081</span><span style="color:#f92672">:</span>	ff d2                	callq  <span style="color:#f92672">*%</span>rdx
+<span style="color:#66d9ef">if</span> (x <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
+<span style="color:#ae81ff">8004200083</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">83</span> <span style="color:#ae81ff">7</span>d fc <span style="color:#ae81ff">00</span>          	cmpl   <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0x0</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">0x4</span>(<span style="color:#f92672">%</span>rbp)
+<span style="color:#ae81ff">8004200087</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">7</span>e <span style="color:#ae81ff">16</span>                	jle    <span style="color:#ae81ff">800420009f</span> <span style="color:#f92672">&lt;</span>test_backtrace<span style="color:#f92672">+</span><span style="color:#ae81ff">0x47</span><span style="color:#f92672">&gt;</span>
+test_backtrace(x<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+</code></pre></div><p>用圖示來表示：</p>
+<p><img src="/posts/os-lab1_2.png" alt="hugo"></p>
+<p>由於每次進入 <code>test_backtrace</code> 就會把前一個 RBP 地址 PUSH 到 stack 中，所以可以透過讀取 RBP 的值來移動到上一個 function 的 stack frame。藉由這樣的方式，就能持續地往前追朔 function。</p>
+<p>那這向前追朔的過程要到什麼時候才要停止呢？</p>
+<p>看 <code>kern/entry.S:63</code> 這段 source code，會發現：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">movq	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0x0</span>,<span style="color:#f92672">%</span>rbp
+
+<span style="color:#75715e"># Set the stack pointer
+</span><span style="color:#75715e"></span>movabs	<span style="color:#960050;background-color:#1e0010">$</span>(bootstacktop),<span style="color:#f92672">%</span>rax
+movq  <span style="color:#f92672">%</span>rax,<span style="color:#f92672">%</span>rsp
+
+<span style="color:#75715e"># now to C code
+</span><span style="color:#75715e"></span>movabs <span style="color:#960050;background-color:#1e0010">$</span>i386_init, <span style="color:#f92672">%</span>rax
+call <span style="color:#f92672">*%</span>rax
+</code></pre></div><p><code>%rbp</code> 的值被設置為 0 後，才進入到 i386_init function 並執行 test_backtrace function，這意味著只要持續讀取 %rbp 的值，直到 %rbp 值為 0 即可停止。</p>
+<p>有了這樣的概念後，就可以來實作一部分的 code：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">mon_backtrace</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv, <span style="color:#66d9ef">struct</span> Trapframe <span style="color:#f92672">*</span>tf)
+{
+    uint64_t rbp <span style="color:#f92672">=</span> read_rbp();
+    <span style="color:#66d9ef">while</span>(rbp <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+    {
+        rbp <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(uint64_t <span style="color:#f92672">*</span>)rbp;
+    }
+}
+</code></pre></div><p>說明一下 <code>read_rbp</code> 這個 function，function 的 code 為：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">__inline</span> uint64_t <span style="color:#a6e22e">read_rbp</span>(<span style="color:#66d9ef">void</span>)
+{
+	uint64_t rbp;
+	<span style="color:#66d9ef">__asm</span> __volatile(<span style="color:#e6db74">&#34;movq %%rbp,%0&#34;</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;=r&#34;</span> (rbp)<span style="color:#f92672">::</span><span style="color:#e6db74">&#34;cc&#34;</span>, <span style="color:#e6db74">&#34;memory&#34;</span>);
+	<span style="color:#66d9ef">return</span> rbp;
+}
+</code></pre></div><p>值得注意的是 <code>&quot;cc&quot;</code>, <code>&quot;memory&quot;</code> 這兩個 clobber arguments，根據 <a href="https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Clobbers">GNU 6.47.2 Extended Asm</a>：</p>
+<blockquote>
+<p>&ldquo;cc&rdquo;
+The &ldquo;cc&rdquo; clobber indicates that the assembler code modifies the flags register. On some machines, GCC represents the condition codes as a specific hardware register; &ldquo;cc&rdquo; serves to name this register. On other machines, condition code handling is different, and specifying &ldquo;cc&rdquo; has no effect. But it is valid no matter what the target.</p>
+</blockquote>
+<p>如果 instruction 會修改 flag tegister ，那就要標記 &ldquo;cc&rdquo; (condition codes)。不過以 x86 的 MOV instruction 來說， MOV 並不會對 flag tegister 造成任何影響，因此即使沒有加註也不會發生錯誤。</p>
+<blockquote>
+<p>&ldquo;memory&rdquo;
+The &ldquo;memory&rdquo; clobber tells the compiler that the assembly code performs memory reads or writes to items other than those listed in the input and output operands. Further, the compiler does not assume that any values read from memory before an asm remain unchanged after that asm; it reloads them as needed. Using the &ldquo;memory&rdquo; clobber effectively forms a read/write memory barrier for the compiler.</p>
+</blockquote>
+<p>至於 &ldquo;memory&rdquo; 則是說明 asm code 有可能讀取非預期的記憶體位置，以及我認為比較重要的是有 read/write memory barrier 效果，由於 GNU gcc 編譯器在優化時，可能會改變記憶體讀取順序，透過 &ldquo;memory&rdquo; 在一些情況下能夠確保值是正確的。(其他範例與解釋可以參考<a href="https://0xax.gitbooks.io/linux-insides/content/Theory/linux-theory-3.html">Inline assembly</a>)。</p>
+<p>而對於 read_rbp 來說，&ldquo;memory&rdquo; 有沒有加都不會影響編譯後的結果。</p>
+<h3 id="rip">RIP</h3>
+<p>x86_64 的 RIP 指的是 64-bit Instruction Pointer ，不過在實作題目的 RIP 意思有點不同，是指 <strong>&ldquo;Return&rdquo;</strong> Instruction Pointer，也就是上面在 stack frame layout 圖中標示的 return address。</p>
+<blockquote>
+<p>The RIP value is the function&rsquo;s <strong>return instruction pointer</strong>: the instruction address to which control will return when the function returns.</p>
+</blockquote>
+<p>根據 stack frame layout， return address 是在 rbp 上方位置，也就是 <code>%rip + 8</code>，因此我們要做的就是把這個地址的值讀出來即可。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">mon_backtrace</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv, <span style="color:#66d9ef">struct</span> Trapframe <span style="color:#f92672">*</span>tf)
+{
+    uint64_t rip <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    uint64_t rbp <span style="color:#f92672">=</span> read_rbp();
+    <span style="color:#66d9ef">while</span>(rbp <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+    {
+        rbp <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(uint64_t <span style="color:#f92672">*</span>)rbp;
+        rip <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(uint64_t <span style="color:#f92672">*</span>)(rbp <span style="color:#f92672">+</span> <span style="color:#ae81ff">8</span>);
+    }
+}
+</code></pre></div><h3 id="dwarf">DWARF</h3>
+<p>最後一個實作條件，就是要從 DWARF(Debugging With Attributed Record Formats) 中取得 function params 數量和值。</p>
+<p>由於多數現代化的程式語言架構是由多個階層式 block 組成，DWARF 運用這特性將程式拆解成樹狀結構，並包含相關資訊（例如參數的大小、類型等），以利使用者查詢。近期 news 也有提到 <a href="https://www.phoronix.com/scan.php?page=news_item&amp;px=GCC-11-DWARF-5-Possible-Default">GCC 11 Compiler Might Finally Enable DWARF 5 Debugging By Default</a>，因此從此 Lab 實作中開始學習接觸 DWARF ，也是不錯的出發點。DWARF 介紹可參閱 <a href="http://www.dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf">Introduction to the DWARF Debugging Format</a>。</p>
+<p>Lab 1 的 source code 把讀取 DWARF 資訊過程包裝成較高階層的 function <code>debuginfo_rip</code>，以利課程使用，其 <code>Ripdebuginfo</code> struct 為：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">struct</span> Ripdebuginfo {
+    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>rip_file;		<span style="color:#75715e">// Source code filename for RIP
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> rip_line;			<span style="color:#75715e">// Source code linenumber for RIP
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>rip_fn_name;	<span style="color:#75715e">// Name of function containing RIP
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> rip_fn_namelen;		<span style="color:#75715e">// Length of function name
+</span><span style="color:#75715e"></span>    uintptr_t rip_fn_addr;		<span style="color:#75715e">// Address of start of function
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> rip_fn_narg;		<span style="color:#75715e">// Number of function arguments
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> size_fn_arg[<span style="color:#ae81ff">10</span>];		<span style="color:#75715e">// Sizes of each of function arguments
+</span><span style="color:#75715e"></span>    uintptr_t offset_fn_arg[<span style="color:#ae81ff">10</span>];	<span style="color:#75715e">// Offset of each of function arguments (from CFA)
+</span><span style="color:#75715e"></span>    Dwarf_Regtable reg_table;
+};
+</code></pre></div><p>根據需求，實作中需要列印出 function params 的數量和值，因此我們將目光放在 <code>rip_fn_narg</code>、<code>size_fn_arg</code>、<code>offset_fn_arg</code> 這三個 member 上。</p>
+<p><code>rip_fn_narg</code>、<code>size_fn_arg</code> 這兩個非常好理解，但是 <code>offset_fn_arg</code> 這又該怎麼解釋，以及 offset 的基準點是什麼？</p>
+<h4 id="解析-offset_fn_arg">解析 offset_fn_arg</h4>
+<p>首先 <code>offset_fn_arg</code> 的註解是：</p>
+<blockquote>
+<p>Offset of each of function arguments (from CFA)</p>
+</blockquote>
+<p>先來查看 CFA 的意思，從 <a href="http://dwarfstd.org/doc/Dwarf3.pdf">DWARF format DOC</a> 可以看到解釋：</p>
+<blockquote>
+<p>An area of memory that is allocated on a stack called a “call frame.” The call frame is identified by an address on the stack. We refer to this address as the Canonical Frame Address or CFA.</p>
+</blockquote>
+<p>了解 CFA 的意思，接下來就來看一下 <code>offset_fn_arg</code> 這個值是從哪裡來的，追蹤一下 source code。 <code>debuginfo_rip</code> function 會呼叫 <code>_dwarf_frame_params_init</code> function：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">_dwarf_frame_params_init</span>(Dwarf_Debug dbg)
+{
+	<span style="color:#75715e">/* Initialise call frame related parameters. */</span>
+dbg<span style="color:#f92672">-&gt;</span>dbg_frame_rule_table_size <span style="color:#f92672">=</span> DW_FRAME_LAST_REG_NUM;
+dbg<span style="color:#f92672">-&gt;</span>dbg_frame_rule_initial_value <span style="color:#f92672">=</span> DW_FRAME_REG_INITIAL_VALUE;
+dbg<span style="color:#f92672">-&gt;</span>dbg_frame_cfa_value <span style="color:#f92672">=</span> DW_FRAME_CFA_COL3;
+dbg<span style="color:#f92672">-&gt;</span>dbg_frame_same_value <span style="color:#f92672">=</span> DW_FRAME_SAME_VAL;
+dbg<span style="color:#f92672">-&gt;</span>dbg_frame_undefined_value <span style="color:#f92672">=</span> DW_FRAME_UNDEFINED_VAL;
+}
+</code></pre></div><p>從 <code>_dwarf_frame_params_init</code> 了解接下來的流程就是從 DWARF info 中讀取 function params 相關資訊。然後，我們快速地跳到 <code>offset_fn_arg</code> assign 過程：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// list_func_die function
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (atom <span style="color:#f92672">==</span> DW_OP_fbreg) {
+    uint8_t <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> loc_ptr;
+    ret_offset <span style="color:#f92672">=</span> _dwarf_decode_sleb128(<span style="color:#f92672">&amp;</span>p);
+    offset <span style="color:#f92672">+=</span> p <span style="color:#f92672">-</span> loc_ptr;
+    loc_ptr <span style="color:#f92672">=</span> p;
+}
+info<span style="color:#f92672">-&gt;</span>offset_fn_arg[info<span style="color:#f92672">-&gt;</span>rip_fn_narg]<span style="color:#f92672">=</span>ret_offset;
+</code></pre></div><p>可以看到關建字 <code>DW_OP_fbreg</code>，搜尋 DWARF 手冊：</p>
+<blockquote>
+<p>DW_OP_fbreg:
+The DW_OP_fbreg operation provides a signed LEB128 offset from the address specified by the location description in the DW_AT_frame_base attribute of the current function.</p>
+</blockquote>
+<p>這樣就能知道，<code>offset_fn_arg</code> 就是以 <code>DW_AT_frame_base</code> 這個 attribute 為基準的 offset 值。</p>
+<p>至於 <code>DW_AT_frame_base</code> attribute 就是指 <strong>base frame pointer</strong>，而根據 <a href="http://6.s081.scripts.mit.edu/sp18/x86-64-architecture-guide.html">Stack Organization</a> 可以知道， current stack frame layout 是從 return address 開始算起，因此我們在計算 base frame address，就要 +8 (old rbp value) +8 (return address value)：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// read DWARF info from RIP (return IP)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> Ripdebuginfo info; 
+<span style="color:#66d9ef">int</span> ret <span style="color:#f92672">=</span> debuginfo_rip((uintptr_t)rip, <span style="color:#f92672">&amp;</span>info);
+
+uint64_t rbp <span style="color:#f92672">=</span> read_rbp(); <span style="color:#75715e">//current RBP
+</span><span style="color:#75715e"></span>uint64_t prev_rbp <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(uint64_t <span style="color:#f92672">*</span>)rbp; <span style="color:#75715e">// back to the previous RBP
+</span><span style="color:#75715e"></span>uint64_t frame_base <span style="color:#f92672">=</span> prev_rbp <span style="color:#f92672">+</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">8</span>;
+</code></pre></div><p>接著讀取 <code>offset_fn_arg</code> 的值，以 Lab 1 來說，第一個 params 的 offset 值是 -20，接著再把 base frame address + (-20)，因為 x86 的 stack 是從 high address 往 low address 成長。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// read DWARF info from RIP (return IP)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> Ripdebuginfo info; 
+<span style="color:#66d9ef">int</span> ret <span style="color:#f92672">=</span> debuginfo_rip((uintptr_t)rip, <span style="color:#f92672">&amp;</span>info);
+
+uint64_t rbp <span style="color:#f92672">=</span> read_rbp(); <span style="color:#75715e">//current RBP
+</span><span style="color:#75715e"></span>uint64_t prev_rbp <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(uint64_t <span style="color:#f92672">*</span>)rbp; <span style="color:#75715e">// back to the previous RBP
+</span><span style="color:#75715e"></span>uint64_t frame_base <span style="color:#f92672">=</span> prev_rbp <span style="color:#f92672">+</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">8</span>;
+
+<span style="color:#66d9ef">int</span> argc <span style="color:#f92672">=</span> info.rip_fn_narg;
+<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> argc; i<span style="color:#f92672">++</span>) {
+    <span style="color:#66d9ef">int</span> offset <span style="color:#f92672">=</span> info.offset_fn_arg[i];
+    uint64_t arg <span style="color:#f92672">=</span> frame_base <span style="color:#f92672">+</span> offset;
+    <span style="color:#75715e">// TODO: we should check the size of args to the display correct value 
+</span><span style="color:#75715e"></span>    cprintf(<span style="color:#e6db74">&#34;%016d &#34;</span>, <span style="color:#f92672">*</span>(uint32_t <span style="color:#f92672">*</span>)arg);
+}
+</code></pre></div><p>最後再根據 params 的 size <code>size_fn_arg</code> 來顯示出正確的數值。(因為 test_backtrace 的 params size 是 4 byte，所以我就直接用 uint32_t 來顯示了)</p>
+<h2 id="完整-code">完整 code</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">mon_backtrace</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv, <span style="color:#66d9ef">struct</span> Trapframe <span style="color:#f92672">*</span>tf)
+{
+	uint64_t rip <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, rbp <span style="color:#f92672">=</span> read_rbp();
+	read_rip(rip);
+	cprintf(<span style="color:#e6db74">&#34;Stack backtrace:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+	<span style="color:#66d9ef">while</span>(rbp <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>){
+		cprintf(<span style="color:#e6db74">&#34; rbp %016x rip %016x</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, rbp, rip);
+		<span style="color:#66d9ef">struct</span> Ripdebuginfo info;
+		<span style="color:#66d9ef">int</span> ret <span style="color:#f92672">=</span> debuginfo_rip((uintptr_t)rip, <span style="color:#f92672">&amp;</span>info);
+		<span style="color:#66d9ef">if</span> (ret <span style="color:#f92672">!=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
+			<span style="color:#66d9ef">int</span> narg <span style="color:#f92672">=</span> info.rip_fn_narg;
+			cprintf(<span style="color:#e6db74">&#34;%s:%d: %s+%016d args:%d &#34;</span>,
+				info.rip_file,
+				info.rip_line,info.rip_fn_name,
+				rip<span style="color:#f92672">-</span>info.rip_fn_addr,
+				narg);
+
+			<span style="color:#75715e">// The frame base begins from return address
+</span><span style="color:#75715e"></span>			uint64_t frame_base <span style="color:#f92672">=</span> rbp <span style="color:#f92672">+</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">8</span>;
+			<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> narg; i<span style="color:#f92672">++</span>) {
+				<span style="color:#66d9ef">int</span> offset <span style="color:#f92672">=</span> info.offset_fn_arg[i];
+				uint64_t arg <span style="color:#f92672">=</span> frame_base <span style="color:#f92672">+</span> offset;
+				<span style="color:#75715e">// TODO: we should check the size of args to display correct value 
+</span><span style="color:#75715e"></span>				cprintf(<span style="color:#e6db74">&#34;%016d &#34;</span>, <span style="color:#f92672">*</span>(uint32_t <span style="color:#f92672">*</span>)arg);
+			}
+		}
+		cprintf(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+
+		rip <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(uint64_t <span style="color:#f92672">*</span>)(rbp <span style="color:#f92672">+</span> <span style="color:#ae81ff">8</span>);
+		rbp <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(uint64_t <span style="color:#f92672">*</span>)rbp;
+	}
+	
+	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div><h2 id="結論">結論</h2>
+<p>透過這個作業可以確實地理解 stack frame ，並且對 DWARF 有初步了解，整體來說不難，但是還蠻有啟發性的。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permalink: </strong>
+      <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" title="Operating System Implementation Lab1 - The Stack" target="_blank" rel="external">https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <div>Gopher</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" title="Operating System Implementation Lab 環境建置"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            
+        </ul>
+        <div class="bar-right">
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+  <div class="copyright">
+    &copy;2017  -
+    2020
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: 'https:\/\/yushuanhsieh.github.io',
+            CONTENT_URL: 'https:\/\/yushuanhsieh.github.io\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://yushuanhsieh.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+
+  </body>
+</html>

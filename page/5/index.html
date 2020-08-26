@@ -38,7 +38,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2020-08-04T08:00:00+08:00" />
+<meta property="og:updated_time" content="2020-08-25T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -136,6 +136,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -147,6 +148,26 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -177,26 +198,6 @@
                     </p>
                 </div>
             </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/" class="title">Escape analysis issues of strings builder</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-06-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-06-24</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/" class="title">Go string to slice 議題</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-06-01 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-06-01</time>
-                    </p>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
@@ -212,6 +213,82 @@
     
     
     
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2019-01-17-react-and-redux/"
+    >
+    
+      
+        <span class="title-cat">Web</span>
+      
+    使用 React-Redux 注意事項和運作原理</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">前言 網路上有很多關於如何使用 redux and react-redux 的教學文章，所以在這邊就不寫如何去應用，而是會著重在一些可能會忽略的細節以及大概的 實作原理。其實這些細節都寫在官網上，不過一般在教學文章內較少著墨，所以特別摘錄出來，讓大家在使用 react-redux 時能注意到可能會發生的問題。
+mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapStateToProps，由於這個 function 關係到 component props，所以就容易產生沒有發生 render 或是 render 次數過多的問題。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/" class="">
+  <time datetime="2019-01-17 08:00:00 &#43;0800 CST" itemprop="datePublished">2019-01-17</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/web/"> Web </a>
+  
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2019-01-17-react-and-redux/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2019-01-01-12-study/"
+    >
+    
+      
+        <span class="title-cat">Study</span>
+      
+    2018/12月份自我學習回顧</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">前言 其實可以看到，我從 11 月開始發文量變少（雖然本來就不多XD），主要是因為目前在複習一些理論課程，我又是手寫筆記派，所以自然地就比較少用 blog 記錄，反而是都寫成筆記，不但能強化當下的記憶，也方便日後複習。 ![12-study]({{ site.url }}/assets/images/12-study.jpg)
+學習回顧 Network Principle 本月份主力衝刺在 Network 基本概念，這個月複習 Network Layer 和 Data Link Layer，雖然對於其中所使用到的 algorithm implementation 方式不熟悉，不過至少找回了概念，之後在 trace network protocol code 的時候也會更有方向。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2019-01-01-12-study/" class="">
+  <time datetime="2019-01-01 08:00:00 &#43;0800 CST" itemprop="datePublished">2019-01-01</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/study/"> Study </a>
+  
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2019-01-01-12-study/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
     <article
       class="article article-type-page"
       itemscope
@@ -507,80 +584,6 @@
 </span>
 
         <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2018-09-09-go-tar-file/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2018-08-25-go-google-oauth/"
-    >
-    
-      
-        <span class="title-cat">Go</span>
-      
-    Google Sign-in with OAuth 2.0</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">前言： 由於目前專案是以 Embedded System 為主，比較少有機會接入第三方 api 的機會，所以這次 side project 就以 Google Sign-in for Web application with Go 的流程當作練習。由於網路上可以找到很多範例，所以在以下文章中會側重在原理 + 為什麼要這樣做，希望除了寫 code 之外，還能建立起基本概念。</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/" class="">
-  <time datetime="2018-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2018-08-25</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/go/"> Go </a>
-  
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2018-08-25-go-google-oauth/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2018-08-11-go-fundamental-array/"
-    >
-    
-      
-        <span class="title-cat">Go</span>
-      
-    Go Fundamental - Array</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">前言 最近在學 Go，而之前有一些 C 的基礎，因此在學到 Go 的 Array 時，發現它和 C 的 Array 差異性蠻大的，所以特別記錄下來。</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/" class="">
-  <time datetime="2018-08-11 08:00:00 &#43;0800 CST" itemprop="datePublished">2018-08-11</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/go/"> Go </a>
-  
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2018-08-11-go-fundamental-array/#comments" class="article-comment-link">Comments</a></span>
       </p>
     </article></div>
   

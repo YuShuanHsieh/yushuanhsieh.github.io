@@ -6,10 +6,32 @@
     <description>Recent content in Posts on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Aug 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 25 Aug 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2019/10 月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-11-07-study-10/</link>
+      <pubDate>Tue, 05 Nov 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-11-07-study-10/</guid>
+      <description>前言 應該是開始要努力分享一些學習到的內容了，十月份又變成只有學習日記，快要變成流水帳版了(誤)。十月卡了一個期中考大魔王，而且更可怕的是出社會太久都把微積分忘光，所以又回去複習。這次考試大多是證明，證明就是一個如果一開始錯誤，後面就會接連錯下去的東西～雖然證明不太好念，不過覺得過程中可以幫助釐清邏輯，再加上有考試壓力，還是收穫不少，當然考試分數也沒有太低啦哈。
+十月依然是一個不是很平靜的月份，花了不少時間在處理人生大事上，中間還發生跑去韓國旅遊，結果不是很好玩的慘痛回憶。不過有一位姊姊跟我說，最令人印象深刻的通常不是什麼美好的回憶，所以雖然這次經驗不太好，但是下次就會知道如何應付，也是一種人生學習～這樣聽起來好像感覺就好很多，默默地放下這事情了。
+希望十一月份可以更好。
+預定目標回顧 1. 其他語言或工具學習 (100%) 這個月看了蠻多 database 的影片和寫作業。我在英國上過資料庫導論，其實英國教授那時候就教的不錯，只可惜 CMU Database 上的更完整一點。印象深刻的部分包含：DB 是用什麼方式來儲存 tuple、DB 可能會有自己的 scheduling 來進行寫入、以及 DB 也是有 free list 來管理目前 tuple 紀錄。對於這些關於 DB internel 的學習，覺得非常有收獲，所以非常有收穫～</description>
+    </item>
+    
+    <item>
+      <title>2019/09 月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-10-05-study/</link>
+      <pubDate>Sat, 05 Oct 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-10-05-study/</guid>
+      <description>前言 這個月是一個比較多事的月份，主要原因是重新調整了生涯規劃。雖然自己出社會也快要十年了，但是轉職成 Engineer 也才不過這兩年的事情，因此自己還像是一名剛出社會的半新鮮人一樣，到處地探索自己喜歡的事物，不斷地從過程中試圖挖掘出自己的熱情所在。
+很好運的是，我覺得我在這過程中一直有貴人相助，例如我加入 Moxa，再因緣際會地加入趨勢科技，進而進入 Golang 社群開始與其他 co-organizer 辦活動等。老實說，我在群體中一直都是最菜的那位，但是大家給予我很多機會成長，讓我有機會接觸到各種事務，雖然依舊還是很菜，但至少開始有點經驗，知道自己該用什麼方式來找出問題點，在面對新技術的時候，可以從哪個方向下手讓自己快速學習。</description>
+    </item>
     
     <item>
       <title>Implement Memory Allocator</title>
@@ -185,26 +207,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/</guid>
       <description>問題： 今天收到 back-end 同事回饋，說是在新版本的 APP UI 中出現不正常行為。由於我們的 menu 必須根據 Embedded System 中的 Applcation 來增減，因此就使用 menu state 來讓其他 component 也可以透過 dispatch 控制 menu 項目。</description>
-    </item>
-    
-    <item>
-      <title>使用 React-Redux 注意事項和運作原理</title>
-      <link>https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/</link>
-      <pubDate>Thu, 17 Jan 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/</guid>
-      <description>前言 網路上有很多關於如何使用 redux and react-redux 的教學文章，所以在這邊就不寫如何去應用，而是會著重在一些可能會忽略的細節以及大概的 實作原理。其實這些細節都寫在官網上，不過一般在教學文章內較少著墨，所以特別摘錄出來，讓大家在使用 react-redux 時能注意到可能會發生的問題。
-mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapStateToProps，由於這個 function 關係到 component props，所以就容易產生沒有發生 render 或是 render 次數過多的問題。</description>
-    </item>
-    
-    <item>
-      <title>2018/12月份自我學習回顧</title>
-      <link>https://yushuanhsieh.github.io/post/2019-01-01-12-study/</link>
-      <pubDate>Tue, 01 Jan 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-01-01-12-study/</guid>
-      <description>前言 其實可以看到，我從 11 月開始發文量變少（雖然本來就不多XD），主要是因為目前在複習一些理論課程，我又是手寫筆記派，所以自然地就比較少用 blog 記錄，反而是都寫成筆記，不但能強化當下的記憶，也方便日後複習。 ![12-study]({{ site.url }}/assets/images/12-study.jpg)
-學習回顧 Network Principle 本月份主力衝刺在 Network 基本概念，這個月複習 Network Layer 和 Data Link Layer，雖然對於其中所使用到的 algorithm implementation 方式不熟悉，不過至少找回了概念，之後在 trace network protocol code 的時候也會更有方向。</description>
     </item>
     
   </channel>
