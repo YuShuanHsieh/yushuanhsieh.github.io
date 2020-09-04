@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DevOps on 文組工程師</title>
+    <link>https://yushuanhsieh.github.io/categories/devops/</link>
+    <description>Recent content in DevOps on 文組工程師</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 04 Sep 2020 08:00:00 +0800</lastBuildDate>
+    
+        <atom:link href="https://yushuanhsieh.github.io/categories/devops/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GDG Hsinchu Meetup Sharing #3 Move from C to Go</title>
+      <link>https://yushuanhsieh.github.io/post/2019-11-19-go-meetup-2/</link>
+      <pubDate>Tue, 19 Nov 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-11-19-go-meetup-2/</guid>
+      <description>前言 這次又來挑戰在新竹分享啦！每次來工程師大本營分享主題都蠻緊張的，很怕會被下面的工程師夥伴慘電，但即使如此，還是非常希望可以在新竹開講，畢竟新竹很多軟韌體工程師，講起 Operating System 時候，共鳴點比較多～ 本次主題主要是想針對使用 C 的工程師來說明 Go 語言的特性，因此在內容上可能相對比較抽象，沒有太多 Coding 部分，絕大多數都是在 Go 是用什麼樣的方式來實現他的特色，例如 user-space scheduler。而這場參加的人數竟然有 20 幾位，算是 GDG Hsinchu 開辦以來人數最多的一次，由此可知大家對於偏底層的內容還是很感興趣，希望之後有機會可以討論到更深的主題！ !</description>
+    </item>
+    
+    <item>
+      <title>2019/10 月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-11-07-study-10/</link>
+      <pubDate>Tue, 05 Nov 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-11-07-study-10/</guid>
+      <description>前言 應該是開始要努力分享一些學習到的內容了，十月份又變成只有學習日記，快要變成流水帳版了(誤)。十月卡了一個期中考大魔王，而且更可怕的是出社會太久都把微積分忘光，所以又回去複習。這次考試大多是證明，證明就是一個如果一開始錯誤，後面就會接連錯下去的東西～雖然證明不太好念，不過覺得過程中可以幫助釐清邏輯，再加上有考試壓力，還是收穫不少，當然考試分數也沒有太低啦哈。
+十月依然是一個不是很平靜的月份，花了不少時間在處理人生大事上，中間還發生跑去韓國旅遊，結果不是很好玩的慘痛回憶。不過有一位姊姊跟我說，最令人印象深刻的通常不是什麼美好的回憶，所以雖然這次經驗不太好，但是下次就會知道如何應付，也是一種人生學習～這樣聽起來好像感覺就好很多，默默地放下這事情了。
+希望十一月份可以更好。
+預定目標回顧 1. 其他語言或工具學習 (100%) 這個月看了蠻多 database 的影片和寫作業。我在英國上過資料庫導論，其實英國教授那時候就教的不錯，只可惜 CMU Database 上的更完整一點。印象深刻的部分包含：DB 是用什麼方式來儲存 tuple、DB 可能會有自己的 scheduling 來進行寫入、以及 DB 也是有 free list 來管理目前 tuple 紀錄。對於這些關於 DB internel 的學習，覺得非常有收獲，所以非常有收穫～</description>
+    </item>
+    
+    <item>
+      <title>2019/09 月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-10-05-study/</link>
+      <pubDate>Sat, 05 Oct 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-10-05-study/</guid>
+      <description>前言 這個月是一個比較多事的月份，主要原因是重新調整了生涯規劃。雖然自己出社會也快要十年了，但是轉職成 Engineer 也才不過這兩年的事情，因此自己還像是一名剛出社會的半新鮮人一樣，到處地探索自己喜歡的事物，不斷地從過程中試圖挖掘出自己的熱情所在。
+很好運的是，我覺得我在這過程中一直有貴人相助，例如我加入 Moxa，再因緣際會地加入趨勢科技，進而進入 Golang 社群開始與其他 co-organizer 辦活動等。老實說，我在群體中一直都是最菜的那位，但是大家給予我很多機會成長，讓我有機會接觸到各種事務，雖然依舊還是很菜，但至少開始有點經驗，知道自己該用什麼方式來找出問題點，在面對新技術的時候，可以從哪個方向下手讓自己快速學習。</description>
+    </item>
+    
+    <item>
+      <title>Implement Memory Allocator</title>
+      <link>https://yushuanhsieh.github.io/post/2019-09-24-stack-memory-allocator/</link>
+      <pubDate>Tue, 24 Sep 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-09-24-stack-memory-allocator/</guid>
+      <description>前言 在很多程式語言都會看到 memory allocator，也可以看到陸續發表的 allocator 實作方式，例如 microsoft mimalloc。與其用看 source code 的方式來了解其原理，倒不如從基本學起，並且從實作過程中了解到為什麼他們要這樣設計 allocator。</description>
+    </item>
+    
+    <item>
+      <title>2019/08月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-09-07-201908-study/</link>
+      <pubDate>Sat, 07 Sep 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-09-07-201908-study/</guid>
+      <description>前言 8月份有蠻多事情要處理，首先是 Go Taipei 社群和 DigitalOcean Hsinchu 合辦 Meetup，這也是我第二次在 Go 社群分享主題。而這次探討的主題和 Lock 相關，再加上會涉及一些系統相關議題，因此花了蠻多時間在看相關素材和實作細節，非常怕在 QA 時間被問到什麼很艱深的問題XD 其實每次分享，對分享者來說都是一個蠻有挑戰性的任務，主要是因為這些內容都需要蠻多時間去準備，而這次在工程師大本營新竹來分享，更是膽戰心驚，深怕不能帶給聽者有幫助的知識。不過，幸好這次 Meetup 安然度過了（所以才有時間來整理 8 月份的學習心得），當面認識了一些人，也交流了不少，很開心 :)</description>
+    </item>
+    
+    <item>
+      <title>Start HTTP/2 running over cleartext TCP</title>
+      <link>https://yushuanhsieh.github.io/post/2019-08-27-http2-h2c/</link>
+      <pubDate>Tue, 27 Aug 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-08-27-http2-h2c/</guid>
+      <description>![flow]({{ site.url }}/assets/images/h2c-flow.png)
+前言 主流使用 HTTP/2 時都是基於 TLS protocol，不過在 HTTP/2 RFC7540 規範中， HTTP/2 其實也可以直接基於 cleartext TCP 來溝通。這次主要介紹 based on cleartext TCP 的 HTTP/2 server 與 client 實作，後續會再加入 HTTP/2 結合 TLS protocol 的相關內容。</description>
+    </item>
+    
+    <item>
+      <title>semaphore sem_post 在 glibc v2.0 v2.1 之比較</title>
+      <link>https://yushuanhsieh.github.io/post/2019-08-18-sem-glibc/</link>
+      <pubDate>Sat, 17 Aug 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-08-18-sem-glibc/</guid>
+      <description>前言 在翻 futex man document 的時候，不小心看到 Linux Futex的设计与实现 這篇文章。文章中有提到在執行 sem_post 的時候，雖然沒有與其他 thread 競爭，還是會用到 fuxtex system call。當然文章中有提到原因，不過看了原因，覺得這看起來很明顯的效能問題，應該會被提出來並改進吧？後來翻了一下目前的 source code ，看到這個是 GLIBC_2_0 的版本（那篇文章也很久了，所以能想見當時的版本應該蠻舊的），而現在 GLIBC_2_1 就有把這部分改進，因此就來簡單記錄一下差異在哪裡吧～</description>
+    </item>
+    
+    <item>
+      <title>2019/07月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-08-05-201907-study/</link>
+      <pubDate>Thu, 08 Aug 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-08-05-201907-study/</guid>
+      <description>前言 時間超快地又到了八月了～七月整個月天氣都蠻悶熱的，加上小套房也不是很通風，想要好好在房間念書就只能一直開冷氣，偶爾再去金山街星巴克當假文青。除了進修之外，還跟公司旅遊補助團去了一趟高雄、台南小旅行，去高雄的那天剛好遇到輕颱大淹水，在開高速公路的時候，風雨交加，旁邊的大遊覽車不斷踩水激起大浪花，整個過程蠻膽戰心驚，深怕一個不注意會發生意外，幸好還是平安回來了。
+![study]({{ site.url }}/assets/images/study-2019-07.jpg)
+學習部分，七月份其實吸收蠻多內容的，收穫滿滿，可惜因為時間關係，筆記大多很潦草，還不足以登上檯面，就沒有放在 blog 上了。七月份學到最多的就是 Linux kernel 和 network 相關知識，而其中印象讓我深刻的是，我在學習過程中遇到一個不太確定的問題，因此花時間在查閱相關內容並找答案，那時候心中覺得這個答案可能是正確的，但是基於經驗不足的關係，還是去請教了韌體相關的資深同事，結果他給了我一個完全不同方向的答案。這令我蠻訝異的，因為我的確沒想到會不同方向的思考路線，也讓我在後續學習時更加注意各面向的思考。不過會導致這原因，深究起來還是對於 kernel 理論不夠熟悉的緣故，所以在學習中加入了 Linux kernel development 書籍，希望能多加深理論基礎。</description>
+    </item>
+    
+    <item>
+      <title>2019/06月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-07-01-201906-study/</link>
+      <pubDate>Mon, 01 Jul 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-07-01-201906-study/</guid>
+      <description>前言 六月份安排了一趟北海道旅遊，因此整體唸書時間相較少些。北海道旅遊中，在富良野鄉村地區待了兩日，雖然只有短短時間，但卻讓我體驗到完全不同的生活環境，遼闊無際的花園農田、路上慢步行走的當地居民們、以及寬廣的生活空間，都令人非常嚮往。我很喜歡在都市的緊湊步調，跟公司同事們努力開發以及學習各種新知原理的過程，但有時候也會想過過這種悠閒沒有太多物質壓力的人生，可能是自己從來沒有過如此的生活方式，所以會有種美麗的幻想吧。
+學習部分，六月份的專注力明顯好很多，因此整體自學的時數有變多，也覺得自己成長了不少。主要原因是因為這個月花了更多時間在學習 linux 以及看 linux kernel source code，有感覺到自己對於作業系統是有比較多興趣的，會自主投入很多時間在理解原理和實驗上。不過因為在看 linux 會碰到很多數學相關的優化內容，因此數學訓練還是要維持固定的進度。</description>
+    </item>
+    
+    <item>
+      <title>Side Project for daily study trello</title>
+      <link>https://yushuanhsieh.github.io/post/2019-06-15-side-project/</link>
+      <pubDate>Fri, 14 Jun 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-06-15-side-project/</guid>
+      <description>![study]({{ site.url }}/assets/images/side-project.png)
+前言 用 Trello 紀錄自己的每日學習進度也好一陣子了，雖然 Trello board 搭配 plugin Calendar 很好用，但是卻有資訊分散在各張卡的問題。因此為了便於在月末寫當月學習報告，以及整理所有曾經讀過的 article/post link，就開發了一個小工具 trello-transform 來從 trello cards 中擷取資訊。其實這個 side project 寫了有一段時間了，之前曾經立志要寫一個有前後端的小網站，這樣不會寫 code 的人也可以使用，但是後來就有點擱置了 XD 原因是我把這個功能寫成一個小框架，以因應每個人紀錄習慣不同，不過這樣的調整就需要會寫一點 code 並知道如何修改，對於不會寫 code 的人來說，可能便利性就沒這麼高。另外就是寫成網頁反而不利於我寫 blog，基於這個 side project 本來就是希望先滿足自己需求，因此後來目標就改成就先以 cli tool 實作為主。</description>
+    </item>
+    
+    <item>
+      <title>Tail Recursion in Go</title>
+      <link>https://yushuanhsieh.github.io/post/2019-06-22-tail-recuriosn-optimization/</link>
+      <pubDate>Fri, 14 Jun 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-06-22-tail-recuriosn-optimization/</guid>
+      <description>前言 最近在實驗效能分析時，有使用到 Tail Recursion 寫法，因此也好奇在 Go 中是否有跟 C 一樣進行 Tail Recursion optimization 優化。在文章中，首先會用 C asm 來說明 tail call optimization，接著 dump Go asm code 來觀察結果。</description>
+    </item>
+    
+    <item>
+      <title>2019/05月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-06-04-study-201906/</link>
+      <pubDate>Tue, 04 Jun 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-06-04-study-201906/</guid>
+      <description>![study]({{ site.url }}/assets/images/study-201906.png)
+前言 五月的時候，團隊來了一位經驗豐富的瑞典人，而剛好有這個機會跟他合作，除了跟他練練英文口說能力之外，順便學習一下他的程式經驗。瑞典人是一位懂很多層面的工程師，從韌體到 Web Front-end 都有實務經驗，而且為人也不錯，會很認真地看每個 Pull Request，並給予架構上或是程式寫法上的回饋，能有這樣的同事真的很開心，即使在當個碼農趕專案，也會覺得從中學習到不少。</description>
+    </item>
+    
+    <item>
+      <title>2019/04月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-05-04-study-201904/</link>
+      <pubDate>Sat, 04 May 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-05-04-study-201904/</guid>
+      <description>![study]({{ site.url }}/assets/images/golang.jpg)
+前言 不知不覺又過了一個月了，本來想說一週要產出一篇文章，結果發現技術文章真的蠻容易難產的，主要原因是我希望能盡可能地從根本去探討這些技術背後運作模式和原理，因此會花費大量時間在整理內容和實驗上。不過部分原因也可能是因為資歷不夠，所以這些內容要思考很久，才會下筆去寫，希望之後慢慢熟稔之後可以加快產出速度。
+上個月曾經提到，我會開始複習大學 CS 基礎課程，因為工作後會隨著時間漸漸地把這些基礎原理忘掉，所以這個月就從離散數學開始看起。說到數學，我覺得現在的我把數學當作一種訓練自己思考邏輯的方式，雖然他對我來說真的有點挑戰性，但是在了解這些數學是如何解出最終解的過程中，其實蠻有樂趣，會讓我很訝異原來可以透過這樣子的方式去找答案。當然我在大學時期也很討厭上課，之所有會有這樣體悟，真的是要等待我出社會累積經歷後，才會認知到這樣邏輯訓練很有助於工作效率。
+除了念書之外，4月份我也去擔任志工協助 Golang Taipei 的擺攤宣傳。在參加活動上我是超級菜逼八，不過真的蠻有意思，可以認識到不同社群的人，能夠互相交流。雖然目前因為工作關係定居在新竹，但還是希望自己能夠多多參與這樣的活動，看看別人如何推廣技術社群也是一種學習！</description>
+    </item>
+    
+    <item>
+      <title>grpc-go source code trace - gRPC client 與 server 建立連線過程</title>
+      <link>https://yushuanhsieh.github.io/post/2019-04-05-grpc-dial/</link>
+      <pubDate>Fri, 05 Apr 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-04-05-grpc-dial/</guid>
+      <description>前言 其實一開始的目的是想要研究 gRPC 的 retry 機制，不過在了解 retry 之前勢必要先說明整個 gRPC client 與 server 建立連線的過程，因此就先用 source code trace 的方式簡單說明在呼叫 grpc.</description>
+    </item>
+    
+    <item>
+      <title>2019/03月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-04-04-study-201903/</link>
+      <pubDate>Wed, 03 Apr 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-04-04-study-201903/</guid>
+      <description>![study]({{ site.url }}/assets/images/golang-meetup.jpeg)
+前言 最近這一個月工作慢慢步上軌道，心情有比較踏實些。剛開始來的時候，實在不太確定自己能幫上什麼忙，不過這個月漸漸地有任務可以做，並且也和其他組員一起合作開發，感覺在團隊中可以發揮自己的價值:) 另外，這個月比較大的轉變是完全負責 back-end ，之前還想說可能會接觸到 React ，所以花了一些時間在看 React 原理，不過目前確定會都以 Go 和 Device application 開發為主，因此後續就會把學習重心放在 Back-end。話雖如此，自己還是有加入公司的 front-end 學習群，跟著裡面的大神們一起念 React Core ，畢竟過去一年蠻大比例是使用 JavaScript 開發，要放棄也是蠻可惜的。</description>
+    </item>
+    
+    <item>
+      <title>Golang - Request test using net/http/httptrace</title>
+      <link>https://yushuanhsieh.github.io/post/2019-03-14-http-trace/</link>
+      <pubDate>Thu, 14 Mar 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-03-14-http-trace/</guid>
+      <description>前言 在撰寫 HTTP request test 測試程式時，除了測試 response 結果是否如預期之外，我們還需要知道過程中需要耗費多少時間（request latency）。市面上有一些 libraries (e.</description>
+    </item>
+    
+    <item>
+      <title>Functional options pattern in GO</title>
+      <link>https://yushuanhsieh.github.io/post/2019-03-10-functional-options/</link>
+      <pubDate>Sun, 10 Mar 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-03-10-functional-options/</guid>
+      <description>前言 之所以使用 Functional options 的契機，是因為用到 gRPC 的 New Server API，發現他是用 functional options 來讓使用者調整 Server 預設配置，這樣的作法不但兼具了擴充性和可用性，也能避免一些使用者誤用。而除了看 source code 來學習如何實作之外，也找起相關文章，進而發現原來早在 2014 年就有人發表過類似教學文，實在是太孤陋寡聞了～</description>
+    </item>
+    
+    <item>
+      <title>2019/02月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-03-03-study-2019-02/</link>
+      <pubDate>Sun, 03 Mar 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-03-03-study-2019-02/</guid>
+      <description>![study-2019-02]({{ site.url }}/assets/images/study-2019-02.png)
+前言 這個月大多在適應新的生活環境，第一次來新竹工作，不意外地在新手村落腳。在還沒來新竹之前，就聽聞過新竹可能是個比台北無聊的地方，那時候覺得反正我生活也很宅，不是 coding 就是買化妝品，只要有舒適的套房和康是美就可以存活了，但是實際上沒有我想的這麼簡單XD 畢竟新竹的社群活動真的少很多，讓假日少了一些樂趣。既然沒有實體活動，只能在線上多參與一些活動或是多看別人分享的文章了。
+本月份學習內容除了加強 React 之外，也開始加入多一點 Golang 內容，不意外的話，之後工作使用語言應該會是 JavaScript 和 Golang，所以先安排階段性的練習，在之後專案中也能比較快上手。</description>
+    </item>
+    
+    <item>
+      <title>React Hooks with memoizedState</title>
+      <link>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</link>
+      <pubDate>Wed, 27 Feb 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</guid>
+      <description>前言 React Hooks 自從正式 release 後，就出現很多相關教學文章，所以這篇不是講如何實作，而是說他如何在 stateless functional component 中保存當前 state。 此外，最近也開始嘗試把 class component 轉換成使用 hooks 的 components，但過程中還是需要蠻多調整，包含之前有使用一些 lifecycle functions ，藉此機會順便檢視是否真的必要使用這些 functions，是否可以透過其他架構方式來簡化。</description>
+    </item>
+    
+    <item>
+      <title>2019/01月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-02-03-study-2019-01/</link>
+      <pubDate>Sun, 03 Feb 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-02-03-study-2019-01/</guid>
+      <description>又到了每個月檢討念書進度的日子了，這次 2019 新的一年有蠻多人生大轉變，像是離職換了一個新的工作環境，以及脫離媽寶身份，跑去新竹生活等。 Moxa 算是我轉職後第一份的正式工作，而在這一年中其實學到很多經驗，但是也對一些流程和開發方式有些疑問。我很想要根據這些問題提出自己的見解，可惜經驗少，又沒有其他公司經驗可以參考，因此總有很想要提出改善，卻又不知道該如何改善的感覺。
+而在年底時，剛好有這個機會可以去趨勢工作，在考量趨勢科技是一家成熟軟體公司的情況下，雖然目前開發經驗還累積不足，但還是決定前往了。我不能説決定是不是正確的，但是我覺得人生就是充滿各種契機，只要在過程中很努力的學習，相信最後都還是值得的結果。
+話又說回來，這次學習主軸又拉回前端，並且參雜一點 Network 理論。這次學習是以 React 以及相關 lib 為主，而 network 則是清大開放課程的 區域網路，之前上完這位教授的網路概論，覺得收穫良多，所以繼續上教授的另一門課程。</description>
+    </item>
+    
+  </channel>
+</rss>

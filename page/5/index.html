@@ -38,7 +38,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2020-08-25T08:00:00+08:00" />
+<meta property="og:updated_time" content="2020-09-04T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -127,10 +127,11 @@
         <ul class="category-list">
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/coscup/" class="category-list-link">coscup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/devops/" class="category-list-link">devops</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/game/" class="category-list-link">game</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/gnu/" class="category-list-link">gnu</a><span class="category-list-count">1</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/go/" class="category-list-link">go</a><span class="category-list-count">13</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/go/" class="category-list-link">go</a><span class="category-list-count">14</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/google-cloud-platform/" class="category-list-link">google-cloud-platform</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/kubernetes/" class="category-list-link">kubernetes</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
@@ -148,6 +149,16 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault/" class="title">Vault Initialization and Keys Security</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-04</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -188,16 +199,6 @@
                     </p>
                 </div>
             </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-06-25-study-05/" class="title">2020/05 月份自我學習回顧</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-06-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-06-25</time>
-                    </p>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
@@ -213,6 +214,43 @@
     
     
     
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2019-01-23-redux-problems/"
+    >
+    
+      
+        <span class="title-cat">Web</span>
+      
+    工作 - Redux State 被異常更新除錯紀錄</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">問題： 今天收到 back-end 同事回饋，說是在新版本的 APP UI 中出現不正常行為。由於我們的 menu 必須根據 Embedded System 中的 Applcation 來增減，因此就使用 menu state 來讓其他 component 也可以透過 dispatch 控制 menu 項目。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/" class="">
+  <time datetime="2019-01-23 08:00:00 &#43;0800 CST" itemprop="datePublished">2019-01-23</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/web/"> Web </a>
+  
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2019-01-23-redux-problems/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
     <article
       class="article article-type-page"
       itemscope
@@ -547,43 +585,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
 </span>
 
         <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2018-09-24-node-js-napi/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2018-09-09-go-tar-file/"
-    >
-    
-      
-        <span class="title-cat">Go</span>
-      
-    Go - Archive files with archive/tar lib</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">前言 由於專案要提供 API 來讓使用者 export 匯出檔案， 因此需要將所需檔案集結成一個 archive file。這個流程是透過 Go 的標準 lib archive/tar 來處理，以下文章將簡單介紹流程和實作方式，並於最後附上完整程式碼。</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/" class="">
-  <time datetime="2018-09-09 08:00:00 &#43;0800 CST" itemprop="datePublished">2018-09-09</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/go/"> Go </a>
-  
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2018-09-09-go-tar-file/#comments" class="article-comment-link">Comments</a></span>
       </p>
     </article></div>
   

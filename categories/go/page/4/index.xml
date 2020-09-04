@@ -6,10 +6,19 @@
     <description>Recent content in Go on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Aug 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 04 Sep 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Fast Property Access</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-16-javascript-optimization-property/</link>
+      <pubDate>Wed, 16 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-16-javascript-optimization-property/</guid>
+      <description>Properties Access in V8 前言 傳統的 JavaScript 引擎，在抓取 object 內的 property 位置時，常常是利用 object 內的 hash table 來取得對應 property (通常稱為 dictionary )。不過這樣需要花費搜尋時間，相對來說效率就不是太好。也因此在現代的 JavaScript 引擎，會根據 object 內的 property 架構來進行不同方式的效能處理，避免一直使用 hash table，而是改採其他更有效率的結構，來達成快速得到 property 的目的。</description>
+    </item>
     
     <item>
       <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Elements</title>

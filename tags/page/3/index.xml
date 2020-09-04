@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>工作 - Redux State 被異常更新除錯紀錄</title>
+      <link>https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/</link>
+      <pubDate>Wed, 23 Jan 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/</guid>
+      <description>問題： 今天收到 back-end 同事回饋，說是在新版本的 APP UI 中出現不正常行為。由於我們的 menu 必須根據 Embedded System 中的 Applcation 來增減，因此就使用 menu state 來讓其他 component 也可以透過 dispatch 控制 menu 項目。</description>
+    </item>
+    
+    <item>
       <title>使用 React-Redux 注意事項和運作原理</title>
       <link>https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/</link>
       <pubDate>Thu, 17 Jan 2019 08:00:00 +0800</pubDate>
@@ -183,15 +192,6 @@ The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然
       
       <guid>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</guid>
       <description>前言： 這陣子在看 Reactive Extension (Rx) 和 Angular ，而 Angular 中常使用的 Router 內就有些 Observable Type 的 instance，因此就打算從這邊深入了解一下 Angular Router 的流程和 Observable 應用方式。</description>
-    </item>
-    
-    <item>
-      <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Fast Property Access</title>
-      <link>https://yushuanhsieh.github.io/post/2018-05-16-javascript-optimization-property/</link>
-      <pubDate>Wed, 16 May 2018 12:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-05-16-javascript-optimization-property/</guid>
-      <description>Properties Access in V8 前言 傳統的 JavaScript 引擎，在抓取 object 內的 property 位置時，常常是利用 object 內的 hash table 來取得對應 property (通常稱為 dictionary )。不過這樣需要花費搜尋時間，相對來說效率就不是太好。也因此在現代的 JavaScript 引擎，會根據 object 內的 property 架構來進行不同方式的效能處理，避免一直使用 hash table，而是改採其他更有效率的結構，來達成快速得到 property 的目的。</description>
     </item>
     
   </channel>

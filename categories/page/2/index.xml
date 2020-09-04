@@ -6,10 +6,19 @@
     <description>Recent content in Categories on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 25 Aug 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 04 Sep 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>GDG Hsinchu Meetup Sharing #3 Move from C to Go</title>
+      <link>https://yushuanhsieh.github.io/post/2019-11-19-go-meetup-2/</link>
+      <pubDate>Tue, 19 Nov 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-11-19-go-meetup-2/</guid>
+      <description>前言 這次又來挑戰在新竹分享啦！每次來工程師大本營分享主題都蠻緊張的，很怕會被下面的工程師夥伴慘電，但即使如此，還是非常希望可以在新竹開講，畢竟新竹很多軟韌體工程師，講起 Operating System 時候，共鳴點比較多～ 本次主題主要是想針對使用 C 的工程師來說明 Go 語言的特性，因此在內容上可能相對比較抽象，沒有太多 Coding 部分，絕大多數都是在 Go 是用什麼樣的方式來實現他的特色，例如 user-space scheduler。而這場參加的人數竟然有 20 幾位，算是 GDG Hsinchu 開辦以來人數最多的一次，由此可知大家對於偏底層的內容還是很感興趣，希望之後有機會可以討論到更深的主題！ !</description>
+    </item>
     
     <item>
       <title>2019/10 月份自我學習回顧</title>
@@ -198,15 +207,6 @@
       <description>又到了每個月檢討念書進度的日子了，這次 2019 新的一年有蠻多人生大轉變，像是離職換了一個新的工作環境，以及脫離媽寶身份，跑去新竹生活等。 Moxa 算是我轉職後第一份的正式工作，而在這一年中其實學到很多經驗，但是也對一些流程和開發方式有些疑問。我很想要根據這些問題提出自己的見解，可惜經驗少，又沒有其他公司經驗可以參考，因此總有很想要提出改善，卻又不知道該如何改善的感覺。
 而在年底時，剛好有這個機會可以去趨勢工作，在考量趨勢科技是一家成熟軟體公司的情況下，雖然目前開發經驗還累積不足，但還是決定前往了。我不能説決定是不是正確的，但是我覺得人生就是充滿各種契機，只要在過程中很努力的學習，相信最後都還是值得的結果。
 話又說回來，這次學習主軸又拉回前端，並且參雜一點 Network 理論。這次學習是以 React 以及相關 lib 為主，而 network 則是清大開放課程的 區域網路，之前上完這位教授的網路概論，覺得收穫良多，所以繼續上教授的另一門課程。</description>
-    </item>
-    
-    <item>
-      <title>工作 - Redux State 被異常更新除錯紀錄</title>
-      <link>https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/</link>
-      <pubDate>Wed, 23 Jan 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/</guid>
-      <description>問題： 今天收到 back-end 同事回饋，說是在新版本的 APP UI 中出現不正常行為。由於我們的 menu 必須根據 Embedded System 中的 Applcation 來增減，因此就使用 menu state 來讓其他 component 也可以透過 dispatch 控制 menu 項目。</description>
     </item>
     
   </channel>

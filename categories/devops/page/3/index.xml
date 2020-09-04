@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DevOps on 文組工程師</title>
+    <link>https://yushuanhsieh.github.io/categories/devops/</link>
+    <description>Recent content in DevOps on 文組工程師</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 04 Sep 2020 08:00:00 +0800</lastBuildDate>
+    
+        <atom:link href="https://yushuanhsieh.github.io/categories/devops/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>工作 - Redux State 被異常更新除錯紀錄</title>
+      <link>https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/</link>
+      <pubDate>Wed, 23 Jan 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/</guid>
+      <description>問題： 今天收到 back-end 同事回饋，說是在新版本的 APP UI 中出現不正常行為。由於我們的 menu 必須根據 Embedded System 中的 Applcation 來增減，因此就使用 menu state 來讓其他 component 也可以透過 dispatch 控制 menu 項目。</description>
+    </item>
+    
+    <item>
+      <title>使用 React-Redux 注意事項和運作原理</title>
+      <link>https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/</link>
+      <pubDate>Thu, 17 Jan 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/</guid>
+      <description>前言 網路上有很多關於如何使用 redux and react-redux 的教學文章，所以在這邊就不寫如何去應用，而是會著重在一些可能會忽略的細節以及大概的 實作原理。其實這些細節都寫在官網上，不過一般在教學文章內較少著墨，所以特別摘錄出來，讓大家在使用 react-redux 時能注意到可能會發生的問題。
+mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapStateToProps，由於這個 function 關係到 component props，所以就容易產生沒有發生 render 或是 render 次數過多的問題。</description>
+    </item>
+    
+    <item>
+      <title>2018/12月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-01-01-12-study/</link>
+      <pubDate>Tue, 01 Jan 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-01-01-12-study/</guid>
+      <description>前言 其實可以看到，我從 11 月開始發文量變少（雖然本來就不多XD），主要是因為目前在複習一些理論課程，我又是手寫筆記派，所以自然地就比較少用 blog 記錄，反而是都寫成筆記，不但能強化當下的記憶，也方便日後複習。 ![12-study]({{ site.url }}/assets/images/12-study.jpg)
+學習回顧 Network Principle 本月份主力衝刺在 Network 基本概念，這個月複習 Network Layer 和 Data Link Layer，雖然對於其中所使用到的 algorithm implementation 方式不熟悉，不過至少找回了概念，之後在 trace network protocol code 的時候也會更有方向。</description>
+    </item>
+    
+    <item>
+      <title>11月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-12-01-11-study/</link>
+      <pubDate>Sat, 01 Dec 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-12-01-11-study/</guid>
+      <description>前言 這個月學習內容主要集中在 Embedded System 和 Network，說來慚愧，雖然大學有修網際網路，但是過了這麼久，很多知識都還給老師了。因為目前在網通廠工作，常常會接觸到 Application Layer Protocol 和使用 UNIX Socket，所以趁這機會再一次把網路課程複習一下，混搭上個月沒有學完的 Embedded System。</description>
+    </item>
+    
+    <item>
+      <title>Node-Red - Node 坑坑紀錄</title>
+      <link>https://yushuanhsieh.github.io/post/2018-11-15-node-red/</link>
+      <pubDate>Thu, 15 Nov 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-11-15-node-red/</guid>
+      <description>前言 最近工作接觸到 Node-RED，需要建立專屬的 Node，而在這過程中遇到蠻多坑的，所以特別紀錄一下。
+相關技術  Node.js v10.11.0 node-gyp docker arm cross compile Node-RED node development  坑坑相連 1.</description>
+    </item>
+    
+    <item>
+      <title>Microprocessor System Lab. - Cross Compiler</title>
+      <link>https://yushuanhsieh.github.io/post/2018-11-04-mcu-cross-compiler/</link>
+      <pubDate>Sun, 04 Nov 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-11-04-mcu-cross-compiler/</guid>
+      <description>前言 其實整個課程已經看完了，只是因為寫 blog 需要準備很多資料，畢竟有些部分老師快速帶過，所以生產文章的速度遠不及看課程速度XD 這次要說的是 Cross Compiler，因為如果是安裝像是 SW4STM32 IDE，它所有 cross compiler 設定都已經備妥妥了，使用者只要按一個蟲蟲鍵便能快速 Debugger，不過實際上它背後執行許多程序，只是因為都被自動配置好了，因此使用者不太需要去處理這些額外的環境設定。</description>
+    </item>
+    
+    <item>
+      <title>10月份自我學習日誌回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</link>
+      <pubDate>Fri, 02 Nov 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</guid>
+      <description>前言 這次十月份的學習方向和預設有點不太一樣，主要是因為某天在因緣際會之下，接觸到交大開放式課程 微處理機系統實驗 Microprocessor System Lab.，覺得實在是太有趣了，所以就欲罷不能的聽下去，順便把一些相關教學材料也買齊，好好學一下 MCU 。可以預知，接下來會繼續上曹孝櫟老師的 嵌入式系統設計概論與實作 Introduction to Embedded Systems Design and Implementation ，剛好本身也是在 IOT 產業，每天都要接觸到 Embedded Systems，這老師說的很好，讓我學習到很多 :D</description>
+    </item>
+    
+    <item>
+      <title>Microprocessor System Lab. - Nucleo-64 development board</title>
+      <link>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</link>
+      <pubDate>Wed, 24 Oct 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</guid>
+      <description>前言： 在英國的時候，學校大多專注在純軟開發課程上，例如敏捷開發(Agile Development), Web Development, database 等。其中有一堂課令我印象深刻，就是用 logic Unit, MUX 零件自組 16 Instruction Processor，然後自己手動按 Clock 去 fetch / execute instrction，透過這樣的學習，讓我更清楚整個電腦實際運作 Code 的流程。</description>
+    </item>
+    
+    <item>
+      <title>9月份自我學習日誌回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</link>
+      <pubDate>Fri, 05 Oct 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</guid>
+      <description>9月份目標  把 Effective Go 看完 複習 JavaScript 概念，釐清各細節 工作上用到的 Protocol 相關知識  目標回顧 1.</description>
+    </item>
+    
+    <item>
+      <title>Node.js Addons N-API example (v10.11.0)</title>
+      <link>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</link>
+      <pubDate>Mon, 24 Sep 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</guid>
+      <description>前言 由於專案需要整合 Node-RED ，我們必須開發自己的 Node 來讓用戶可以直接透過視覺化方式來建立簡單邏輯，又我們的 SDK 是 C 版本，因此有這機會可以接觸 Node.</description>
+    </item>
+    
+    <item>
+      <title>Go - Archive files with archive/tar lib</title>
+      <link>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</link>
+      <pubDate>Sun, 09 Sep 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</guid>
+      <description>前言 由於專案要提供 API 來讓使用者 export 匯出檔案， 因此需要將所需檔案集結成一個 archive file。這個流程是透過 Go 的標準 lib archive/tar 來處理，以下文章將簡單介紹流程和實作方式，並於最後附上完整程式碼。</description>
+    </item>
+    
+    <item>
+      <title>Google Sign-in with OAuth 2.0</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</link>
+      <pubDate>Sat, 25 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</guid>
+      <description>前言： 由於目前專案是以 Embedded System 為主，比較少有機會接入第三方 api 的機會，所以這次 side project 就以 Google Sign-in for Web application with Go 的流程當作練習。由於網路上可以找到很多範例，所以在以下文章中會側重在原理 + 為什麼要這樣做，希望除了寫 code 之外，還能建立起基本概念。</description>
+    </item>
+    
+    <item>
+      <title>Go Fundamental - Array</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</link>
+      <pubDate>Sat, 11 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</guid>
+      <description>前言 最近在學 Go，而之前有一些 C 的基礎，因此在學到 Go 的 Array 時，發現它和 C 的 Array 差異性蠻大的，所以特別記錄下來。</description>
+    </item>
+    
+    <item>
+      <title>Angular Schematics</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-05-angular-schematics/</link>
+      <pubDate>Sun, 05 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-05-angular-schematics/</guid>
+      <description>前言： 最近專案需要提供工具讓外部人員一同參與 Web App 的開發，由於我們的 Web App 已經有基本架構和開發方式，為了讓外部人員能夠更方便的 follow 架構，所以就決定使用 Schematics 來創建專屬樣板，讓協作開發人員可以迅速地建立專案用的 component page，然後他們只需要修改部分程式碼即可。</description>
+    </item>
+    
+    <item>
+      <title>Redux Anti Pattern</title>
+      <link>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</link>
+      <pubDate>Sun, 15 Jul 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</guid>
+      <description>前言 這篇文章是基於 Redux Anti-Patterns - Part 1. State Management 所進行的探討，包含在專案內是否有犯類似的錯誤，以及後續該如何改善。文章會結合目前專案所使用的 Redux(ngrx)，並檢視使用 Ngrx 是否能避免這些錯誤發生。</description>
+    </item>
+    
+    <item>
+      <title>CSS Typed Object Model</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</link>
+      <pubDate>Sun, 24 Jun 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</guid>
+      <description>前言 Chrome 66 版本全新支援 CSS Typed Object Model，透過這種新型的 CSS Typed OM，可以有效提升使用 JavaScript 操作 CSSOM 屬性的效率。雖然目前僅有 Chrome 支援（ Firefox 據說在努力中， Edge 目前沒下文），不過既然此方式能對網頁呈現效能有所提升，讓開發者和使用者都因此受惠，未來想必會成為主流方式。</description>
+    </item>
+    
+    <item>
+      <title>The Main Flow of Rendering Engines</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-23-browser-render-engine/</link>
+      <pubDate>Sat, 23 Jun 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-23-browser-render-engine/</guid>
+      <description>前言： 最近在寫 CSS Animation 部分，於是比較深入的看瀏覽器渲染流程，希望在進行 Animation 時可以更加地流暢。
+The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然地寫出這樣的頁面：</description>
+    </item>
+    
+    <item>
+      <title>Angular - Reactive Form</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</link>
+      <pubDate>Thu, 14 Jun 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</guid>
+      <description>前言 在建立表單的部份，Angular 與 AngularJS 最大的不同就是多了 Reactive Form 的方式。由於 Reactive Form 比起一般 Template-Driven Form 更具彈性且好掌控，所以就來大致介紹一下與 Reactive Form 相關的流程機制。</description>
+    </item>
+    
+    <item>
+      <title>Angular - ng-template &amp; ng-container</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-29-angular-6-ngtemplate/</link>
+      <pubDate>Tue, 29 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-29-angular-6-ngtemplate/</guid>
+      <description>前言： 昨天剛好在看 Angular CDK Overlay (Overlay Document) 這部分，因為 Overlay 是 CDK 中 Portal 的ㄧ種，而 Portal 又和 Angular 中的 Template 機制有關係，這才發現自己對於 Angular 的 ng-template 和 ng-container 概念不是很清楚，所以特別再看了一下這部分的實作原理和應用方式。</description>
+    </item>
+    
+    <item>
+      <title>Understanding Router in Angular 6</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</link>
+      <pubDate>Thu, 24 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</guid>
+      <description>前言： 這陣子在看 Reactive Extension (Rx) 和 Angular ，而 Angular 中常使用的 Router 內就有些 Observable Type 的 instance，因此就打算從這邊深入了解一下 Angular Router 的流程和 Observable 應用方式。</description>
+    </item>
+    
+  </channel>
+</rss>
