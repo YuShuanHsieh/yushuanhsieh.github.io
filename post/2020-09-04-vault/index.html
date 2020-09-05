@@ -47,7 +47,7 @@
  Vault Architecture Vault Key Rotation Vault Seal/Unseal  另外， Barrier 這個元件在 Vault 相當重要，在 Vault Architecture 頁面中有提及，可以先了解其用意，再來看它是如何被實現。">
 <meta itemprop="datePublished" content="2020-09-04T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2020-09-04T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="1202">
+<meta itemprop="wordCount" content="1309">
 
 
 
@@ -269,25 +269,28 @@
 </ol>
 <p>另外， <code>Barrier</code> 這個元件在 Vault 相當重要，在 <a href="https://www.vaultproject.io/docs/internals/architecture">Vault Architecture</a> 頁面中有提及，可以先了解其用意，再來看它是如何被實現。</p>
 <h2 id="問題">問題</h2>
-<p>Vault 在進行 Unseal 流程時，其中最重要的就是將加密過的 master key 解密，接著再利用 master key 解出 encrption Key，並且建立起 barrier 防護，讓 storage backend 的資料可以安全地來往於 Vault server 與 storage backend 之間。</p>
+<p>Vault 在進行 unseal 流程時，其中最重要的就是將加密過的 master key 解密，接著再利用 master key 解出 encryption Key，並且建立起 barrier 防護，讓 storage backend 的資料可以安全地來往於 Vault server 與 storage backend 之間。</p>
 <p>其中，基於安全考量，我們想要確認幾件事情：</p>
 <ol>
-<li>Encrption Key 負責加解密 Vault 核心資訊，所以它是如何產生的？</li>
-<li>Encrption Key 的安全性？</li>
+<li>Encryption Key 負責加解密 Vault 核心資訊，所以它是如何產生的？</li>
+<li>Encryption Key 的安全性？</li>
 <li>Barrier 與 storage backend 之間的安全性是如何被實作的？</li>
 </ol>
 <p>以下從 source code 逐步解析這些過程，並且找出上述幾個問題的解答。</p>
+<h2 id="環境">環境</h2>
+<p>Vault 1.5.3
+本文主要在說明 Vault 初次 initialize 的流程</p>
 <h2 id="vault-initialization">Vault Initialization</h2>
-<p>要知道 Encrption Key 是如何產生的，就從 Vault 初始化步驟著手。</p>
+<p>要知道 encryption Key 是如何產生的，就從 Vault 初始化步驟著手。</p>
 <p><img src="/posts/vault_1.png" alt="vault"></p>
-<p>當 Vault 啟動階段，會先根據使用者的 comfiguration file 進行參數設定，然後進入到 Vault system 初始化流程。而初始化後的 Vault 是屬於 Seal 階段，此時如果使用者設定的 Seal provider 支持自動 Unseal，就會進行 Unseal，最後啟動完成。</p>
+<p>當 Vault 啟動階段，會先根據使用者的 configuration file 進行參數設定，然後進入到 Vault system 初始化流程。而初始化後的 Vault 是屬於 seal 階段，此時如果使用者設定的 seal provider 支持自動 unseal，就會進行 unseal，最後啟動完成。</p>
 <h3 id="seal-initialization">Seal Initialization</h3>
 <p>在 concept 文中有提到，Vault 會對 master key 進行加解密，以確保 master key 安全性。而 seal 就是提供此加解密流程的 object。</p>
 <blockquote>
 <p>The seal configures the seal type to use for additional data protection, such as using HSM or Cloud KMS solutions to encrypt and decrypt the master key.</p>
 </blockquote>
-<p>Seal 在 source code 為 interface 型態，而目前提供 <code>defaultSeal</code> 和 <code>autoSeal</code> 兩種實作 struct。透過此抽象層，我們就能應用不同 Seal provider。關於 Vault 實作不同 Seal provider，可以參考 <a href="https://github.com/hashicorp/go-kms-wrapping">Go-KMS-Wrapping</a> repository。</p>
-<p>Seal Initialization 會呼叫底層 Seal provider 所提供的 Init function，其行為根據 provider 而有所不同，例如使用 GCP KMS 當作 Seal provider，在這階段就是什麼都不用做。</p>
+<p>Seal 在 source code 為 interface 型態，而目前提供 <code>defaultSeal</code> 和 <code>autoSeal</code> 兩種實作 struct。透過此抽象層，我們就能應用不同 seal provider。關於 Vault 實作不同 Seal provider，可以參考 <a href="https://github.com/hashicorp/go-kms-wrapping">Go-KMS-Wrapping</a> repository，而預設的 seal provider 是 Shamir seal，也就是利用 shared shamir keys 來加解密。</p>
+<p>Seal Initialization 會呼叫底層 seal provider 所提供的 Init function，其行為根據各 provider 需求而有所不同，也有可能這階段什麼都不需要做（例如 GCP seal provider）。</p>
 <h3 id="barrier-initialization">Barrier Initialization</h3>
 <p>Barrier 負責加解密往來於 Vault server 和 storage backend 的資料，因此它的初始化步驟就相當的重要。Barrier 也被抽象成一個 interface，實際實作的 struct 為 <code>AESGCMBarrier</code>。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">AESGCMBarrier</span> <span style="color:#66d9ef">struct</span> {
@@ -312,7 +315,7 @@
 
     <span style="color:#a6e22e">initialized</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Bool</span>
 }
-</code></pre></div><p>首先，在初始化之前，會先呼叫 system call 產生出 master key（使用 <code>crypto/rand</code> Go lib）</p>
+</code></pre></div><p>首先，在初始化之前，會先呼叫 system call 產生出 master key（預設情況下使用 <code>crypto/rand</code> Go lib）</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// vault/init.go
 </span><span style="color:#75715e">// BarrierKey is master key. barrierKeyShares is only used for testing. 
 </span><span style="color:#75715e"></span><span style="color:#a6e22e">barrierKey</span>, <span style="color:#a6e22e">barrierKeyShares</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">generateShares</span>(<span style="color:#a6e22e">barrierConfig</span>)
@@ -351,8 +354,8 @@
 	<span style="color:#a6e22e">keys</span>       <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">uint32</span>]<span style="color:#f92672">*</span><span style="color:#a6e22e">Key</span>
 	<span style="color:#a6e22e">activeTerm</span> <span style="color:#66d9ef">uint32</span>
 }
-</code></pre></div><p><strong>每個 Keyring 由一組 master key 與多組 encryption key 結合而成</strong>，Keyring 結構方便 Barrier 管理 encryption key，同時有助於重建 key 的流程，後續內容會再提及。</p>
-<p>產生出 encryption key 之後，透過 <code>persistKeyring</code> 把 encryption key 使用 master key 加密後存到 storage 中。</p>
+</code></pre></div><p><strong>每個 keyring 由一組 master key 與多組 encryption key 結合而成</strong>，keyring 結構設計對於 keys 來說十分重要，除了方便 Barrier 管理多組 encryption key 之外，同時也實現 master key 與 encryption key 的更新方法。</p>
+<p>產生出 encryption key 之後，透過 <code>persistKeyring</code> 把 encryption key 使用 master key AES 加密後存到 storage 中。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">AESGCMBarrier</span>) <span style="color:#a6e22e">persistKeyring</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">keyring</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Keyring</span>) <span style="color:#66d9ef">error</span> {
     <span style="color:#75715e">// Create the keyring entry
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">keyringBuf</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">keyring</span>.<span style="color:#a6e22e">Serialize</span>()
@@ -416,24 +419,37 @@
     <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
 }
 </code></pre></div><h4 id="encrypt-the-master-key-using-the-encryption-key">Encrypt the master key using the encryption key</h4>
-<p>上述 source code 可以看到一個很奇怪的地方，就是 <code>Encrypt the master key</code> ，文件說 master key 是由 Seal provider 所加密，為什麼這裡的 master key 是由 encryption key 加密呢？</p>
+<p>上述 source code 可以看到一個很奇怪的地方，就是 <code>Encrypt the master key</code> ，文件說 master key 是由 seal provider 所加密，為什麼這裡的 master key 是由 encryption key 加密呢？</p>
 <p>我們在 <code>vault/barrier.go</code> 可以找到答案：</p>
 <blockquote>
 <p>This is encrypted by the latest key in the keyring. This is only used by standby instances to handle the case of a rekey. If the active instance does a rekey, the standby instances can no longer reload the keyring since they have the old master key.</p>
 </blockquote>
-<p>這段把 master key 使用 encryption key 加密，並且儲存在 <code>masterKeyPath</code>，其用途僅是針對 rekey 流程。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">AESGCMBarrier</span>) <span style="color:#a6e22e">putInternal</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">term</span> <span style="color:#66d9ef">uint32</span>, <span style="color:#a6e22e">primary</span> <span style="color:#a6e22e">cipher</span>.<span style="color:#a6e22e">AEAD</span>, <span style="color:#a6e22e">entry</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">logical</span>.<span style="color:#a6e22e">StorageEntry</span>) <span style="color:#66d9ef">error</span> {
-	<span style="color:#a6e22e">value</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">encrypt</span>(<span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">Key</span>, <span style="color:#a6e22e">term</span>, <span style="color:#a6e22e">primary</span>, <span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">Value</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+<p>這段把 master key 使用 encryption key 加密，並且儲存在 <code>masterKeyPath</code>，其用途僅是針對 rekey 流程。而把 master key 使用 seal provider 加密後儲存則是在下一段 code 中出現。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// vault/init.go
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">StoredKeysSupported</span>() {
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">StoredKeysSupportedShamirMaster</span>:
+        <span style="color:#75715e">// store the master key(barrierKey)
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">keysToStore</span> <span style="color:#f92672">:=</span> [][]<span style="color:#66d9ef">byte</span>{<span style="color:#a6e22e">barrierKey</span>}
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">GetAccess</span>().<span style="color:#a6e22e">Wrapper</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">aeadwrapper</span>.<span style="color:#a6e22e">ShamirWrapper</span>).<span style="color:#a6e22e">SetAESGCMKeyBytes</span>(<span style="color:#a6e22e">sealKey</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#e6db74">&#34;failed to set seal key&#34;</span>, <span style="color:#e6db74">&#34;error&#34;</span>, <span style="color:#a6e22e">err</span>)
+			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to set seal key: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
+		}
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">SetStoredKeys</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">keysToStore</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#e6db74">&#34;failed to store keys&#34;</span>, <span style="color:#e6db74">&#34;error&#34;</span>, <span style="color:#a6e22e">err</span>)
+			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to store keys: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
+		}
+		<span style="color:#a6e22e">results</span>.<span style="color:#a6e22e">SecretShares</span> = <span style="color:#a6e22e">sealKeyShares</span>
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">StoredKeysSupportedGeneric</span>:
+		<span style="color:#a6e22e">keysToStore</span> <span style="color:#f92672">:=</span> [][]<span style="color:#66d9ef">byte</span>{<span style="color:#a6e22e">barrierKey</span>}
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">SetStoredKeys</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">keysToStore</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#e6db74">&#34;failed to store keys&#34;</span>, <span style="color:#e6db74">&#34;error&#34;</span>, <span style="color:#a6e22e">err</span>)
+			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to store keys: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
+		}
+	<span style="color:#66d9ef">default</span>:
+		<span style="color:#75715e">// We don&#39;t support initializing an old-style Shamir seal anymore, so
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">// this case is only reachable by tests.
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">results</span>.<span style="color:#a6e22e">SecretShares</span> = <span style="color:#a6e22e">barrierKeyShares</span>
 	}
-	<span style="color:#a6e22e">pe</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">physical</span>.<span style="color:#a6e22e">Entry</span>{
-		<span style="color:#a6e22e">Key</span>:      <span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">Key</span>,
-		<span style="color:#a6e22e">Value</span>:    <span style="color:#a6e22e">value</span>,
-		<span style="color:#a6e22e">SealWrap</span>: <span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">SealWrap</span>,
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">backend</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">pe</span>)
-}
 </code></pre></div><h3 id="barrier-unseal">Barrier Unseal</h3>
 <p>所謂的 Vault Unseal，正確來說應該是 Barrier Unseal，實際流程為：</p>
 <ol>
@@ -442,16 +458,16 @@
 <li>組成 keyring struct</li>
 <li>Unseal 完成</li>
 </ol>
-<p>Barrier 需要得到正確的 keyring 才能用其中的 encryption key 來加解密 storage 的資料，因此 Unseal 最重要的目的就是取得 encryption key。</p>
+<p>Barrier 需要得到正確的 keyring 才能用其中的 encryption key 來加解密 storage 的資料，因此 unseal 最重要的目的就是取得 keyring。</p>
 <h3 id="barrier-workflow">Barrier Workflow</h3>
-<p>了解 Barrier 初始化過程後，我們來看一下資料是如何進出 Barrier 與 storage backend 的。</p>
+<p>了解 barrier 初始化過程後，我們來看一下資料是如何進出 Barrier 與 storage backend 的。</p>
 <p><img src="/posts/vault_2.png" alt="vault"></p>
-<p>實際實作有三層 Layer：Logical、Barrier、Physical Layers。當一個 requset 進來，會根據 URL path 來選擇 secret engine 和所要執行的 operation，接著如果有資料需要更新儲存到 storage backend，就會呼叫 logical.Storage put 方法。</p>
-<p>而 logical.Storage 是個抽象層，實際上是執行 Barrier 的 put 方法，Barrier 會先將 data 使用 keyring 中的 encryption key 加密後，再呼叫 physical 的 put 方法來儲存，反之亦然。</p>
+<p>實際實作有三層 Layer：<code>Logical</code>、<code>Barrier</code>、<code>Physical</code> Layers。當一個 request 進來，會根據 URL path 來選擇(route) secret engine 和所要執行的 operation，接著如果有資料需要更新儲存到 storage backend，就會呼叫 logical.Storage put 方法。</p>
+<p>而 logical.Storage 只是個抽象層，實際上是執行 barrier 的 put 方法，Barrier 會先將 data 使用 keyring 中最新的 encryption key 加密後，再呼叫 physical 的 put 方法來儲存，反之亦然。</p>
 <h3 id="generate-a-root-token">Generate a Root Token</h3>
-<p>在 Vault 初始化時，會需要一組 root token 以供使用者進行初步驗證與設定。Root token 是由 base 62 組合而成的 24bytes 長度字串，當產生出 token 之後，會需要將 token 存入 storage 中，因此在這個階段 Barrier 須維持 Unseal 狀態。</p>
+<p>在 Vault 初始化時，會需要一組 root token 以供使用者進行初步驗證與設定。Root token 是由 base 62 組合而成的 24bytes 長度字串，當產生出 token 之後，會需要將 token 存入 storage 中，因此在這個階段 barrier 須維持 unseal 狀態。</p>
 <h4 id="entropy-of-token-generation">Entropy of Token Generation</h4>
-<p>產生 token 的 source code 有個很有意思的地方，就是討論 token entropy，簡單 Information Entropy 介紹可參考 <a href="https://brilliant.org/wiki/entropy-information-theory/">Entropy (Information Theory)</a>。</p>
+<p>產生 token 的 source code 有個很有意思的地方，就是討論 token entropy，<code>Information Entropy</code> 介紹可參考 <a href="https://brilliant.org/wiki/entropy-information-theory/">Entropy (Information Theory)</a>。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">charset</span> = <span style="color:#e6db74">&#34;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#34;</span>
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">csLen</span> = byte(len(<span style="color:#a6e22e">charset</span>))
 
@@ -489,18 +505,18 @@
 <p><code>uuid.GenerateRandomBytesWithReader(batchSize, reader)</code>，此 reader 在預設情況下為 crypto/rand。</p>
 </blockquote>
 <h2 id="barrier-seal">Barrier Seal</h2>
-<p>當所有需要 Unseal 狀態的指令動作都執行完之後，最後一個階段就是再次將 Barrier 切換到 Seal 狀態，初始化完成。</p>
+<p>當所有需要 unseal 狀態的指令動作都執行完之後，最後一個階段就是再次將 barrier 切換到 seal 狀態，初始化完成。</p>
 <h2 id="問題討論">問題討論</h2>
 <p>回到一開始我們所要討論的問題：</p>
-<h3 id="1-encrption-key-負責加解密-vault-核心資訊所以它是如何產生的">1. Encrption Key 負責加解密 Vault 核心資訊，所以它是如何產生的？</h3>
-<p>不論是 encrption Key 或是 master key，皆是 256bit ，以供 AES-256 加密算法使用，安全度也較高。至於 random source 是利用 OS 的 random number generator，其實作方式則根據各 OS 而有所不同。</p>
-<h3 id="2-encrption-key-的安全性">2. Encrption Key 的安全性</h3>
-<p>上述有提到，master key 和 encrption Key 的產生仰賴 OS random number generator，而此 random number generator (PNG) 通常為 entropy input + algorithem，並非 true random number generator (<a href="https://en.wikipedia.org/wiki/Hardware_random_number_generator">TPNG or HRNG</a>)，對於需要高度資安考量的應用場景來說，會有安全疑慮。</p>
+<h3 id="1-encryption-key-負責加解密-vault-核心資訊所以它是如何產生的">1. Encryption Key 負責加解密 Vault 核心資訊，所以它是如何產生的？</h3>
+<p>不論是 encryption Key 或是 master key，皆是 256bit ，以供 AES-256 加密算法使用，安全度也較高。至於 random source 是利用 OS 的 random number generator，其實作方式則根據各 OS 而有所不同。</p>
+<h3 id="2-encryption-key-的安全性">2. Encryption Key 的安全性</h3>
+<p>上述有提到，master key 和 encryption Key 的產生仰賴 OS random number generator，而此 random number generator (PNG) 通常為 entropy input + algorithm true random number generator (<a href="https://en.wikipedia.org/wiki/Hardware_random_number_generator">TPNG or HRNG</a>)，對於需要高度資安考量的應用場景來說，會有安全疑慮。</p>
 <p>以 Linux 來說，entropy input 來自硬體 event（例如 interrupt），其 entropy source 受到當前硬體環境、行為等影響，導致無法保證 PNG 所產生的亂數品質。</p>
 <p>延伸閱讀：<a href="https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/Studies/LinuxRNG/LinuxRNG_EN.pdf">Documentation and Analysis of the Linux Random Number Generator</a></p>
-<p>當然，Vault 本身也針對此問題導入 HSM module（<a href="https://learn.hashicorp.com/tutorials/vault/hsm-entropy?in=vault/enterprise">Vault HSM Integration - Entropy Augmentation</a>），讓使用者可以設定 master key 或是 encrption Key 的生成是來自外部的安全模組，保證 encrption Key 的隨機性。</p>
+<p>當然，Vault 本身也針對此問題導入 HSM module（<a href="https://learn.hashicorp.com/tutorials/vault/hsm-entropy?in=vault/enterprise">Vault HSM Integration - Entropy Augmentation</a>），讓使用者可以設定 master key 或是 encryption Key 的生成是來自外部的安全模組，保證 encrption Key 的隨機性。</p>
 <h3 id="3-barrier-與-storage-backend-之間的安全性是如何被實作的">3. Barrier 與 storage backend 之間的安全性是如何被實作的？</h3>
-<p>當資料需要儲存到 storage backend 時，Barrier 應為 Unseal 狀態，也就是 Barrier 擁有 keyring ，並且使用 keyring 中最新一把 encryption key 對資料進行加解密。keyring 可以存在多把新舊版本的 encryption key，以確保 encryption key 可以被更新，而資料也可以被前一版本的 encryption key 所解密。</p>
+<p>當資料需要儲存到 storage backend 時，barrier 應為 unseal 狀態，也就是 barrier 擁有 keyring ，並且使用 keyring 中最新一把 encryption key 對資料進行加解密。keyring 可以存在多把新舊版本的 encryption key，以確保 encryption key 可以被更新，而資料也可以被前一版本的 encryption key 所解密。</p>
 
     </div>
     <div class="article-footer">
