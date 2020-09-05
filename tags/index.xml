@@ -12,10 +12,10 @@
     
     <item>
       <title>Vault Initialization and Keys Security</title>
-      <link>https://yushuanhsieh.github.io/post/2020-09-04-vault/</link>
+      <link>https://yushuanhsieh.github.io/post/2020-09-04-vault-security/</link>
       <pubDate>Fri, 04 Sep 2020 08:00:00 +0800</pubDate>
       
-      <guid>https://yushuanhsieh.github.io/post/2020-09-04-vault/</guid>
+      <guid>https://yushuanhsieh.github.io/post/2020-09-04-vault-security/</guid>
       <description>預備知識 在閱讀下方內容之前，建議先對 Vault 架構有個基本了解，相關官方文章如下：
  Vault Architecture Vault Key Rotation Vault Seal/Unseal  另外， Barrier 這個元件在 Vault 相當重要，在 Vault Architecture 頁面中有提及，可以先了解其用意，再來看它是如何被實現。</description>
     </item>
