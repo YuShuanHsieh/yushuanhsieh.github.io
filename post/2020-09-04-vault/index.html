@@ -47,7 +47,7 @@
  Vault Architecture Vault Key Rotation Vault Seal/Unseal  另外， Barrier 這個元件在 Vault 相當重要，在 Vault Architecture 頁面中有提及，可以先了解其用意，再來看它是如何被實現。">
 <meta itemprop="datePublished" content="2020-09-04T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2020-09-04T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="1309">
+<meta itemprop="wordCount" content="1316">
 
 
 
@@ -315,7 +315,7 @@
 
     <span style="color:#a6e22e">initialized</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Bool</span>
 }
-</code></pre></div><p>首先，在初始化之前，會先呼叫 system call 產生出 master key（預設情況下使用 <code>crypto/rand</code> Go lib）</p>
+</code></pre></div><p>首先，在初始化之前，會先產生 master key。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// vault/init.go
 </span><span style="color:#75715e">// BarrierKey is master key. barrierKeyShares is only used for testing. 
 </span><span style="color:#75715e"></span><span style="color:#a6e22e">barrierKey</span>, <span style="color:#a6e22e">barrierKeyShares</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">generateShares</span>(<span style="color:#a6e22e">barrierConfig</span>)
@@ -347,8 +347,9 @@
 
     <span style="color:#75715e">// ...
 </span><span style="color:#75715e"></span>}
-</code></pre></div><p>就看到我們第一個問題解答，<code>encryption key</code> 在預設情況下，是透過 system call 由 OS random number generator 所產生出來一個 256bits AES key。</p>
-<p>此外，這邊引入 <code>Keyring</code> 來建立起 master key 與 encryption key 的關係。</p>
+</code></pre></div><p>就可以看到產生 encryption key 的 function <code>b.GenerateKey(reader)</code>。
+其中，這樣的設計很有巧思，<code>reader(io.Reader)</code> parameter 在 Vault 中又稱作 <code>secureRandomReader</code>，實際上就是 random number generator (PNG)。在預設情況下，會使用 OS 本身所提供的 random number generator，但使用者也能根據需求來使用自己想要的 generator，例如 hardware / true number generator。</p>
+<p>此外，這邊也引入 <code>Keyring</code> 來建立起 master key 與 encryption key 的關係。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Keyring</span> <span style="color:#66d9ef">struct</span> {
 	<span style="color:#a6e22e">masterKey</span>  []<span style="color:#66d9ef">byte</span>
 	<span style="color:#a6e22e">keys</span>       <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">uint32</span>]<span style="color:#f92672">*</span><span style="color:#a6e22e">Key</span>
