@@ -28,12 +28,11 @@
   <title>Tail Recursion in Go - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Tail Recursion in Go" />
 <meta property="og:description" content="前言 最近在實驗效能分析時，有使用到 Tail Recursion 寫法，因此也好奇在 Go 中是否有跟 C 一樣進行 Tail Recursion optimization 優化。在文章中，首先會用 C asm 來說明 tail call optimization，接著 dump Go asm code 來觀察結果。" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言 最近在實驗效能分析時，有使用到 Tail Recursion 寫法，因此也好奇在 Go 中是否有跟 C 一樣進行 Tail Recursion optimization 優化。在文章中，首先會用 C asm 來說明 tail call optimization，接著 dump Go asm code 來觀察結果。">
 <meta itemprop="datePublished" content="2019-06-14T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2019-06-14T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="1073">
+<meta itemprop="wordCount" content="1197">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -257,57 +256,57 @@
 <p>最近在實驗效能分析時，有使用到 Tail Recursion 寫法，因此也好奇在 Go 中是否有跟 C 一樣進行 Tail Recursion optimization 優化。在文章中，首先會用 C asm 來說明 tail call optimization，接著 dump Go asm code 來觀察結果。</p>
 <h2 id="tail-call">Tail Call</h2>
 <p>在說明 Tail Recursion Optimization 之前，先來說說 <a href="https://en.wikipedia.org/wiki/Tail_call">Tail Call</a>。 Tail Call 概念很簡單，就是在 function 的最後語句執行另一個 function call。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">search</span>(<span style="color:#66d9ef">int</span> data)
-{
-  <span style="color:#66d9ef">return</span> advanced_search(data);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#2b91af">int</span> search(<span style="color:#2b91af">int</span> data)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#00f">return</span> advanced_search(data);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
 </code></pre></div><p>要注意的是， <code>Tail Call</code> 意指最後的行為只允許使用 function call，所以以下的寫法就不是 <code>Tail Call</code>，因為它需要先進行 <code>2 * 1 + funcB(a-1)</code> 的運算，才能返回。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">non_tail</span>(<span style="color:#66d9ef">int</span> a)
-{
- <span style="color:#66d9ef">if</span> (a <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>)
- {
-   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
- }
- <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> funcB(a<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#2b91af">int</span> non_tail(<span style="color:#2b91af">int</span> a)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span> <span style="color:#00f">if</span> (a &lt; 1)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>   <span style="color:#00f">return</span> 1;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span> }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span> <span style="color:#00f">return</span> 2 * 1 + funcB(a-1);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
 </code></pre></div><h2 id="tail-recursion">Tail recursion</h2>
 <p>Tail Call 可以應用在 Recursion 上，在尾端再次呼叫自身程式，就被稱為 <code>Tail recursion</code>。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">search</span>(<span style="color:#66d9ef">int</span> data)
-{
-  <span style="color:#75715e">// some conditions..
-</span><span style="color:#75715e"></span>  
-  <span style="color:#66d9ef">return</span> search(data); <span style="color:#75715e">// call itself.
-</span><span style="color:#75715e"></span>}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#2b91af">int</span> search(<span style="color:#2b91af">int</span> data)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#008000">// some conditions..
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span>  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#00f">return</span> search(data); <span style="color:#008000">// call itself.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000"></span>}
 </code></pre></div><p>提到 Tail recursion，很多人常用的例子是透過將 Recursion 改寫成 Tail recursion 的方式，來改善 <strong>Find Fibonacci Number</strong> 的效能。回想當初我們在初學習實作 Fibonacci Number 所使用的 Recursion 寫法：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">recursion_fib</span>(<span style="color:#66d9ef">int</span> n)
-{
-  <span style="color:#66d9ef">if</span> (n <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span>) 
-    <span style="color:#66d9ef">return</span> n;
-  <span style="color:#66d9ef">return</span>  recursion_fib(n <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> recursion_fib(n <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#2b91af">int</span> recursion_fib(<span style="color:#2b91af">int</span> n)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#00f">if</span> (n &lt;= 1) 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    <span style="color:#00f">return</span> n;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#00f">return</span>  recursion_fib(n - 1) + recursion_fib(n - 2);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 </code></pre></div><p>可以改寫成 <code>Tail recursion</code> 版本：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tail_recursion_fib</span>(<span style="color:#66d9ef">int</span> n, <span style="color:#66d9ef">int</span> left, <span style="color:#66d9ef">int</span> right)
-{
-  <span style="color:#66d9ef">if</span> (n <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-  {
-    <span style="color:#66d9ef">return</span> left;
-  }
-  <span style="color:#66d9ef">return</span> tail_recursion_fib(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, right, left <span style="color:#f92672">+</span> right);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#2b91af">int</span> tail_recursion_fib(<span style="color:#2b91af">int</span> n, <span style="color:#2b91af">int</span> left, <span style="color:#2b91af">int</span> right)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#00f">if</span> (n == 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    <span style="color:#00f">return</span> left;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  <span style="color:#00f">return</span> tail_recursion_fib(n-1, right, left + right);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
 </code></pre></div><p>透過以上改寫，我們就能避免掉因為 Recursion 造成的 <a href="http://www-inst.eecs.berkeley.edu/~cs61bl/r//cur/trees/fibonacci-tree.html">Fibonacci Trees</a>，進而提升執行效率（<a href="https://hackmd.io/@sysprog/rJ8BOjGGl?type=view#Fibonacci-sequence">Fibonacci with recursion and tail recursion 效率比較</a>）。</p>
 <p>不過，單就上面我們無法看出 <code>Tail recursion</code> 的優勢，以上面提到的 Fibonacci Number 為例，將 Recursion 改成 Tail recursion，因為減少一個自身的 function 運算，避免 Recursion 發散，本來就對效能有所提升。</p>
 <h2 id="tail-recursion-optimization">Tail recursion Optimization</h2>
 <p>之所以採用 <code>Tail recursion</code> 寫法的主要原因，是因為很多語言可以透過 compile 將 <code>Tail recursion</code> 的效能最佳化，以避免因為執行到 function 而需要為它建立新的 <a href="https://www.cs.auckland.ac.nz/software/AlgAnim/stacks.html">Stack Frame</a>。</p>
 <p><img src="https://www.cs.auckland.ac.nz/software/AlgAnim/fig/stackframe.gif" alt="stack frame"></p>
 <p>舉例:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tail</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> result)
-{
-  <span style="color:#66d9ef">if</span> (a <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-  {
-    <span style="color:#66d9ef">return</span> result;
-  }
-  <span style="color:#66d9ef">return</span> tail(a<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> result);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#2b91af">int</span> tail(<span style="color:#2b91af">int</span> a, <span style="color:#2b91af">int</span> result)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#00f">if</span> (a == 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    <span style="color:#00f">return</span> result;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  <span style="color:#00f">return</span> tail(a-1, 1 + result);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
 </code></pre></div><p>![study]({{ site.url }}/assets/images/tail-recursion-2.png)</p>
 <p>可以看到在 <code>Tail recursion Optimization</code> 部分，只需要把處理過後的數值儲存起來，接著跳轉到同一個 function 最前端重複執行即可。反過來看，如果沒有經過優化的話，那麼就需要耗費 stack 空間為相同的 function 建立新的 stack frame。</p>
 <h2 id="tail-recursion-optimization--iteration">Tail Recursion (Optimization) / Iteration</h2>
@@ -332,100 +331,100 @@
 <h2 id="效能實驗">效能實驗</h2>
 <p>簡單實驗一下會在有無 <code>Tail recursion Optimization</code> 的情況下，會有多少差距。</p>
 <h3 id="機器">機器</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">Raspberry B3 ARM Cortex-A53 <span style="color:#ae81ff">64</span> bit
-gcc target: aarch64-linux-gnu
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Raspberry B3 ARM Cortex-A53 64 bit
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>gcc target: aarch64-linux-gnu
 </code></pre></div><h3 id="test-code">Test code</h3>
 <p>測試程式則是大家熟悉的 Fibonacci Number</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tail_recursion_fib</span>(<span style="color:#66d9ef">int</span> n, <span style="color:#66d9ef">int</span> left, <span style="color:#66d9ef">int</span> right)
-{
-  <span style="color:#66d9ef">if</span> (n <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-  {
-    <span style="color:#66d9ef">return</span> left;
-  }
-  <span style="color:#66d9ef">return</span> tail_recursion_fib(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, right, left <span style="color:#f92672">+</span> right);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#2b91af">int</span> tail_recursion_fib(<span style="color:#2b91af">int</span> n, <span style="color:#2b91af">int</span> left, <span style="color:#2b91af">int</span> right)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#00f">if</span> (n == 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    <span style="color:#00f">return</span> left;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  <span style="color:#00f">return</span> tail_recursion_fib(n-1, right, left + right);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
 </code></pre></div><p>首先，先把 c file compile 成沒有優化過後的 assembly code file。
 （之所以不直接用 -Os 來進行 code 優化，是因為 -Os 會影響很多 assembly code，不好進行評估）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gcc -S tail.c
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>gcc -S tail.c
 </code></pre></div><p>可以獲得 *.s 的 assembly code file。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">tail_fib:
-        stp     x29, x30, [sp, <span style="color:#f92672">-</span><span style="color:#ae81ff">32</span>] <span style="color:#75715e">// 移動 stack pointer
-</span><span style="color:#75715e"></span>        add     x29, sp, <span style="color:#ae81ff">0</span>
-        str     w0, [x29, <span style="color:#ae81ff">28</span>]
-        str     w1, [x29, <span style="color:#ae81ff">24</span>]
-        str     w2, [x29, <span style="color:#ae81ff">20</span>]
-        ldr     w0, [x29, <span style="color:#ae81ff">28</span>]
-        cmp     w0, <span style="color:#ae81ff">0</span>
-        bne     .L2
-        ldr     w0, [x29, <span style="color:#ae81ff">24</span>]
-        b       .L3
-.L2:
-        ldr     w0, [x29, <span style="color:#ae81ff">28</span>]
-        sub     w3, w0, <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">1</span>
-        ldr     w1, [x29, <span style="color:#ae81ff">24</span>]
-        ldr     w0, [x29, <span style="color:#ae81ff">20</span>]
-        add     w0, w1, w0
-        mov     w2, w0
-        ldr     w1, [x29, <span style="color:#ae81ff">20</span>]
-        mov     w0, w3
-        bl      tail_fib <span style="color:#75715e">// branch 執行 function
-</span><span style="color:#75715e"></span>.L3:
-        ldp     x29, x30, [sp], <span style="color:#ae81ff">32</span>
-        ret
-        .size   tail_fib, .<span style="color:#f92672">-</span>tail_fib
-        .section        .rodata
-        .align  <span style="color:#ae81ff">3</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>tail_fib:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>        stp     x29, x30, [sp, -32] <span style="color:#008000">// 移動 stack pointer
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000"></span>        add     x29, sp, 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        str     w0, [x29, 28]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        str     w1, [x29, 24]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        str     w2, [x29, 20]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        ldr     w0, [x29, 28]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        cmp     w0, 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        bne     .L2
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        ldr     w0, [x29, 24]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        b       .L3
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>.L2:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        ldr     w0, [x29, 28]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        sub     w3, w0, <span style="">#</span>1
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        ldr     w1, [x29, 24]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        ldr     w0, [x29, 20]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        add     w0, w1, w0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        mov     w2, w0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        ldr     w1, [x29, 20]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        mov     w0, w3
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        bl      tail_fib <span style="color:#008000">// branch 執行 function
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#008000"></span>.L3:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        ldp     x29, x30, [sp], 32
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        ret
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        .size   tail_fib, .-tail_fib
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        .section        .rodata
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>        .align  3
 </code></pre></div><p>然後參照優化行為，把 <code>bl tail_fib</code> 改成 goto 到原有 stack frame head：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">tail_fib:
-        stp     x29, x30, [sp, <span style="color:#f92672">-</span><span style="color:#ae81ff">32</span>]<span style="color:#f92672">!</span>
-        add     x29, sp, <span style="color:#ae81ff">0</span>
-	b	.L5
-.L5:
-        str     w0, [x29, <span style="color:#ae81ff">28</span>]
-        str     w1, [x29, <span style="color:#ae81ff">24</span>]
-        str     w2, [x29, <span style="color:#ae81ff">20</span>]
-        ldr     w0, [x29, <span style="color:#ae81ff">28</span>]
-        cmp     w0, <span style="color:#ae81ff">0</span>
-        bne     .L2
-        ldr     w0, [x29, <span style="color:#ae81ff">24</span>]
-        b       .L3
-.L2:
-        ldr     w0, [x29, <span style="color:#ae81ff">28</span>]
-        sub     w3, w0, <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">1</span>
-        ldr     w1, [x29, <span style="color:#ae81ff">24</span>]
-        ldr     w0, [x29, <span style="color:#ae81ff">20</span>]
-        add     w0, w1, w0
-        mov     w2, w0
-        ldr     w1, [x29, <span style="color:#ae81ff">20</span>]
-        mov     w0, w3
-	b	.L5 <span style="color:#75715e">// 用途類似 x86 的 jmp. 跳至 .L5 避免移動 SP
-</span><span style="color:#75715e"></span>.L3:
-        ldp     x29, x30, [sp], <span style="color:#ae81ff">32</span>
-        ret
-        .size   tail_fib, .<span style="color:#f92672">-</span>tail_fib
-        .section        .rodata
-        .align  <span style="color:#ae81ff">3</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>tail_fib:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>        stp     x29, x30, [sp, -32]!
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        add     x29, sp, 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	b	.L5
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>.L5:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        str     w0, [x29, 28]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        str     w1, [x29, 24]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        str     w2, [x29, 20]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        ldr     w0, [x29, 28]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        cmp     w0, 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        bne     .L2
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        ldr     w0, [x29, 24]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        b       .L3
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>.L2:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        ldr     w0, [x29, 28]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        sub     w3, w0, <span style="">#</span>1
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        ldr     w1, [x29, 24]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        ldr     w0, [x29, 20]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        add     w0, w1, w0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        mov     w2, w0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        ldr     w1, [x29, 20]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>        mov     w0, w3
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>	b	.L5 <span style="color:#008000">// 用途類似 x86 的 jmp. 跳至 .L5 避免移動 SP
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#008000"></span>.L3:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        ldp     x29, x30, [sp], 32
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        ret
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>        .size   tail_fib, .-tail_fib
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>        .section        .rodata
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>        .align  3
 </code></pre></div><p>另外也提供  <code>x86_64-apple-darwin</code> 的 assembly code，可以很清楚看出 <code>Tail Recursion Optimization</code>。(說明一下，由於 <code>aarch64-linux-gnu</code> 在經過 compiler 優化後變化很大，如果不熟悉 assembly code 的話，可能看不出差異點，所以提供 x86_64-apple-darwin 版本)</p>
 <p>Normal</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">LBB0_2:
-	movl	<span style="color:#f92672">-</span><span style="color:#ae81ff">8</span>(<span style="color:#f92672">%</span>rbp), <span style="color:#f92672">%</span>eax
-	subl	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">1</span>, <span style="color:#f92672">%</span>eax
-	movl	<span style="color:#f92672">-</span><span style="color:#ae81ff">16</span>(<span style="color:#f92672">%</span>rbp), <span style="color:#f92672">%</span>esi
-	movl	<span style="color:#f92672">-</span><span style="color:#ae81ff">12</span>(<span style="color:#f92672">%</span>rbp), <span style="color:#f92672">%</span>ecx
-	addl	<span style="color:#f92672">-</span><span style="color:#ae81ff">16</span>(<span style="color:#f92672">%</span>rbp), <span style="color:#f92672">%</span>ecx
-	movl	<span style="color:#f92672">%</span>eax, <span style="color:#f92672">%</span>edi
-	movl	<span style="color:#f92672">%</span>ecx, <span style="color:#f92672">%</span>edx
-	callq	_tail_fib <span style="color:#75715e">// call function and then move down SP
-</span><span style="color:#75715e"></span>	movl	<span style="color:#f92672">%</span>eax, <span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>(<span style="color:#f92672">%</span>rbp)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>LBB0_2:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	movl	-8(%rbp), %eax
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>	subl	<span style="">$</span>1, %eax
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	movl	-16(%rbp), %esi
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>	movl	-12(%rbp), %ecx
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	addl	-16(%rbp), %ecx
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	movl	%eax, %edi
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>	movl	%ecx, %edx
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>	callq	_tail_fib <span style="color:#008000">// call function and then move down SP
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>	movl	%eax, -4(%rbp)
 </code></pre></div><p>Optimization</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">LBB0_3:                                 <span style="color:#960050;background-color:#1e0010">##</span> <span style="color:#f92672">=&gt;</span>This Inner Loop Header: Depth<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
-	movl	<span style="color:#f92672">%</span>edx, <span style="color:#f92672">%</span>esi
-	decl	<span style="color:#f92672">%</span>edi
-	movl	<span style="color:#f92672">%</span>eax, <span style="color:#f92672">%</span>edx
-	addl	<span style="color:#f92672">%</span>esi, <span style="color:#f92672">%</span>edx
-	incl	<span style="color:#f92672">%</span>ecx
-	movl	<span style="color:#f92672">%</span>esi, <span style="color:#f92672">%</span>eax
-	jne	LBB0_3 <span style="color:#75715e">// Use loop
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>LBB0_3:                                 <span style="">##</span> =&gt;This Inner Loop Header: Depth=1
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	movl	%edx, %esi
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	decl	%edi
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>	movl	%eax, %edx
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>	addl	%esi, %edx
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>	incl	%ecx
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>	movl	%esi, %eax
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>	jne	LBB0_3 <span style="color:#008000">// Use loop
 </span></code></pre></div><h3 id="result">Result</h3>
 <p>在 recusion 數量少的情況下，效率沒有太多變化，不過當到了 recusive function call 多的時候，就會看出兩者之間的時間差距。</p>
 <p>![study]({{ site.url }}/assets/images/tail-recursion.png)</p>
@@ -450,42 +449,42 @@ gcc target: aarch64-linux-gnu
 <h2 id="實驗分析">實驗分析</h2>
 <h3 id="test-code-1">Test code</h3>
 <p>一樣使用 <code>Fibonacci Number</code> Tail Recursion 寫法為例：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">TailRecursionFib</span>(<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">left</span>, <span style="color:#a6e22e">right</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">n</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">left</span>
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">TailRecursionFib</span>(<span style="color:#a6e22e">n</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">right</span>, <span style="color:#a6e22e">left</span><span style="color:#f92672">+</span><span style="color:#a6e22e">right</span>)
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">func</span> TailRecursionFib(n, left, right <span style="color:#2b91af">int</span>) <span style="color:#2b91af">int</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#00f">if</span> n == 0 {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>		<span style="color:#00f">return</span> left
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>	<span style="color:#00f">return</span> TailRecursionFib(n-1, right, left+right)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 </code></pre></div><h3 id="assembly-code-with-go-compiler">Assembly code with Go compiler</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#e6db74">&#34;&#34;</span>.TailRecursionFib STEXT size<span style="color:#f92672">=</span><span style="color:#ae81ff">121</span> args<span style="color:#f92672">=</span><span style="color:#ae81ff">0x20</span> locals<span style="color:#f92672">=</span><span style="color:#ae81ff">0x28</span>
-  <span style="color:#ae81ff">0x0000</span> <span style="color:#ae81ff">00000</span> (main.go:<span style="color:#ae81ff">38</span>)	TEXT	<span style="color:#e6db74">&#34;&#34;</span>.TailRecursionFib(SB), ABIInternal, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">40</span><span style="color:#f92672">-</span><span style="color:#ae81ff">32</span>
-  <span style="color:#ae81ff">0x0000</span> <span style="color:#ae81ff">00000</span> (main.go:<span style="color:#ae81ff">38</span>)	MOVQ	(TLS), CX
-  <span style="color:#ae81ff">0x0009</span> <span style="color:#ae81ff">0000</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">38</span>)	CMPQ	SP, <span style="color:#ae81ff">16</span>(CX)
-  <span style="color:#ae81ff">0x000d</span> <span style="color:#ae81ff">00013</span> (main.go:<span style="color:#ae81ff">38</span>)	JLS	<span style="color:#ae81ff">114</span>
-  <span style="color:#ae81ff">0x000f</span> <span style="color:#ae81ff">00015</span> (main.go:<span style="color:#ae81ff">38</span>)	SUBQ	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">40</span>, SP
-  <span style="color:#ae81ff">0x0013</span> <span style="color:#ae81ff">0001</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">38</span>)	MOVQ	BP, <span style="color:#ae81ff">32</span>(SP)
-  <span style="color:#ae81ff">0x0018</span> <span style="color:#ae81ff">00024</span> (main.go:<span style="color:#ae81ff">38</span>)	LEAQ	<span style="color:#ae81ff">32</span>(SP), BP
-  <span style="color:#ae81ff">0x001d</span> <span style="color:#ae81ff">0002</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">38</span>)	FUNCDATA	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0</span>, gclocals<span style="color:#960050;background-color:#1e0010">·</span><span style="color:#ae81ff">33</span>cdeccccebe80329f1fdbee7f5874cb(SB)
-  <span style="color:#ae81ff">0x001d</span> <span style="color:#ae81ff">0002</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">38</span>)	FUNCDATA	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">1</span>, gclocals<span style="color:#960050;background-color:#1e0010">·</span><span style="color:#ae81ff">33</span>cdeccccebe80329f1fdbee7f5874cb(SB)
-  <span style="color:#ae81ff">0x001d</span> <span style="color:#ae81ff">0002</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">38</span>)	FUNCDATA	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">3</span>, gclocals<span style="color:#960050;background-color:#1e0010">·</span><span style="color:#ae81ff">33</span>cdeccccebe80329f1fdbee7f5874cb(SB)
-  <span style="color:#ae81ff">0x001d</span> <span style="color:#ae81ff">0002</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">39</span>)	PCDATA	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">2</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0</span>
-  <span style="color:#ae81ff">0x001d</span> <span style="color:#ae81ff">0002</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">39</span>)	PCDATA	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0</span>
-  <span style="color:#ae81ff">0x001d</span> <span style="color:#ae81ff">0002</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">39</span>)	MOVQ	<span style="color:#e6db74">&#34;&#34;</span>.n<span style="color:#f92672">+</span><span style="color:#ae81ff">48</span>(SP), AX
-  <span style="color:#ae81ff">0x0022</span> <span style="color:#ae81ff">00034</span> (main.go:<span style="color:#ae81ff">39</span>)	TESTQ	AX, AX
-  <span style="color:#ae81ff">0x0025</span> <span style="color:#ae81ff">00037</span> (main.go:<span style="color:#ae81ff">39</span>)	JNE	<span style="color:#ae81ff">59</span>
-  <span style="color:#ae81ff">0x0027</span> <span style="color:#ae81ff">0003</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">40</span>)	MOVQ	<span style="color:#e6db74">&#34;&#34;</span>.left<span style="color:#f92672">+</span><span style="color:#ae81ff">56</span>(SP), AX
-  <span style="color:#ae81ff">0x002c</span> <span style="color:#ae81ff">00044</span> (main.go:<span style="color:#ae81ff">40</span>)	MOVQ	AX, <span style="color:#e6db74">&#34;&#34;</span>.<span style="color:#f92672">~</span>r3<span style="color:#f92672">+</span><span style="color:#ae81ff">72</span>(SP)
-  <span style="color:#ae81ff">0x0031</span> <span style="color:#ae81ff">0004</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">40</span>)	MOVQ	<span style="color:#ae81ff">32</span>(SP), BP
-  <span style="color:#ae81ff">0x0036</span> <span style="color:#ae81ff">00054</span> (main.go:<span style="color:#ae81ff">40</span>)	ADDQ	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">40</span>, SP
-  <span style="color:#ae81ff">0x003a</span> <span style="color:#ae81ff">0005</span><span style="color:#ae81ff">8</span> (main.go:<span style="color:#ae81ff">40</span>)	RET
-  <span style="color:#ae81ff">0x003b</span> <span style="color:#ae81ff">0005</span><span style="color:#ae81ff">9</span> (main.go:<span style="color:#ae81ff">42</span>)	DECQ	AX
-  <span style="color:#ae81ff">0x003e</span> <span style="color:#ae81ff">00062</span> (main.go:<span style="color:#ae81ff">42</span>)	MOVQ	AX, (SP)
-  <span style="color:#ae81ff">0x0042</span> <span style="color:#ae81ff">00066</span> (main.go:<span style="color:#ae81ff">42</span>)	MOVQ	<span style="color:#e6db74">&#34;&#34;</span>.right<span style="color:#f92672">+</span><span style="color:#ae81ff">64</span>(SP), AX
-  <span style="color:#ae81ff">0x0047</span> <span style="color:#ae81ff">00071</span> (main.go:<span style="color:#ae81ff">42</span>)	MOVQ	AX, <span style="color:#ae81ff">8</span>(SP)
-  <span style="color:#ae81ff">0x004c</span> <span style="color:#ae81ff">00076</span> (main.go:<span style="color:#ae81ff">42</span>)	MOVQ	<span style="color:#e6db74">&#34;&#34;</span>.left<span style="color:#f92672">+</span><span style="color:#ae81ff">56</span>(SP), CX
-  <span style="color:#ae81ff">0x0051</span> <span style="color:#ae81ff">000</span><span style="color:#ae81ff">81</span> (main.go:<span style="color:#ae81ff">42</span>)	ADDQ	CX, AX
-  <span style="color:#ae81ff">0x0054</span> <span style="color:#ae81ff">000</span><span style="color:#ae81ff">84</span> (main.go:<span style="color:#ae81ff">42</span>)	MOVQ	AX, <span style="color:#ae81ff">16</span>(SP)
-  <span style="color:#ae81ff">0x0059</span> <span style="color:#ae81ff">000</span><span style="color:#ae81ff">89</span> (main.go:<span style="color:#ae81ff">42</span>)	CALL	<span style="color:#e6db74">&#34;&#34;</span>.TailRecursionFib(SB) <span style="color:#75715e">// Call itself
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#a31515">&#34;&#34;</span>.TailRecursionFib STEXT size=121 args=0x20 locals=0x28
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  0x0000 00000 (main.go:38)	TEXT	<span style="color:#a31515">&#34;&#34;</span>.TailRecursionFib(SB), ABIInternal, <span style="">$</span>40-32
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  0x0000 00000 (main.go:38)	MOVQ	(TLS), CX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  0x0009 00009 (main.go:38)	CMPQ	SP, 16(CX)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  0x000d 00013 (main.go:38)	JLS	114
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  0x000f 00015 (main.go:38)	SUBQ	<span style="">$</span>40, SP
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  0x0013 00019 (main.go:38)	MOVQ	BP, 32(SP)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  0x0018 00024 (main.go:38)	LEAQ	32(SP), BP
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  0x001d 00029 (main.go:38)	FUNCDATA	<span style="">$</span>0, gclocals<span style="">·</span>33cdeccccebe80329f1fdbee7f5874cb(SB)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  0x001d 00029 (main.go:38)	FUNCDATA	<span style="">$</span>1, gclocals<span style="">·</span>33cdeccccebe80329f1fdbee7f5874cb(SB)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  0x001d 00029 (main.go:38)	FUNCDATA	<span style="">$</span>3, gclocals<span style="">·</span>33cdeccccebe80329f1fdbee7f5874cb(SB)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  0x001d 00029 (main.go:39)	PCDATA	<span style="">$</span>2, <span style="">$</span>0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  0x001d 00029 (main.go:39)	PCDATA	<span style="">$</span>0, <span style="">$</span>0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  0x001d 00029 (main.go:39)	MOVQ	<span style="color:#a31515">&#34;&#34;</span>.n+48(SP), AX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  0x0022 00034 (main.go:39)	TESTQ	AX, AX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  0x0025 00037 (main.go:39)	JNE	59
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  0x0027 00039 (main.go:40)	MOVQ	<span style="color:#a31515">&#34;&#34;</span>.left+56(SP), AX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  0x002c 00044 (main.go:40)	MOVQ	AX, <span style="color:#a31515">&#34;&#34;</span>.~r3+72(SP)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  0x0031 00049 (main.go:40)	MOVQ	32(SP), BP
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  0x0036 00054 (main.go:40)	ADDQ	<span style="">$</span>40, SP
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  0x003a 00058 (main.go:40)	RET
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  0x003b 00059 (main.go:42)	DECQ	AX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>  0x003e 00062 (main.go:42)	MOVQ	AX, (SP)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>  0x0042 00066 (main.go:42)	MOVQ	<span style="color:#a31515">&#34;&#34;</span>.right+64(SP), AX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  0x0047 00071 (main.go:42)	MOVQ	AX, 8(SP)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  0x004c 00076 (main.go:42)	MOVQ	<span style="color:#a31515">&#34;&#34;</span>.left+56(SP), CX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  0x0051 00081 (main.go:42)	ADDQ	CX, AX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>  0x0054 00084 (main.go:42)	MOVQ	AX, 16(SP)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>  0x0059 00089 (main.go:42)	CALL	<span style="color:#a31515">&#34;&#34;</span>.TailRecursionFib(SB) <span style="color:#008000">// Call itself
 </span></code></pre></div><h3 id="效能">效能</h3>
 <p>執行時，可以明顯看出在 grow stack size 時出現的執行時間高峰，進而降低整體速度。</p>
 <p>![study]({{ site.url }}/assets/images/stack-size-comp.png)</p>
@@ -516,12 +515,12 @@ gcc target: aarch64-linux-gnu
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -563,17 +562,6 @@ gcc target: aarch64-linux-gnu
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

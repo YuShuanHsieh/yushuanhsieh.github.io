@@ -29,12 +29,11 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
   <title>使用 React-Redux 注意事項和運作原理 - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="使用 React-Redux 注意事項和運作原理" />
 <meta property="og:description" content="前言 網路上有很多關於如何使用 redux and react-redux 的教學文章，所以在這邊就不寫如何去應用，而是會著重在一些可能會忽略的細節以及大概的 實作原理。其實這些細節都寫在官網上，不過一般在教學文章內較少著墨，所以特別摘錄出來，讓大家在使用 react-redux 時能注意到可能會發生的問題。
@@ -48,7 +47,7 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
 mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapStateToProps，由於這個 function 關係到 component props，所以就容易產生沒有發生 render 或是 render 次數過多的問題。">
 <meta itemprop="datePublished" content="2019-01-17T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2019-01-17T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="791">
+<meta itemprop="wordCount" content="871">
 
 
 
@@ -76,7 +75,7 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -150,7 +149,7 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -165,6 +164,16 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -175,7 +184,7 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -185,7 +194,7 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -199,16 +208,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -271,44 +270,44 @@ function 關係到 component props，所以就容易產生沒有發生 render �
 <p>Note that returning a <strong>mutated object of the same reference</strong> is a common mistake that can result in your component not re-rendering when expected.</p>
 </blockquote>
 <p>最常發生的例子像是 array，如果使用 array.push(value)，那麼 array 還是同一個 reference，那麼就不會觸發 render().</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">
-<span style="color:#75715e">// in reducer
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">case</span> <span style="color:#a6e22e">appListAction</span>.<span style="color:#a6e22e">ADD_APP</span><span style="color:#f92672">:</span>
-    <span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">action</span>.<span style="color:#a6e22e">payload</span>);
-    <span style="color:#75715e">// state.list 為相同 reference
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> {...<span style="color:#a6e22e">state</span>, <span style="color:#a6e22e">list</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">list</span>};
-
-<span style="color:#75715e">// 由於 state.list 為相同 reference，不會觸發 render
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">mapStateToProps</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">state</span> =&gt; ({
-  <span style="color:#a6e22e">list</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">list</span>
-})
-
-<span style="color:#75715e">// Fix
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">case</span> <span style="color:#a6e22e">appListAction</span>.<span style="color:#a6e22e">ADD_APP</span><span style="color:#f92672">:</span>
-  <span style="color:#75715e">// 重新建立一個 array
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">return</span> {...<span style="color:#a6e22e">state</span>, <span style="color:#a6e22e">list</span><span style="color:#f92672">:</span> [...<span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">list</span>, <span style="color:#a6e22e">action</span>.<span style="color:#a6e22e">payload</span>]};
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000">// in reducer
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000"></span><span style="color:#00f">case</span> appListAction.ADD_APP:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    state.list.push(action.payload);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#008000">// state.list 為相同 reference
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000"></span>    <span style="color:#00f">return</span> {...state, list: state.list};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000">// 由於 state.list 為相同 reference，不會觸發 render
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span><span style="color:#00f">const</span> mapStateToProps = state =&gt; ({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  list: state.list
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000">// Fix
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#008000"></span><span style="color:#00f">case</span> appListAction.ADD_APP:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  <span style="color:#008000">// 重新建立一個 array
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#008000"></span>  <span style="color:#00f">return</span> {...state, list: [...state.list, action.payload]};
 </code></pre></div><h3 id="2-render太頻繁---only-return-new-object-references-if-needed">2. render()太頻繁 - Only Return New Object References If Needed</h3>
 <p>這個問題是在說，我們有可能會濫用 return new object ，導致觸發 render()。例如說：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">return</span> {
-  <span style="color:#75715e">// map func always create a new array.
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">list</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">item</span> =&gt; <span style="color:#a6e22e">item</span>),
-  <span style="color:#a6e22e">target</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">target</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#008000">// map func always create a new array.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>  list: state.list.map(item =&gt; item),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  target: state.target
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 </code></pre></div><p>這樣即使 state.list 的值不變，但是由於 map 的 return 值是新建立一個 array，導致 component 的 list 會一直被更新，進而導致頻繁觸發 render()。</p>
 <p>建議的解決辦法是使用 <code>memoized selector functions</code>，而官方推出的 lib 是 <code>reselect</code>，以下節錄 <code>reselect</code> 中一段重要原始碼：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">defaultMemoize</span>(<span style="color:#a6e22e">func</span>, <span style="color:#a6e22e">equalityCheck</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">defaultEqualityCheck</span>) {
-  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">lastArgs</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>
-  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">lastResult</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>
-  
-  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">function</span> () {
-    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">areArgumentsShallowlyEqual</span>(<span style="color:#a6e22e">equalityCheck</span>, <span style="color:#a6e22e">lastArgs</span>, <span style="color:#a6e22e">arguments</span>)) {
-      <span style="color:#a6e22e">lastResult</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">func</span>.<span style="color:#a6e22e">apply</span>(<span style="color:#66d9ef">null</span>, <span style="color:#a6e22e">arguments</span>)
-    }
-
-    <span style="color:#a6e22e">lastArgs</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">arguments</span>
-    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">lastResult</span>
-  }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">export</span> <span style="color:#00f">function</span> defaultMemoize(func, equalityCheck = defaultEqualityCheck) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#00f">let</span> lastArgs = <span style="color:#00f">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#00f">let</span> lastResult = <span style="color:#00f">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#00f">return</span> <span style="color:#00f">function</span> () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#00f">if</span> (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, arguments)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      lastResult = func.apply(<span style="color:#00f">null</span>, arguments)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    lastArgs = arguments
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#00f">return</span> lastResult
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
 </code></pre></div><p>簡單來說，就是會先檢查 function 的 input value 有沒有發生變化，如果沒有發生變化，則會直接返回上一次運算的結果值。</p>
 <p>如何使用 <code>reselect</code> 一樣略過不做介紹，網上已經有很多很完整的範例可以供參考～</p>
 <h3 id="3-render太頻繁---the-number-of-declared-arguments-affects-behavior">3. render()太頻繁 - The Number of Declared Arguments Affects Behavior</h3>
@@ -320,16 +319,16 @@ function 關係到 component props，所以就容易產生沒有發生 render �
 <blockquote>
 <p>This means that you should <strong>not add the ownProps argument unless you actually need to use it</strong>, or your mapStateToProps function will run more often than it needs to.</p>
 </blockquote>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">
-<span style="color:#75715e">// source code from wrapMapToProps.js
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">initProxySelector</span>(<span style="color:#a6e22e">dispatch</span>, { <span style="color:#a6e22e">displayName</span> }) {
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">proxy</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">mapToPropsProxy</span>(<span style="color:#a6e22e">stateOrDispatch</span>, <span style="color:#a6e22e">ownProps</span>) {
-      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">proxy</span>.<span style="color:#a6e22e">dependsOnOwnProps</span>
-        <span style="color:#75715e">// 這邊會判斷是否有使用 props 當參數來決定後續處理方式
-</span><span style="color:#75715e"></span>        <span style="color:#f92672">?</span> <span style="color:#a6e22e">proxy</span>.<span style="color:#a6e22e">mapToProps</span>(<span style="color:#a6e22e">stateOrDispatch</span>, <span style="color:#a6e22e">ownProps</span>)
-        <span style="color:#f92672">:</span> <span style="color:#a6e22e">proxy</span>.<span style="color:#a6e22e">mapToProps</span>(<span style="color:#a6e22e">stateOrDispatch</span>)
-    }
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000">// source code from wrapMapToProps.js
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#00f">return</span> <span style="color:#00f">function</span> initProxySelector(dispatch, { displayName }) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#00f">const</span> proxy = <span style="color:#00f">function</span> mapToPropsProxy(stateOrDispatch, ownProps) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      <span style="color:#00f">return</span> proxy.dependsOnOwnProps
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        <span style="color:#008000">// 這邊會判斷是否有使用 props 當參數來決定後續處理方式
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000"></span>        ? proxy.mapToProps(stateOrDispatch, ownProps)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        : proxy.mapToProps(stateOrDispatch)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    }
 </code></pre></div><h3 id="4-mapstatetoprops-must-be-a-fast-pure-and-synchronous-function">4. <code>mapStateToProps</code> MUST be a fast, pure and synchronous function</h3>
 <p>這題比較偏效能議題，官方建議 <code>mapStateToProps</code> 應該是一個邏輯簡單 / pure / 且 synchronous 的 function。畢竟當 state 變動時，就會呼叫此 function，如果 <code>mapStateToProps</code> 的邏輯複雜，那就會大幅降低每次變動後的處理速度。</p>
 <p>再來複習 Pure Function 定義:</p>
@@ -344,52 +343,52 @@ function 關係到 component props，所以就容易產生沒有發生 render �
 </ol>
 </blockquote>
 <p>以下例子就是會改變 variable member 而造成 side effects 的例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">Test</span>() {
-  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-  
-  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">notPureFunc</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>) {
-    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>;
-  }
-  
-  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">pureFunc</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>) {
-    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>;
-  }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">function</span> Test() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#00f">this</span>.value = 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#00f">this</span>.notPureFunc = <span style="color:#00f">function</span>(a, b) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#00f">return</span> <span style="color:#00f">this</span>.value += a + b;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#00f">this</span>.pureFunc = <span style="color:#00f">function</span>(a, b) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#00f">return</span> a + b;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
 </code></pre></div><p>從上面例子可以知道，如果不是使用 pure function，可能的風險就是會造成 return 值不會是你所預期的（因為他會修改到內部變數），因此這樣寫法也盡量避免的。</p>
 <h2 id="mapdispatchtoprops-issues"><code>mapDispatchToProps</code> Issues</h2>
 <h3 id="1-using-the-object-shorthand-form-of-mapdispatchtoprops">1. Using the <strong>object shorthand</strong> form of mapDispatchToProps</h3>
 <p>網路上可以看到很多例子這樣寫：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">mapDispatchToProps</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">dispatch</span> =&gt; {
-  <span style="color:#66d9ef">return</span> {
-    <span style="color:#75715e">// dispatching actions returned by action creators
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">increment</span><span style="color:#f92672">:</span> () =&gt; <span style="color:#a6e22e">dispatch</span>(<span style="color:#a6e22e">increment</span>()),
-    <span style="color:#a6e22e">decrement</span><span style="color:#f92672">:</span> () =&gt; <span style="color:#a6e22e">dispatch</span>(<span style="color:#a6e22e">decrement</span>()),
-    <span style="color:#a6e22e">reset</span><span style="color:#f92672">:</span> () =&gt; <span style="color:#a6e22e">dispatch</span>(<span style="color:#a6e22e">reset</span>())
-  }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">const</span> mapDispatchToProps = dispatch =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#00f">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    <span style="color:#008000">// dispatching actions returned by action creators
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000"></span>    increment: () =&gt; dispatch(increment()),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    decrement: () =&gt; dispatch(decrement()),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    reset: () =&gt; dispatch(reset())
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>}
 </code></pre></div><p>或是使用 <code>redux</code> 本身的 <code>bindActionCreators</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">
-<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">bindActionCreators</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;redux&#39;</span>
-
-<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">mapDispatchToProps</span>(<span style="color:#a6e22e">dispatch</span>) {
-  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">bindActionCreators</span>({ <span style="color:#a6e22e">increment</span>, <span style="color:#a6e22e">decrement</span>, <span style="color:#a6e22e">reset</span> }, <span style="color:#a6e22e">dispatch</span>)
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">import</span> { bindActionCreators } from <span style="color:#a31515">&#39;redux&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">function</span> mapDispatchToProps(dispatch) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#00f">return</span> bindActionCreators({ increment, decrement, reset }, dispatch)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 </code></pre></div><p>因為這樣的寫法實在太常見了，頻繁寫 dispatch 看起來變得很多餘，所以 <code>react-redux</code> 整合 <code>mapDispatchToProps</code> function，我們只要使用 object type 的 mapDispatchToProps，內部機制就會自動幫你套用 <code>mapDispatchToProps</code>，讓使用者用起來更方便。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">
-<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">connect</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;react-redux&#34;</span>;
-
-<span style="color:#a6e22e">connect</span>(
-  <span style="color:#a6e22e">mapState</span>,
-  { <span style="color:#a6e22e">increment</span>, <span style="color:#a6e22e">decrement</span>, <span style="color:#a6e22e">reset</span> }
-)(<span style="color:#a6e22e">Counter</span>);
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">import</span> { connect } from <span style="color:#a31515">&#34;react-redux&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>connect(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  mapState,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  { increment, decrement, reset }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>)(Counter);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>
 </code></pre></div><p>不過即使 <code>react-redux</code> 幫你貼心設計好了，我們還是要知他是使用了 <code>bindActionCreators</code> 來綁定 dispatch 行為。</p>
 <h4 id="如果不使用-mapdispatchtoprops-這個變數呢">如果不使用 mapDispatchToProps 這個變數呢？</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">
-<span style="color:#75715e">// 官網例子
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">connect</span>(<span style="color:#a6e22e">mapStateToProps</span> <span style="color:#75715e">/** no second argument */</span>)(<span style="color:#a6e22e">MyComponent</span>)
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">// 官網例子
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>connect(mapStateToProps <span style="color:#008000">/** no second argument */</span>)(MyComponent)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
 </code></pre></div><p>那Default 設定就會是 <code>props.dispatch</code>，然後再自己手動呼叫 <code>dispatch(action)</code>。</p>
 <p>當然，官方也有特別提醒，如果使用 mapDispatchToProps，那 dispatch function 就不會被傳入到 component 中。</p>
 <blockquote>
@@ -401,46 +400,46 @@ function 關係到 component props，所以就容易產生沒有發生 render �
 <blockquote>
 <p>Internally, React Redux uses <strong>React&rsquo;s &ldquo;context&rdquo; feature</strong> to make the Redux store accessible to deeply nested connected components.</p>
 </blockquote>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx">
-<span style="color:#75715e">// 我們通常用這種方式來設定 redux store
-</span><span style="color:#75715e"></span>&lt;<span style="color:#f92672">Provider</span> <span style="color:#a6e22e">store</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">store</span>}&gt;
-  &lt;<span style="color:#f92672">...</span>&gt;
-&lt;/<span style="color:#f92672">Provider</span>&gt;
-
-<span style="color:#75715e">// source code from `react-redux`
-</span><span style="color:#75715e">// `this.state` contains a store property you passed
-</span><span style="color:#75715e"></span>&lt;<span style="color:#f92672">Context.Provider</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span>{<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">state</span>}&gt;
-  {<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">children</span>}
-&lt;/<span style="color:#f92672">Context.Provider</span>&gt;
-
-<span style="color:#75715e">// The store object is observable pattern to detect value change. 
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">store</span>.<span style="color:#a6e22e">subscribe</span>(() =&gt; {
-  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">newStoreState</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">store</span>.<span style="color:#a6e22e">getState</span>()
-  <span style="color:#75715e">//...some code
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">setState</span>(<span style="color:#a6e22e">providerState</span> =&gt; {
-    <span style="color:#75715e">// reference comparision
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">providerState</span>.<span style="color:#a6e22e">storeState</span> <span style="color:#f92672">===</span> <span style="color:#a6e22e">newStoreState</span>) {
-      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>
-    }
-    <span style="color:#66d9ef">return</span> { <span style="color:#a6e22e">storeState</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">newStoreState</span> }
-  })
-})
-
-<span style="color:#75715e">// --- source code from connectAdvanced.js. use to create connectHOC
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e">// WeappedComponent subscribe the value of context(store)
-</span><span style="color:#75715e">// and the render will be triggered when selected state changed
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">renderWrappedComponent</span>(<span style="color:#a6e22e">value</span>) { <span style="color:#75715e">// The value means context value
-</span><span style="color:#75715e"></span>  <span style="color:#75715e">// more code..
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">storeState</span>, <span style="color:#a6e22e">store</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">value</span>
-  <span style="color:#75715e">// more code..
-</span><span style="color:#75715e"></span>}
-
-&lt;<span style="color:#f92672">ContextToUse.Consumer</span>&gt;
-  {<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">renderWrappedComponent</span>}
-&lt;/<span style="color:#f92672">ContextToUse.Consumer</span>&gt;
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000">// 我們通常用這種方式來設定 redux store
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000"></span>&lt;Provider store={store}&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  &lt;...&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>&lt;/Provider&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000">// source code from `react-redux`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000">// `this.state` contains a store property you passed
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span>&lt;Context.Provider value={<span style="color:#00f">this</span>.state}&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  {<span style="color:#00f">this</span>.props.children}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>&lt;/Context.Provider&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000">// The store object is observable pattern to detect value change. 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#008000"></span>store.subscribe(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  <span style="color:#00f">const</span> newStoreState = store.getState()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  <span style="color:#008000">//...some code
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#008000"></span>  <span style="color:#00f">this</span>.setState(providerState =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    <span style="color:#008000">// reference comparision
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#008000"></span>    <span style="color:#00f">if</span> (providerState.storeState === newStoreState) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>      <span style="color:#00f">return</span> <span style="color:#00f">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    <span style="color:#00f">return</span> { storeState: newStoreState }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#008000">// --- source code from connectAdvanced.js. use to create connectHOC
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#008000">// WeappedComponent subscribe the value of context(store)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#008000">// and the render will be triggered when selected state changed
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>renderWrappedComponent(value) { <span style="color:#008000">// The value means context value
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#008000"></span>  <span style="color:#008000">// more code..
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#008000"></span>  <span style="color:#00f">const</span> { storeState, store } = value
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  <span style="color:#008000">// more code..
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#008000"></span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>&lt;ContextToUse.Consumer&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>  {<span style="color:#00f">this</span>.renderWrappedComponent}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>&lt;/ContextToUse.Consumer&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>
 </code></pre></div><p>簡單來說，就是利用 React 自身機制的的 <code>&lt;Context.Provider&gt;</code> and <code>&lt;Context.Consumer&gt;</code> 來實作。當 (1) dispatch action， (2) 經過 reducer function  (3) 產生出一個新的 state 時，(4) 會透過上面 setState 來更新 context value，(5) 接著那些 subscribed context 的 component 就會接收到 state 更新訊息，然後再判斷是否要 re-render component。</p>
 <p>簡單流程說明大概是這樣。</p>
 <h2 id="結尾">結尾</h2>
@@ -465,12 +464,12 @@ function 關係到 component props，所以就容易產生沒有發生 render �
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -512,17 +511,6 @@ function 關係到 component props，所以就容易產生沒有發生 render �
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

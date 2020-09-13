@@ -28,12 +28,11 @@
   <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Fast Property Access - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="How Does JavaScript Engine (V8) Optimize JavaScript code - Fast Property Access" />
 <meta property="og:description" content="Properties Access in V8 前言 傳統的 JavaScript 引擎，在抓取 object 內的 property 位置時，常常是利用 object 內的 hash table 來取得對應 property (通常稱為 dictionary )。不過這樣需要花費搜尋時間，相對來說效率就不是太好。也因此在現代的 JavaScript 引擎，會根據 object 內的 property 架構來進行不同方式的效能處理，避免一直使用 hash table，而是改採其他更有效率的結構，來達成快速得到 property 的目的。" />
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -267,7 +266,7 @@
 <h2 id="in-object-property">in-object property</h2>
 <p>要最快速可以 acccess 到 property 的方式，就是直接在 object 內放置 property 的值，也就是 <code>in-object property</code>。<code>in-object property</code> 在 Object initializer  就會建立，所以如果是在 object 建立後才加入的 property ，那就不會是 in-object property 了。</p>
 <p>![in-object.png]({{ site.url }}/assets/images/in-object.png)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">student</span> <span style="color:#f92672">=</span> {<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;1234&#39;</span>, <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;student&#39;</span>} <span style="color:#75715e">// in-object property
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">const</span> student = {id: <span style="color:#a31515">&#39;1234&#39;</span>, name: <span style="color:#a31515">&#39;student&#39;</span>} <span style="color:#008000">// in-object property
 </span></code></pre></div><h2 id="fast-property">Fast Property</h2>
 <p>當有其他 property 加入到 object 時，通常情況下，V8 會將其儲存在 property store (Fixed Array)，這就是所謂的 <code>Fast Property</code>。透過 array 的 index ，可以直接讀取 property。不過由於我們是透過 property 的命名來取得 property，因此需要一份名單來紀錄 property 的 key / 值以及其他資訊。這份名單叫做 <code>Descriptor Array</code>。</p>
 <blockquote>
@@ -309,12 +308,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -356,17 +355,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

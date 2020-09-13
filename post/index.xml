@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Sep 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 12 Sep 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</title>
+      <link>https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/</link>
+      <pubDate>Sat, 12 Sep 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/</guid>
+      <description>前言 之前是看 COMP790 的課程，但是實作起來發現有點問題，而且題目跟實際 source code 說明不太一樣。在花了很多時間釐清之後，發現原課程內容可能來自於 CSE 506: Lecture from Stony Brook University，仔細看了一下 CSE 506 的 Lab 課程，發現題目與 source code 相符程度較高，因此後續會改看 CSE 506 這系列課程。</description>
+    </item>
     
     <item>
       <title>Vault Initialization and Keys Security</title>
@@ -22,7 +31,7 @@
     </item>
     
     <item>
-      <title>Operating System Implementation Lab1 - The Stack</title>
+      <title>CSE 506 Lab1 - The Stack</title>
       <link>https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/</link>
       <pubDate>Tue, 25 Aug 2020 08:00:00 +0800</pubDate>
       
@@ -31,7 +40,7 @@
     </item>
     
     <item>
-      <title>Operating System Implementation Lab 環境建置</title>
+      <title>CSE 506 Lab 環境建置</title>
       <link>https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/</link>
       <pubDate>Mon, 24 Aug 2020 08:00:00 +0800</pubDate>
       
@@ -189,17 +198,6 @@
       <guid>https://yushuanhsieh.github.io/post/2019-12-30-2019-review/</guid>
       <description>2019 年過去了，不免俗地跟風一下，回顧今年做了哪些事情。整體來說 2019 年對我來說是一個正向的轉變，包含職位、生涯、薪資、技術能力等，至於促使這些轉變的時機。我覺得是好好把握突然來的機會，以及當覺得這個方向好像和自己想做的有點不合時，就要勇於開拓新的方向。
 Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變成 back-end 吧。而這個動機在於很多人在聽到我是商科轉職，就說我一定是去做前端，因為前端對他們而言技術能力需求低，即使文組也可以勝任，其他資工系本科出身的不會去寫前端。當然這樣的想法很過時，而且說這些話的人大概也寫不出來像 angular, react 之類的框架，不過為了證明自己能力，還是不爭氣地開始尋求 back-end 的機會，也很幸運地進入趨勢科技開始寫 Go 。</description>
-    </item>
-    
-    <item>
-      <title>2019/11 月份自我學習回顧</title>
-      <link>https://yushuanhsieh.github.io/post/2019-12-05-study-11/</link>
-      <pubDate>Thu, 05 Dec 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-12-05-study-11/</guid>
-      <description>前言 12/01是我生日，於是給自己放了一個禮拜的休息假，每天下班回去就是睡覺或是滑手機放空，除非公司 slack 出現訊息，不然很少打開電腦。老實說放假的感覺挺好的，沒有進修進度壓力，也可以好好休養身心～不知道是不是剛換環境以及天氣變化的關係，感冒時好時壞，這幾天就去大醫院照內視鏡和超音波做詳細檢查，幸好沒有什麼問題，就是抵抗力弱了一點（該不會是身體又發現我早午餐都沒怎麼吃吧QQ）
-剛到職新創公司滿一個月，來說說感想～其實還沒加入之前蠻擔心的，畢竟聽說新創公司變動很快，不太清楚自己能不能適應，之所以加入完全是賭上對於主管和同事能力的信任。不過來了一個多月，感覺還不錯，除了福利好之外，還接觸到之前沒有機會實戰的技術。更有意思的是，每個產業都有自己的特色，去吸收那些產業知識和市場訊息，可以擴大自己的眼界。現在唯一比較有壓力的是英文口說 XD 還有許多年紀輕輕但是身懷絕技的同事們，進而督促自己不能懈怠才行。我覺得新創公司的好處是，每個同事都有自己的理想和態度主動積極，在那種氛圍下，自己也比較不容易懈怠。
-生日剛過完，對自己也有些期許，其中最大的目標就是對 Google cloud platform 熟悉並且考到證照，既然決定要走 Cloud 開發，那當然要耕耘相關 infrastructure ，才能更妥善地利用這些服務來開發 application。當然我對作業系統還是很有愛，希望今年可以多讀一些相關論文，甚至可以啟發自己寫一點寫論文出來。之所以會這樣想，是因為發現自己還蠻喜歡做 research 的，可以讓自己對某些領域的學術知識更加了解。</description>
     </item>
     
   </channel>

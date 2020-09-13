@@ -6,10 +6,19 @@
     <description>Recent content in Categories on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Sep 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 12 Sep 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Understanding Router in Angular 6</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</link>
+      <pubDate>Thu, 24 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</guid>
+      <description>前言： 這陣子在看 Reactive Extension (Rx) 和 Angular ，而 Angular 中常使用的 Router 內就有些 Observable Type 的 instance，因此就打算從這邊深入了解一下 Angular Router 的流程和 Observable 應用方式。</description>
+    </item>
     
     <item>
       <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Fast Property Access</title>

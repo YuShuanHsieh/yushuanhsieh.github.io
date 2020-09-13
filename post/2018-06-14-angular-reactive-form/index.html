@@ -28,12 +28,11 @@
   <title>Angular - Reactive Form - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Angular - Reactive Form" />
 <meta property="og:description" content="前言 在建立表單的部份，Angular 與 AngularJS 最大的不同就是多了 Reactive Form 的方式。由於 Reactive Form 比起一般 Template-Driven Form 更具彈性且好掌控，所以就來大致介紹一下與 Reactive Form 相關的流程機制。" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言 在建立表單的部份，Angular 與 AngularJS 最大的不同就是多了 Reactive Form 的方式。由於 Reactive Form 比起一般 Template-Driven Form 更具彈性且好掌控，所以就來大致介紹一下與 Reactive Form 相關的流程機制。">
 <meta itemprop="datePublished" content="2018-06-14T12:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2018-06-14T12:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="339">
+<meta itemprop="wordCount" content="370">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -261,69 +260,69 @@
 <p>下圖簡單地介紹 FormControl 的內部機制，首先在建立 FormControl Instance 時，我們可以透過 constructor 初始化 value 和設置想要的 validators function。舉例來說，我們提供給使用者修改暱稱的欄位，需要在欄位上先填好使用者原本的暱稱，以及設置好暱稱驗證方式。</p>
 <p>![Angular FormControl]({{ site.url }}/assets/images/angular-formControl.png)</p>
 <p>而當有新的 value 進來時，會透過 setValue() 這個 function 來更新 value 參數。在 setValue() 更新完 value 之後，就會進行值驗證，看看新進來的 value 是否符合規範，，並將 status 狀態更新為 invalid 或是 valid。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">control</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FormControl</span>(<span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#a6e22e">Validators</span>.<span style="color:#a6e22e">required</span>);
-<span style="color:#a6e22e">control</span>.<span style="color:#a6e22e">setValue</span>(<span style="color:#e6db74">&#39;newValue&#39;</span>);
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">const</span> control = <span style="color:#00f">new</span> FormControl(<span style="color:#a31515">&#39;&#39;</span>, Validators.required);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>control.setValue(<span style="color:#a31515">&#39;newValue&#39;</span>);
 </code></pre></div><p>由於有了值的驗證機制，所以開發者除了可以使用 setValue() 來改變 value variable 之外，還可以透過 FormControl 中的 status 來得知值的驗證結果。這在顯示欄位輸入提示上非常有用。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Formcontrol source code
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">setValue</span>(<span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">any</span>, <span style="color:#a6e22e">options</span><span style="color:#f92672">:</span> {
-  <span style="color:#a6e22e">onlySelf</span><span style="color:#f92672">?:</span> <span style="color:#66d9ef">boolean</span>,
-  <span style="color:#a6e22e">emitEvent</span><span style="color:#f92672">?:</span> <span style="color:#66d9ef">boolean</span>,
-  <span style="color:#a6e22e">emitModelToViewChange</span><span style="color:#f92672">?:</span> <span style="color:#66d9ef">boolean</span>,
-  <span style="color:#a6e22e">emitViewToModelChange</span><span style="color:#f92672">?:</span> <span style="color:#66d9ef">boolean</span>
-  } <span style="color:#f92672">=</span> {})<span style="color:#f92672">:</span> <span style="color:#66d9ef">void</span> {
-    <span style="color:#75715e">// update value
-</span><span style="color:#75715e"></span>    (<span style="color:#66d9ef">this</span> <span style="color:#a6e22e">as</span>{<span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">any</span>}).<span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">_pendingValue</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">value</span>;
-    
-    <span style="color:#75715e">// 中間省略
-</span><span style="color:#75715e"></span>
-    <span style="color:#75715e">// update status function
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">updateValueAndValidity</span>(<span style="color:#a6e22e">options</span>);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// Formcontrol source code
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span>setValue(value: any, options: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  onlySelf?: <span style="color:#00f">boolean</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  emitEvent?: <span style="color:#00f">boolean</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  emitModelToViewChange?: <span style="color:#00f">boolean</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  emitViewToModelChange?: <span style="color:#00f">boolean</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  } = {}): <span style="color:#00f">void</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#008000">// update value
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span>    (<span style="color:#00f">this</span> as{value: any}).value = <span style="color:#00f">this</span>._pendingValue = value;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#008000">// 中間省略
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#008000">// update status function
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#008000"></span>    <span style="color:#00f">this</span>.updateValueAndValidity(options);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
 </code></pre></div><h2 id="formcontrol-directive">formControl Directive</h2>
 <p>上面有提到， FormControl 本身是一個獨立物件，那該如何讓 FormControl 與 DOM 產生連結? <code>formControl Directive</code> 所扮演的角色就是 <strong>FormControl Instance 和 DOM 之間的橋樑</strong>，讓使用者所輸入的值可以被更新在 FormControl 的 value 參數上，或是當 FormControl 的 value 改變時，新的值可以被寫上 DOM element 。</p>
 <p>我們可以在官網看到以下例子:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">@Component</span>({
-  <span style="color:#75715e">///...
-</span><span style="color:#75715e"></span>})
-<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ExampleComponent</span> {
-  <span style="color:#a6e22e">control</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FormControl</span>(<span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#a6e22e">Validators</span>.<span style="color:#a6e22e">required</span>);
-}
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text&#34;</span> <span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">formControl</span><span style="color:#960050;background-color:#1e0010">]=&#34;</span><span style="color:#a6e22e">control</span><span style="color:#960050;background-color:#1e0010">&#34;</span>&gt;
-&lt;<span style="color:#f92672">p</span>&gt;{{control.value}}&lt;/<span style="color:#f92672">p</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">@Component</span>({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#008000">///...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">export</span> <span style="color:#00f">class</span> ExampleComponent {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  control = <span style="color:#00f">new</span> FormControl(<span style="color:#a31515">&#39;&#39;</span>, Validators.required);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
+</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;input type=<span style="color:#a31515">&#34;text&#34;</span> <span style="">[</span>formControl<span style="">]=&#34;</span>control<span style="">&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>&lt;p&gt;{{control.value}}&lt;/p&gt;
 </code></pre></div><p>這就是將新建立好的 ForControl Instance 傳遞給 formControl Directive 來做操作的意思。</p>
 <p>藉由 formControl Directive 的協助，ForControl Instance 就可以獲得使用者所輸入的值，然後我們就能把值顯示在畫面上。 (如同上方的 <code>{{control.value}}</code> )</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#75715e">// formControl Directive source code
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">@Directive</span>({
-  <span style="color:#a6e22e">selector</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;[formControl]&#39;</span>, 
-  <span style="color:#a6e22e">providers</span><span style="color:#f92672">:</span> [<span style="color:#a6e22e">formControlBinding</span>], 
-  <span style="color:#a6e22e">exportAs</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;ngForm&#39;</span>})
-<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FormControlDirective</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">NgControl</span> <span style="color:#66d9ef">implements</span> <span style="color:#a6e22e">OnChanges</span> {
-  <span style="color:#75715e">//...
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">ngOnChanges</span>(<span style="color:#a6e22e">changes</span>: <span style="color:#66d9ef">SimpleChanges</span>)<span style="color:#f92672">:</span> <span style="color:#66d9ef">void</span> {
-    <span style="color:#75715e">//...
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">setUpControl</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">form</span>, <span style="color:#66d9ef">this</span>);
-    <span style="color:#75715e">//...
-</span><span style="color:#75715e"></span>  }
-}
-
-<span style="color:#75715e">// setUpControl
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">setUpControl</span>(<span style="color:#a6e22e">control</span>: <span style="color:#66d9ef">FormControl</span>, <span style="color:#a6e22e">dir</span>: <span style="color:#66d9ef">NgControl</span>)<span style="color:#f92672">:</span> <span style="color:#66d9ef">void</span> {
-  <span style="color:#75715e">// write a value to target DOM element. 
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">dir</span>.<span style="color:#a6e22e">valueAccessor</span> <span style="color:#f92672">!</span>.<span style="color:#a6e22e">writeValue</span>(<span style="color:#a6e22e">control</span>.<span style="color:#a6e22e">value</span>);
-  <span style="color:#a6e22e">setUpViewChangePipeline</span>(<span style="color:#a6e22e">control</span>, <span style="color:#a6e22e">dir</span>);
-  <span style="color:#a6e22e">setUpModelChangePipeline</span>(<span style="color:#a6e22e">control</span>, <span style="color:#a6e22e">dir</span>);
-  <span style="color:#75715e">//...
-</span><span style="color:#75715e"></span>}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// formControl Directive source code
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span><span style="color:#00f">@Directive</span>({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  selector: <span style="color:#a31515">&#39;[formControl]&#39;</span>, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  providers: [formControlBinding], 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  exportAs: <span style="color:#a31515">&#39;ngForm&#39;</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#00f">export</span> <span style="color:#00f">class</span> FormControlDirective <span style="color:#00f">extends</span> NgControl <span style="color:#00f">implements</span> OnChanges {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#008000">//...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000"></span>  ngOnChanges(changes: <span style="color:#2b91af">SimpleChanges</span>): <span style="color:#00f">void</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#008000">//...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>    setUpControl(<span style="color:#00f">this</span>.form, <span style="color:#00f">this</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#008000">//...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#008000">// setUpControl
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#008000"></span><span style="color:#00f">function</span> setUpControl(control: <span style="color:#2b91af">FormControl</span>, dir: <span style="color:#2b91af">NgControl</span>): <span style="color:#00f">void</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  <span style="color:#008000">// write a value to target DOM element. 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#008000"></span>  dir.valueAccessor !.writeValue(control.value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  setUpViewChangePipeline(control, dir);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  setUpModelChangePipeline(control, dir);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  <span style="color:#008000">//...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#008000"></span>}
 </code></pre></div><h2 id="valueaccessor">ValueAccessor</h2>
 <p>下方圖顯示 formControl Directive 如何連結 FormControl Instance 和 DOM element。</p>
 <p>![Angular formControl directive]({{ site.url }}/assets/images/angular-directive.png)</p>
 <p>可以看到 DOM element 和 formControl Directive 之間有個 <code>ValueAccessor</code>，它負責與 DOM element 進行互動。當使用者在欄位中輸入字元，觸發 input event 的時候， formControl Directive 就會透過 <code>ValueAccessor</code> 取得使用者輸入的值，然後對 FormControl 的 value 進行更新。</p>
 <p>反之，當 FormControl 的 value 發生變動時， formControl Directive 會藉由 <code>ValueAccessor</code> 的 writeValue() function，將變動的值寫入 DOM element。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// DefaultValueAccessor source code
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">writeValue</span>(<span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">any</span>)<span style="color:#f92672">:</span> <span style="color:#66d9ef">void</span> {
-  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">normalizedValue</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">value</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">?</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">value</span>;
-  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">_renderer</span>.<span style="color:#a6e22e">setProperty</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">_elementRef</span>.<span style="color:#a6e22e">nativeElement</span>, <span style="color:#e6db74">&#39;value&#39;</span>, <span style="color:#a6e22e">normalizedValue</span>);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// DefaultValueAccessor source code
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>writeValue(value: any): <span style="color:#00f">void</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#00f">const</span> normalizedValue = value == <span style="color:#00f">null</span> ? <span style="color:#a31515">&#39;&#39;</span> : value;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  <span style="color:#00f">this</span>._renderer.setProperty(<span style="color:#00f">this</span>._elementRef.nativeElement, <span style="color:#a31515">&#39;value&#39;</span>, normalizedValue);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 </code></pre></div><h2 id="結論">結論</h2>
 <p>本篇文章介紹 Angular 機制是如何透過建立 <code>FormControl</code>，並且引入 <code>formcontrol Directive</code> 來完成使用者輸入互動和欄位驗證。而這樣的概念也會應用在 <code>formGroup</code> 和 <code>formBuilder</code> 中，往後在寫 Reactive Form 時，就可以更清楚地知道，該如何透過這樣的流程來完成心目中的表單設計。</p>
 
@@ -342,12 +341,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -389,17 +388,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

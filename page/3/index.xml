@@ -6,10 +6,21 @@
     <description>Recent content on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Sep 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 12 Sep 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2019/01月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-02-03-study-2019-01/</link>
+      <pubDate>Sun, 03 Feb 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-02-03-study-2019-01/</guid>
+      <description>又到了每個月檢討念書進度的日子了，這次 2019 新的一年有蠻多人生大轉變，像是離職換了一個新的工作環境，以及脫離媽寶身份，跑去新竹生活等。 Moxa 算是我轉職後第一份的正式工作，而在這一年中其實學到很多經驗，但是也對一些流程和開發方式有些疑問。我很想要根據這些問題提出自己的見解，可惜經驗少，又沒有其他公司經驗可以參考，因此總有很想要提出改善，卻又不知道該如何改善的感覺。
+而在年底時，剛好有這個機會可以去趨勢工作，在考量趨勢科技是一家成熟軟體公司的情況下，雖然目前開發經驗還累積不足，但還是決定前往了。我不能説決定是不是正確的，但是我覺得人生就是充滿各種契機，只要在過程中很努力的學習，相信最後都還是值得的結果。
+話又說回來，這次學習主軸又拉回前端，並且參雜一點 Network 理論。這次學習是以 React 以及相關 lib 為主，而 network 則是清大開放課程的 區域網路，之前上完這位教授的網路概論，覺得收穫良多，所以繼續上教授的另一門課程。</description>
+    </item>
     
     <item>
       <title>工作 - Redux State 被異常更新除錯紀錄</title>
@@ -184,15 +195,6 @@ The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然
       
       <guid>https://yushuanhsieh.github.io/post/2018-05-29-angular-6-ngtemplate/</guid>
       <description>前言： 昨天剛好在看 Angular CDK Overlay (Overlay Document) 這部分，因為 Overlay 是 CDK 中 Portal 的ㄧ種，而 Portal 又和 Angular 中的 Template 機制有關係，這才發現自己對於 Angular 的 ng-template 和 ng-container 概念不是很清楚，所以特別再看了一下這部分的實作原理和應用方式。</description>
-    </item>
-    
-    <item>
-      <title>Understanding Router in Angular 6</title>
-      <link>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</link>
-      <pubDate>Thu, 24 May 2018 12:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</guid>
-      <description>前言： 這陣子在看 Reactive Extension (Rx) 和 Angular ，而 Angular 中常使用的 Router 內就有些 Observable Type 的 instance，因此就打算從這邊深入了解一下 Angular Router 的流程和 Observable 應用方式。</description>
     </item>
     
   </channel>

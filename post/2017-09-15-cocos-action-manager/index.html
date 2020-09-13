@@ -32,12 +32,11 @@ UT_hash_handle" />
   <title>Discussing the Action Manager in Cocos2d-x - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Discussing the Action Manager in Cocos2d-x" />
 <meta property="og:description" content="[前言]
@@ -57,7 +56,7 @@ ActionManager
 UT_hash_handle">
 <meta itemprop="datePublished" content="2017-09-15T14:18:11&#43;01:00" />
 <meta itemprop="dateModified" content="2017-09-15T14:18:11&#43;01:00" />
-<meta itemprop="wordCount" content="108">
+<meta itemprop="wordCount" content="118">
 
 
 
@@ -88,7 +87,7 @@ UT_hash_handle"/>
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -162,7 +161,7 @@ UT_hash_handle"/>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -177,6 +176,16 @@ UT_hash_handle"/>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -187,7 +196,7 @@ UT_hash_handle"/>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -197,7 +206,7 @@ UT_hash_handle"/>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -211,16 +220,6 @@ UT_hash_handle"/>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -280,34 +279,34 @@ UT_hash_handle"/>
 從圖中可以看到main loop中透過Schedule先將特定物件(在這邊為nodes)的圖像數據update，然後再繪製出調整後的nodes，這樣就能夠呈現出物品移動的視覺效果了。</p>
 <p><strong>[Action Manager]</strong><br>
 要讓node產生變化ActionManager和Schedule是非常重要的兩個Class，ActionManager負責管理所有nodes的actions，Schedule則是負責所有物件的update排程。當Director初始化的時候，會產生出ActionManager，並將ActionManager預先排入Schedule中，這樣每次在遊戲迴圈中，就會執行ActionManager 的update function來執行其底下所管理的動作。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">_scheduler <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> (std<span style="color:#f92672">::</span>nothrow) Scheduler();
-_actionManager <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> (std<span style="color:#f92672">::</span>nothrow) ActionManager();
-_scheduler<span style="color:#f92672">-&gt;</span>scheduleUpdate(_actionManager, Scheduler<span style="color:#f92672">::</span>PRIORITY_SYSTEM, false);
-<span style="color:#75715e">/* Scheduler::PRIORITY_SYSTEM 高優先權 */</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c++" data-lang="c++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>_scheduler = <span style="color:#00f">new</span> (std::nothrow) Scheduler();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>_actionManager = <span style="color:#00f">new</span> (std::nothrow) ActionManager();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>_scheduler-&gt;scheduleUpdate(_actionManager, Scheduler::PRIORITY_SYSTEM, false);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000">/* Scheduler::PRIORITY_SYSTEM 高優先權 */</span>
 </code></pre></div><p>至於ActionManager是如何管理各個node的動作呢？當使用者寫node-&gt;runAction(Action* action);的時候，其實就是把node和指定動作一起加入到ActionManager中。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">Action <span style="color:#f92672">*</span> Node<span style="color:#f92672">::</span>runAction(Action<span style="color:#f92672">*</span> action)
-{
-    CCASSERT( action <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nullptr</span>, <span style="color:#e6db74">&#34;Argument must be non-nil&#34;</span>);
-    _actionManager<span style="color:#f92672">-&gt;</span>addAction(action, <span style="color:#66d9ef">this</span>, <span style="color:#f92672">!</span>_running);
-    <span style="color:#66d9ef">return</span> action;
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c++" data-lang="c++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Action * Node::runAction(Action* action)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    CCASSERT( action != <span style="color:#00f">nullptr</span>, <span style="color:#a31515">&#34;Argument must be non-nil&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    _actionManager-&gt;addAction(action, <span style="color:#00f">this</span>, !_running);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    <span style="color:#00f">return</span> action;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 </code></pre></div><p>ActionManager使用HashTable List來管理這些node，其struct為：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_hashElement</span>
-{
-    <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_ccArray</span>     <span style="color:#f92672">*</span>actions;
-    Node                <span style="color:#f92672">*</span>target;
-    <span style="color:#66d9ef">int</span>                 actionIndex;
-    Action              <span style="color:#f92672">*</span>currentAction;
-    <span style="color:#66d9ef">bool</span>                currentActionSalvaged;
-    <span style="color:#66d9ef">bool</span>                paused;
-    UT_hash_handle      hh;
-} tHashElement;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c++" data-lang="c++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">typedef</span> <span style="color:#00f">struct</span> <span style="color:#2b91af">_hashElement</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#00f">struct</span> <span style="color:#2b91af">_ccArray</span>     *actions;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    Node                *target;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#2b91af">int</span>                 actionIndex;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    Action              *currentAction;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#2b91af">bool</span>                currentActionSalvaged;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#2b91af">bool</span>                paused;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    UT_hash_handle      hh;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>} tHashElement;
 </code></pre></div><p>這邊可以看到 _hashElement 中包含了node(*target)和action arrays(*actions)可以保存node以及對應的action sequence，而UT_hash_handle則是cocos2d自訂的資料結構，其中包含  *previous 和 *next 供element search，另外還有key值。當ActionManager執行update function的時候：</p>
 <ol>
 <li>visit _hashElement(first loop)</li>
 <li>從actions中取出currentAction並執行。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">_currentTarget<span style="color:#f92672">-&gt;</span>currentAction<span style="color:#f92672">-&gt;</span>step(dt);
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c++" data-lang="c++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>_currentTarget-&gt;currentAction-&gt;step(dt);
 </code></pre></div><ol start="3">
 <li>remove current action.</li>
 <li>如果target的動作全部執行完畢，則remove _hashElement(*target)</li>
@@ -329,12 +328,12 @@ _scheduler<span style="color:#f92672">-&gt;</span>scheduleUpdate(_actionManager,
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -376,17 +375,6 @@ _scheduler<span style="color:#f92672">-&gt;</span>scheduleUpdate(_actionManager,
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

@@ -28,12 +28,11 @@
   <title>Redux Anti Pattern - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Redux Anti Pattern" />
 <meta property="og:description" content="前言 這篇文章是基於 Redux Anti-Patterns - Part 1. State Management 所進行的探討，包含在專案內是否有犯類似的錯誤，以及後續該如何改善。文章會結合目前專案所使用的 Redux(ngrx)，並檢視使用 Ngrx 是否能避免這些錯誤發生。" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言 這篇文章是基於 Redux Anti-Patterns - Part 1. State Management 所進行的探討，包含在專案內是否有犯類似的錯誤，以及後續該如何改善。文章會結合目前專案所使用的 Redux(ngrx)，並檢視使用 Ngrx 是否能避免這些錯誤發生。">
 <meta itemprop="datePublished" content="2018-07-15T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2018-07-15T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="301">
+<meta itemprop="wordCount" content="321">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -258,28 +257,28 @@
 <h2 id="1-state-duplication">1. State Duplication</h2>
 <h3 id="問題點">問題點</h3>
 <p>錯誤的建立 state 導致 state 內部 property 或是與其他 state 內容重複。文章內以 session 為例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Store</span> {
-  <span style="color:#a6e22e">sessions</span>: <span style="color:#66d9ef">Session</span>[];
-  <span style="color:#75715e">/** The currentSession would be a part of sessions*/</span>
-  <span style="color:#a6e22e">currentSession</span>: <span style="color:#66d9ef">Session</span>;
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">interface</span> Store {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  sessions: <span style="color:#2b91af">Session</span>[];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#008000">/** The currentSession would be a part of sessions*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  currentSession: <span style="color:#2b91af">Session</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 </code></pre></div><h3 id="解決方式">解決方式</h3>
 <p>如上面的例子，將 <code>currentSession</code> 改成 index 檢索，所以我們實際取用資料時，還是使用 <code>sessions</code> 內的資料，而不是複製一份到 currentSession。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Store</span> {
-  <span style="color:#a6e22e">sessions</span><span style="color:#f92672">:</span> {[<span style="color:#a6e22e">key</span>: <span style="color:#66d9ef">number</span>]<span style="color:#f92672">:</span> <span style="color:#a6e22e">Session</span>};
-  <span style="color:#a6e22e">currentSession</span>: <span style="color:#66d9ef">number</span>;
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">interface</span> Store {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  sessions: {[key: <span style="color:#2b91af">number</span>]: Session};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  currentSession: <span style="color:#2b91af">number</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
 </code></pre></div><h3 id="檢討">檢討</h3>
 <p>目前專案內在指定特定的物件時，多使用 index 檢索的方式，並沒有上面所發生的 state 重複問題。不過日前在寫 state 時，差點發生類似的錯誤，因為我必須將 state 內的資料分類，而那時候想法是避免在新增刪除時需要重新進行分類（因為State 內的資料結構是採用 Array），所以額外設置一個已分類好的 Entity。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Store</span> {
-  <span style="color:#a6e22e">books</span>: <span style="color:#66d9ef">Array</span>&lt;<span style="color:#f92672">Book</span>&gt;;
-  <span style="color:#a6e22e">novel</span>: <span style="color:#66d9ef">Array</span>&lt;<span style="color:#f92672">Book</span>&gt;;
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">interface</span> Store {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  books: <span style="color:#2b91af">Array</span>&lt;Book&gt;;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  novel: <span style="color:#2b91af">Array</span>&lt;Book&gt;;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
 </code></pre></div><p>不過馬上發現這樣會造成與主要資料難同步的問題，再加上考量到專案內會使用特定分類的情況不多，新增刪除的情況也不多，所以就不調整原先的資料架構，加一個 selector 的方式來篩選類別。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">getNovels</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createSelector</span>(
-  <span style="color:#a6e22e">getAllBooks</span>,
-  <span style="color:#a6e22e">books</span> <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">book</span>.<span style="color:#a6e22e">category</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;NOVELS&#39;</span>
-);
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">const</span> getNovels = createSelector(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  getAllBooks,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  books =&gt; book.category === <span style="color:#a31515">&#39;NOVELS&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>);
 </code></pre></div><p>假設今天情況改變，專案需要大量的新增刪除行為時，則會調整 state 內的架構，當資料從 DB 取出時，先進行分類，避免後續重複 O(n) 的發生，會是比較好的做法。</p>
 <h2 id="2-incorrect-information-expert">2. Incorrect Information Expert</h2>
 <h3 id="問題點-1">問題點</h3>
@@ -291,34 +290,34 @@
 <h2 id="3-implicit-state-duplication">3. Implicit State Duplication</h2>
 <h3 id="問題點-2">問題點</h3>
 <p>一個類似 State 重複的問題，文章給了以下例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">State</span> {
-  <span style="color:#a6e22e">sessions</span><span style="color:#f92672">:</span> {[<span style="color:#a6e22e">key</span>: <span style="color:#66d9ef">number</span>]<span style="color:#f92672">:</span> <span style="color:#a6e22e">Session</span>};
-  <span style="color:#a6e22e">totalSessions</span>: <span style="color:#66d9ef">number</span>;
-  <span style="color:#a6e22e">currentSession</span>: <span style="color:#66d9ef">number</span>;
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">interface</span> State {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  sessions: {[key: <span style="color:#2b91af">number</span>]: Session};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  totalSessions: <span style="color:#2b91af">number</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  currentSession: <span style="color:#2b91af">number</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 </code></pre></div><p>其中 totalSessions 為對 sessions Array 所得出的總數，這樣其實也是一種隱性 state 重複。</p>
 <h3 id="解決方式-2">解決方式</h3>
 <p>建議捨棄可以從其他 state property 中得知資訊的 state，例如上方的例子，我們可以在使用時寫成：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript">Object.<span style="color:#a6e22e">keys</span>(<span style="color:#a6e22e">sessions</span>).<span style="color:#a6e22e">length</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Object.keys(sessions).length
 </code></pre></div><p>當然你可能會在在意起效能上的問題，不過使用 pure function 的方式可以達到有效優化。另外，以 ngrx 來說，他使用 observable selector，當 Array 個數發生變化時才會重新運算，所以效能上不會有太大影響。</p>
 <h3 id="檢討-2">檢討</h3>
 <p>目前專案全面改採用 ngrx 搭配 selector，因此這問題目前還沒發生。不過在開發期間確實可以持續注意是否有這類隱性 state 重複問題，藉此讓整個 state 保持一致性。</p>
 <h2 id="4-overwriting-state-updates">4. Overwriting State Updates</h2>
 <h3 id="問題點-3">問題點</h3>
 <p>這個問題起因於 copy 一份 state 內的資料，而在進行 store dispatch 的時候，誤將 copy 的舊資料 pass 到 reducer，導致 state 原本已更新的資料被覆蓋掉。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">setGuide</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">id</span>: <span style="color:#66d9ef">string</span>) <span style="color:#f92672">=&gt;</span> (<span style="color:#a6e22e">dispatch</span>, <span style="color:#a6e22e">getStore</span>) <span style="color:#f92672">=&gt;</span> {
-  <span style="color:#75715e">/** Problems */</span>
-  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">session</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getStore</span>().<span style="color:#a6e22e">sessions</span>[<span style="color:#a6e22e">id</span>];
-  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#e6db74">`/session/</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">id</span><span style="color:#e6db74">}</span><span style="color:#e6db74">/guide`</span>, {
-      <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;put&#39;</span>
-    })
-    .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">r</span> <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">json</span>())
-    .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">guide</span> <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">updateSession</span>(<span style="color:#a6e22e">session</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;guide&#39;</span>, <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">User</span>(<span style="color:#a6e22e">guide</span>))));
-};
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">const</span> setGuide = (id: <span style="color:#2b91af">string</span>) =&gt; (dispatch, getStore) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#008000">/** Problems */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#00f">const</span> session = getStore().sessions[id];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  <span style="color:#00f">return</span> fetch(<span style="color:#a31515">`/session/</span><span style="color:#a31515">${</span>id<span style="color:#a31515">}</span><span style="color:#a31515">/guide`</span>, {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>      method: <span style="color:#a31515">&#39;put&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    .then(r =&gt; r.json())
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>    .then(guide =&gt; updateSession(session.set(<span style="color:#a31515">&#39;guide&#39;</span>, <span style="color:#00f">new</span> User(guide))));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>};
 </code></pre></div><h3 id="解決方式-3">解決方式</h3>
 <p>當必須在 async 情況下使用 dispatch 時，應該從上一個 action 中獲得最新的資料，再進行 dispatch，如同以下文章中的例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">dispatch</span>(<span style="color:#a6e22e">updateSession</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">session</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;title&#39;</span>, <span style="color:#e6db74">&#39;Advanced Go&#39;</span>)))
-  .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">s</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">props</span>.<span style="color:#a6e22e">dispatch</span>(<span style="color:#a6e22e">setGuide</span>(<span style="color:#a6e22e">s</span>)));
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-typescript" data-lang="typescript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">this</span>.props.dispatch(updateSession(<span style="color:#00f">this</span>.props.session.set(<span style="color:#a31515">&#39;title&#39;</span>, <span style="color:#a31515">&#39;Advanced Go&#39;</span>)))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  .then(s =&gt; <span style="color:#00f">this</span>.props.dispatch(setGuide(s)));
 </code></pre></div><h3 id="檢討-3">檢討</h3>
 <p>由於 ngrx 中使用 Effects 來處理 action 執行後再一次進行 dispatch action 的行為，所以這部分的錯誤使用可以較妥善地被避免掉。</p>
 <h2 id="結論">結論</h2>
@@ -339,12 +338,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -386,17 +385,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

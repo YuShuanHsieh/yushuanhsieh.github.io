@@ -29,12 +29,11 @@
   <title>Start HTTP/2 running over cleartext TCP - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Start HTTP/2 running over cleartext TCP" />
 <meta property="og:description" content="![flow]({{ site.url }}/assets/images/h2c-flow.png)
@@ -48,7 +47,7 @@
 前言 主流使用 HTTP/2 時都是基於 TLS protocol，不過在 HTTP/2 RFC7540 規範中， HTTP/2 其實也可以直接基於 cleartext TCP 來溝通。這次主要介紹 based on cleartext TCP 的 HTTP/2 server 與 client 實作，後續會再加入 HTTP/2 結合 TLS protocol 的相關內容。">
 <meta itemprop="datePublished" content="2019-08-27T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2019-08-27T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="1234">
+<meta itemprop="wordCount" content="1343">
 
 
 
@@ -76,7 +75,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -150,7 +149,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -165,6 +164,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -175,7 +184,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -185,7 +194,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -199,16 +208,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -297,112 +296,112 @@
 </ol>
 <p>有了這些概念後，我們就可以知道 h2c server 該如何建立。</p>
 <h3 id="h2c-server-example">H2c Server Example</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-
-<span style="color:#f92672">import</span> (
-    <span style="color:#e6db74">&#34;fmt&#34;</span>
-    <span style="color:#e6db74">&#34;log&#34;</span>
-    <span style="color:#e6db74">&#34;net/http&#34;</span>
-
-    <span style="color:#e6db74">&#34;golang.org/x/net/http2&#34;</span>
-    <span style="color:#e6db74">&#34;golang.org/x/net/http2/h2c&#34;</span>
-)
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">h2serv</span> <span style="color:#a6e22e">http2</span>.<span style="color:#a6e22e">Server</span>
-
-    <span style="color:#a6e22e">handler</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
-        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprint</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;HTTP/2 Server Example&#34;</span>)
-    })
-
-    <span style="color:#a6e22e">serv</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{
-        <span style="color:#a6e22e">Addr</span>:    <span style="color:#e6db74">&#34;:9090&#34;</span>,
-        <span style="color:#75715e">// Create a h2c handler to dispatch incoming requests.
-</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">Handler</span>: <span style="color:#a6e22e">h2c</span>.<span style="color:#a6e22e">NewHandler</span>(<span style="color:#a6e22e">handler</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">h2serv</span>),
-    }
-
-    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Start server %s&#34;</span>, <span style="color:#a6e22e">serv</span>.<span style="color:#a6e22e">Addr</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">serv</span>.<span style="color:#a6e22e">ListenAndServe</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ErrServerClosed</span> {
-        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Panicln</span>(<span style="color:#a6e22e">err</span>)
-    }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">package</span> main
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#00f">import</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#a31515">&#34;fmt&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#a31515">&#34;log&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#a31515">&#34;net/http&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#a31515">&#34;golang.org/x/net/http2&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#a31515">&#34;golang.org/x/net/http2/h2c&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#00f">func</span> main() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#00f">var</span> h2serv http2.Server
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    handler := http.HandlerFunc(<span style="color:#00f">func</span>(w http.ResponseWriter, r *http.Request) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        fmt.Fprint(w, <span style="color:#a31515">&#34;HTTP/2 Server Example&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    serv := http.Server{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        Addr:    <span style="color:#a31515">&#34;:9090&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        <span style="color:#008000">// Create a h2c handler to dispatch incoming requests.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#008000"></span>        Handler: h2c.NewHandler(handler, &amp;h2serv),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    log.Printf(<span style="color:#a31515">&#34;Start server %s&#34;</span>, serv.Addr)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    <span style="color:#00f">if</span> err := serv.ListenAndServe(); err != http.ErrServerClosed {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>        log.Panicln(err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>}
 </code></pre></div><p>在網路上可能會看到以下寫法：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">server</span> <span style="color:#a6e22e">http2</span>.<span style="color:#a6e22e">Server</span>
-
-    <span style="color:#a6e22e">l</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Listen</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#e6db74">&#34;localhost:9090&#34;</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
-    }
-
-    <span style="color:#66d9ef">for</span> {
-        <span style="color:#a6e22e">conn</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Accept</span>()
-        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
-        }
-
-        <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">ServeConn</span>(<span style="color:#a6e22e">conn</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http2</span>.<span style="color:#a6e22e">ServeConnOpts</span>{
-            <span style="color:#a6e22e">Handler</span>: <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
-                <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;HTTP/2 Server Example&#34;</span>)
-            }),
-        })
-    }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">func</span> main() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#00f">var</span> server http2.Server
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    l, err := net.Listen(<span style="color:#a31515">&#34;tcp&#34;</span>, <span style="color:#a31515">&#34;localhost:9090&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        log.Fatalln(err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#00f">for</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        conn, err := l.Accept()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>            log.Fatalln(err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        server.ServeConn(conn, &amp;http2.ServeConnOpts{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>            Handler: http.HandlerFunc(<span style="color:#00f">func</span>(w http.ResponseWriter, r *http.Request) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>                fmt.Fprintf(w, <span style="color:#a31515">&#34;HTTP/2 Server Example&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>            }),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>}
 </code></pre></div><p>這種 low-level API <code>l.Accept()</code> Loop，並且直接使用 <code>server.ServeConn</code> 的做法等於省略了 <code>h2cHandler</code>  這層判斷，讓 request 直接進入 HTTP/2 格式處理。建議還是使用 <code>h2c.NewHandler</code> 作法，讓 server handler 比較有彈性。</p>
 <h2 id="h2c-client">H2c Client</h2>
 <p>有了 HTTP/2 server 後，就寫個簡單的 client 來進行測試吧！</p>
 <p>首先，Client 端發出含有 <code>Upgrade:h2c</code> 的 HTTP request 到 server 端，然後確認 response 是否如預期。</p>
 <h3 id="1-建立-upgrade-request">1. 建立 upgrade request</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">MethodGet</span>, <span style="color:#e6db74">&#34;http://localhost:9090&#34;</span>, <span style="color:#66d9ef">nil</span>)
-<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;Upgrade&#34;</span>, <span style="color:#e6db74">&#34;h2c&#34;</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>req, err := http.NewRequest(http.MethodGet, <span style="color:#a31515">&#34;http://localhost:9090&#34;</span>, <span style="color:#00f">nil</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>req.Header.Add(<span style="color:#a31515">&#34;Upgrade&#34;</span>, <span style="color:#a31515">&#34;h2c&#34;</span>)
 </code></pre></div><h3 id="2-加入更多-http2-upgrade-requirement">2. 加入更多 HTTP/2 upgrade requirement</h3>
 <p>光有 <code>Upgrade:h2c</code> 還不夠，還要有 <code>HTTP2-Settings</code> Header Field 以及其內容。</p>
 <blockquote>
 <p>The content of the HTTP2-Settings header field is the payload of a SETTINGS frame, encoded as a base64url string.</p>
 </blockquote>
 <p>HTTP2-Settings 其實就是 HTTP/2 的 SETTINGS frame(<a href="https://httpwg.org/specs/rfc7540.html#SETTINGS">RFC7540 6.5</a>)，其值用來進行溝通期間的參數設定，例如更新 window size 或是 設定 max frame size 等。只不過因為我們起初是發送 HTTP request，所以就將值 encoding 後放入到 <code>HTTP2-Settings</code> header field 中。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">settings</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">byte</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0xa</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0xfa</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">01</span>, <span style="color:#ae81ff">0x40</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>}
-<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">MethodGet</span>, <span style="color:#e6db74">&#34;http://localhost:9000&#34;</span>, <span style="color:#66d9ef">nil</span>)
-<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;Connection&#34;</span>, <span style="color:#e6db74">&#34;HTTP2-Settings&#34;</span>)
-<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;HTTP2-Settings&#34;</span>, <span style="color:#a6e22e">base64</span>.<span style="color:#a6e22e">RawURLEncoding</span>.<span style="color:#a6e22e">EncodeToString</span>(<span style="color:#a6e22e">settings</span>))
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>settings := []<span style="color:#2b91af">byte</span>{0, 5, 0, 0xa, 0, 0, 0, 3, 0, 0, 0, 0xfa, 0, 6, 0, 10, 01, 0x40, 0, 4, 0, 10, 0, 0}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>req, _ := http.NewRequest(http.MethodGet, <span style="color:#a31515">&#34;http://localhost:9000&#34;</span>, <span style="color:#00f">nil</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>req.Header.Add(<span style="color:#a31515">&#34;Connection&#34;</span>, <span style="color:#a31515">&#34;HTTP2-Settings&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>req.Header.Add(<span style="color:#a31515">&#34;HTTP2-Settings&#34;</span>, base64.RawURLEncoding.EncodeToString(settings))
 </code></pre></div><p>簡單說明一下，settings 的內容是由數個 Identifier (16 bit) +  Value (32 bit) 所組成，其格式定義在 <a href="https://httpwg.org/specs/rfc7540.html#SettingFormat">RFC7540 6.5.1 SETTINGS FORMAT</a>。</p>
 <p>舉例來說：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">[]<span style="color:#66d9ef">byte</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0xa</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>}
-<span style="color:#75715e">// big-endian
-</span><span style="color:#75715e">// 0x5 - SETTINGS_MAX_FRAME_SIZE, value - 0xa0000 = 655360
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>[]<span style="color:#2b91af">byte</span>{0, 5, 0, 0xa, 0, 0}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">// big-endian
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000">// 0x5 - SETTINGS_MAX_FRAME_SIZE, value - 0xa0000 = 655360
 </span></code></pre></div><p>最後，為什麼 upgrade request 需要 <code>HTTP2-Settings</code>，在 <a href="https://httpwg.org/specs/rfc7540.html#Http2SettingsHeader">RFC7540 3.2.1</a> 有解答：</p>
 <blockquote>
 <p>Providing these values (HTTP2-Settings) in the upgrade request gives a client an opportunity to provide parameters prior to receiving any frames from the server.</p>
 </blockquote>
 <h3 id="3-send-upgrade-request-and-get-response">3. Send upgrade request and get response</h3>
 <p>Client sample code</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">conn</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Dial</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#e6db74">&#34;localhost:9000&#34;</span>)
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-  <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
-}
-
-<span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">newUpgradeRequest</span>()
-
-<span style="color:#75715e">// send a request
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">conn</span>)
-
-<span style="color:#75715e">// get data from server
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">buf</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufio</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">conn</span>)
-
-<span style="color:#75715e">// convert data to HTTP response format. 
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ReadResponse</span>(<span style="color:#a6e22e">buf</span>, <span style="color:#a6e22e">req</span>)
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
-}
-
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusSwitchingProtocols</span> {
-	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#e6db74">&#34;server does not support h2c&#34;</span>)
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>conn, err := net.Dial(<span style="color:#a31515">&#34;tcp&#34;</span>, <span style="color:#a31515">&#34;localhost:9000&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  log.Fatalln(err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>req := newUpgradeRequest()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000">// send a request
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span>req.Write(conn)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000">// get data from server
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>buf := bufio.NewReader(conn)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#008000">// convert data to HTTP response format. 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#008000"></span>resp, err := http.ReadResponse(buf, req)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>	log.Fatalln(err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#00f">if</span> resp.StatusCode != http.StatusSwitchingProtocols {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>	log.Fatalln(<span style="color:#a31515">&#34;server does not support h2c&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>}
 </code></pre></div><p>為了 re-use <code>net.Conn</code> 以及使用 http2.Client，因此就採用 low level API 的方式來發送 HTTP request。</p>
 <p>我們從 Wireshark 可以看到結果，在正確設置了 upgrade header 後，就會回應 switching protocols response，而這也正是我們所預期的。</p>
 <p>![flow]({{ site.url }}/assets/images/h2c-upgrade-1.png)</p>
 <p>而從 Go server Debug tool 來看 (其實就是在 go run server.go 前面加上<code>GODEBUG=http2debug=2</code>)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#ae81ff">2019</span><span style="color:#f92672">/</span><span style="color:#ae81ff">08</span><span style="color:#f92672">/</span><span style="color:#ae81ff">27</span> <span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">23</span><span style="color:#f92672">:</span><span style="color:#ae81ff">33</span> http2: Framer <span style="color:#ae81ff">0xc0001420e0</span><span style="color:#f92672">:</span> wrote SETTINGS len<span style="color:#f92672">=</span><span style="color:#ae81ff">24</span>, settings: MAX_FRAME_SIZE<span style="color:#f92672">=</span><span style="color:#ae81ff">655360</span>, MAX_CONCURRENT_STREAMS<span style="color:#f92672">=</span><span style="color:#ae81ff">250</span>, MAX_HEADER_LIST_SIZE<span style="color:#f92672">=</span><span style="color:#ae81ff">655680</span>, INITIAL_WINDOW_SIZE<span style="color:#f92672">=</span><span style="color:#ae81ff">655360</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>2019/08/27 15:23:33 http2: Framer 0xc0001420e0: wrote SETTINGS len=24, settings: MAX_FRAME_SIZE=655360, MAX_CONCURRENT_STREAMS=250, MAX_HEADER_LIST_SIZE=655680, INITIAL_WINDOW_SIZE=655360
 </code></pre></div><p>MAX_FRAME_SIZE value 也有正確被 server 讀取，皆大歡喜！</p>
 <p>反之，如果只設置 <code>Upgrade:&quot;h2c&quot;</code> 而沒有設置 <code>HTTP2-Settings</code> 的情況下：</p>
 <p>![flow]({{ site.url }}/assets/images/h2c-upgrade-2.png)</p>
@@ -413,100 +412,100 @@
 <p>Upon receiving the 101 response, the client MUST send a <strong>connection preface</strong> (Section 3.5), which includes a SETTINGS frame.</p>
 </blockquote>
 <p>從 h2c.go source code 也可以看到有這樣的確認機制：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// h2cUpgrade establishes a h2c connection using the HTTP/1 upgrade (Section 3.2).
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">h2cUpgrade</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) (<span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Conn</span>, <span style="color:#66d9ef">error</span>) {
-	
-	<span style="color:#75715e">// more...
-</span><span style="color:#75715e"></span>	
-	<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;HTTP/1.1 101 Switching Protocols\r\n&#34;</span> <span style="color:#f92672">+</span>
-		<span style="color:#e6db74">&#34;Connection: Upgrade\r\n&#34;</span> <span style="color:#f92672">+</span>
-		<span style="color:#e6db74">&#34;Upgrade: h2c\r\n\r\n&#34;</span>))
-	<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Flush</span>()
-
-	<span style="color:#75715e">// A conforming client will now send an H2 client preface which need to drain
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// since we already sent this.
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">drainClientPreface</span>(<span style="color:#a6e22e">rw</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
-	}
-
-	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">rwConn</span>{
-		<span style="color:#a6e22e">Conn</span>:      <span style="color:#a6e22e">conn</span>,
-		<span style="color:#a6e22e">Reader</span>:    <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">MultiReader</span>(<span style="color:#a6e22e">initBytes</span>, <span style="color:#a6e22e">rw</span>),
-		<span style="color:#a6e22e">BufWriter</span>: <span style="color:#a6e22e">newSettingsAckSwallowWriter</span>(<span style="color:#a6e22e">rw</span>.<span style="color:#a6e22e">Writer</span>),
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">c</span>, <span style="color:#66d9ef">nil</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// h2cUpgrade establishes a h2c connection using the HTTP/1 upgrade (Section 3.2).
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span><span style="color:#00f">func</span> h2cUpgrade(w http.ResponseWriter, r *http.Request) (net.Conn, <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	<span style="color:#008000">// more...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000"></span>	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	rw.Write([]byte(<span style="color:#a31515">&#34;HTTP/1.1 101 Switching Protocols\r\n&#34;</span> +
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>		<span style="color:#a31515">&#34;Connection: Upgrade\r\n&#34;</span> +
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>		<span style="color:#a31515">&#34;Upgrade: h2c\r\n\r\n&#34;</span>))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>	rw.Flush()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>	<span style="color:#008000">// A conforming client will now send an H2 client preface which need to drain
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>	<span style="color:#008000">// since we already sent this.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000"></span>	<span style="color:#00f">if</span> err := drainClientPreface(rw); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>		<span style="color:#00f">return</span> <span style="color:#00f">nil</span>, err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>	c := &amp;rwConn{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>		Conn:      conn,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>		Reader:    io.MultiReader(initBytes, rw),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>		BufWriter: newSettingsAckSwallowWriter(rw.Writer),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>	<span style="color:#00f">return</span> c, <span style="color:#00f">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>}
 </code></pre></div><p>如果 client 沒有接著發送 <code>connection preface</code> 那該連線就無法成立。</p>
 <p>因此，我們就繼續實作 client，在收到 101 status code 後，就接著使用 <code>http2.Transport.NewClientConn</code> 來建立 client conn 並發送 client connection preface。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tr</span> <span style="color:#a6e22e">http2</span>.<span style="color:#a6e22e">Transport</span>
-<span style="color:#a6e22e">http2Conn</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tr</span>.<span style="color:#a6e22e">NewClientConn</span>(<span style="color:#a6e22e">conn</span>)
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">var</span> tr http2.Transport
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>http2Conn, err := tr.NewClientConn(conn)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>	log.Fatalln(err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 </code></pre></div><h4 id="http2transportnewclientconn">http2.Transport.NewClientConn</h4>
 <p>client connection preface 在 NewClientConn 階段就會發送給 server 端，從 source code 可以看到相關實作。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Transport</span>) <span style="color:#a6e22e">newClientConn</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Conn</span>, <span style="color:#a6e22e">singleUse</span> <span style="color:#66d9ef">bool</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">ClientConn</span>, <span style="color:#66d9ef">error</span>) {
-	<span style="color:#a6e22e">cc</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ClientConn</span>{
-		<span style="color:#a6e22e">t</span>:                     <span style="color:#a6e22e">t</span>,
-		<span style="color:#a6e22e">tconn</span>:                 <span style="color:#a6e22e">c</span>,
-		<span style="color:#a6e22e">readerDone</span>:            make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}),
-		<span style="color:#a6e22e">nextStreamID</span>:          <span style="color:#ae81ff">1</span>,
-		<span style="color:#a6e22e">maxFrameSize</span>:          <span style="color:#ae81ff">16</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">10</span>,           <span style="color:#75715e">// spec default
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">initialWindowSize</span>:     <span style="color:#ae81ff">65535</span>,              <span style="color:#75715e">// spec default
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">maxConcurrentStreams</span>:  <span style="color:#ae81ff">1000</span>,               <span style="color:#75715e">// &#34;infinite&#34;, per spec. 1000 seems good enough.
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">peerMaxHeaderListSize</span>: <span style="color:#ae81ff">0xffffffffffffffff</span>, <span style="color:#75715e">// &#34;infinite&#34;, per spec. Use 2^64-1 instead.
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">streams</span>:               make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">uint32</span>]<span style="color:#f92672">*</span><span style="color:#a6e22e">clientStream</span>),
-		<span style="color:#a6e22e">singleUse</span>:             <span style="color:#a6e22e">singleUse</span>,
-		<span style="color:#a6e22e">wantSettingsAck</span>:       <span style="color:#66d9ef">true</span>,
-		<span style="color:#a6e22e">pings</span>:                 make(<span style="color:#66d9ef">map</span>[[<span style="color:#ae81ff">8</span>]<span style="color:#66d9ef">byte</span>]<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}),
-	}
-	
-	<span style="color:#75715e">// skip..
-</span><span style="color:#75715e"></span>
-	<span style="color:#75715e">// send the client connection preface
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">bw</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">clientPreface</span>)
-	
-	<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">fr</span>.<span style="color:#a6e22e">WriteSettings</span>(<span style="color:#a6e22e">initialSettings</span><span style="color:#f92672">...</span>)
-	<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">fr</span>.<span style="color:#a6e22e">WriteWindowUpdate</span>(<span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">transportDefaultConnFlow</span>)
-	<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">inflow</span>.<span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">transportDefaultConnFlow</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">initialWindowSize</span>)
-	<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">bw</span>.<span style="color:#a6e22e">Flush</span>()
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">werr</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">werr</span>
-	}
-
-	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">readLoop</span>()
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">cc</span>, <span style="color:#66d9ef">nil</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">func</span> (t *Transport) newClientConn(c net.Conn, singleUse <span style="color:#2b91af">bool</span>) (*ClientConn, <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	cc := &amp;ClientConn{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>		t:                     t,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>		tconn:                 c,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>		readerDone:            make(<span style="color:#00f">chan</span> <span style="color:#00f">struct</span>{}),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>		nextStreamID:          1,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>		maxFrameSize:          16 &lt;&lt; 10,           <span style="color:#008000">// spec default
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000"></span>		initialWindowSize:     65535,              <span style="color:#008000">// spec default
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span>		maxConcurrentStreams:  1000,               <span style="color:#008000">// &#34;infinite&#34;, per spec. 1000 seems good enough.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>		peerMaxHeaderListSize: 0xffffffffffffffff, <span style="color:#008000">// &#34;infinite&#34;, per spec. Use 2^64-1 instead.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000"></span>		streams:               make(<span style="color:#00f">map</span>[<span style="color:#2b91af">uint32</span>]*clientStream),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>		singleUse:             singleUse,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>		wantSettingsAck:       <span style="color:#00f">true</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>		pings:                 make(<span style="color:#00f">map</span>[[8]<span style="color:#2b91af">byte</span>]<span style="color:#00f">chan</span> <span style="color:#00f">struct</span>{}),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>	<span style="color:#008000">// skip..
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>	<span style="color:#008000">// send the client connection preface
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#008000"></span>	cc.bw.Write(clientPreface)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>	cc.fr.WriteSettings(initialSettings...)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>	cc.fr.WriteWindowUpdate(0, transportDefaultConnFlow)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>	cc.inflow.add(transportDefaultConnFlow + initialWindowSize)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>	cc.bw.Flush()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>	<span style="color:#00f">if</span> cc.werr != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>		<span style="color:#00f">return</span> <span style="color:#00f">nil</span>, cc.werr
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>	<span style="color:#00f">go</span> cc.readLoop()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>	<span style="color:#00f">return</span> cc, <span style="color:#00f">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>}
 </code></pre></div><h3 id="5-communicating-communications">5. Communicating communications</h3>
 <p>最後，連線建立完成，可以開始開啟新 stream 並且交換 frames！</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">MethodGet</span>, <span style="color:#e6db74">&#34;http://localhost:9000&#34;</span>, <span style="color:#66d9ef">nil</span>)
-<span style="color:#a6e22e">http2Conn</span>.<span style="color:#a6e22e">RoundTrip</span>(<span style="color:#a6e22e">req</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>req, _ := http.NewRequest(http.MethodGet, <span style="color:#a31515">&#34;http://localhost:9000&#34;</span>, <span style="color:#00f">nil</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>http2Conn.RoundTrip(req)
 </code></pre></div><p>![flow]({{ site.url }}/assets/images/h2c-upgrade-3.png)</p>
 <h2 id="831-補充關於-http2transport">8/31 補充：關於 http2.Transport</h2>
 <p>在整合 demo code 成為一個完整的 h2c-client 時，發現一個連線 bug。</p>
 <p>當 client 發送一個包含 HTTP/2 upgrade 的 HTTP request 時， server 在接收到後，會將其格式轉成 HTTP/2 ，並在後續建立起 HTTP/2 連線時，會把這個資訊放入 buffer 中。HTTP/2 連線建立成功， server 發送完初始 SETTINGS frames 後，就會緊接著將這個 request 處理完並且將 response 回應給 client 端。</p>
 <p>此時，這個 response 的 stream ID 為 <code>0x1</code> (<a href="https://httpwg.org/specs/rfc7540.html#StreamIdentifiers">RFC 7540 5.1.1</a>)，但是 client 端在接收到 response 後卻會顯示 error， error 內容為收到未預期的 stream ID ，並強制關閉 connection。</p>
 <p>查看了一下 client transport source code，發現 transport 在接收 DATA frame 時會檢查 stream ID 是否超出 request 的 stream ID。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">rl</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">clientConnReadLoop</span>) <span style="color:#a6e22e">processData</span>(<span style="color:#a6e22e">f</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">DataFrame</span>) <span style="color:#66d9ef">error</span> {
-	<span style="color:#a6e22e">neverSent</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">nextStreamID</span>
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">StreamID</span> <span style="color:#f92672">&gt;=</span> <span style="color:#a6e22e">neverSent</span> {
-		<span style="color:#75715e">// We never asked for this.
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">logf</span>(<span style="color:#e6db74">&#34;http2: Transport received unsolicited DATA frame; closing connection&#34;</span>)
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ConnectionError</span>(<span style="color:#a6e22e">ErrCodeProtocol</span>)
-	}
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">func</span> (rl *clientConnReadLoop) processData(f *DataFrame) <span style="color:#2b91af">error</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	neverSent := cc.nextStreamID
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	<span style="color:#00f">if</span> f.StreamID &gt;= neverSent {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>		<span style="color:#008000">// We never asked for this.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000"></span>		cc.logf(<span style="color:#a31515">&#34;http2: Transport received unsolicited DATA frame; closing connection&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>		<span style="color:#00f">return</span> ConnectionError(ErrCodeProtocol)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
 </code></pre></div><p>看的出來是 <code>nextStreamID</code> 的問題。這時候回去看 <code>newClientConn</code> source code，會看到 <code>nextStreamID</code> 會被初始化成 <code>1</code>，而此時因為 client 端在 HTTP/2 連線建立成功後，還沒有發送任何 request，因此 <code>nextStreamID</code> 維持 1，進而造成這樣的錯誤回報。</p>
 <p>那麼要如何避免這樣的錯誤發生呢？</p>
 <p>一個蠻 tricky 的做法，就是:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">tr</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http2</span>.<span style="color:#a6e22e">Transport</span>{<span style="color:#a6e22e">AllowHTTP</span>: <span style="color:#66d9ef">true</span>}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>tr := &amp;http2.Transport{AllowHTTP: <span style="color:#00f">true</span>}
 </code></pre></div><p>把 Transport 的 AllowHTTP 設定為 true。雖然根據官方 source code 的說法：</p>
 <blockquote>
 <p>AllowHTTP, if true, permits HTTP/2 requests using the insecure, plain-text &ldquo;http&rdquo; scheme. Note that this does not enable h2c support.</p>
 </blockquote>
 <p>看起來好像跟問題沒有什麼太大關係，不過這樣的設定會更動到 <code>nextStreamID</code> 的值。一樣是在 <code>newClientConn</code> method：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">AllowHTTP</span> {
-	<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">nextStreamID</span> = <span style="color:#ae81ff">3</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">if</span> t.AllowHTTP {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	cc.nextStreamID = 3
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
 </code></pre></div><p>因為 nextStreamID 初始值變成 3 了，所以當接收到 response 的 stream ID 為 1 時，判斷就會是正常結果，避免掉上述的問題。</p>
 <p>老實說，把 nextStreamID 設置為 3，對我來說是一個蠻 magic number 的行為，code 裡面也沒有解釋為什麼是 3 而不是 4,5,6,7 &hellip; ，不過既然可以解決了，就這樣吧 XD 畢竟 Go 本來的 HTTP2 package 本來就是預設 TLS 行為，這個錯誤只會發生在使用 HTTP/1.1 upgrade 後而已。</p>
 <h2 id="sample-codes">Sample Codes</h2>
@@ -530,12 +529,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -577,17 +576,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

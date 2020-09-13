@@ -28,12 +28,11 @@
   <title>grpc-go source code trace - gRPC client 與 server 建立連線過程 - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="grpc-go source code trace - gRPC client 與 server 建立連線過程" />
 <meta property="og:description" content="前言 其實一開始的目的是想要研究 gRPC 的 retry 機制，不過在了解 retry 之前勢必要先說明整個 gRPC client 與 server 建立連線的過程，因此就先用 source code trace 的方式簡單說明在呼叫 grpc." />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言 其實一開始的目的是想要研究 gRPC 的 retry 機制，不過在了解 retry 之前勢必要先說明整個 gRPC client 與 server 建立連線的過程，因此就先用 source code trace 的方式簡單說明在呼叫 grpc.">
 <meta itemprop="datePublished" content="2019-04-05T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-05T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="913">
+<meta itemprop="wordCount" content="1084">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -259,68 +258,68 @@
 <p>grpc-go v1.19.1</p>
 <h2 id="grpcdial-的背後">grpc.Dial 的背後</h2>
 <p>以下是 client 向 server 連線的基本方式。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">conn</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">grpc</span>.<span style="color:#a6e22e">Dial</span>(<span style="color:#a6e22e">serverIpAddress</span>, <span style="color:#a6e22e">grpc</span>.<span style="color:#a6e22e">WithInsecure</span>())
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Dial</span>(<span style="color:#a6e22e">target</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">opts</span> <span style="color:#f92672">...</span><span style="color:#a6e22e">DialOption</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">ClientConn</span>, <span style="color:#66d9ef">error</span>) {
-  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">DialContext</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(), <span style="color:#a6e22e">target</span>, <span style="color:#a6e22e">opts</span><span style="color:#f92672">...</span>)
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>conn, err := grpc.Dial(serverIpAddress, grpc.WithInsecure())
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">func</span> Dial(target <span style="color:#2b91af">string</span>, opts ...DialOption) (*ClientConn, <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  <span style="color:#00f">return</span> DialContext(context.Background(), target, opts...)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 </code></pre></div><p>首先， Client 需要透過 <strong>Name Resolver</strong> 解析 Dial 中的 <code>target string</code> 來取得 Server 正確的 IP Addresses 和 port，以利後續建立 connection。例如使用 DNS Name Resolver，就可以透過 <code>conn, err := grpc.Dial(&quot;dns:///your.target.name:8888&quot;)</code> 這種 Domain name 的方式來發送 RPCs。</p>
 <p>關於 Name Resolution 部分可以參閱 <a href="https://github.com/grpc/grpc/blob/master/doc/naming.md">官方文件</a> 說明。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Notice: 部分 source code 被移除
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">DialContext</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">target</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">opts</span> <span style="color:#f92672">...</span><span style="color:#a6e22e">DialOption</span>) (<span style="color:#a6e22e">conn</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ClientConn</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
-  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">dopts</span>.<span style="color:#a6e22e">resolverBuilder</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
-	  <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">parsedTarget</span> = <span style="color:#a6e22e">parseTarget</span>(<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">target</span>)
-	  <span style="color:#a6e22e">grpclog</span>.<span style="color:#a6e22e">Infof</span>(<span style="color:#e6db74">&#34;parsed scheme: %q&#34;</span>, <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">parsedTarget</span>.<span style="color:#a6e22e">Scheme</span>)
-	  <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">dopts</span>.<span style="color:#a6e22e">resolverBuilder</span> = <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">parsedTarget</span>.<span style="color:#a6e22e">Scheme</span>)
-	  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">dopts</span>.<span style="color:#a6e22e">resolverBuilder</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
-		  <span style="color:#75715e">// If resolver builder is still nil, the parsed target&#39;s scheme is
-</span><span style="color:#75715e"></span>		  <span style="color:#75715e">// not registered. Fallback to default resolver and set Endpoint to
-</span><span style="color:#75715e"></span>		  <span style="color:#75715e">// the original target.
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">grpclog</span>.<span style="color:#a6e22e">Infof</span>(<span style="color:#e6db74">&#34;scheme %q not registered, fallback to default scheme&#34;</span>, <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">parsedTarget</span>.<span style="color:#a6e22e">Scheme</span>)
-			<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">parsedTarget</span> = <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">Target</span>{
-				<span style="color:#a6e22e">Scheme</span>:   <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">GetDefaultScheme</span>(),
-				<span style="color:#a6e22e">Endpoint</span>: <span style="color:#a6e22e">target</span>,
-			}
-			<span style="color:#75715e">// Default use passthrough resolver builder (passthrough.go)
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">dopts</span>.<span style="color:#a6e22e">resolverBuilder</span> = <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">parsedTarget</span>.<span style="color:#a6e22e">Scheme</span>)
-		}
-	}
-	
-	<span style="color:#a6e22e">rWrapper</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">newCCResolverWrapper</span>(<span style="color:#a6e22e">cc</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;failed to build resolver: %v&#34;</span>, <span style="color:#a6e22e">err</span>)
-	}
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// Notice: 部分 source code 被移除
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span><span style="color:#00f">func</span> DialContext(ctx context.Context, target <span style="color:#2b91af">string</span>, opts ...DialOption) (conn *ClientConn, err <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#00f">if</span> cc.dopts.resolverBuilder == <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	  cc.parsedTarget = parseTarget(cc.target)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>	  grpclog.Infof(<span style="color:#a31515">&#34;parsed scheme: %q&#34;</span>, cc.parsedTarget.Scheme)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	  cc.dopts.resolverBuilder = resolver.Get(cc.parsedTarget.Scheme)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	  <span style="color:#00f">if</span> cc.dopts.resolverBuilder == <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>		  <span style="color:#008000">// If resolver builder is still nil, the parsed target&#39;s scheme is
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span>		  <span style="color:#008000">// not registered. Fallback to default resolver and set Endpoint to
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>		  <span style="color:#008000">// the original target.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000"></span>			grpclog.Infof(<span style="color:#a31515">&#34;scheme %q not registered, fallback to default scheme&#34;</span>, cc.parsedTarget.Scheme)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>			cc.parsedTarget = resolver.Target{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>				Scheme:   resolver.GetDefaultScheme(),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>				Endpoint: target,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>			<span style="color:#008000">// Default use passthrough resolver builder (passthrough.go)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#008000"></span>			cc.dopts.resolverBuilder = resolver.Get(cc.parsedTarget.Scheme)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>	rWrapper, err := newCCResolverWrapper(cc)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>	<span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>		<span style="color:#00f">return</span> <span style="color:#00f">nil</span>, fmt.Errorf(<span style="color:#a31515">&#34;failed to build resolver: %v&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>}
 </code></pre></div><p><code>Resolver</code> 是一個 interface，使用者可以根據需求來註冊不同實作的 resolver，例如 <code>etcd-io/etcd</code> 。而在沒有指定 resolver 情況下（我們可以使用 URI scheme 來選擇特定 resolver， e.g. <code>etcd://</code> ）， grpc-go 會使用預設 <code>passthrough resolver</code> 去解析名稱。(passthrough 其實就是很單純地把 target 再返回來，因此僅適用於簡單應用或是測試。另外在 gRPC 文件中有提到，預設是使用 DNS，不過 grpc-go 卻是用 passthrough)。</p>
 <p>想參考第三方實作 resolver ，可參見 <a href="https://github.com/etcd-io/etcd/blob/master/clientv3/balancer/resolver/endpoint/endpoint.go">etcd clientv3 resolver</a></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">newCCResolverWrapper</span>(<span style="color:#a6e22e">cc</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ClientConn</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">ccResolverWrapper</span>, <span style="color:#66d9ef">error</span>) {
-  <span style="color:#a6e22e">ccr</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ccResolverWrapper</span>{
-    <span style="color:#a6e22e">cc</span>:     <span style="color:#a6e22e">cc</span>,
-    <span style="color:#a6e22e">addrCh</span>: make(<span style="color:#66d9ef">chan</span> []<span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">Address</span>, <span style="color:#ae81ff">1</span>),
-    <span style="color:#a6e22e">scCh</span>:   make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>, <span style="color:#ae81ff">1</span>),
-  }
-  <span style="color:#75715e">// Create a resolver from resolver builder
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">ccr</span>.<span style="color:#a6e22e">resolver</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">rb</span>.<span style="color:#a6e22e">Build</span>(<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">parsedTarget</span>, <span style="color:#a6e22e">ccr</span>, <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">BuildOption</span>{<span style="color:#a6e22e">DisableServiceConfig</span>: <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">dopts</span>.<span style="color:#a6e22e">disableServiceConfig</span>})
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">func</span> newCCResolverWrapper(cc *ClientConn) (*ccResolverWrapper, <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  ccr := &amp;ccResolverWrapper{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    cc:     cc,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    addrCh: make(<span style="color:#00f">chan</span> []resolver.Address, 1),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    scCh:   make(<span style="color:#00f">chan</span> <span style="color:#2b91af">string</span>, 1),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  <span style="color:#008000">// Create a resolver from resolver builder
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#008000"></span>  ccr.resolver, err = rb.Build(cc.parsedTarget, ccr, resolver.BuildOption{DisableServiceConfig: cc.dopts.disableServiceConfig})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>}
 </code></pre></div><p>以下以 default 的 passthrough resolver 來說明接下去的流程。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Default use passthrough Builder.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#f92672">*</span><span style="color:#a6e22e">passthroughBuilder</span>) <span style="color:#a6e22e">Build</span>(<span style="color:#a6e22e">target</span> <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">Target</span>, <span style="color:#a6e22e">cc</span> <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">ClientConn</span>, <span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">BuildOption</span>) (<span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">Resolver</span>, <span style="color:#66d9ef">error</span>) {
-  <span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">passthroughResolver</span>{
-		<span style="color:#a6e22e">target</span>: <span style="color:#a6e22e">target</span>,
-		<span style="color:#a6e22e">cc</span>:     <span style="color:#a6e22e">cc</span>,
-	}
-	<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">start</span>()
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">passthroughResolver</span>) <span style="color:#a6e22e">start</span>() {
-  <span style="color:#75715e">// 直接返回使用者輸入的 target
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">UpdateState</span>(<span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">State</span>{<span style="color:#a6e22e">Addresses</span>: []<span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">Address</span>{{<span style="color:#a6e22e">Addr</span>: <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">Endpoint</span>}}})
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">ccr</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ccResolverWrapper</span>) <span style="color:#a6e22e">UpdateState</span>(<span style="color:#a6e22e">s</span> <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">State</span>) {
-  <span style="color:#75715e">// 透過 wrapper 通知 ClientConn 更新 State
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">ccr</span>.<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">updateResolverState</span>(<span style="color:#a6e22e">s</span>)
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// Default use passthrough Builder.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span><span style="color:#00f">func</span> (*passthroughBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOption) (resolver.Resolver, <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  r := &amp;passthroughResolver{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>		target: target,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>		cc:     cc,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	r.start()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#00f">func</span> (r *passthroughResolver) start() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#008000">// 直接返回使用者輸入的 target
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>	r.cc.UpdateState(resolver.State{Addresses: []resolver.Address{{Addr: r.target.Endpoint}}})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#00f">func</span> (ccr *ccResolverWrapper) UpdateState(s resolver.State) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  <span style="color:#008000">// 透過 wrapper 通知 ClientConn 更新 State
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#008000"></span>  ccr.cc.updateResolverState(s)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>}
 </code></pre></div><p>當 Name Resolver 解析完 target 之後，會透過 balancer wrapper 產生的 watcher 通知 <code>Balancer</code> 最新的 Addresses。</p>
 <p>![gRPC-Dial-1.png]({{ site.url }}/assets/images/gRPC-Dial-1.png)</p>
 <p><strong>Balancer</strong> 是 gRPC 實現 load-balacing 要角，它最主要負責 Handle connection 和 addresses 的狀態變化（例如當 Addresses 更新時則更新連線），以及在後續 transport 階段決定該選擇哪個 server connection(又稱為 balancer policy)。 gRPC Load Balance 採用 <a href="https://github.com/grpc/grpc/blob/master/doc/load-balancing.md#external-load-balancing-service">External Load Balancing Service</a>，讓使用者可以選擇其他實作的 Balancer。</p>
@@ -330,162 +329,162 @@
 <blockquote>
 <p><strong>SubConn</strong> represents a gRPC sub connection. Each sub connection contains a list of addresses. gRPC will try to connect to them (in sequence), and stop trying the remainder once one connection is successful.</p>
 </blockquote>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">cc</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ClientConn</span>) <span style="color:#a6e22e">updateResolverState</span>(<span style="color:#a6e22e">s</span> <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">State</span>) <span style="color:#66d9ef">error</span> {
-  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">dopts</span>.<span style="color:#a6e22e">balancerBuilder</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isGRPCLB</span> {
-			<span style="color:#a6e22e">newBalancerName</span> = <span style="color:#a6e22e">grpclbName</span>
-		} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">sc</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">sc</span>.<span style="color:#a6e22e">LB</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#a6e22e">newBalancerName</span> = <span style="color:#f92672">*</span><span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">sc</span>.<span style="color:#a6e22e">LB</span>
-		} <span style="color:#66d9ef">else</span> {
-		  <span style="color:#75715e">// Default use pick first balancer(pick_first.go)
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">newBalancerName</span> = <span style="color:#a6e22e">PickFirstBalancerName</span>
-		}
-		<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">switchBalancer</span>(<span style="color:#a6e22e">newBalancerName</span>)
-  }
-  <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">balancerWrapper</span>.<span style="color:#a6e22e">updateResolverState</span>(<span style="color:#a6e22e">s</span>)
-}
-
-<span style="color:#75715e">// Use resolverUpdateCh to pass resolved Addresses to Balancer
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">ccb</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ccBalancerWrapper</span>) <span style="color:#a6e22e">updateResolverState</span>(<span style="color:#a6e22e">s</span> <span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">State</span>) {
-  <span style="color:#a6e22e">ccb</span>.<span style="color:#a6e22e">resolverUpdateCh</span> <span style="color:#f92672">&lt;-</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s</span>
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">cc</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ClientConn</span>) <span style="color:#a6e22e">switchBalancer</span>(<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>) {
-  <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">balancerWrapper</span> = <span style="color:#a6e22e">newCCBalancerWrapper</span>(<span style="color:#a6e22e">cc</span>, <span style="color:#a6e22e">builder</span>, <span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">balancerBuildOpts</span>)
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">newCCBalancerWrapper</span>(<span style="color:#a6e22e">cc</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ClientConn</span>, <span style="color:#a6e22e">b</span> <span style="color:#a6e22e">balancer</span>.<span style="color:#a6e22e">Builder</span>, <span style="color:#a6e22e">bopts</span> <span style="color:#a6e22e">balancer</span>.<span style="color:#a6e22e">BuildOptions</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">ccBalancerWrapper</span> {
-  <span style="color:#a6e22e">ccb</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ccBalancerWrapper</span>{
-		<span style="color:#a6e22e">cc</span>:               <span style="color:#a6e22e">cc</span>,
-		<span style="color:#a6e22e">stateChangeQueue</span>: <span style="color:#a6e22e">newSCStateUpdateBuffer</span>(),
-		<span style="color:#a6e22e">resolverUpdateCh</span>: make(<span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">State</span>, <span style="color:#ae81ff">1</span>),
-		<span style="color:#a6e22e">done</span>:             make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}),
-		<span style="color:#a6e22e">subConns</span>:         make(<span style="color:#66d9ef">map</span>[<span style="color:#f92672">*</span><span style="color:#a6e22e">acBalancerWrapper</span>]<span style="color:#66d9ef">struct</span>{}),
-	}
-	<span style="color:#75715e">// Create a watcher for name resolved events.
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">ccb</span>.<span style="color:#a6e22e">watcher</span>() 
-	<span style="color:#a6e22e">ccb</span>.<span style="color:#a6e22e">balancer</span> = <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Build</span>(<span style="color:#a6e22e">ccb</span>, <span style="color:#a6e22e">bopts</span>)
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ccb</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">func</span> (cc *ClientConn) updateResolverState(s resolver.State) <span style="color:#2b91af">error</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#00f">if</span> cc.dopts.balancerBuilder == <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#00f">if</span> isGRPCLB {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>			newBalancerName = grpclbName
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>		} <span style="color:#00f">else</span> <span style="color:#00f">if</span> cc.sc != <span style="color:#00f">nil</span> &amp;&amp; cc.sc.LB != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>			newBalancerName = *cc.sc.LB
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>		} <span style="color:#00f">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>		  <span style="color:#008000">// Default use pick first balancer(pick_first.go)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span>			newBalancerName = PickFirstBalancerName
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>		cc.switchBalancer(newBalancerName)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  cc.balancerWrapper.updateResolverState(s)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#008000">// Use resolverUpdateCh to pass resolved Addresses to Balancer
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#008000"></span><span style="color:#00f">func</span> (ccb *ccBalancerWrapper) updateResolverState(s resolver.State) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  ccb.resolverUpdateCh &lt;- &amp;s
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#00f">func</span> (cc *ClientConn) switchBalancer(name <span style="color:#2b91af">string</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  cc.balancerWrapper = newCCBalancerWrapper(cc, builder, cc.balancerBuildOpts)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#00f">func</span> newCCBalancerWrapper(cc *ClientConn, b balancer.Builder, bopts balancer.BuildOptions) *ccBalancerWrapper {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  ccb := &amp;ccBalancerWrapper{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>		cc:               cc,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>		stateChangeQueue: newSCStateUpdateBuffer(),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>		resolverUpdateCh: make(<span style="color:#00f">chan</span> *resolver.State, 1),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>		done:             make(<span style="color:#00f">chan</span> <span style="color:#00f">struct</span>{}),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>		subConns:         make(<span style="color:#00f">map</span>[*acBalancerWrapper]<span style="color:#00f">struct</span>{}),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>	<span style="color:#008000">// Create a watcher for name resolved events.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#008000"></span>	<span style="color:#00f">go</span> ccb.watcher() 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>	ccb.balancer = b.Build(ccb, bopts)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>	<span style="color:#00f">return</span> ccb
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>}
 </code></pre></div><p>以下擷取 watcher 接收 resolver Update 的後續處理：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// watcher balancer functions sequentially, so the balancer can be implemented
-</span><span style="color:#75715e">// lock-free.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">ccb</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ccBalancerWrapper</span>) <span style="color:#a6e22e">watcher</span>() {
-  <span style="color:#66d9ef">for</span> {
-		<span style="color:#66d9ef">select</span> {
-		<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ccb</span>.<span style="color:#a6e22e">resolverUpdateCh</span>:
-			<span style="color:#66d9ef">select</span> {
-			<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ccb</span>.<span style="color:#a6e22e">done</span>:
-				<span style="color:#a6e22e">ccb</span>.<span style="color:#a6e22e">balancer</span>.<span style="color:#a6e22e">Close</span>()
-				<span style="color:#66d9ef">return</span>
-			<span style="color:#66d9ef">default</span>:
-			}
-			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ub</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ccb</span>.<span style="color:#a6e22e">balancer</span>.(<span style="color:#a6e22e">balancer</span>.<span style="color:#a6e22e">V2Balancer</span>); <span style="color:#a6e22e">ok</span> {
-				<span style="color:#a6e22e">ub</span>.<span style="color:#a6e22e">UpdateResolverState</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">s</span>)
-			} <span style="color:#66d9ef">else</span> {
-				<span style="color:#a6e22e">ccb</span>.<span style="color:#a6e22e">balancer</span>.<span style="color:#a6e22e">HandleResolvedAddrs</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Addresses</span>, <span style="color:#66d9ef">nil</span>)
-			}
-		}
-	}
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// watcher balancer functions sequentially, so the balancer can be implemented
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000">// lock-free.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000"></span><span style="color:#00f">func</span> (ccb *ccBalancerWrapper) watcher() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#00f">for</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>		<span style="color:#00f">select</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>		<span style="color:#00f">case</span> s := &lt;-ccb.resolverUpdateCh:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>			<span style="color:#00f">select</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>			<span style="color:#00f">case</span> &lt;-ccb.done:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>				ccb.balancer.Close()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>				<span style="color:#00f">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>			<span style="color:#00f">default</span>:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>			<span style="color:#00f">if</span> ub, ok := ccb.balancer.(balancer.V2Balancer); ok {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>				ub.UpdateResolverState(*s)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>			} <span style="color:#00f">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>				ccb.balancer.HandleResolvedAddrs(s.Addresses, <span style="color:#00f">nil</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>}
 </code></pre></div><p>這邊以簡單地 pick first balancer 為例，觀察 Balancer Handle resolved addresses 實際行為。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">pickfirstBalancer</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">cc</span> <span style="color:#a6e22e">balancer</span>.<span style="color:#a6e22e">ClientConn</span>
-	<span style="color:#a6e22e">sc</span> <span style="color:#a6e22e">balancer</span>.<span style="color:#a6e22e">SubConn</span>
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pickfirstBalancer</span>) <span style="color:#a6e22e">HandleResolvedAddrs</span>(<span style="color:#a6e22e">addrs</span> []<span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">Address</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#a6e22e">grpclog</span>.<span style="color:#a6e22e">Infof</span>(<span style="color:#e6db74">&#34;pickfirstBalancer: HandleResolvedAddrs called with error %v&#34;</span>, <span style="color:#a6e22e">err</span>)
-		<span style="color:#66d9ef">return</span>
-	}
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">sc</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">sc</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">NewSubConn</span>(<span style="color:#a6e22e">addrs</span>, <span style="color:#a6e22e">balancer</span>.<span style="color:#a6e22e">NewSubConnOptions</span>{})
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#a6e22e">grpclog</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;pickfirstBalancer: failed to NewSubConn: %v&#34;</span>, <span style="color:#a6e22e">err</span>)
-			<span style="color:#66d9ef">return</span>
-		}
-		<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">UpdateBalancerState</span>(<span style="color:#a6e22e">connectivity</span>.<span style="color:#a6e22e">Idle</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">picker</span>{<span style="color:#a6e22e">sc</span>: <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">sc</span>})
-		<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">sc</span>.<span style="color:#a6e22e">Connect</span>() <span style="color:#75715e">// Connect to server (b.sc is balancer_conn_wrapper)
-</span><span style="color:#75715e"></span>	} <span style="color:#66d9ef">else</span> {
-		<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">sc</span>.<span style="color:#a6e22e">UpdateAddresses</span>(<span style="color:#a6e22e">addrs</span>)
-		<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">sc</span>.<span style="color:#a6e22e">Connect</span>()
-	}
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">type</span> pickfirstBalancer <span style="color:#00f">struct</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	cc balancer.ClientConn
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>	sc balancer.SubConn
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#00f">func</span> (b *pickfirstBalancer) HandleResolvedAddrs(addrs []resolver.Address, err <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	<span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>		grpclog.Infof(<span style="color:#a31515">&#34;pickfirstBalancer: HandleResolvedAddrs called with error %v&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>		<span style="color:#00f">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>	<span style="color:#00f">if</span> b.sc == <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>		b.sc, err = b.cc.NewSubConn(addrs, balancer.NewSubConnOptions{})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>		<span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>			grpclog.Errorf(<span style="color:#a31515">&#34;pickfirstBalancer: failed to NewSubConn: %v&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>			<span style="color:#00f">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>		b.cc.UpdateBalancerState(connectivity.Idle, &amp;picker{sc: b.sc})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>		b.sc.Connect() <span style="color:#008000">// Connect to server (b.sc is balancer_conn_wrapper)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#008000"></span>	} <span style="color:#00f">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>		b.sc.UpdateAddresses(addrs)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>		b.sc.Connect()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>}
 </code></pre></div><p>上面可以看到如果沒有 subConn ，則會透過 <code>balancer_conn_wrapper</code> 通知 ClientConn 新建一條 SubConn，接著觸發 Connnect。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">ac</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">addrConn</span>) <span style="color:#a6e22e">connect</span>() <span style="color:#66d9ef">error</span> {
-  <span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">updateConnectivityState</span>(<span style="color:#a6e22e">connectivity</span>.<span style="color:#a6e22e">Connecting</span>)
-	<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
-
-	<span style="color:#75715e">// Start a goroutine connecting to the server asynchronously.
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">resetTransport</span>()
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">func</span> (ac *addrConn) connect() <span style="color:#2b91af">error</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  ac.updateConnectivityState(connectivity.Connecting)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	ac.mu.Unlock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>	<span style="color:#008000">// Start a goroutine connecting to the server asynchronously.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000"></span>	<span style="color:#00f">go</span> ac.resetTransport()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
 </code></pre></div><p>此時就會另起 goroutine 來正式與 Server 建立連線。
 ![gRPC-Dial-2.png]({{ site.url }}/assets/images/gRPC-Dial-2.png)</p>
 <p><code>resetTransport</code> 是一個無限循環的迴圈，意味著如果 Server 端異常導致 disconnect 時，client 端會重新嘗試連線，直到連線成功或是 <code>connectivity.Shutdown</code> 為止。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">ac</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">addrConn</span>) <span style="color:#a6e22e">resetTransport</span>() {
-  <span style="color:#75715e">// Reconnect forever
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; ; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &gt; <span style="color:#ae81ff">0</span> {
-			<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">cc</span>.<span style="color:#a6e22e">resolveNow</span>(<span style="color:#a6e22e">resolver</span>.<span style="color:#a6e22e">ResolveNowOption</span>{})
-		}
-
-		<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">state</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">connectivity</span>.<span style="color:#a6e22e">Shutdown</span> {
-			<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
-			<span style="color:#66d9ef">return</span>
-		}
-
-		<span style="color:#a6e22e">newTr</span>, <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">reconnect</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">tryAllAddrs</span>(<span style="color:#a6e22e">addrs</span>, <span style="color:#a6e22e">connectDeadline</span>)
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
-			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">state</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">connectivity</span>.<span style="color:#a6e22e">Shutdown</span> {
-				<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
-				<span style="color:#66d9ef">return</span>
-			}
-			<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">updateConnectivityState</span>(<span style="color:#a6e22e">connectivity</span>.<span style="color:#a6e22e">TransientFailure</span>)
-
-			<span style="color:#75715e">// Backoff.
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">resetBackoff</span>
-			<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
-
-      <span style="color:#75715e">// wait and reconnect
-</span><span style="color:#75715e"></span>		  <span style="color:#a6e22e">timer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTimer</span>(<span style="color:#a6e22e">backoffFor</span>)
-			<span style="color:#66d9ef">select</span> {
-			<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">timer</span>.<span style="color:#a6e22e">C</span>:
-				<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
-				<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">backoffIdx</span><span style="color:#f92672">++</span>
-				<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
-			<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">b</span>:
-				<span style="color:#a6e22e">timer</span>.<span style="color:#a6e22e">Stop</span>()
-			<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Done</span>():
-				<span style="color:#a6e22e">timer</span>.<span style="color:#a6e22e">Stop</span>()
-				<span style="color:#66d9ef">return</span>
-			}
-			<span style="color:#66d9ef">continue</span>
-		}
-
-		<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">state</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">connectivity</span>.<span style="color:#a6e22e">Shutdown</span> {
-			<span style="color:#a6e22e">newTr</span>.<span style="color:#a6e22e">Close</span>()
-			<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
-			<span style="color:#66d9ef">return</span>
-		}
-		<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">curAddr</span> = <span style="color:#a6e22e">addr</span>
-		<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">transport</span> = <span style="color:#a6e22e">newTr</span>
-		<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">backoffIdx</span> = <span style="color:#ae81ff">0</span>
-
-    <span style="color:#75715e">// A connection with Ready state can be picked
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">healthcheckManagingState</span> {
-			<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">updateConnectivityState</span>(<span style="color:#a6e22e">connectivity</span>.<span style="color:#a6e22e">Ready</span>)
-		}
-		<span style="color:#a6e22e">ac</span>.<span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
-		
-		<span style="color:#75715e">// Block until the created transport is down. And when this happens,
-</span><span style="color:#75715e"></span>		<span style="color:#75715e">// we restart from the top of the addr list.
-</span><span style="color:#75715e"></span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">reconnect</span>.<span style="color:#a6e22e">Done</span>()
-		<span style="color:#a6e22e">hcancel</span>()
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">func</span> (ac *addrConn) resetTransport() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#008000">// Reconnect forever
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000"></span>	<span style="color:#00f">for</span> i := 0; ; i++ {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>		<span style="color:#00f">if</span> i &gt; 0 {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>			ac.cc.resolveNow(resolver.ResolveNowOption{})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>		ac.mu.Lock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>		<span style="color:#00f">if</span> ac.state == connectivity.Shutdown {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>			ac.mu.Unlock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>			<span style="color:#00f">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>		newTr, addr, reconnect, err := ac.tryAllAddrs(addrs, connectDeadline)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>		<span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>			ac.mu.Lock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>			<span style="color:#00f">if</span> ac.state == connectivity.Shutdown {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>				ac.mu.Unlock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>				<span style="color:#00f">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>			ac.updateConnectivityState(connectivity.TransientFailure)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>			<span style="color:#008000">// Backoff.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#008000"></span>			b := ac.resetBackoff
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>			ac.mu.Unlock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>      <span style="color:#008000">// wait and reconnect
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#008000"></span>		  timer := time.NewTimer(backoffFor)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>			<span style="color:#00f">select</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>			<span style="color:#00f">case</span> &lt;-timer.C:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>				ac.mu.Lock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>				ac.backoffIdx++
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>				ac.mu.Unlock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>			<span style="color:#00f">case</span> &lt;-b:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>				timer.Stop()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>			<span style="color:#00f">case</span> &lt;-ac.ctx.Done():
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>				timer.Stop()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>				<span style="color:#00f">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>			<span style="color:#00f">continue</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>		ac.mu.Lock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>		<span style="color:#00f">if</span> ac.state == connectivity.Shutdown {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>			newTr.Close()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>			ac.mu.Unlock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>			<span style="color:#00f">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>		ac.curAddr = addr
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>		ac.transport = newTr
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>		ac.backoffIdx = 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>    <span style="color:#008000">// A connection with Ready state can be picked
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span style="color:#008000"></span>    <span style="color:#00f">if</span> !healthcheckManagingState {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>			ac.updateConnectivityState(connectivity.Ready)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>		ac.mu.Unlock()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>		
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>		<span style="color:#008000">// Block until the created transport is down. And when this happens,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span style="color:#008000"></span>		<span style="color:#008000">// we restart from the top of the addr list.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span><span style="color:#008000"></span>		&lt;-reconnect.Done()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>		hcancel()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span>}
 </code></pre></div><p>如果在一開始的 <code>grpc.Dial</code> 額外設置 <code>grpc.WithBlock</code>，則會等到確認 <code>connectivity.Ready</code> 後才會返回。不然在預設狀態下是 non-blocking ，讓 Client 在等待連線成功之餘可以做更多事情。</p>
 <p>最後可以透過實驗來觀察 gRPC log，對流程有更深刻的了解。只要加入 environment variable
 <code>GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info</code></p>
@@ -511,12 +510,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -558,17 +557,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

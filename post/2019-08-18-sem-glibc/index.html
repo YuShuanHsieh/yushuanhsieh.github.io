@@ -28,12 +28,11 @@
   <title>semaphore sem_post 在 glibc v2.0 v2.1 之比較 - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="semaphore sem_post 在 glibc v2.0 v2.1 之比較" />
 <meta property="og:description" content="前言 在翻 futex man document 的時候，不小心看到 Linux Futex的设计与实现 這篇文章。文章中有提到在執行 sem_post 的時候，雖然沒有與其他 thread 競爭，還是會用到 fuxtex system call。當然文章中有提到原因，不過看了原因，覺得這看起來很明顯的效能問題，應該會被提出來並改進吧？後來翻了一下目前的 source code ，看到這個是 GLIBC_2_0 的版本（那篇文章也很久了，所以能想見當時的版本應該蠻舊的），而現在 GLIBC_2_1 就有把這部分改進，因此就來簡單記錄一下差異在哪裡吧～" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言 在翻 futex man document 的時候，不小心看到 Linux Futex的设计与实现 這篇文章。文章中有提到在執行 sem_post 的時候，雖然沒有與其他 thread 競爭，還是會用到 fuxtex system call。當然文章中有提到原因，不過看了原因，覺得這看起來很明顯的效能問題，應該會被提出來並改進吧？後來翻了一下目前的 source code ，看到這個是 GLIBC_2_0 的版本（那篇文章也很久了，所以能想見當時的版本應該蠻舊的），而現在 GLIBC_2_1 就有把這部分改進，因此就來簡單記錄一下差異在哪裡吧～">
 <meta itemprop="datePublished" content="2019-08-17T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2019-08-17T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="353">
+<meta itemprop="wordCount" content="394">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -262,94 +261,94 @@
 <h2 id="version">Version</h2>
 <p>glibc 2.29</p>
 <h3 id="glibc_2_0-version">GLIBC_2_0 version</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> attribute_compat_text_section <span style="color:#a6e22e">__old_sem_post</span> (sem_t <span style="color:#f92672">*</span>sem)
-{
-  <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>futex <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>) sem;
-  atomic_write_barrier ();
-  (<span style="color:#66d9ef">void</span>) atomic_increment_val (futex);
-  <span style="color:#66d9ef">int</span> err <span style="color:#f92672">=</span> lll_futex_wake(futex, <span style="color:#ae81ff">1</span>, LLL_SHARED);
-  <span style="color:#66d9ef">if</span> (__builtin_expect (err, <span style="color:#ae81ff">0</span>) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
-    {
-      __set_errno (<span style="color:#f92672">-</span>err);
-      <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
-    }
-  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#2b91af">int</span> attribute_compat_text_section __old_sem_post (sem_t *sem)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#2b91af">int</span> *futex = (<span style="color:#2b91af">int</span> *) sem;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  atomic_write_barrier ();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  (<span style="color:#2b91af">void</span>) atomic_increment_val (futex);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#2b91af">int</span> err = lll_futex_wake(futex, 1, LLL_SHARED);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#00f">if</span> (__builtin_expect (err, 0) &lt; 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      __set_errno (-err);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      <span style="color:#00f">return</span> -1;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#00f">return</span> 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
 </code></pre></div><p>從 source code 可以看到，在將 sem value + 1 後，就直接使用 <code>lll_futex_wake</code> 呼叫 futex wake system call，其原因在文章內也有提到，是因為當 sem value 加 1 後，當時的機制並無法確認是否有其他 thread 正在 wait。</p>
 <p>也因此，才會有原文提到的:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#ae81ff">20533</span> futex(<span style="color:#ae81ff">0xb7db1be8</span>, FUTEX_WAIT, <span style="color:#ae81ff">20534</span>, NULL <span style="color:#f92672">&lt;</span>unfinished ...<span style="color:#f92672">&gt;</span> <span style="color:#75715e">// pthread_join
-</span><span style="color:#75715e"></span><span style="color:#ae81ff">20534</span> futex(<span style="color:#ae81ff">0x8049870</span>, FUTEX_WAKE, <span style="color:#ae81ff">1</span>)   <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#75715e">// sem_post
-</span><span style="color:#75715e"></span><span style="color:#ae81ff">20533</span> <span style="color:#f92672">&lt;</span>... futex resumed<span style="color:#f92672">&gt;</span> )             <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>20533 futex(0xb7db1be8, FUTEX_WAIT, 20534, NULL &lt;unfinished ...&gt; <span style="color:#008000">// pthread_join
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>20534 futex(0x8049870, FUTEX_WAKE, 1)   = 0 <span style="color:#008000">// sem_post
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>20533 &lt;... futex resumed&gt; )             = 0
 </code></pre></div><p>這樣的情形發生。</p>
 <h3 id="glibc_2_1-version">GLIBC_2_1 version</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// 這邊假設為 64 bit processor 
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">__new_sem_post</span> (sem_t <span style="color:#f92672">*</span>sem)
-{
-  <span style="color:#66d9ef">struct</span> new_sem <span style="color:#f92672">*</span>isem <span style="color:#f92672">=</span> (<span style="color:#66d9ef">struct</span> new_sem <span style="color:#f92672">*</span>) sem;
-  <span style="color:#66d9ef">int</span> private <span style="color:#f92672">=</span> isem<span style="color:#f92672">-&gt;</span>private;
-  uint64_t d <span style="color:#f92672">=</span> atomic_load_relaxed (<span style="color:#f92672">&amp;</span>isem<span style="color:#f92672">-&gt;</span>data);
-  <span style="color:#66d9ef">do</span>
-    {
-      <span style="color:#75715e">// SEM_VALUE_MASK = 32
-</span><span style="color:#75715e"></span>      <span style="color:#75715e">// SEM_VALUE_MAX = 2147483647 (Maximum value the semaphore can have)
-</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">if</span> ((d <span style="color:#f92672">&amp;</span> SEM_VALUE_MASK) <span style="color:#f92672">==</span> SEM_VALUE_MAX)
-        {
-          __set_errno (EOVERFLOW);
-          <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
-        }
-    }
-  <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>atomic_compare_exchange_weak_release (<span style="color:#f92672">&amp;</span>isem<span style="color:#f92672">-&gt;</span>data, <span style="color:#f92672">&amp;</span>d, d <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>));
-  <span style="color:#66d9ef">if</span> ((d <span style="color:#f92672">&gt;&gt;</span> SEM_NWAITERS_SHIFT) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
-    futex_wake (((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>) <span style="color:#f92672">&amp;</span>isem<span style="color:#f92672">-&gt;</span>data) <span style="color:#f92672">+</span> SEM_VALUE_OFFSET, <span style="color:#ae81ff">1</span>, private);
-  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// 這邊假設為 64 bit processor 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span><span style="color:#2b91af">int</span> __new_sem_post (sem_t *sem)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#00f">struct</span> new_sem *isem = (<span style="color:#00f">struct</span> new_sem *) sem;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#2b91af">int</span> private = isem-&gt;private;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  uint64_t d = atomic_load_relaxed (&amp;isem-&gt;data);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#00f">do</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      <span style="color:#008000">// SEM_VALUE_MASK = 32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>      <span style="color:#008000">// SEM_VALUE_MAX = 2147483647 (Maximum value the semaphore can have)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000"></span>      <span style="color:#00f">if</span> ((d &amp; SEM_VALUE_MASK) == SEM_VALUE_MAX)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>          __set_errno (EOVERFLOW);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>          <span style="color:#00f">return</span> -1;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  <span style="color:#00f">while</span> (!atomic_compare_exchange_weak_release (&amp;isem-&gt;data, &amp;d, d + 1));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  <span style="color:#00f">if</span> ((d &gt;&gt; SEM_NWAITERS_SHIFT) &gt; 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    futex_wake (((<span style="color:#2b91af">unsigned</span> <span style="color:#2b91af">int</span> *) &amp;isem-&gt;data) + SEM_VALUE_OFFSET, 1, private);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  <span style="color:#00f">return</span> 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>}
 </code></pre></div><p>在新版可以看到，為了解決<strong>無法確認當前是否有其他 threads 正在 wait</strong>的問題， sem value 被分為兩個部分: <code>nwaiters</code> and <code>value</code>，然後使用 bit shift 來取出 nwaiters number ，只有當 nwaiters &gt; 0 時，才會呼叫 futex_wake 了。</p>
 <p>接著就使用原文中的實驗程式，來看一下新版的結果：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">set_tid_address(<span style="color:#ae81ff">0x7feb89cd39d0</span>)         <span style="color:#f92672">=</span> <span style="color:#ae81ff">3771</span>
-set_robust_list(<span style="color:#ae81ff">0x7feb89cd39e0</span>, <span style="color:#ae81ff">24</span>)     <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-rt_sigaction(SIGRTMIN, {sa_handler<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7feb898a0bd0</span>, sa_mask<span style="color:#f92672">=</span>[], sa_flags<span style="color:#f92672">=</span>SA_RESTORER<span style="color:#f92672">|</span>SA_SIGINFO, sa_restorer<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7feb898ac0e0</span>}, NULL, <span style="color:#ae81ff">8</span>) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-rt_sigaction(SIGRT_1, {sa_handler<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7feb898a0c60</span>, sa_mask<span style="color:#f92672">=</span>[], sa_flags<span style="color:#f92672">=</span>SA_RESTORER<span style="color:#f92672">|</span>SA_RESTART<span style="color:#f92672">|</span>SA_SIGINFO, sa_restorer<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7feb898ac0e0</span>}, NULL, <span style="color:#ae81ff">8</span>) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, <span style="color:#ae81ff">8</span>) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-getrlimit(RLIMIT_STACK, {rlim_cur<span style="color:#f92672">=</span><span style="color:#ae81ff">8192</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1024</span>, rlim_max<span style="color:#f92672">=</span>RLIM64_INFINITY}) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-mmap(NULL, <span style="color:#ae81ff">8392704</span>, PROT_READ<span style="color:#f92672">|</span>PROT_WRITE, MAP_PRIVATE<span style="color:#f92672">|</span>MAP_ANONYMOUS<span style="color:#f92672">|</span>MAP_STACK, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x7feb88cfb000</span>
-brk(NULL)                               <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x5599ebd5e000</span>
-brk(<span style="color:#ae81ff">0x5599ebd7f000</span>)                     <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x5599ebd7f000</span>
-mprotect(<span style="color:#ae81ff">0x7feb88cfb000</span>, <span style="color:#ae81ff">4096</span>, PROT_NONE) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-clone(child_stack<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7feb894faff0</span>, flags<span style="color:#f92672">=</span>CLONE_VM<span style="color:#f92672">|</span>CLONE_FS<span style="color:#f92672">|</span>CLONE_FILES<span style="color:#f92672">|</span>CLONE_SIGHAND<span style="color:#f92672">|</span>CLONE_THREAD<span style="color:#f92672">|</span>CLONE_SYSVSEM<span style="color:#f92672">|</span>CLONE_SETTLS<span style="color:#f92672">|</span>CLONE_PARENT_SETTID<span style="color:#f92672">|</span>CLONE_CHILD_CLEARTID, parent_tidptr<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7feb894fb9d0</span>, tls<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7feb894fb700</span>, child_tidptr<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7feb894fb9d0</span>) <span style="color:#f92672">=</span> <span style="color:#ae81ff">3772</span>
-futex(<span style="color:#ae81ff">0x7feb894fb9d0</span>, FUTEX_WAIT, <span style="color:#ae81ff">3772</span>, NULLsem value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#75715e">// pthread_join
-</span><span style="color:#75715e"></span>) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-exit_group(<span style="color:#ae81ff">0</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>set_tid_address(0x7feb89cd39d0)         = 3771
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>set_robust_list(0x7feb89cd39e0, 24)     = 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>rt_sigaction(SIGRTMIN, {sa_handler=0x7feb898a0bd0, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7feb898ac0e0}, NULL, 8) = 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>rt_sigaction(SIGRT_1, {sa_handler=0x7feb898a0c60, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7feb898ac0e0}, NULL, 8) = 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>mmap(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7feb88cfb000
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>brk(NULL)                               = 0x5599ebd5e000
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>brk(0x5599ebd7f000)                     = 0x5599ebd7f000
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>mprotect(0x7feb88cfb000, 4096, PROT_NONE) = 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>clone(child_stack=0x7feb894faff0, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0x7feb894fb9d0, tls=0x7feb894fb700, child_tidptr=0x7feb894fb9d0) = 3772
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>futex(0x7feb894fb9d0, FUTEX_WAIT, 3772, NULLsem value = 0 <span style="color:#008000">// pthread_join
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000"></span>) = 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>exit_group(0)
 </code></pre></div><p>可以清楚看到，除了 <code>pthread_join</code> 的 futex wait 之外，並沒有發現如同舊版的 futex wake 了。</p>
 <h2 id="結論">結論</h2>
 <p>目前看到很多大神的 source code 分析。其實都有點年代了，建議還是要再翻一次當前版本的 source code ，才不會只學到舊觀念，而沒跟上新版本呀！</p>
 <h2 id="附錄">附錄</h2>
 <h3 id="實驗-source-code">實驗 source code</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;semaphore.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;pthread.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-sem_t sem_a;
-<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">task1</span>();
-
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">void</span>){
-  <span style="color:#66d9ef">int</span> ret<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
-  pthread_t thrd1;
-  sem_init(<span style="color:#f92672">&amp;</span>sem_a,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>);
-  ret<span style="color:#f92672">=</span>pthread_create(<span style="color:#f92672">&amp;</span>thrd1,NULL,task1,NULL); 
-  pthread_join(thrd1,NULL);
-}
-
-<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">task1</span>()
-{
-  <span style="color:#66d9ef">int</span> sval <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-  sem_wait(<span style="color:#f92672">&amp;</span>sem_a); 
-  sleep(<span style="color:#ae81ff">1</span>);
-  sem_getvalue(<span style="color:#f92672">&amp;</span>sem_a,<span style="color:#f92672">&amp;</span>sval);
-  printf(<span style="color:#e6db74">&#34;sem value = %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>,sval);
-  
-  (<span style="color:#f92672">&amp;</span>sem_a);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdio.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;unistd.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;semaphore.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;pthread.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#00f"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>sem_t sem_a;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#2b91af">void</span> *task1();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#2b91af">int</span> main(<span style="color:#2b91af">void</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#2b91af">int</span> ret=0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  pthread_t thrd1;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  sem_init(&amp;sem_a,0,1);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  ret=pthread_create(&amp;thrd1,NULL,task1,NULL); 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  pthread_join(thrd1,NULL);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#2b91af">void</span> *task1()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  <span style="color:#2b91af">int</span> sval = 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  sem_wait(&amp;sem_a); 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  sleep(1);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  sem_getvalue(&amp;sem_a,&amp;sval);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>  printf(<span style="color:#a31515">&#34;sem value = %d</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>,sval);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  (&amp;sem_a);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>}
 </code></pre></div>
     </div>
     <div class="article-footer">
@@ -366,12 +365,12 @@ sem_t sem_a;
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -413,17 +412,6 @@ sem_t sem_a;
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

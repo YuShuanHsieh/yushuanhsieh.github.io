@@ -28,12 +28,11 @@
   <title>Angular - ng-template &amp; ng-container - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Angular - ng-template &amp; ng-container" />
 <meta property="og:description" content="前言： 昨天剛好在看 Angular CDK Overlay (Overlay Document) 這部分，因為 Overlay 是 CDK 中 Portal 的ㄧ種，而 Portal 又和 Angular 中的 Template 機制有關係，這才發現自己對於 Angular 的 ng-template 和 ng-container 概念不是很清楚，所以特別再看了一下這部分的實作原理和應用方式。" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言： 昨天剛好在看 Angular CDK Overlay (Overlay Document) 這部分，因為 Overlay 是 CDK 中 Portal 的ㄧ種，而 Portal 又和 Angular 中的 Template 機制有關係，這才發現自己對於 Angular 的 ng-template 和 ng-container 概念不是很清楚，所以特別再看了一下這部分的實作原理和應用方式。">
 <meta itemprop="datePublished" content="2018-05-29T12:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2018-05-29T12:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="423">
+<meta itemprop="wordCount" content="434">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -257,11 +256,11 @@
 <p>昨天剛好在看 Angular CDK Overlay <a href="https://material.angular.io/cdk/overlay/overview">(Overlay Document)</a> 這部分，因為 Overlay 是 CDK 中 Portal 的ㄧ種，而 Portal 又和 Angular 中的 Template 機制有關係，這才發現自己對於 Angular 的 <code>ng-template</code> 和 <code>ng-container</code> 概念不是很清楚，所以特別再看了一下這部分的實作原理和應用方式。</p>
 <h2 id="ng-template"><code>&lt;ng-template&gt;</code></h2>
 <p>在說明 <code>ng-template</code>之前，先從我們很常用到的 <code>*ngIf</code> 來說起，在 Angular 中 <code>*</code> 星號代表 <code>ng-template</code> 的 sugar syntax，讓開發者簡化語法。所以下面的語法：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">div</span> <span style="color:#960050;background-color:#1e0010">*</span><span style="color:#a6e22e">ngIf</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;condition&#34;</span>&gt;Hello World!&lt;/<span style="color:#f92672">div</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;div <span style="">*</span>ngIf=<span style="color:#a31515">&#34;condition&#34;</span>&gt;Hello World!&lt;/div&gt;
 </code></pre></div><p>實際上就是下面語法的縮寫：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">ng-template</span> <span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">ngIf</span><span style="color:#960050;background-color:#1e0010">]=</span> <span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">condition</span><span style="color:#960050;background-color:#1e0010">&#34;</span> &gt;
-   &lt;<span style="color:#f92672">div</span>&gt;Hello World!&lt;/<span style="color:#f92672">div</span>&gt;
-&lt;/<span style="color:#f92672">ng-template</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;ng-template <span style="">[</span>ngIf<span style="">]=</span> <span style="">&#34;</span>condition<span style="">&#34;</span> &gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>   &lt;div&gt;Hello World!&lt;/div&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>&lt;/ng-template&gt;
 </code></pre></div><p><strong>那麼，<code>&lt;ng-template&gt;</code>到底是什麼東西呢？</strong></p>
 <blockquote>
 <p>The <code>&lt;ng-template&gt;</code> is an Angular element for rendering HTML. <strong>It is never displayed directly</strong>. In fact, before rendering the view, Angular replaces the <code>&lt;ng-template&gt;</code> and its contents with a comment.</p>
@@ -269,11 +268,11 @@
 <p>從官方文件中，我們可以知道，Angular Render 機制中並不會直接把這個 selector 和裡面所包含的內容顯示在最後 HTML 上。所以如果開發者沒有對 <code>&lt;ng-template&gt;</code> 進行額外處理，基本上就等於無用。</p>
 <p>**所以，該如何正確地使用 <code>&lt;ng-template&gt;</code> ？</p>
 <p>首先，我們可以把 <code>&lt;ng-template&gt;</code> 想像成定義一個 template 的外框，你可以在裡面放入想要的 DOM。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!--定義一個有你好文字和登出按鈕的 Template--&gt;</span>
-&lt;<span style="color:#f92672">ng-template</span>&gt;
-  &lt;<span style="color:#f92672">h1</span>&gt;Hello Yu-Shuan！&lt;/<span style="color:#f92672">h1</span>&gt;
-  &lt;<span style="color:#f92672">button</span>&gt;Logout&lt;/<span style="color:#f92672">button</span>&gt;
-&lt;/<span style="color:#f92672">ng-template</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">&lt;!--定義一個有你好文字和登出按鈕的 Template--&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>&lt;ng-template&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  &lt;h1&gt;Hello Yu-Shuan！&lt;/h1&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  &lt;button&gt;Logout&lt;/button&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>&lt;/ng-template&gt;
 </code></pre></div><p>只有這樣寫是沒有任何作用的，所以我們可以透過 <code>TemplateRef</code> ，來決定如何讓裡面的 DOM 顯示。根據官方文件說明：</p>
 <blockquote>
 <p>You can access a <code>TemplateRef</code> via a directive placed on a <!-- raw HTML omitted --> element (or directive prefixed with *) and have the TemplateRef for this Embedded View injected into the constructor of the directive using the TemplateRef Token.</p>
@@ -294,11 +293,11 @@
 <p>The <code>&lt;ng-container&gt;</code> is a syntax element recognized by the Angular parser. It&rsquo;s not a directive, component, class, or interface.</p>
 </blockquote>
 <p>現在我們來改寫上面剛剛提到的 <code>ngIf</code> 例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">ng-template</span> <span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">ngIf</span><span style="color:#960050;background-color:#1e0010">]=</span> <span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">condition</span><span style="color:#960050;background-color:#1e0010">&#34;</span> &gt;
-  &lt;<span style="color:#f92672">ng-container</span>&gt;
-   &lt;<span style="color:#f92672">div</span>&gt;Hello World!&lt;/<span style="color:#f92672">div</span>&gt;
-  &lt;/<span style="color:#f92672">ng-container</span>&gt;
-&lt;/<span style="color:#f92672">ng-template</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;ng-template <span style="">[</span>ngIf<span style="">]=</span> <span style="">&#34;</span>condition<span style="">&#34;</span> &gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;ng-container&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>   &lt;div&gt;Hello World!&lt;/div&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  &lt;/ng-container&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>&lt;/ng-template&gt;
 </code></pre></div><p>這樣的結果其實是一樣的，因為 <code>&lt;ng-container&gt;</code> 在最後 render 時並不會顯示，所以最後 render 出的 DOM 會和沒有寫 <code>&lt;ng-container&gt;</code> 的情況相同。</p>
 <h3 id="使用-ng-container-的時機">使用 ng-container 的時機</h3>
 <p>如果裡面內容會顯示，只有 <code>&lt;ng-container&gt;</code> 這個 Tag 不顯示，那為什麼要用 <code>&lt;ng-container&gt;</code>？<strong>當你發現沒有適合的 container 可以裝你想要的 DOM</strong>，就可以使用 <code>ng-container</code>。回到剛剛的例子，如果改用 <code>&lt;div *ngTemplateOutlet=&quot;greet&quot;&gt;</code> 那 <code>&lt;div&gt;</code> 這個 Tag 就會顯示在最後的 HTML 上，假設你剛好有預設 <code>&lt;div&gt;</code> 的 CSS style，那有可能就會讓你裡面的 DOM 被影響到。</p>
@@ -306,32 +305,32 @@
 <p><strong>等等！可是我看很多例子，都會看到 ng-container 和
 NgTemplateOutlet 並用啊！為什麼沒有提到這個？</strong></p>
 <p>大家會在官方網站教學上，常常看到以下例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!--這邊的 #greet 是指把這個 DOM 元素宣告成 variable，然後就可以直接在下方引入此 variable(而此 variable 就是 templateRef)--&gt;</span>
-&lt;<span style="color:#f92672">ng-template</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#a6e22e">greet</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;Hello&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">ng-template</span>&gt;
-&lt;<span style="color:#f92672">ng-container</span> <span style="color:#960050;background-color:#1e0010">*</span><span style="color:#a6e22e">ngTemplateOutlet</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;greet&#34;</span>&gt;&lt;/<span style="color:#f92672">ng-container</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">&lt;!--這邊的 #greet 是指把這個 DOM 元素宣告成 variable，然後就可以直接在下方引入此 variable(而此 variable 就是 templateRef)--&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>&lt;ng-template <span style="">#</span>greet&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;/ng-template&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>&lt;ng-container <span style="">*</span>ngTemplateOutlet=<span style="color:#a31515">&#34;greet&#34;</span>&gt;&lt;/ng-container&gt;
 </code></pre></div><p>現在來看看 <code>ngTemplateOutlet</code> 這個 Directive 的解釋：</p>
 <blockquote>
 <p>Inserts an embedded view from a prepared TemplateRef.</p>
 </blockquote>
 <p>讓我們把 <code>&lt;ng-container *ngTemplateOutlet=&quot;greet&quot;&gt;&lt;/ng-container&gt;</code> 拆開來看：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">ng-template</span> <span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">ngTemplateOutlet</span><span style="color:#960050;background-color:#1e0010">]=&#34;</span><span style="color:#a6e22e">greet</span><span style="color:#960050;background-color:#1e0010">&#34;</span>&gt;
-  &lt;<span style="color:#f92672">ng-container</span>&gt;&lt;/<span style="color:#f92672">ng-container</span>&gt;
-&lt;/<span style="color:#f92672">ng-template</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;ng-template <span style="">[</span>ngTemplateOutlet<span style="">]=&#34;</span>greet<span style="">&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;ng-container&gt;&lt;/ng-container&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>&lt;/ng-template&gt;
 </code></pre></div><p>可以發現，以上面例子， <code>&lt;ng-container&gt;</code> 其實也可以用其他來取代，例如改用 div 寫成 <code>&lt;div *ngTemplateOutlet=&quot;greet&quot;&gt;</code> 也沒啥不可以。</p>
 <h2 id="the-difference-between-ng-template-和-ng-container">The Difference between <code>ng-template</code> 和 <code>ng-container</code></h2>
 <p>最後來說一下 <code>&lt;ng-template&gt;</code> 和 <code>&lt;ng-container&gt;</code> 的差異，兩個 Tag 皆不會被 render 在最後的 HTML DOM 上，是供 Angular 機制使用。不過 <code>&lt;ng-template&gt;</code> 內的 DOM 如果沒有經過處理，並不會被 render 在畫面上。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">ng-template</span>&gt;
-  &lt;<span style="color:#f92672">h1</span>&gt; Hello World! &lt;/<span style="color:#f92672">h1</span>&gt;
-&lt;/<span style="color:#f92672">ng-template</span>&gt;
-
-<span style="color:#75715e">&lt;!-- Render 之後，以上內容都不會顯示在畫面上 --&gt;</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;ng-template&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;h1&gt; Hello World! &lt;/h1&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>&lt;/ng-template&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000">&lt;!-- Render 之後，以上內容都不會顯示在畫面上 --&gt;</span>
 </code></pre></div><p>反之， <code>&lt;ng-container&gt;</code> 只是個容器，所以他裡面的內容在經過 Render 後，會顯示在畫面上。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">ng-container</span>&gt;
-  &lt;<span style="color:#f92672">h1</span>&gt; Hello World! &lt;/<span style="color:#f92672">h1</span>&gt;
-&lt;/<span style="color:#f92672">ng-container</span>&gt;
-
-<span style="color:#75715e">&lt;!-- Render 之後 --&gt;</span>
-&lt;<span style="color:#f92672">h1</span>&gt; Hello World! &lt;/<span style="color:#f92672">h1</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;ng-container&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;h1&gt; Hello World! &lt;/h1&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>&lt;/ng-container&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000">&lt;!-- Render 之後 --&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>&lt;h1&gt; Hello World! &lt;/h1&gt;
 </code></pre></div><h2 id="reference">Reference</h2>
 <ol>
 <li><a href="https://angular.io/guide/structural-directives">https://angular.io/guide/structural-directives</a></li>
@@ -354,12 +353,12 @@ NgTemplateOutlet 並用啊！為什麼沒有提到這個？</strong></p>
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -401,17 +400,6 @@ NgTemplateOutlet 並用啊！為什麼沒有提到這個？</strong></p>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

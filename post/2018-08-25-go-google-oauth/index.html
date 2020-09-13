@@ -28,12 +28,11 @@
   <title>Google Sign-in with OAuth 2.0 - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Google Sign-in with OAuth 2.0" />
 <meta property="og:description" content="前言： 由於目前專案是以 Embedded System 為主，比較少有機會接入第三方 api 的機會，所以這次 side project 就以 Google Sign-in for Web application with Go 的流程當作練習。由於網路上可以找到很多範例，所以在以下文章中會側重在原理 &#43; 為什麼要這樣做，希望除了寫 code 之外，還能建立起基本概念。" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言： 由於目前專案是以 Embedded System 為主，比較少有機會接入第三方 api 的機會，所以這次 side project 就以 Google Sign-in for Web application with Go 的流程當作練習。由於網路上可以找到很多範例，所以在以下文章中會側重在原理 &#43; 為什麼要這樣做，希望除了寫 code 之外，還能建立起基本概念。">
 <meta itemprop="datePublished" content="2018-08-25T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2018-08-25T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="571">
+<meta itemprop="wordCount" content="601">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -273,48 +272,48 @@
 <h4 id="故事場景">故事場景</h4>
 <p>使用者想要使用 Google 帳號登入我的網站，但是我必須確認這個使用者確實為 Google 用戶，因此我需要先將使用者引導到 Google 授權頁面，同時告知我需要取得使用者基本資訊，讓使用者決定要不要將資訊資料授權給我。</p>
 <p>根據上麵所敘述的場景，首先要做的是建立一個<strong>發送給 Google Authorization Server 的請求</strong>來引導用戶轉向到該 Server，而請求中需要包含你的 Web Application 資訊以供 Google Server 辨識。一個簡單的 Google Authorization Server 請求如下:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">https://accounts.google.com/o/oauth2/v2/auth?
-scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.metadata.readonly<span style="color:#960050;background-color:#1e0010">&amp;</span>
-state=state_parameter_passthrough_value<span style="color:#960050;background-color:#1e0010">&amp;</span>
-redirect_uri=http%3A%2F%2Foauth2.example.com%2Fcallback<span style="color:#960050;background-color:#1e0010">&amp;</span>
-client_id=client_id
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>https://accounts.google.com/o/oauth2/v2/auth?
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.metadata.readonly<span style="">&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>state=state_parameter_passthrough_value<span style="">&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>redirect_uri=http%3A%2F%2Foauth2.example.com%2Fcallback<span style="">&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>client_id=client_id
 </code></pre></div><p>從上面一串網址，可以知道我們需要填入的基本參數有 <code>scope</code> | <code>client_id</code> | <code>redirect_uri</code> 這幾項，其中 <code>client_id</code> 是需要透過申請憑證來取得，這樣 Google Authorization Server 才會知道來者何人～因此在寫 code 之前，先前往 (Google 憑證頁面)[https://console.developers.google.com/apis/credentials] 申請憑證，有了憑證之後，就使用 Google 所提供的 Golang lib 來建立請求吧！</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">import</span> (
-  <span style="color:#e6db74">&#34;golang.org/x/oauth2&#34;</span>
-  <span style="color:#e6db74">&#34;golang.org/x/oauth2/google&#34;</span>
-)
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CreateGoogleOAuthURL</span>() <span style="color:#66d9ef">string</span> {
-  <span style="color:#75715e">// 使用 lib 產生一個特定 config instance
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">config</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">oauth2</span>.<span style="color:#a6e22e">Config</span>{
-    <span style="color:#75715e">//憑證的 client_id
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">ClientID</span>: <span style="color:#e6db74">&#34;Your ID&#34;</span>,
-    <span style="color:#75715e">//憑證的 client_secret
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">ClientSecret</span>: <span style="color:#e6db74">&#34;Your Secret&#34;</span>,
-    <span style="color:#75715e">//當 Google auth server 驗證過後，接收從 Google auth server 傳來的資訊
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">RedirectURL</span>:  <span style="color:#e6db74">&#34;http://localhost:8080/google-login-callback&#34;</span>,
-    <span style="color:#75715e">//告知 Google auth server 授權範圍，在這邊是取得用戶基本資訊和Email，Scopes 為 Google 提供
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Scopes</span>: []<span style="color:#66d9ef">string</span>{
-      <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/userinfo.email&#34;</span>,
-      <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/userinfo.profile&#34;</span>,
-    },
-    <span style="color:#75715e">//指的是 Google auth server 的 endpoint，用 lib 預設值即可
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Endpoint</span>: <span style="color:#a6e22e">google</span>.<span style="color:#a6e22e">Endpoint</span>,
-   }
-
-   <span style="color:#75715e">//產生出 config instance 後，就可以使用 func AuthCodeURL 建立請求網址
-</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">AuthCodeURL</span>(<span style="color:#e6db74">&#34;state&#34;</span>)
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">import</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#a31515">&#34;golang.org/x/oauth2&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#a31515">&#34;golang.org/x/oauth2/google&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#00f">func</span> CreateGoogleOAuthURL() <span style="color:#2b91af">string</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#008000">// 使用 lib 產生一個特定 config instance
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000"></span>  config := &amp;oauth2.Config{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#008000">//憑證的 client_id
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>    ClientID: <span style="color:#a31515">&#34;Your ID&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#008000">//憑證的 client_secret
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>    ClientSecret: <span style="color:#a31515">&#34;Your Secret&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#008000">//當 Google auth server 驗證過後，接收從 Google auth server 傳來的資訊
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#008000"></span>    RedirectURL:  <span style="color:#a31515">&#34;http://localhost:8080/google-login-callback&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#008000">//告知 Google auth server 授權範圍，在這邊是取得用戶基本資訊和Email，Scopes 為 Google 提供
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#008000"></span>    Scopes: []<span style="color:#2b91af">string</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      <span style="color:#a31515">&#34;https://www.googleapis.com/auth/userinfo.email&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      <span style="color:#a31515">&#34;https://www.googleapis.com/auth/userinfo.profile&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    <span style="color:#008000">//指的是 Google auth server 的 endpoint，用 lib 預設值即可
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#008000"></span>    Endpoint: google.Endpoint,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>   }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>   <span style="color:#008000">//產生出 config instance 後，就可以使用 func AuthCodeURL 建立請求網址
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#008000"></span>   <span style="color:#00f">return</span> config.AuthCodeURL(<span style="color:#a31515">&#34;state&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>}
 </code></pre></div><h4 id="configauthcodeurl-所需要的參數-state-是指什麼呢"><code>config.AuthCodeURL</code> 所需要的參數 <code>state</code> 是指什麼呢？</h4>
 <p>在上面範例中，可以看到:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">requestUrl</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">AuthCodeURL</span>(<span style="color:#e6db74">&#34;state&#34;</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>requestUrl := config.AuthCodeURL(<span style="color:#a31515">&#34;state&#34;</span>)
 </code></pre></div><p>這個 state 是為了防止 <code>CSRF(跨站請求偽造)</code> 攻擊而設置的。建議可以透過<strong>隨機產生</strong>的方式來產生出一個 state，當 Google server 驗證完後，會原封不動地把 state 再回傳給網站 server，如此一來我們就可以驗證 state 是否為網站所發出的 state，以確保正確性。</p>
 <h3 id="step-2-引導使用者前往授權頁面來確認授權">Step 2. 引導使用者前往授權頁面來確認授權</h3>
 <p>有了請求網址，我們就可以將使用者導引到該網址去進行授權：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">LoginWithGoogleOAuth</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
-	<span style="color:#a6e22e">redirectURL</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">CreateGoogleOAuthURL</span>()
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Redirect</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusSeeOther</span>, <span style="color:#a6e22e">redirectURL</span>) <span style="color:#75715e">// http.StatusSeeOther 為 303
-</span><span style="color:#75715e"></span>}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">func</span> LoginWithGoogleOAuth(c *gin.Context) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	redirectURL := CreateGoogleOAuthURL()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	c.Redirect(http.StatusSeeOther, redirectURL) <span style="color:#008000">// http.StatusSeeOther 為 303
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span>}
 </code></pre></div><p>在授權頁面上，可以看到你所設定的 scope 和網站資訊，以便使用者進行授權確認。</p>
 <h4 id="http-status-code">Http Status code</h4>
 <p>這邊要注意的地方是，Http Status code 必須為 3xx 系列，才能正確執行轉址，此外，建議 Status code 為 303，因為 303 明確定義出：</p>
@@ -328,37 +327,37 @@ client_id=client_id
 <pre><code>https://oauth2.example.com/auth?code=4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&amp;state=state_parameter_passthrough_value
 </code></pre><p>最重要的是後面 <code>code=4/P7q7W91a-oMsCeLvIaQm6bTrgtp7</code> 這一段，根據 OAuth 流程，Google Authorization Server 並不會直接回應 token ，而是會給一組 code 表示使用者許可授權，而我們必須再拿這組 code 外加憑證申請到的 <code>client_secret</code> 去跟 Google 索取 token。此外， OAuth 2.0 建議 code 有效時間最多只有 10 分鐘，所以基本上在拿到 code 之後，就會緊接換 token 的流程。</p>
 <p>在這串回應中還有夾帶我們所發出去的 <code>state</code> ，此時也要進行驗證，確保這個 state 和發出去的值為一致。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// check state，這邊的 c 指的是 c *gin.Context
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Query</span>(<span style="color:#e6db74">&#34;state&#34;</span>)
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">s</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;state_parameter_passthrough_value&#34;</span> {
-  <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">AbortWithError</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusUnauthorized</span>,, <span style="color:#e6db74">&#34;error message&#34;</span>)
-  <span style="color:#66d9ef">return</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// check state，這邊的 c 指的是 c *gin.Context
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>s := c.Query(<span style="color:#a31515">&#34;state&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">if</span> s != <span style="color:#a31515">&#34;state_parameter_passthrough_value&#34;</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  c.AbortWithError(http.StatusUnauthorized,, <span style="color:#a31515">&#34;error message&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#00f">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 </code></pre></div><h3 id="step-4-使用換取-access-token並且拿-token-去跟-google-server-索取授權資料">Step 4. 使用換取 access token，並且拿 token 去跟 Google Server 索取授權資料</h3>
 <p>有了 <code>code</code> 之後，我們就可以換取 access token，並且使用這組 access token 獲得我們所需要的資料。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 這邊的 c 指的是 c *gin.Context
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">code</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Query</span>(<span style="color:#e6db74">&#34;code&#34;</span>)
-<span style="color:#75715e">// 拿 code 跟 Google Server 交換 token
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">token</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">Exchange</span>(<span style="color:#a6e22e">oauth2</span>.<span style="color:#a6e22e">NoContext</span>, <span style="color:#a6e22e">code</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// 這邊的 c 指的是 c *gin.Context
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>code := c.Query(<span style="color:#a31515">&#34;code&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000">// 拿 code 跟 Google Server 交換 token
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span>token, err := config.Exchange(oauth2.NoContext, code)
 </code></pre></div><p>Google Server 的回應範例：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;access_token&#34;</span>:<span style="color:#e6db74">&#34;1/fFAGRNJru1FTz70BzhT3Zg&#34;</span>,
-  <span style="color:#f92672">&#34;expires_in&#34;</span>:<span style="color:#ae81ff">3920</span>,
-  <span style="color:#f92672">&#34;token_type&#34;</span>:<span style="color:#e6db74">&#34;Bearer&#34;</span>,
-  <span style="color:#f92672">&#34;refresh_token&#34;</span>:<span style="color:#e6db74">&#34;1/xEoDL4iW3cxlI7yDbSRFYNG01kVKM2C-259HOF2aQbI&#34;</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &#34;access_token&#34;:<span style="color:#a31515">&#34;1/fFAGRNJru1FTz70BzhT3Zg&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  &#34;expires_in&#34;:3920,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  &#34;token_type&#34;:<span style="color:#a31515">&#34;Bearer&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  &#34;refresh_token&#34;:<span style="color:#a31515">&#34;1/xEoDL4iW3cxlI7yDbSRFYNG01kVKM2C-259HOF2aQbI&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 </code></pre></div><h4 id="如何處理-token">如何處理 token</h4>
 <p>在 Google OAuth 2.0 官方文件有提到，在拿到回應之後，最好把 <code>access_token</code> 和 <code>refresh_token</code> 都保存在一個長期有效的安全地方，例如有人會存在 shared session。 <code>refresh_token</code> 這組 token 是當 <code>access_token</code> 過期時，可以拿 <code>refresh_token</code> 再去交換一組有效的 <code>access_token</code>。</p>
 <blockquote>
 <p>Important: Your application should store both tokens in a secure, long-lived location that is accessible between different invocations of your application. The refresh token enables your application to obtain a new access token if the one that you have expires. As such, if your application loses the refresh token, the user will need to repeat the OAuth 2.0 consent flow so that your application can obtain a new refresh token.</p>
 </blockquote>
 <p>最後，就拿 <code>access_token</code> 去 Google 指定的 Server 位置取資料吧！</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 這個 client 是 http wrapper，讓你可以直接使用 `client.Get` ，它會執行時會自動在網址後方帶上 access_token 字段
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">Client</span>(<span style="color:#a6e22e">oauth2</span>.<span style="color:#a6e22e">NoContext</span>, <span style="color:#a6e22e">token</span>)
-<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">getErr</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;https://www.googleapis.com/oauth2/v3/userinfo&#34;</span>)
-<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
-<span style="color:#75715e">// 讀取返回的資料
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">rawData</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">Body</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// 這個 client 是 http wrapper，讓你可以直接使用 `client.Get` ，它會執行時會自動在網址後方帶上 access_token 字段
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>client := config.Client(oauth2.NoContext, token)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>res, getErr := client.Get(<span style="color:#a31515">&#34;https://www.googleapis.com/oauth2/v3/userinfo&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">defer</span> res.Body.Close()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000">// 讀取返回的資料
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000"></span>rawData, _ := ioutil.ReadAll(res.Body)
 </code></pre></div><h4 id="refresh_token"><code>refresh_token</code></h4>
 <p>上面有提到 <code>Implicit Grant</code> 的模式，在此模式之下，是不會有 <code>refresh_token</code> 的功能。</p>
 <h2 id="reference">Reference</h2>
@@ -382,12 +381,12 @@ client_id=client_id
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -429,17 +428,6 @@ client_id=client_id
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

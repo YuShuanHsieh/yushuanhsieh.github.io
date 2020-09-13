@@ -28,12 +28,11 @@
   <title>AngularJS - angular-formly study notes - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="AngularJS - angular-formly study notes" />
 <meta property="og:description" content="Angular formly 運作原理 將 form 中的每個 field 獨立出來寫成共用 template，並供整個 app 使用。使用者先在 angular-formly 中進行 configuration，包含設定 type 和 wrapper ，接著只要在 component 的 controller 中建立指定 type 的 field objects 之後，angular-formly 就會結合之前設定好的 field template 和 objects， render 出完整的表單。 !" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="Angular formly 運作原理 將 form 中的每個 field 獨立出來寫成共用 template，並供整個 app 使用。使用者先在 angular-formly 中進行 configuration，包含設定 type 和 wrapper ，接著只要在 component 的 controller 中建立指定 type 的 field objects 之後，angular-formly 就會結合之前設定好的 field template 和 objects， render 出完整的表單。 !">
 <meta itemprop="datePublished" content="2018-01-05T12:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2018-01-05T12:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="619">
+<meta itemprop="wordCount" content="686">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -258,21 +257,21 @@
 ![study.png]({{ site.url }}/assets/images/angular-formly-usage-1.png)</p>
 <h4 id="angular-formly-field-render-source-code">Angular-formly field render source code</h4>
 <p>Angular-formly 套用 field template 的順序流程：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">getFieldTemplate</span>(<span style="color:#a6e22e">scope</span>.<span style="color:#a6e22e">options</span>)
-      .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">runManipulators</span>(<span style="color:#a6e22e">fieldManipulators</span>.<span style="color:#a6e22e">preWrapper</span>))
-      .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">transcludeInWrappers</span>(<span style="color:#a6e22e">scope</span>.<span style="color:#a6e22e">options</span>, <span style="color:#a6e22e">scope</span>.<span style="color:#a6e22e">formOptions</span>))
-      .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">runManipulators</span>(<span style="color:#a6e22e">fieldManipulators</span>.<span style="color:#a6e22e">postWrapper</span>))
-      .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">setElementTemplate</span>)
-      .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">watchFormControl</span>)
-      .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">callLinkFunctions</span>)
-      .<span style="color:#66d9ef">catch</span>(<span style="color:#a6e22e">error</span> =&gt; {
-        <span style="color:#a6e22e">formlyWarn</span>(
-          <span style="color:#e6db74">&#39;there-was-a-problem-setting-the-template-for-this-field&#39;</span>,
-          <span style="color:#e6db74">&#39;There was a problem setting the template for this field &#39;</span>,
-          <span style="color:#a6e22e">scope</span>.<span style="color:#a6e22e">options</span>,
-          <span style="color:#a6e22e">error</span>
-        )
-      })
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>getFieldTemplate(scope.options)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>      .then(runManipulators(fieldManipulators.preWrapper))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>      .then(transcludeInWrappers(scope.options, scope.formOptions))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>      .then(runManipulators(fieldManipulators.postWrapper))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      .then(setElementTemplate)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      .then(watchFormControl)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      .then(callLinkFunctions)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      .<span style="color:#00f">catch</span>(error =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        formlyWarn(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>          <span style="color:#a31515">&#39;there-was-a-problem-setting-the-template-for-this-field&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>          <span style="color:#a31515">&#39;There was a problem setting the template for this field &#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>          scope.options,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>          error
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>      })
 </code></pre></div><h2 id="set-up-field-templates">Set Up Field Templates</h2>
 <h3 id="--prebuilt-template">- Prebuilt Template</h3>
 <p>在使用 angular-formly 之前必須先定義好各 field 的 template。目前有幾個已經建好的簡易 formly template，包含：</p>
@@ -283,9 +282,9 @@
 </ol>
 <p>不過目前這些 template module 都已經沒在維護，所以還是自己寫一個 template 比較妥當。</p>
 <h4 id="pre-built-template-使用方式">Pre-built template 使用方式</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#39;angular-formly-templates-bootstrap&#39;</span>;
-<span style="color:#75715e">// inject to the module
-</span><span style="color:#75715e"></span>.<span style="color:#a6e22e">module</span>(<span style="color:#e6db74">&#39;myApp&#39;</span>, [<span style="color:#e6db74">&#39;formly&#39;</span>, <span style="color:#e6db74">&#39;formlyBootstrap&#39;</span>]);
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">import</span> <span style="color:#a31515">&#39;angular-formly-templates-bootstrap&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">// inject to the module
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>.module(<span style="color:#a31515">&#39;myApp&#39;</span>, [<span style="color:#a31515">&#39;formly&#39;</span>, <span style="color:#a31515">&#39;formlyBootstrap&#39;</span>]);
 </code></pre></div><p><strong>[Notice]</strong> 使用之前，請先看 template 的 source code，確認好有哪些 type 有被定義，不然會報錯。（例如: formlyBootstrap 並沒有定義switch type，因此無法使用。）</p>
 <hr>
 <h3 id="--use-custom-template">- Use Custom Template</h3>
@@ -293,43 +292,43 @@
 <p>使用 <code>formlyConfig</code> 或 <code>formlyConfigProvider</code> 來定義自己的 field template。</p>
 <h5 id="example1-use-formlyconfig">Example1: use <code>formlyConfig</code></h5>
 <p>在 module.run 中設定的好處是，可以 inject 其他想要的 service。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">run</span>((<span style="color:#a6e22e">formlyConfig</span>, <span style="color:#a6e22e">MyService</span>) =&gt; {
-  <span style="color:#a6e22e">formlyConfig</span>.<span style="color:#a6e22e">setType</span>({
-    <span style="color:#75715e">// Set a type object.
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// MyService could be used in controller.
-</span><span style="color:#75715e"></span>  });
-});
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>module.run((formlyConfig, MyService) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  formlyConfig.setType({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#008000">// Set a type object.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span>    <span style="color:#008000">// MyService could be used in controller.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000"></span>  });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>});
 </code></pre></div><h5 id="example2-use-formlyconfigprovider">Example2: use <code>formlyConfigProvider</code></h5>
 <p>在 cinfig 階段設定，則無法引入 service ，因為該階段 service 還未被建立。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">config</span>(<span style="color:#a6e22e">formlyConfigProvider</span> =&gt; {
-  <span style="color:#a6e22e">formlyConfigProvider</span>.<span style="color:#a6e22e">setType</span>({
-    <span style="color:#75715e">// Set a type object.
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// You cannot inject your services in a config stage.
-</span><span style="color:#75715e"></span>  });
-});
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>module.config(formlyConfigProvider =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  formlyConfigProvider.setType({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#008000">// Set a type object.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span>    <span style="color:#008000">// You cannot inject your services in a config stage.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000"></span>  });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>});
 </code></pre></div><h3 id="api-reference">API Reference</h3>
 <h3 id="1-settype">1. setType</h3>
 <h5 id="example-1">Example 1:</h5>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">formlyConfig</span>.<span style="color:#a6e22e">setType</span>({
-  <span style="color:#75715e">// 定義 field type
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;input&#39;</span>,
-  <span style="color:#a6e22e">template</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&lt;input ng-model=&#34;model[options.key]&#34; /&gt;&#39;</span>
-  <span style="color:#75715e">// 必須使用 model[options.key]，因為是要指定 options.key 的值為 model 對象
-</span><span style="color:#75715e"></span>});
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>formlyConfig.setType({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#008000">// 定義 field type
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>  name: <span style="color:#a31515">&#39;input&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  template: <span style="color:#a31515">&#39;&lt;input ng-model=&#34;model[options.key]&#34; /&gt;&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#008000">// 必須使用 model[options.key]，因為是要指定 options.key 的值為 model 對象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000"></span>});
 </code></pre></div><h5 id="example-2">Example 2:</h5>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">formlyConfig</span>.<span style="color:#a6e22e">setType</span>({
-  <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;ipAddress&#39;</span>,
-  <span style="color:#66d9ef">extends</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;input&#39;</span>,
-  <span style="color:#75715e">// 用來包裝 field template 的 wrapper template.
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">wrapper</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;someWrapper&#39;</span>,
-  <span style="color:#75715e">// 加入自訂 property。
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">defaultOptions</span><span style="color:#f92672">:</span> {},
-  <span style="color:#a6e22e">link</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">scope</span>, <span style="color:#a6e22e">el</span>, <span style="color:#a6e22e">attrs</span>) {},
-  <span style="color:#75715e">// 該controller 的觸發時間為 formly-field(internal API) 之後，field controller 之前。
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">controller</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">$scope</span>, <span style="color:#a6e22e">yourInjectableThing</span>) {},
-  <span style="color:#75715e">// 欄位驗證
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">apiCheck</span><span style="color:#f92672">:</span> {}
-});
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>formlyConfig.setType({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  name: <span style="color:#a31515">&#39;ipAddress&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#00f">extends</span>: <span style="color:#a31515">&#39;input&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#008000">// 用來包裝 field template 的 wrapper template.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000"></span>  wrapper: <span style="color:#a31515">&#39;someWrapper&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#008000">// 加入自訂 property。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000"></span>  defaultOptions: {},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  link: <span style="color:#00f">function</span>(scope, el, attrs) {},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#008000">// 該controller 的觸發時間為 formly-field(internal API) 之後，field controller 之前。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>  controller: <span style="color:#00f">function</span>($scope, yourInjectableThing) {},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#008000">// 欄位驗證
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>  apiCheck: {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>});
 </code></pre></div><p><strong>[Notice]</strong> Just be aware that angular-formly does make use of <em>common parameters</em> like required or onClick to automatically add attributes to ng-model elements.</p>
 <h4 id="some-properties-of-config">Some properties of config:</h4>
 <ul>
@@ -343,13 +342,13 @@ field refernece.(Required!)</li>
 Default setting uses <code>apiCheck</code> library.</li>
 </ul>
 <h5 id="example-for-apicheck">*Example for apiCheck:</h5>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">apiCheck</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">check</span> =&gt; ({
-          <span style="color:#a6e22e">templateOptions</span><span style="color:#f92672">:</span> {
-            <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">check</span>.<span style="color:#a6e22e">string</span>.<span style="color:#a6e22e">optional</span>,
-            <span style="color:#a6e22e">required</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">check</span>.<span style="color:#a6e22e">bool</span>.<span style="color:#a6e22e">optional</span>,
-            <span style="color:#a6e22e">labelSrOnly</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">check</span>.<span style="color:#a6e22e">bool</span>.<span style="color:#a6e22e">optional</span>,
-          }
-        })
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>apiCheck: check =&gt; ({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>          templateOptions: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>            label: check.string.optional,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>            required: check.bool.optional,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>            labelSrOnly: check.bool.optional,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>        })
 </code></pre></div><ul>
 <li>
 <p><strong>extend</strong>
@@ -361,13 +360,13 @@ Default setting uses <code>apiCheck</code> library.</li>
 </li>
 </ul>
 <h5 id="example-for-defaultoptions">*Example for defaultOptions:</h5>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">defaultOptions</span><span style="color:#f92672">:</span> {
-  <span style="color:#a6e22e">ngModelAttrs</span><span style="color:#f92672">:</span> {
-    <span style="color:#75715e">// 在 type的 attribute 中加入 rows 和 mdMaxLength 屬性。
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">rows</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">attribute</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;rows&#39;</span>},
-    <span style="color:#a6e22e">mdMaxLength</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">attribute</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;md-maxlength&#39;</span>}
-  }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>defaultOptions: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  ngModelAttrs: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#008000">// 在 type的 attribute 中加入 rows 和 mdMaxLength 屬性。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span>    rows: {attribute: <span style="color:#a31515">&#39;rows&#39;</span>},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    mdMaxLength: {attribute: <span style="color:#a31515">&#39;md-maxlength&#39;</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
 </code></pre></div><h3 id="2-setwrapper">2. setWrapper</h3>
 <p>定義 wrapper 的寫法和定義 field 寫法雷同，不過template 中需加入指定 html tag。</p>
 <ul>
@@ -375,14 +374,14 @@ Default setting uses <code>apiCheck</code> library.</li>
 <li>至少要有 <code>templateUrl</code> 或 <code>template</code>。</li>
 </ul>
 <h5 id="wapper-template-example">*wapper template example：</h5>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">div</span>&gt;
-  &lt;<span style="color:#f92672">label</span>&gt;
-    {{to.label}}
-    {{to.required ? &#39;*&#39; : &#39;&#39;}}
-  &lt;/<span style="color:#f92672">label</span>&gt;
-  <span style="color:#75715e">&lt;!-- 需使用&lt;formly-transclude&gt; 來指定 field template 放置的位置 --&gt;</span>
-  &lt;<span style="color:#f92672">formly-transclude</span>&gt;&lt;/<span style="color:#f92672">formly-transclude</span>&gt;
-&lt;/<span style="color:#f92672">div</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;div&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;label&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    {{to.label}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    {{to.required ? &#39;*&#39; : &#39;&#39;}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  &lt;/label&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  <span style="color:#008000">&lt;!-- 需使用&lt;formly-transclude&gt; 來指定 field template 放置的位置 --&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  &lt;formly-transclude&gt;&lt;/formly-transclude&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>&lt;/div&gt;
 </code></pre></div><hr>
 <p>###[ 其他重點 ] Template&rsquo;s $scope</p>
 <p>在寫 controller 或 expressionProperties function 的時候，可以使用$scope 來操作 template 中的變數。這邊要注意的是， angular-formly 的 $scope 有調整過，新增一些 formly 特有屬性，所以要使用指定的 property 去取得 model 參數。</p>
@@ -410,21 +409,21 @@ Default setting uses <code>apiCheck</code> library.</li>
 </tbody>
 </table>
 <h5 id="templates-scope-example-1">*template&rsquo;s $scope example 1</h5>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">label</span>&gt;{{ to.label }}&lt;/<span style="color:#f92672">label</span>&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;label&gt;{{ to.label }}&lt;/label&gt;
 </code></pre></div><h5 id="templates-scope-example-2">*template&rsquo;s $scope example 2</h5>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">  <span style="color:#a6e22e">key</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;priority&#39;</span>,
-  <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;radio&#39;</span>,
-  <span style="color:#a6e22e">defaultValue</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">item</span>.<span style="color:#a6e22e">priority</span> <span style="color:#f92672">||</span> <span style="color:#ae81ff">1</span>,
-  <span style="color:#a6e22e">templateOptions</span><span style="color:#f92672">:</span> {
-    <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Priority&#39;</span>,
-    <span style="color:#a6e22e">options</span><span style="color:#f92672">:</span> []
-  },
-  <span style="color:#a6e22e">controller</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">$scope</span>) {
-    <span style="color:#a6e22e">$scope</span>.<span style="color:#a6e22e">to</span>.<span style="color:#a6e22e">options</span> <span style="color:#f92672">=</span> [
-      { <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Urgent&#39;</span> },
-      { <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2</span>, <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Normal&#39;</span> }
-    ];
-  }
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>  key: <span style="color:#a31515">&#39;priority&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  type: <span style="color:#a31515">&#39;radio&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  defaultValue: <span style="color:#00f">this</span>.item.priority || 1,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  templateOptions: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    label: <span style="color:#a31515">&#39;Priority&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    options: []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  controller: <span style="color:#00f">function</span>($scope) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    $scope.to.options = [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      { value: 1, label: <span style="color:#a31515">&#39;Urgent&#39;</span> },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      { value: 2, label: <span style="color:#a31515">&#39;Normal&#39;</span> }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    ];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  }
 </code></pre></div><hr>
 <h2 id="field-configuration">Field configuration</h2>
 <h3 id="property">Property</h3>
@@ -457,12 +456,12 @@ initialize model. 如果該 model 在 compile-time 中為 undefined，則會 ass
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -504,17 +503,6 @@ initialize model. 如果該 model 在 compile-time 中為 undefined，則會 ass
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

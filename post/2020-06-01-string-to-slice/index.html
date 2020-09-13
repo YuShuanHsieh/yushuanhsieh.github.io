@@ -28,12 +28,11 @@
   <title>Go string to slice 議題 - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Go string to slice 議題" />
 <meta property="og:description" content="日前在看 Go runtime/string.go source code 的時候，意外看到一篇文章 Go中string转[]byte的陷阱，不過這篇文章的日期間隔已久，Go version 也從文章中的 1.10 改版到 1." />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="日前在看 Go runtime/string.go source code 的時候，意外看到一篇文章 Go中string转[]byte的陷阱，不過這篇文章的日期間隔已久，Go version 也從文章中的 1.10 改版到 1.">
 <meta itemprop="datePublished" content="2020-06-01T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2020-06-01T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="289">
+<meta itemprop="wordCount" content="304">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -261,55 +260,55 @@
 <h2 id="問題摘要">問題摘要</h2>
 <h3 id="1-runtimestringtoslicebyte">1. runtime.stringtoslicebyte</h3>
 <p>首先，文章中提到的例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-    <span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#e6db74">&#34;&#34;</span>)
-    <span style="color:#a6e22e">s1</span> <span style="color:#f92672">:=</span> append(<span style="color:#a6e22e">s</span>, <span style="color:#e6db74">&#39;a&#39;</span>)
-    <span style="color:#a6e22e">s2</span> <span style="color:#f92672">:=</span> append(<span style="color:#a6e22e">s</span>, <span style="color:#e6db74">&#39;b&#39;</span>)
-    <span style="color:#75715e">//fmt.Println(s1, &#34;==========&#34;, s2)
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">s1</span>), <span style="color:#e6db74">&#34;==========&#34;</span>, string(<span style="color:#a6e22e">s2</span>))
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">func</span> main() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    s := []byte(<span style="color:#a31515">&#34;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    s1 := append(s, <span style="color:#a31515">&#39;a&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    s2 := append(s, <span style="color:#a31515">&#39;b&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    <span style="color:#008000">//fmt.Println(s1, &#34;==========&#34;, s2)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000"></span>    fmt.Println(string(s1), <span style="color:#a31515">&#34;==========&#34;</span>, string(s2))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
 </code></pre></div><p>在沒有 <code>fmt.Println(s1, &quot;==========&quot;, s2)</code> 這一行的情況下，output 會產生：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">b <span style="color:#f92672">==========</span> b
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>b ========== b
 </code></pre></div><p>的結果。</p>
 <p>反之，如果加了 <code>fmt.Println(s1, &quot;==========&quot;, s2)</code> ，由於 <strong>Escape Analysis</strong> 的關係，因此結果會變成：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">a <span style="color:#f92672">==========</span> b
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>a ========== b
 </code></pre></div><p>此陷阱是由於在一開始宣告 byte slice 時，是由 string 轉換成 slice</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#e6db74">&#34;&#34;</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>s := []byte(<span style="color:#a31515">&#34;&#34;</span>)
 </code></pre></div><p>這樣的寫法會觸發 <code>runtime.stringtoslicebyte</code> ，細究此 function：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">stringtoslicebyte</span>(<span style="color:#a6e22e">buf</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">tmpBuf</span>, <span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) []<span style="color:#66d9ef">byte</span> {
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">b</span> []<span style="color:#66d9ef">byte</span>
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">buf</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">&amp;&amp;</span> len(<span style="color:#a6e22e">s</span>) <span style="color:#f92672">&lt;=</span> len(<span style="color:#a6e22e">buf</span>) {
-		<span style="color:#f92672">*</span><span style="color:#a6e22e">buf</span> = <span style="color:#a6e22e">tmpBuf</span>{}
-		<span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">buf</span>[:len(<span style="color:#a6e22e">s</span>)]
-	} <span style="color:#66d9ef">else</span> {
-		<span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">rawbyteslice</span>(len(<span style="color:#a6e22e">s</span>))
-	}
-	copy(<span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">s</span>)
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">b</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">func</span> stringtoslicebyte(buf *tmpBuf, s <span style="color:#2b91af">string</span>) []<span style="color:#2b91af">byte</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	<span style="color:#00f">var</span> b []<span style="color:#2b91af">byte</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>	<span style="color:#00f">if</span> buf != <span style="color:#00f">nil</span> &amp;&amp; len(s) &lt;= len(buf) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>		*buf = tmpBuf{}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>		b = buf[:len(s)]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	} <span style="color:#00f">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>		b = rawbyteslice(len(s))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>	copy(b, s)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>	<span style="color:#00f">return</span> b
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
 </code></pre></div><p>會發現 escape analysis 結果 (<code>buf != nil</code>) 有可能影響最後回傳的 []byte slice，進而導致後續 slice append 行為不同。</p>
 <h3 id="2-byte-slice-initialization">2. byte slice initialization</h3>
 <p>另外，在 issue <a href="https://github.com/golang/go/issues/26498">cmd/compile: constant string -&gt; []byte and []byte -&gt; string conversions aren&rsquo;t constant folded</a> 中也提到 byte 的行為不一致：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#e6db74">&#34;foo&#34;</span>)
-<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">byte</span>{<span style="color:#e6db74">&#39;f&#39;</span>,<span style="color:#e6db74">&#39;o&#39;</span>,<span style="color:#e6db74">&#39;o&#39;</span>}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>a := []byte(<span style="color:#a31515">&#34;foo&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>b := []<span style="color:#2b91af">byte</span>{<span style="color:#a31515">&#39;f&#39;</span>,<span style="color:#a31515">&#39;o&#39;</span>,<span style="color:#a31515">&#39;o&#39;</span>}
 </code></pre></div><p>因為前者 a 會觸發 <code>runtime.stringtoslicebyte</code> 的關係，所以 <code>[]byte(&quot;foo&quot;)</code> 比起 <code>[]byte{'f','o','o'}</code> 需要額外的執行成本，但是對使用者來說， <code>[]byte(&quot;foo&quot;)</code> 應該是更常見的寫法。</p>
 <h2 id="optimization">Optimization</h2>
 <p>因此，在 <a href="https://github.com/golang/go/commit/ceb0c371d9a535826497289ac7d0b206a59526e6">cmd/compile: make []byte(&quot;&hellip;&quot;) more efficient</a> 這項 commit 就針對</p>
 <p><code>[]byte(string) conversions</code></p>
 <p>行為做改進，不再使用 <code>stringtoslicebyte</code> ，而是定義一個與 string 相同長度的 byte array (記憶體空間根據 escape analysis 可能在 heap 或是 goroutine stack)，並且使用 string 來將此 array 初始化，再轉換成 slice 回傳。</p>
 <p>實作方式可參閱下面的 asm code，可以看到已和陷阱文章中所提到的 asm code 有明顯差異。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// s := []byte(&#34;abc&#34;)
-</span><span style="color:#75715e"></span>
-<span style="color:#ae81ff">0x0021</span> <span style="color:#ae81ff">00033</span>	PCDATA	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">1</span>
-<span style="color:#ae81ff">0x0021</span> <span style="color:#ae81ff">00033</span>	PCDATA	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">1</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0</span>
-<span style="color:#ae81ff">0x0021</span> <span style="color:#ae81ff">00033</span>	LEAQ	type.[<span style="color:#ae81ff">3</span>]uint8(SB), AX
-<span style="color:#ae81ff">0x0028</span> <span style="color:#ae81ff">00040</span>	PCDATA	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0</span>
-<span style="color:#ae81ff">0x0028</span> <span style="color:#ae81ff">00040</span>	MOVQ	AX, (SP)
-<span style="color:#ae81ff">0x002c</span> <span style="color:#ae81ff">00044</span>	CALL	runtime.newobject(SB)
-<span style="color:#ae81ff">0x0031</span> <span style="color:#ae81ff">0004</span><span style="color:#ae81ff">9</span>	PCDATA	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">0</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">1</span>
-<span style="color:#ae81ff">0x0031</span> <span style="color:#ae81ff">0004</span><span style="color:#ae81ff">9</span>	MOVQ	<span style="color:#ae81ff">8</span>(SP), AX
-<span style="color:#ae81ff">0x0036</span> <span style="color:#ae81ff">00054</span>	MOVW	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">25185</span>, (AX)
-<span style="color:#ae81ff">0x003b</span> <span style="color:#ae81ff">0005</span><span style="color:#ae81ff">9</span>	MOVB	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">99</span>, <span style="color:#ae81ff">2</span>(AX)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// s := []byte(&#34;abc&#34;)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>0x0021 00033	PCDATA	<span style="">$</span>0, <span style="">$</span>1
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>0x0021 00033	PCDATA	<span style="">$</span>1, <span style="">$</span>0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>0x0021 00033	LEAQ	type.[3]uint8(SB), AX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>0x0028 00040	PCDATA	<span style="">$</span>0, <span style="">$</span>0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>0x0028 00040	MOVQ	AX, (SP)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>0x002c 00044	CALL	runtime.newobject(SB)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>0x0031 00049	PCDATA	<span style="">$</span>0, <span style="">$</span>1
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>0x0031 00049	MOVQ	8(SP), AX
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>0x0036 00054	MOVW	<span style="">$</span>25185, (AX)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>0x003b 00059	MOVB	<span style="">$</span>99, 2(AX)
 </code></pre></div><p>這樣的更動自然地也就消除了一開始所提到的 string 轉 byte slice 陷阱，自 <strong>Go 1.12</strong> 版本之後，<code>[]byte(string)</code> 會回傳 cap, len 值皆為 string 長度的 byte slice，而不會受到 <code>runtime.stringtoslicebyte</code> 邏輯因素而產生 cap 為 32 的 slice (具體內容可詳見<a href="https://www.cnblogs.com/mushroom/p/8998538.html">Go中string转[]byte的陷阱</a>)。</p>
 <h2 id="總結">總結</h2>
 <p>由於改善 <code>[]byte(string)</code> 的 compile 結果，也消除了之前可能會遇到的陷阱，這其中從發現問題到修改過程都有值得讓人好好學習的知識和概念。</p>
@@ -329,12 +328,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -376,17 +375,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

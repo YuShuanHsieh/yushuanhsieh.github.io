@@ -28,12 +28,11 @@
   <title>Implement Memory Allocator - Implicit Free List - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Implement Memory Allocator - Implicit Free List" />
 <meta property="og:description" content="前言 由前篇文章可以知道，使用 stack data structure 是最簡單的 memory allocator 入門寫法，但是卻會造成一些問題，例如不能任意順序 free 等。既然如此，我們就換成 list 來實作 memory allocator，解決使用 stack 實作的問題。" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言 由前篇文章可以知道，使用 stack data structure 是最簡單的 memory allocator 入門寫法，但是卻會造成一些問題，例如不能任意順序 free 等。既然如此，我們就換成 list 來實作 memory allocator，解決使用 stack 實作的問題。">
 <meta itemprop="datePublished" content="2020-01-19T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2020-01-19T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="1225">
+<meta itemprop="wordCount" content="1369">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -276,15 +275,15 @@
 <p>![study]({{ site.url }}/assets/images/memory-allocator-1.png)</p>
 <h3 id="aligning-blocks">Aligning blocks</h3>
 <p>malloc 應該遵守 alignment 規定：<strong>8 bytes on 32-bit and 16 bytes on 64-bit</strong>。(其原因在下方補充內容中會提及)，所以當我們在計算 block size 時，要加入 alignment 條件，即：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#define HEADER_SIZE 8
-</span><span style="color:#75715e">#define ALIGNMENT 16
-</span><span style="color:#75715e">#define ALIGN(size) (((size) + (ALIGNMENT-1)) &amp; ~(ALIGNMENT-1))
-</span><span style="color:#75715e"></span>
-
-size_t <span style="color:#a6e22e">block_size</span>(size_t payload_size)
-{
-  <span style="color:#66d9ef">return</span> ALIGN(HEADER_SIZE <span style="color:#f92672">+</span> payload_size);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">#define HEADER_SIZE 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">#define ALIGNMENT 16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">#define ALIGN(size) (((size) + (ALIGNMENT-1)) &amp; ~(ALIGNMENT-1))
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>size_t block_size(size_t payload_size)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  <span style="color:#00f">return</span> ALIGN(HEADER_SIZE + payload_size);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>}
 </code></pre></div><p><strong>重點：align 所有 block size，而不是只有 payload size。</strong></p>
 <p>另外一個重點，<strong>malloc return 的 payload address 必須符合 16-byte-aligned</strong>，因此必要時應調整第一個 header 的起始位置，讓 <code>payload address &amp; 0xF</code> 等於 0。</p>
 <p>e.g.
@@ -326,10 +325,10 @@ size_t <span style="color:#a6e22e">block_size</span>(size_t payload_size)
 <h3 id="1-調整-header-格式">1. 調整 header 格式</h3>
 <p>![study]({{ site.url }}/assets/images/memory-allocator-7.png)</p>
 <p>原先的 header struct 是</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
-  size_t size;
-  size_t allocated;
-} block_header;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">typedef</span> <span style="color:#00f">struct</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  size_t size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  size_t allocated;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>} block_header;
 </code></pre></div><p>但是由於 alignment 關係，一開始的幾個 bit 值皆為 0 ，因此可以直接使用這些 bit 來表示 allocated 值即可。(e.g. alignment 為 8 bytes，則 0-2 bits 皆為 0)</p>
 <h3 id="2-改善---coalesce">2. 改善 - Coalesce</h3>
 <p>在基本版本的 implicit free list 中，有可能因為 allocate 和 free 的連續操作，造成原先大塊的 block 被拆分成小塊的 blocks，進而導致再次 allocate 大 size 的 object 時會找不到適合的 block。</p>
@@ -348,189 +347,189 @@ size_t <span style="color:#a6e22e">block_size</span>(size_t payload_size)
 <p>由於 implicit free list 是 allocated 以及 unallocated blocks 混雜在一起，因此在找尋適合大小的 block 時會花費比較多時間。此外，如果我們是使用 first fit 策略(找到第一個有足夠大小的 block 即返回)，那就有可能造成額外的 external fragmenation 問題。但如果改用 best fit策略(找到最適合的大小 block)，那就要遍歷所有的 blocks 進行 size 比較，因此而花費更多尋找時間。</p>
 <h2 id="實作">實作</h2>
 <p>實作部分可以參考 <a href="https://github.com/YuShuanHsieh/allocator-example/blob/master/free_list/mm.c">Github allocator-example</a>，這其實是 <a href="https://my.eng.utah.edu/~cs4400/">CS 4400 – Computer Systems</a> 的程式作業XD 而實作結合了上面所提到的三個改善方式。可以透過 <code>make test60</code> 來進行測試。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdint.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt; </span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;errno.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdbool.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdint.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/mman.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;mm.h&#34;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">typedef</span> uint64_t header;
-
-<span style="color:#75715e">#define HEADER_SIZE sizeof(header)
-</span><span style="color:#75715e">#define ALIGNMENT 16
-</span><span style="color:#75715e">#define ALIGN(size) (((size) + (ALIGNMENT-1)) &amp; ~(ALIGNMENT-1))
-</span><span style="color:#75715e">#define BLOCK_SIZE(header_ptr) (*(uint64_t *) header_ptr &amp; ~0xF)
-</span><span style="color:#75715e">#define BLOCK_ALLOCATED(header_ptr) (*(uint64_t *) header_ptr &amp; 1)
-</span><span style="color:#75715e">#define BLOCK_FOOTER(header_ptr) ((char *)(header_ptr) + BLOCK_SIZE(header_ptr) - HEADER_SIZE)
-</span><span style="color:#75715e">#define PREV_BLOCK_ALLOCATED(header_ptr) ((*(uint64_t *) header_ptr &amp; 2) &gt;&gt; 1)
-</span><span style="color:#75715e">#define NEXT_BLOCK(header_ptr)((char *)(header_ptr) + BLOCK_SIZE(header_ptr))
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>area;
-
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">set_header</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>header, <span style="color:#66d9ef">int</span> size, <span style="color:#66d9ef">bool</span> allocated, <span style="color:#66d9ef">bool</span> prev_allocated)
-{
-    <span style="color:#f92672">*</span>(uint64_t <span style="color:#f92672">*</span>)header <span style="color:#f92672">=</span> size <span style="color:#f92672">|</span> allocated <span style="color:#f92672">|</span> (prev_allocated <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">1</span>);
-}
-
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">set_footer</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>footer, <span style="color:#66d9ef">int</span> size)
-{
-    <span style="color:#f92672">*</span>(uint64_t <span style="color:#f92672">*</span>)footer <span style="color:#f92672">=</span> size;
-}
-
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">mm_init</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>heap, size_t heap_size)
-{ 
-  area <span style="color:#f92672">=</span> heap <span style="color:#f92672">+</span> HEADER_SIZE;
-  heap_size <span style="color:#f92672">=</span> heap_size <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> HEADER_SIZE;
-  set_header(area, heap_size, false, true);
-  set_header(NEXT_BLOCK(area), <span style="color:#ae81ff">0</span>, true, true);
-
-}
-
-<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">find_free_block</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>heap, size_t size)
-{
-    <span style="color:#66d9ef">bool</span> allocated;
-    size_t block_size;
-    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>block <span style="color:#f92672">=</span> heap;
-
-    <span style="color:#66d9ef">while</span>(<span style="color:#ae81ff">1</span>)
-    {
-        allocated <span style="color:#f92672">=</span> BLOCK_ALLOCATED(block);
-        block_size <span style="color:#f92672">=</span> BLOCK_SIZE(block);
-
-        <span style="color:#66d9ef">if</span> (block_size <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-        {
-            <span style="color:#66d9ef">return</span> NULL;
-        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (allocated <span style="color:#f92672">==</span> true <span style="color:#f92672">||</span> block_size <span style="color:#f92672">&lt;</span> size)
-        {
-            block <span style="color:#f92672">=</span> NEXT_BLOCK(block);
-        } <span style="color:#66d9ef">else</span> {
-            <span style="color:#66d9ef">return</span> block;
-        }
-    };
-}
-
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">print_fragment</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>heap)
-{
-    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>head <span style="color:#f92672">=</span> heap;
-    size_t fragment_size;
-    <span style="color:#66d9ef">bool</span> allocated;
-
-    <span style="color:#66d9ef">while</span>(<span style="color:#ae81ff">1</span>)
-    {  
-        fragment_size <span style="color:#f92672">=</span> BLOCK_SIZE(head);
-        allocated <span style="color:#f92672">=</span> BLOCK_ALLOCATED(head);
-
-        <span style="color:#66d9ef">if</span>(fragment_size <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-        {
-            <span style="color:#66d9ef">break</span>;
-        }
-
-        printf(<span style="color:#e6db74">&#34; [%zu, %d] &#34;</span>, fragment_size, allocated);
-        head <span style="color:#f92672">=</span> NEXT_BLOCK(head);
-    }
-    printf(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-}
-
-<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">mm_malloc</span>(size_t size)
-{
-  <span style="color:#66d9ef">if</span> (size <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-  {
-    <span style="color:#66d9ef">return</span> NULL;
-  }
-
-  <span style="color:#66d9ef">int</span> aligned_size <span style="color:#f92672">=</span> ALIGN(size <span style="color:#f92672">+</span> HEADER_SIZE);
-  <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>block <span style="color:#f92672">=</span> find_free_block(area, aligned_size);
-
-  <span style="color:#66d9ef">if</span> (block <span style="color:#f92672">==</span> NULL)
-  {
-      printf(<span style="color:#e6db74">&#34;space is not enough </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-      <span style="color:#66d9ef">return</span> NULL;
-  }
-
-  size_t block_size <span style="color:#f92672">=</span> BLOCK_SIZE(block);
-  
-  size_t remainder_size <span style="color:#f92672">=</span> block_size <span style="color:#f92672">-</span> aligned_size;
-
-  <span style="color:#66d9ef">if</span> (remainder_size <span style="color:#f92672">&gt;</span> ALIGN(HEADER_SIZE))
-  {
-    set_header(block, aligned_size, true, PREV_BLOCK_ALLOCATED(block));
-    set_header(NEXT_BLOCK(block), remainder_size, false, true);
-  } <span style="color:#66d9ef">else</span> {
-    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>next_header <span style="color:#f92672">=</span> NEXT_BLOCK(block);
-    set_header(block, BLOCK_SIZE(block), true, PREV_BLOCK_ALLOCATED(block));
-    set_header(next_header, BLOCK_SIZE(next_header), BLOCK_ALLOCATED(next_header), true);
-  }
-
-  <span style="color:#66d9ef">return</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)(block) <span style="color:#f92672">+</span> HEADER_SIZE;
-}
-
-
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">coalesce_blocks</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>block)
-{
-    size_t size, prev_size, next_size;
-    <span style="color:#66d9ef">bool</span> prev <span style="color:#f92672">=</span> PREV_BLOCK_ALLOCATED(block);
-    <span style="color:#66d9ef">bool</span> next <span style="color:#f92672">=</span> BLOCK_ALLOCATED(NEXT_BLOCK(block));
-
-    size <span style="color:#f92672">=</span> BLOCK_SIZE(block);
-
-    <span style="color:#66d9ef">if</span> (prev <span style="color:#f92672">==</span> false <span style="color:#f92672">&amp;&amp;</span> next <span style="color:#f92672">==</span> false)
-    {
-      <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>prev_footer <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)block <span style="color:#f92672">-</span> HEADER_SIZE;
-      prev_size <span style="color:#f92672">=</span> BLOCK_SIZE(prev_footer);
-      next_size <span style="color:#f92672">=</span> BLOCK_SIZE(NEXT_BLOCK(block));
-
-      <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>prev_header <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)block <span style="color:#f92672">-</span> prev_size;
-      <span style="color:#66d9ef">int</span> new_size <span style="color:#f92672">=</span> prev_size <span style="color:#f92672">+</span> next_size <span style="color:#f92672">+</span> size;
-      set_header(prev_header, new_size, false, PREV_BLOCK_ALLOCATED(prev_header));
-      set_footer(BLOCK_FOOTER(prev_header), new_size);
-
-      block <span style="color:#f92672">=</span> prev_header;
-
-    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (prev <span style="color:#f92672">==</span> false)
-    {
-      <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>prev_footer <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)block <span style="color:#f92672">-</span> HEADER_SIZE;
-      prev_size <span style="color:#f92672">=</span> BLOCK_SIZE(prev_footer);
-      <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>prev_header <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)block <span style="color:#f92672">-</span> prev_size;
-
-      <span style="color:#66d9ef">int</span> new_size <span style="color:#f92672">=</span> prev_size <span style="color:#f92672">+</span> size;
-      set_header(prev_header, new_size, false, PREV_BLOCK_ALLOCATED(prev_header));
-      set_footer(BLOCK_FOOTER(prev_header), new_size);
-
-      block <span style="color:#f92672">=</span> prev_header;
-
-    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (next <span style="color:#f92672">==</span> false)
-    {
-      next_size <span style="color:#f92672">=</span> BLOCK_SIZE(NEXT_BLOCK(block));
-
-      <span style="color:#66d9ef">int</span> new_size <span style="color:#f92672">=</span> next_size <span style="color:#f92672">+</span> size;
-      set_header(block, new_size, false, PREV_BLOCK_ALLOCATED(block));
-      set_footer(BLOCK_FOOTER(block), new_size);
-      
-    } <span style="color:#66d9ef">else</span> {
-    }
-}
-
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">mm_free</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>payload)
-{
-  <span style="color:#66d9ef">if</span> (payload <span style="color:#f92672">==</span> NULL)
-  {
-      <span style="color:#66d9ef">return</span>;
-  }
-  <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>header <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)payload <span style="color:#f92672">-</span> HEADER_SIZE;
-  set_header(header, BLOCK_SIZE(header), false, PREV_BLOCK_ALLOCATED(header));
-  
-  <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>footer <span style="color:#f92672">=</span> BLOCK_FOOTER(header);
-  set_footer(footer, BLOCK_SIZE(header));
-
-  <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>next <span style="color:#f92672">=</span> NEXT_BLOCK(header);
-  set_header(next, BLOCK_SIZE(next), BLOCK_ALLOCATED(next), false);
-
-  coalesce_blocks(header);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdint.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdio.h&gt; </span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;unistd.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;errno.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  5</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdbool.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  6</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdint.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  7</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;sys/mman.h&gt;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  8</span><span style="color:#00f"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  9</span><span style="color:#00f">#include</span> <span style="color:#00f">&#34;mm.h&#34;</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 10</span><span style="color:#00f"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 11</span><span style="color:#00f">typedef</span> uint64_t header;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 13</span><span style="color:#00f">#define HEADER_SIZE sizeof(header)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 14</span><span style="color:#00f">#define ALIGNMENT 16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 15</span><span style="color:#00f">#define ALIGN(size) (((size) + (ALIGNMENT-1)) &amp; ~(ALIGNMENT-1))
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 16</span><span style="color:#00f">#define BLOCK_SIZE(header_ptr) (*(uint64_t *) header_ptr &amp; ~0xF)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 17</span><span style="color:#00f">#define BLOCK_ALLOCATED(header_ptr) (*(uint64_t *) header_ptr &amp; 1)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 18</span><span style="color:#00f">#define BLOCK_FOOTER(header_ptr) ((char *)(header_ptr) + BLOCK_SIZE(header_ptr) - HEADER_SIZE)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 19</span><span style="color:#00f">#define PREV_BLOCK_ALLOCATED(header_ptr) ((*(uint64_t *) header_ptr &amp; 2) &gt;&gt; 1)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 20</span><span style="color:#00f">#define NEXT_BLOCK(header_ptr)((char *)(header_ptr) + BLOCK_SIZE(header_ptr))
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 21</span><span style="color:#00f"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 22</span><span style="color:#2b91af">void</span> *area;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 24</span><span style="color:#2b91af">void</span> set_header(<span style="color:#2b91af">void</span> *header, <span style="color:#2b91af">int</span> size, <span style="color:#2b91af">bool</span> allocated, <span style="color:#2b91af">bool</span> prev_allocated)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 25</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 26</span>    *(uint64_t *)header = size | allocated | (prev_allocated &lt;&lt; 1);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 27</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 28</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 29</span><span style="color:#2b91af">void</span> set_footer(<span style="color:#2b91af">void</span> *footer, <span style="color:#2b91af">int</span> size)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 30</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 31</span>    *(uint64_t *)footer = size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 32</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 33</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 34</span><span style="color:#2b91af">void</span> mm_init(<span style="color:#2b91af">void</span> *heap, size_t heap_size)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 35</span>{ 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 36</span>  area = heap + HEADER_SIZE;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 37</span>  heap_size = heap_size - 2 * HEADER_SIZE;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 38</span>  set_header(area, heap_size, false, true);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 39</span>  set_header(NEXT_BLOCK(area), 0, true, true);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 40</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 41</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 42</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 43</span><span style="color:#2b91af">void</span> *find_free_block(<span style="color:#2b91af">void</span> *heap, size_t size)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 44</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 45</span>    <span style="color:#2b91af">bool</span> allocated;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 46</span>    size_t block_size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 47</span>    <span style="color:#2b91af">void</span> *block = heap;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 48</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 49</span>    <span style="color:#00f">while</span>(1)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 50</span>    {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 51</span>        allocated = BLOCK_ALLOCATED(block);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 52</span>        block_size = BLOCK_SIZE(block);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 53</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 54</span>        <span style="color:#00f">if</span> (block_size == 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 55</span>        {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 56</span>            <span style="color:#00f">return</span> NULL;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 57</span>        } <span style="color:#00f">else</span> <span style="color:#00f">if</span> (allocated == true || block_size &lt; size)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 58</span>        {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 59</span>            block = NEXT_BLOCK(block);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 60</span>        } <span style="color:#00f">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 61</span>            <span style="color:#00f">return</span> block;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 62</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 63</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 64</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 65</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 66</span><span style="color:#2b91af">void</span> print_fragment(<span style="color:#2b91af">void</span> *heap)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 67</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 68</span>    <span style="color:#2b91af">void</span> *head = heap;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 69</span>    size_t fragment_size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 70</span>    <span style="color:#2b91af">bool</span> allocated;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 71</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 72</span>    <span style="color:#00f">while</span>(1)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 73</span>    {  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 74</span>        fragment_size = BLOCK_SIZE(head);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 75</span>        allocated = BLOCK_ALLOCATED(head);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 76</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 77</span>        <span style="color:#00f">if</span>(fragment_size == 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 78</span>        {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 79</span>            <span style="color:#00f">break</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 80</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 81</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 82</span>        printf(<span style="color:#a31515">&#34; [%zu, %d] &#34;</span>, fragment_size, allocated);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 83</span>        head = NEXT_BLOCK(head);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 84</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 85</span>    printf(<span style="color:#a31515">&#34;</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 86</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 87</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 88</span><span style="color:#2b91af">void</span> *mm_malloc(size_t size)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 89</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 90</span>  <span style="color:#00f">if</span> (size == 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 91</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 92</span>    <span style="color:#00f">return</span> NULL;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 93</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 94</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 95</span>  <span style="color:#2b91af">int</span> aligned_size = ALIGN(size + HEADER_SIZE);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 96</span>  <span style="color:#2b91af">void</span> *block = find_free_block(area, aligned_size);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 97</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 98</span>  <span style="color:#00f">if</span> (block == NULL)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 99</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">100</span>      printf(<span style="color:#a31515">&#34;space is not enough </span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">101</span>      <span style="color:#00f">return</span> NULL;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">102</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">103</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">104</span>  size_t block_size = BLOCK_SIZE(block);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">105</span>  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">106</span>  size_t remainder_size = block_size - aligned_size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">107</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">108</span>  <span style="color:#00f">if</span> (remainder_size &gt; ALIGN(HEADER_SIZE))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">109</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">110</span>    set_header(block, aligned_size, true, PREV_BLOCK_ALLOCATED(block));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">111</span>    set_header(NEXT_BLOCK(block), remainder_size, false, true);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">112</span>  } <span style="color:#00f">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">113</span>    <span style="color:#2b91af">void</span> *next_header = NEXT_BLOCK(block);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">114</span>    set_header(block, BLOCK_SIZE(block), true, PREV_BLOCK_ALLOCATED(block));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">115</span>    set_header(next_header, BLOCK_SIZE(next_header), BLOCK_ALLOCATED(next_header), true);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">116</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">117</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">118</span>  <span style="color:#00f">return</span> (<span style="color:#2b91af">char</span> *)(block) + HEADER_SIZE;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">119</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">120</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">121</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">122</span><span style="color:#2b91af">void</span> coalesce_blocks(<span style="color:#2b91af">void</span> *block)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">123</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">124</span>    size_t size, prev_size, next_size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">125</span>    <span style="color:#2b91af">bool</span> prev = PREV_BLOCK_ALLOCATED(block);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">126</span>    <span style="color:#2b91af">bool</span> next = BLOCK_ALLOCATED(NEXT_BLOCK(block));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">127</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">128</span>    size = BLOCK_SIZE(block);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">129</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">130</span>    <span style="color:#00f">if</span> (prev == false &amp;&amp; next == false)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">131</span>    {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">132</span>      <span style="color:#2b91af">void</span> *prev_footer = (<span style="color:#2b91af">char</span> *)block - HEADER_SIZE;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">133</span>      prev_size = BLOCK_SIZE(prev_footer);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">134</span>      next_size = BLOCK_SIZE(NEXT_BLOCK(block));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">135</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">136</span>      <span style="color:#2b91af">void</span> *prev_header = (<span style="color:#2b91af">char</span> *)block - prev_size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">137</span>      <span style="color:#2b91af">int</span> new_size = prev_size + next_size + size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">138</span>      set_header(prev_header, new_size, false, PREV_BLOCK_ALLOCATED(prev_header));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">139</span>      set_footer(BLOCK_FOOTER(prev_header), new_size);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">140</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">141</span>      block = prev_header;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">142</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">143</span>    } <span style="color:#00f">else</span> <span style="color:#00f">if</span> (prev == false)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">144</span>    {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">145</span>      <span style="color:#2b91af">void</span> *prev_footer = (<span style="color:#2b91af">char</span> *)block - HEADER_SIZE;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">146</span>      prev_size = BLOCK_SIZE(prev_footer);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">147</span>      <span style="color:#2b91af">void</span> *prev_header = (<span style="color:#2b91af">char</span> *)block - prev_size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">148</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">149</span>      <span style="color:#2b91af">int</span> new_size = prev_size + size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">150</span>      set_header(prev_header, new_size, false, PREV_BLOCK_ALLOCATED(prev_header));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">151</span>      set_footer(BLOCK_FOOTER(prev_header), new_size);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">152</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">153</span>      block = prev_header;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">154</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">155</span>    } <span style="color:#00f">else</span> <span style="color:#00f">if</span> (next == false)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">156</span>    {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">157</span>      next_size = BLOCK_SIZE(NEXT_BLOCK(block));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">158</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">159</span>      <span style="color:#2b91af">int</span> new_size = next_size + size;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">160</span>      set_header(block, new_size, false, PREV_BLOCK_ALLOCATED(block));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">161</span>      set_footer(BLOCK_FOOTER(block), new_size);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">162</span>      
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">163</span>    } <span style="color:#00f">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">164</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">165</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">166</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">167</span><span style="color:#2b91af">void</span> mm_free(<span style="color:#2b91af">void</span> *payload)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">168</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">169</span>  <span style="color:#00f">if</span> (payload == NULL)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">170</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">171</span>      <span style="color:#00f">return</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">172</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">173</span>  <span style="color:#2b91af">void</span> *header = (<span style="color:#2b91af">char</span> *)payload - HEADER_SIZE;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">174</span>  set_header(header, BLOCK_SIZE(header), false, PREV_BLOCK_ALLOCATED(header));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">175</span>  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">176</span>  <span style="color:#2b91af">void</span> *footer = BLOCK_FOOTER(header);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">177</span>  set_footer(footer, BLOCK_SIZE(header));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">178</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">179</span>  <span style="color:#2b91af">void</span> *next = NEXT_BLOCK(header);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">180</span>  set_header(next, BLOCK_SIZE(next), BLOCK_ALLOCATED(next), false);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">181</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">182</span>  coalesce_blocks(header);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">183</span>}
 </code></pre></div><h2 id="note">Note</h2>
 <h3 id="sbrk-is-deprecated">sbrk() is deprecated</h3>
 <p>網路上會看到很多範例使用 sbrk ，來延伸 heap 大小，不過卻被人詬病是比較不好的做法，原因是延伸後的 memory range 可能會被使用到 (shared memory)。不過這樣的情形是有機率會出現在 virtual memory 有限的 32 bit 架構上，但對於 virtual memory 很充足的 64 bit 架構來說，每個 process 會有各自的 memory space，不太會發生這樣情形。</p>
@@ -555,12 +554,12 @@ size_t <span style="color:#a6e22e">block_size</span>(size_t payload_size)
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -602,17 +601,6 @@ size_t <span style="color:#a6e22e">block_size</span>(size_t payload_size)
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

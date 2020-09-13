@@ -28,12 +28,11 @@
   <title>Golang - Request test using net/http/httptrace - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Golang - Request test using net/http/httptrace" />
 <meta property="og:description" content="前言 在撰寫 HTTP request test 測試程式時，除了測試 response 結果是否如預期之外，我們還需要知道過程中需要耗費多少時間（request latency）。市面上有一些 libraries (e." />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言 在撰寫 HTTP request test 測試程式時，除了測試 response 結果是否如預期之外，我們還需要知道過程中需要耗費多少時間（request latency）。市面上有一些 libraries (e.">
 <meta itemprop="datePublished" content="2019-03-14T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2019-03-14T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="687">
+<meta itemprop="wordCount" content="754">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -259,60 +258,60 @@
 <p>在說明 <code>httptrace</code> 之前，由於 request test 中是藉由 http package 來發起的 ，所以先來了解一下 golang 中，透過 <code>http</code> package 的 client 處理 http request 的流程。</p>
 <h3 id="new-request">New Request</h3>
 <p>首先我們透過 <code>http.Get</code> 發出 request， 過程中會經由 NewRequest  產出 request instance 並交由 client.Do(request) method 處理。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;/example&#34;</span>)
-
-<span style="color:#75715e">// is equal to: 
-</span><span style="color:#75715e"></span>
-<span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, <span style="color:#e6db74">&#34;/example&#34;</span>, <span style="color:#66d9ef">nil</span>)
-<span style="color:#a6e22e">resp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DefaultClient</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">req</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>http.Get(<span style="color:#a31515">&#34;/example&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000">// is equal to: 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>req := http.NewRequest(<span style="color:#a31515">&#34;GET&#34;</span>, <span style="color:#a31515">&#34;/example&#34;</span>, <span style="color:#00f">nil</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>resp := http.DefaultClient.Do(req)
 </code></pre></div><h3 id="send-request">Send Request</h3>
 <p><code>client.do</code> method 主要負責發送 request 和回傳 response，可說是整段流程的核心，而過程中會先處理 HTTP Headers 相關內容，接著將 request 正式透過 <code>client.send</code> 送出。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// source code from client.go
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e">// 1. Client Do
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Client</span>) <span style="color:#a6e22e">do</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) (<span style="color:#a6e22e">retres</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">reterr</span> <span style="color:#66d9ef">error</span>) {
-  <span style="color:#75715e">// ...some code to deal with Headers
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">didTimeout</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">deadline</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	  <span style="color:#75715e">// error handle	
-</span><span style="color:#75715e"></span>	}
-	<span style="color:#75715e">// ...more
-</span><span style="color:#75715e"></span>}
-
-<span style="color:#75715e">// 2. Send Request
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Client</span>) <span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">deadline</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>) 
- (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">didTimeout</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">bool</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
-  <span style="color:#75715e">// ...some code to add cookies
-</span><span style="color:#75715e"></span>  <span style="color:#75715e">// send request with transport method
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">didTimeout</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">transport</span>(), <span style="color:#a6e22e">deadline</span>)
-  <span style="color:#75715e">// ...more
-</span><span style="color:#75715e"></span>}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// source code from client.go
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000">// 1. Client Do
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000"></span><span style="color:#00f">func</span> (c *Client) do(req *Request) (retres *Response, reterr <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#008000">// ...some code to deal with Headers
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000"></span>  <span style="color:#00f">if</span> resp, didTimeout, err = c.send(req, deadline); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	  <span style="color:#008000">// error handle	
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000"></span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>	<span style="color:#008000">// ...more
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000">// 2. Send Request
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000"></span><span style="color:#00f">func</span> (c *Client) send(req *Request, deadline time.Time) 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span> (resp *Response, didTimeout <span style="color:#00f">func</span>() <span style="color:#2b91af">bool</span>, err <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  <span style="color:#008000">// ...some code to add cookies
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#008000"></span>  <span style="color:#008000">// send request with transport method
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#008000"></span>  resp, didTimeout, err = send(req, c.transport(), deadline)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  <span style="color:#008000">// ...more
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#008000"></span>}
 </code></pre></div><h3 id="roundtripper-transport">RoundTripper (Transport)</h3>
 <p>接著來到重頭戲啦，上面 code 中可以看到 <code>c.transport()</code>，它會回傳 <code>RoundTripper</code>，真正執行整個 <strong>http transaction</strong> 就是 RoundTripper 中的 <code>RoundTrip</code> method。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 3. Start RoundTrip
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">ireq</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">rt</span> <span style="color:#a6e22e">RoundTripper</span>, <span style="color:#a6e22e">deadline</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">didTimeout</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">bool</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
-  <span style="color:#75715e">// ...more
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">rt</span>.<span style="color:#a6e22e">RoundTrip</span>(<span style="color:#a6e22e">req</span>)
-  <span style="color:#75715e">// ..more
-</span><span style="color:#75715e"></span>}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// 3. Start RoundTrip
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span><span style="color:#00f">func</span> send(ireq *Request, rt RoundTripper, deadline time.Time) (resp *Response, didTimeout <span style="color:#00f">func</span>() <span style="color:#2b91af">bool</span>, err <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#008000">// ...more
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span>  resp, err = rt.RoundTrip(req)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#008000">// ..more
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000"></span>}
 </code></pre></div><p><code>RoundTripper</code> 是一個 interface，http package 在預設情況下是使用實作 RoundTripper 的 DefaultTransport 進行基本傳輸， 如果對於 http 流程很清楚的使用者，當然可以自己自製一個 transport 來完成整個 transaction。</p>
 <p>緊接著繼續看 DefaultTransport 是如何實作 RoundTrip 的。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// source code from transport.go
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e">// internel RoundTrip methods
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Transport</span>) <span style="color:#a6e22e">roundTrip</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#66d9ef">error</span>) {
-  <span style="color:#75715e">// get trace from ctx
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">ctx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Context</span>()
-  <span style="color:#a6e22e">trace</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">httptrace</span>.<span style="color:#a6e22e">ContextClientTrace</span>(<span style="color:#a6e22e">ctx</span>)
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// source code from transport.go
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000">// internel RoundTrip methods
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span><span style="color:#00f">func</span> (t *Transport) roundTrip(req *Request) (*Response, <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#008000">// get trace from ctx
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000"></span>  ctx := req.Context()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  trace := httptrace.ContextClientTrace(ctx)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
 </code></pre></div><p>頭幾行馬上看到我們今天要介紹的主角 - <code>httptrace</code> 中的 trace instance，它在 <code>roundTrip</code> method 被取出來，而從這邊我們就可以很快地了解到為什麼 <code>httptrace</code> 可以實現追蹤 http 的流程了，因為在接下來的 transaction 過程中，這個 trace 中的 functions 都會在適時的階段觸發。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">pc</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">persistConn</span>) <span style="color:#a6e22e">readResponse</span>(<span style="color:#a6e22e">rc</span> <span style="color:#a6e22e">requestAndChan</span>, <span style="color:#a6e22e">trace</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">httptrace</span>.<span style="color:#a6e22e">ClientTrace</span>) (<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">trace</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">trace</span>.<span style="color:#a6e22e">GotFirstResponseByte</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">peek</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">pc</span>.<span style="color:#a6e22e">br</span>.<span style="color:#a6e22e">Peek</span>(<span style="color:#ae81ff">1</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">&amp;&amp;</span> len(<span style="color:#a6e22e">peek</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {
-		  <span style="color:#75715e">// trigger trace hook functions
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">trace</span>.<span style="color:#a6e22e">GotFirstResponseByte</span>()
-		}
-	}
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">func</span> (pc *persistConn) readResponse(rc requestAndChan, trace *httptrace.ClientTrace) (resp *Response, err <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#00f">if</span> trace != <span style="color:#00f">nil</span> &amp;&amp; trace.GotFirstResponseByte != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>		<span style="color:#00f">if</span> peek, err := pc.br.Peek(1); err == <span style="color:#00f">nil</span> &amp;&amp; len(peek) == 1 {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>		  <span style="color:#008000">// trigger trace hook functions
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000"></span>			trace.GotFirstResponseByte()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
 </code></pre></div><p>![httptrace]({{ site.url }}/assets/images/httptrace-1.png)</p>
 <h2 id="httptrace-packages">httptrace packages</h2>
 <p>httptrace 主要提供 HTTP client requests 的事件中追蹤，package 中包含了 <code>ClientTrace</code> struct，我們可以客製化 <code>ClientTrace</code> 中的 methods，並把 trace 放入 request context，這樣的話，這個 trace 就會在上面剛剛所提到的 roundTrip 中被觸發。</p>
@@ -344,86 +343,86 @@
 <ol>
 <li>首先引入必要的 packages</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">import</span> (
-  <span style="color:#e6db74">&#34;time&#34;</span>
-  <span style="color:#e6db74">&#34;net/http&#34;</span>
-  <span style="color:#e6db74">&#34;net/http/httptest&#34;</span>
-  <span style="color:#e6db74">&#34;net/http/httptrace&#34;</span>
-)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">import</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#a31515">&#34;time&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#a31515">&#34;net/http&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  <span style="color:#a31515">&#34;net/http/httptest&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#a31515">&#34;net/http/httptrace&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>)
 </code></pre></div><ol start="2">
 <li>接著產生一個包含我們自己實作 methods 的 trace</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Tracer</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">start</span>       <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>
-	<span style="color:#a6e22e">end</span>         <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>
-	<span style="color:#a6e22e">latency</span>     <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Tracer</span>) <span style="color:#a6e22e">GotConn</span>(<span style="color:#a6e22e">connInfo</span> <span style="color:#a6e22e">httptrace</span>.<span style="color:#a6e22e">GotConnInfo</span>) {
-	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">start</span> = <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>()
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Tracer</span>) <span style="color:#a6e22e">GotFirstResponseByte</span>() {
-	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">end</span> = <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>()
-	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">latency</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">end</span>.<span style="color:#a6e22e">Sub</span>(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">start</span>)
-}
-
-<span style="color:#a6e22e">trace</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">httptrace</span>.<span style="color:#a6e22e">ClientTrace</span>{
-	<span style="color:#a6e22e">GotConn</span>: <span style="color:#a6e22e">tracer</span>.<span style="color:#a6e22e">GotConn</span>,
-	<span style="color:#a6e22e">GotFirstResponseByte</span>: <span style="color:#a6e22e">tracer</span>.<span style="color:#a6e22e">GotFirstResponseByte</span>,
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">type</span> Tracer <span style="color:#00f">struct</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	start       time.Time
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>	end         time.Time
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	latency     time.Duration
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#00f">func</span> (l *Tracer) GotConn(connInfo httptrace.GotConnInfo) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>	l.start = time.Now()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#00f">func</span> (l *Tracer) GotFirstResponseByte() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>	l.end = time.Now()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>	l.latency = l.end.Sub(l.start)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>trace := &amp;httptrace.ClientTrace{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>	GotConn: tracer.GotConn,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>	GotFirstResponseByte: tracer.GotFirstResponseByte,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>}
 </code></pre></div><ol start="3">
 <li>然後把 trace 放入 request context 內</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;POST&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">URL</span>, <span style="color:#a6e22e">bytes</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">data</span>))
-<span style="color:#a6e22e">req</span> = <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">WithContext</span>(<span style="color:#a6e22e">httptrace</span>.<span style="color:#a6e22e">WithClientTrace</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Context</span>(), <span style="color:#a6e22e">trace</span>))
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>req, _ := http.NewRequest(<span style="color:#a31515">&#34;POST&#34;</span>, server.URL, bytes.NewReader(data))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>req = req.WithContext(httptrace.WithClientTrace(req.Context(), trace))
 </code></pre></div><ol start="4">
 <li>執行 RoundTrip</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Use DefaultTransport directly
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DefaultTransport</span>.<span style="color:#a6e22e">RoundTrip</span>(<span style="color:#a6e22e">req</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// Use DefaultTransport directly
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>res, err := http.DefaultTransport.RoundTrip(req)
 </code></pre></div><p>剛剛上述流程中有介紹到，預設下是使用 <code>http.DefaultTransport</code> 這個 <code>RoundTripper</code> 來執行 HTTP transaction 的，所以我們在測試時，就直接呼叫 <code>http.DefaultTransport.RoundTrip(req)</code> 即可。如此一來，就可以看到剛剛所設定好的 trace hooks 在過程中被觸發，同時也會獲得最後 response 結果。</p>
 <h2 id="notice-use-httptest-to-start-your-test-server">Notice: use <code>httptest</code> to start your test server</h2>
 <p>上面是包含 client 發 request 階段，所以別忘了要先啟動 server，測試才可以正常執行。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">httptest</span>.<span style="color:#a6e22e">NewServer</span>(<span style="color:#a6e22e">handler</span>) <span style="color:#75715e">// Your test handler
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>server := httptest.NewServer(handler) <span style="color:#008000">// Your test handler
 </span></code></pre></div><h2 id="demo-code">Demo code</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">import</span> (
-  <span style="color:#e6db74">&#34;time&#34;</span>
-  <span style="color:#e6db74">&#34;net/http&#34;</span>
-  <span style="color:#e6db74">&#34;net/http/httptest&#34;</span>
-  <span style="color:#e6db74">&#34;net/http/httptrace&#34;</span>
-  <span style="color:#e6db74">&#34;testing&#34;</span>
-)
-
-<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Tracer</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">start</span>       <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>
-	<span style="color:#a6e22e">end</span>         <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>
-	<span style="color:#a6e22e">latency</span>     <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Tracer</span>) <span style="color:#a6e22e">GotConn</span>(<span style="color:#a6e22e">connInfo</span> <span style="color:#a6e22e">httptrace</span>.<span style="color:#a6e22e">GotConnInfo</span>) {
-	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">start</span> = <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>()
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Tracer</span>) <span style="color:#a6e22e">GotFirstResponseByte</span>() {
-	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">end</span> = <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>()
-	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">latency</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">end</span>.<span style="color:#a6e22e">Sub</span>(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">start</span>)
-}
-
-<span style="color:#a6e22e">trace</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">httptrace</span>.<span style="color:#a6e22e">ClientTrace</span>{
-	<span style="color:#a6e22e">GotConn</span>: <span style="color:#a6e22e">tracer</span>.<span style="color:#a6e22e">GotConn</span>,
-	<span style="color:#a6e22e">GotFirstResponseByte</span>: <span style="color:#a6e22e">tracer</span>.<span style="color:#a6e22e">GotFirstResponseByte</span>,
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">TestRequest</span>(<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">T</span>) {
-  <span style="color:#75715e">// handler := your handler
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">server</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">httptest</span>.<span style="color:#a6e22e">NewServer</span>(<span style="color:#a6e22e">handler</span>) <span style="color:#75715e">// New test server
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;POST&#34;</span>, <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">URL</span>, <span style="color:#a6e22e">bytes</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">data</span>))
-  <span style="color:#a6e22e">req</span> = <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">WithContext</span>(<span style="color:#a6e22e">httptrace</span>.<span style="color:#a6e22e">WithClientTrace</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Context</span>(), <span style="color:#a6e22e">trace</span>))
-  <span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DefaultTransport</span>.<span style="color:#a6e22e">RoundTrip</span>(<span style="color:#a6e22e">req</span>)
-  <span style="color:#75715e">// check your response
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">Close</span>()
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">import</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#a31515">&#34;time&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#a31515">&#34;net/http&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#a31515">&#34;net/http/httptest&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#a31515">&#34;net/http/httptrace&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#a31515">&#34;testing&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#00f">type</span> Tracer <span style="color:#00f">struct</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>	start       time.Time
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>	end         time.Time
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>	latency     time.Duration
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#00f">func</span> (l *Tracer) GotConn(connInfo httptrace.GotConnInfo) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>	l.start = time.Now()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#00f">func</span> (l *Tracer) GotFirstResponseByte() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>	l.end = time.Now()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>	l.latency = l.end.Sub(l.start)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>trace := &amp;httptrace.ClientTrace{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>	GotConn: tracer.GotConn,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>	GotFirstResponseByte: tracer.GotFirstResponseByte,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#00f">func</span> TestRequest(t *testing.T) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>  <span style="color:#008000">// handler := your handler
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#008000"></span>  server := httptest.NewServer(handler) <span style="color:#008000">// New test server
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#008000"></span>  req, _ := http.NewRequest(<span style="color:#a31515">&#34;POST&#34;</span>, server.URL, bytes.NewReader(data))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>  req = req.WithContext(httptrace.WithClientTrace(req.Context(), trace))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  res, err := http.DefaultTransport.RoundTrip(req)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>  <span style="color:#008000">// check your response
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span style="color:#008000"></span>  server.Close()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>}
 </code></pre></div><h2 id="references">References:</h2>
 <ul>
 <li><a href="https://golang.org/pkg/net/http/httptrace/">https://golang.org/pkg/net/http/httptrace/</a></li>
@@ -444,12 +443,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -491,17 +490,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

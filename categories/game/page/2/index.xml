@@ -12,6 +12,17 @@
     
     
     <item>
+      <title>2019/11 月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-12-05-study-11/</link>
+      <pubDate>Thu, 05 Dec 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-12-05-study-11/</guid>
+      <description>前言 12/01是我生日，於是給自己放了一個禮拜的休息假，每天下班回去就是睡覺或是滑手機放空，除非公司 slack 出現訊息，不然很少打開電腦。老實說放假的感覺挺好的，沒有進修進度壓力，也可以好好休養身心～不知道是不是剛換環境以及天氣變化的關係，感冒時好時壞，這幾天就去大醫院照內視鏡和超音波做詳細檢查，幸好沒有什麼問題，就是抵抗力弱了一點（該不會是身體又發現我早午餐都沒怎麼吃吧QQ）
+剛到職新創公司滿一個月，來說說感想～其實還沒加入之前蠻擔心的，畢竟聽說新創公司變動很快，不太清楚自己能不能適應，之所以加入完全是賭上對於主管和同事能力的信任。不過來了一個多月，感覺還不錯，除了福利好之外，還接觸到之前沒有機會實戰的技術。更有意思的是，每個產業都有自己的特色，去吸收那些產業知識和市場訊息，可以擴大自己的眼界。現在唯一比較有壓力的是英文口說 XD 還有許多年紀輕輕但是身懷絕技的同事們，進而督促自己不能懈怠才行。我覺得新創公司的好處是，每個同事都有自己的理想和態度主動積極，在那種氛圍下，自己也比較不容易懈怠。
+生日剛過完，對自己也有些期許，其中最大的目標就是對 Google cloud platform 熟悉並且考到證照，既然決定要走 Cloud 開發，那當然要耕耘相關 infrastructure ，才能更妥善地利用這些服務來開發 application。當然我對作業系統還是很有愛，希望今年可以多讀一些相關論文，甚至可以啟發自己寫一點寫論文出來。之所以會這樣想，是因為發現自己還蠻喜歡做 research 的，可以讓自己對某些領域的學術知識更加了解。</description>
+    </item>
+    
+    <item>
       <title>GDG Hsinchu Meetup Sharing #3 Move from C to Go</title>
       <link>https://yushuanhsieh.github.io/post/2019-11-19-go-meetup-2/</link>
       <pubDate>Tue, 19 Nov 2019 08:00:00 +0800</pubDate>
@@ -196,17 +207,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</guid>
       <description>前言 React Hooks 自從正式 release 後，就出現很多相關教學文章，所以這篇不是講如何實作，而是說他如何在 stateless functional component 中保存當前 state。 此外，最近也開始嘗試把 class component 轉換成使用 hooks 的 components，但過程中還是需要蠻多調整，包含之前有使用一些 lifecycle functions ，藉此機會順便檢視是否真的必要使用這些 functions，是否可以透過其他架構方式來簡化。</description>
-    </item>
-    
-    <item>
-      <title>2019/01月份自我學習回顧</title>
-      <link>https://yushuanhsieh.github.io/post/2019-02-03-study-2019-01/</link>
-      <pubDate>Sun, 03 Feb 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-02-03-study-2019-01/</guid>
-      <description>又到了每個月檢討念書進度的日子了，這次 2019 新的一年有蠻多人生大轉變，像是離職換了一個新的工作環境，以及脫離媽寶身份，跑去新竹生活等。 Moxa 算是我轉職後第一份的正式工作，而在這一年中其實學到很多經驗，但是也對一些流程和開發方式有些疑問。我很想要根據這些問題提出自己的見解，可惜經驗少，又沒有其他公司經驗可以參考，因此總有很想要提出改善，卻又不知道該如何改善的感覺。
-而在年底時，剛好有這個機會可以去趨勢工作，在考量趨勢科技是一家成熟軟體公司的情況下，雖然目前開發經驗還累積不足，但還是決定前往了。我不能説決定是不是正確的，但是我覺得人生就是充滿各種契機，只要在過程中很努力的學習，相信最後都還是值得的結果。
-話又說回來，這次學習主軸又拉回前端，並且參雜一點 Network 理論。這次學習是以 React 以及相關 lib 為主，而 network 則是清大開放課程的 區域網路，之前上完這位教授的網路概論，覺得收穫良多，所以繼續上教授的另一門課程。</description>
     </item>
     
   </channel>

@@ -28,12 +28,11 @@
   <title>Go - Archive files with archive/tar lib - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Go - Archive files with archive/tar lib" />
 <meta property="og:description" content="前言 由於專案要提供 API 來讓使用者 export 匯出檔案， 因此需要將所需檔案集結成一個 archive file。這個流程是透過 Go 的標準 lib archive/tar 來處理，以下文章將簡單介紹流程和實作方式，並於最後附上完整程式碼。" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言 由於專案要提供 API 來讓使用者 export 匯出檔案， 因此需要將所需檔案集結成一個 archive file。這個流程是透過 Go 的標準 lib archive/tar 來處理，以下文章將簡單介紹流程和實作方式，並於最後附上完整程式碼。">
 <meta itemprop="datePublished" content="2018-09-09T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2018-09-09T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="504">
+<meta itemprop="wordCount" content="580">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -264,129 +263,129 @@
 <p>![Go-Tar-2.png]({{ site.url }}/assets/images/Go-Tar-2.png)</p>
 <h3 id="1-create-a-tarwriter">1. Create a Tar.Writer</h3>
 <p>在打包檔案時，首要先做的就是建立一個 tar file 的 writer，後續才能將需要打包的檔案 file 和 header 寫入到 tar file 中。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 建立一個 tar file 的檔案位置.
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">target</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">filepath</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">tarPath</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s.tar&#34;</span>, <span style="color:#a6e22e">tarName</span>))
-<span style="color:#75715e">// 根據上面所建立的檔案位置來創建檔案. (回傳值為 *io.File，實作了 io.writer interface)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">tarfile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#a6e22e">target</span>)
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-}
-<span style="color:#75715e">// 建立一個內含 tar 檔案的 tar writer
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">tarWriter</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tar</span>.<span style="color:#a6e22e">NewWriter</span>(<span style="color:#a6e22e">tarfile</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// 建立一個 tar file 的檔案位置.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>target := filepath.Join(tarPath, fmt.Sprintf(<span style="color:#a31515">&#34;%s.tar&#34;</span>, tarName))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000">// 根據上面所建立的檔案位置來創建檔案. (回傳值為 *io.File，實作了 io.writer interface)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"></span>tarfile, err := os.Create(target)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>	<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#008000">// 建立一個內含 tar 檔案的 tar writer
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span style="color:#008000"></span>tarWriter := tar.NewWriter(tarfile)
 </code></pre></div><h3 id="2讀取要打包的檔案">2.讀取要打包的檔案</h3>
 <p>接下來，我們要一一讀取需要打包的檔案們，以便後續將這些檔案寫入到 tar.Writer 中。透過標準函式庫 <code>filepath.Walk()</code> 就能輕鬆走訪各 folder 底下的檔案群。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">source</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;&lt;source folder&gt;&#34;</span>
-
-<span style="color:#75715e">// Check source is existing.
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">info</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stat</span>(<span style="color:#a6e22e">source</span>)
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-}
-
-<span style="color:#a6e22e">filepath</span>.<span style="color:#a6e22e">Walk</span>(<span style="color:#a6e22e">source</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">info</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">FileInfo</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) <span style="color:#66d9ef">error</span> {
-  <span style="color:#75715e">// Read each file
-</span><span style="color:#75715e"></span>})
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>source := <span style="color:#a31515">&#34;&lt;source folder&gt;&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000">// Check source is existing.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000"></span>info, err := os.Stat(source)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	<span style="color:#00f">return</span> <span style="color:#00f">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>filepath.Walk(source, <span style="color:#00f">func</span>(path <span style="color:#2b91af">string</span>, info os.FileInfo, err <span style="color:#2b91af">error</span>) <span style="color:#2b91af">error</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#008000">// Read each file
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000"></span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
 </code></pre></div><h3 id="3-將要打包的檔案寫入到-tarwriter-中">3. 將要打包的檔案寫入到 tar.Writer 中</h3>
 <p>上面有提到，在打包 file 時，需要包含其對應的 <code>header</code>，因此我們可以透過 <code>tar.FileInfoHeader</code> 的幫助來去擷取 <code>io.File</code> 內的資訊，然後得到我們所要的 <code>header</code>。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">header</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tar</span>.<span style="color:#a6e22e">FileInfoHeader</span>(<span style="color:#a6e22e">info</span>, <span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">Name</span>())
-<span style="color:#75715e">// func FileInfoHeader(fi os.FileInfo, link string) (*Header, error)
-</span><span style="color:#75715e">// 這邊的 link 是提供給 file mode 為 ModeSymlink 時使用。
-</span><span style="color:#75715e">// 詳細可以參考 https://en.wikipedia.org/wiki/Symbolic_link
-</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 這邊要特別注意的是， io.File Name 不包含路徑，所以如果你的檔案是放在其他子 folder 底下，要記得重新設定 `header.name`。如果沒有重新設定的話，就不會放到對應 folder 底下啦。
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">Name</span> = <span style="color:#a6e22e">filepath</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">baseDir</span>, <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">TrimPrefix</span>(<span style="color:#a6e22e">path</span>, <span style="color:#a6e22e">source</span>))
-<span style="color:#75715e">// strings.TrimPrefix(path, source) 這個用意是為了去除 source path
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>header, err := tar.FileInfoHeader(info, info.Name())
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">// func FileInfoHeader(fi os.FileInfo, link string) (*Header, error)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000">// 這邊的 link 是提供給 file mode 為 ModeSymlink 時使用。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000">// 詳細可以參考 https://en.wikipedia.org/wiki/Symbolic_link
+</span></code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// 這邊要特別注意的是， io.File Name 不包含路徑，所以如果你的檔案是放在其他子 folder 底下，要記得重新設定 `header.name`。如果沒有重新設定的話，就不會放到對應 folder 底下啦。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>header.Name = filepath.Join(baseDir, strings.TrimPrefix(path, source))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000">// strings.TrimPrefix(path, source) 這個用意是為了去除 source path
 </span></code></pre></div><p>有了 <code>header</code> 之後，就把它寫入 tar.Writer 吧！</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tarWriter</span>.<span style="color:#a6e22e">WriteHeader</span>(<span style="color:#a6e22e">header</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">if</span> err := tarWriter.WriteHeader(header); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
 </code></pre></div><p>寫入了 <code>header</code> 之後，再把 file 內容也寫進去。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 打開檔案
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#a6e22e">path</span>)
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-}
-<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
-<span style="color:#75715e">// 將檔案複製到 tar.Writer
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">tarWriter</span>, <span style="color:#a6e22e">file</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// 打開檔案
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span>file, err := os.Open(path)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>	<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#00f">defer</span> file.Close()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#008000">// 將檔案複製到 tar.Writer
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#008000"></span>_, err = io.Copy(tarWriter, file)
 </code></pre></div><h3 id="4-關閉-tarwriter">4. 關閉 tar.Writer</h3>
 <p>當把所有檔案和 <code>header</code> 寫到 tar file 之後，就可以把 tar.Writer 和 file stream 關掉。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">tarfile</span>.<span style="color:#a6e22e">Close</span>()
-<span style="color:#a6e22e">tarWriter</span>.<span style="color:#a6e22e">Close</span>()
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>tarfile.Close()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>tarWriter.Close()
 </code></pre></div><h2 id="source-code">Source Code</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Archive Create a tar file with multiple resources
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Archive</span>(<span style="color:#a6e22e">sources</span> []<span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">tarPath</span>, <span style="color:#a6e22e">tarName</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
-
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
-	<span style="color:#75715e">// Create the tar path
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">target</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">filepath</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">tarPath</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s.tar&#34;</span>, <span style="color:#a6e22e">tarName</span>))
-	<span style="color:#75715e">// Create the tar file
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">tarfile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#a6e22e">target</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-	}
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">tarfile</span>.<span style="color:#a6e22e">Close</span>()
-
-	<span style="color:#75715e">// Create a tar writer
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">tarWriter</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tar</span>.<span style="color:#a6e22e">NewWriter</span>(<span style="color:#a6e22e">tarfile</span>)
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">tarWriter</span>.<span style="color:#a6e22e">Close</span>()
-
-	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">source</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">sources</span> {
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">tarFile</span>(<span style="color:#a6e22e">source</span>, <span style="color:#a6e22e">tarWriter</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-		}
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">tarFile</span>(<span style="color:#a6e22e">source</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">tarWriter</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">tar</span>.<span style="color:#a6e22e">Writer</span>) <span style="color:#66d9ef">error</span> {
-	<span style="color:#75715e">// Check source is existing.
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">info</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stat</span>(<span style="color:#a6e22e">source</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-	}
-
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">baseDir</span> <span style="color:#66d9ef">string</span>
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">IsDir</span>() {
-		<span style="color:#a6e22e">baseDir</span> = <span style="color:#a6e22e">filepath</span>.<span style="color:#a6e22e">Base</span>(<span style="color:#a6e22e">source</span>)
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">filepath</span>.<span style="color:#a6e22e">Walk</span>(<span style="color:#a6e22e">source</span>,
-		<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">info</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">FileInfo</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) <span style="color:#66d9ef">error</span> {
-			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-			}
-			<span style="color:#75715e">// Create a tar header for a single file
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">header</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tar</span>.<span style="color:#a6e22e">FileInfoHeader</span>(<span style="color:#a6e22e">info</span>, <span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">Name</span>())
-			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-			}
-			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%#v \n&#34;</span>, <span style="color:#a6e22e">header</span>)
-
-			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">baseDir</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;&#34;</span> {
-				<span style="color:#75715e">// Name of file entry, a full path is needed.
-</span><span style="color:#75715e"></span>				<span style="color:#75715e">// strings.TrimPrefix - Remove unnecessarily path
-</span><span style="color:#75715e"></span>				<span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">Name</span> = <span style="color:#a6e22e">filepath</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">baseDir</span>, <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">TrimPrefix</span>(<span style="color:#a6e22e">path</span>, <span style="color:#a6e22e">source</span>))
-			}
-
-			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tarWriter</span>.<span style="color:#a6e22e">WriteHeader</span>(<span style="color:#a6e22e">header</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-			}
-
-			<span style="color:#75715e">// Write
-</span><span style="color:#75715e"></span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">IsDir</span>() {
-				<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-			}
-
-			<span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#a6e22e">path</span>)
-			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-			}
-			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
-			<span style="color:#75715e">// io.Copy is copy the content of src file
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">tarWriter</span>, <span style="color:#a6e22e">file</span>)
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-		})
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// Archive Create a tar file with multiple resources
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span><span style="color:#00f">func</span> Archive(sources []<span style="color:#2b91af">string</span>, tarPath, tarName <span style="color:#2b91af">string</span>) <span style="color:#2b91af">error</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	<span style="color:#00f">var</span> err <span style="color:#2b91af">error</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>	<span style="color:#008000">// Create the tar path
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000"></span>	target := filepath.Join(tarPath, fmt.Sprintf(<span style="color:#a31515">&#34;%s.tar&#34;</span>, tarName))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	<span style="color:#008000">// Create the tar file
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000"></span>	tarfile, err := os.Create(target)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>	<span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>		<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>	<span style="color:#00f">defer</span> tarfile.Close()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>	<span style="color:#008000">// Create a tar writer
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#008000"></span>	tarWriter := tar.NewWriter(tarfile)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>	<span style="color:#00f">defer</span> tarWriter.Close()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>	<span style="color:#00f">for</span> _, source := <span style="color:#00f">range</span> sources {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>		<span style="color:#00f">if</span> err = tarFile(source, tarWriter); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>			<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>	<span style="color:#00f">return</span> <span style="color:#00f">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#00f">func</span> tarFile(source <span style="color:#2b91af">string</span>, tarWriter *tar.Writer) <span style="color:#2b91af">error</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>	<span style="color:#008000">// Check source is existing.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#008000"></span>	info, err := os.Stat(source)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>	<span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>		<span style="color:#00f">return</span> <span style="color:#00f">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>	<span style="color:#00f">var</span> baseDir <span style="color:#2b91af">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>	<span style="color:#00f">if</span> info.IsDir() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>		baseDir = filepath.Base(source)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>	<span style="color:#00f">return</span> filepath.Walk(source,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>		<span style="color:#00f">func</span>(path <span style="color:#2b91af">string</span>, info os.FileInfo, err <span style="color:#2b91af">error</span>) <span style="color:#2b91af">error</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>			<span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>				<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>			<span style="color:#008000">// Create a tar header for a single file
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#008000"></span>			header, err := tar.FileInfoHeader(info, info.Name())
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>			<span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>				<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>			fmt.Printf(<span style="color:#a31515">&#34;%#v \n&#34;</span>, header)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>			<span style="color:#00f">if</span> baseDir != <span style="color:#a31515">&#34;&#34;</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>				<span style="color:#008000">// Name of file entry, a full path is needed.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span style="color:#008000"></span>				<span style="color:#008000">// strings.TrimPrefix - Remove unnecessarily path
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span style="color:#008000"></span>				header.Name = filepath.Join(baseDir, strings.TrimPrefix(path, source))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>			<span style="color:#00f">if</span> err := tarWriter.WriteHeader(header); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>				<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>			<span style="color:#008000">// Write
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span style="color:#008000"></span>			<span style="color:#00f">if</span> info.IsDir() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>				<span style="color:#00f">return</span> <span style="color:#00f">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span>			file, err := os.Open(path)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>			<span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>				<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>			}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>			<span style="color:#00f">defer</span> file.Close()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>			<span style="color:#008000">// io.Copy is copy the content of src file
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span><span style="color:#008000"></span>			_, err = io.Copy(tarWriter, file)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span>			<span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span>		})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span>}
 </code></pre></div>
     </div>
     <div class="article-footer">
@@ -403,12 +402,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -450,17 +449,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

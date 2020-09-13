@@ -31,12 +31,11 @@
   <title>Vault Initialization and Keys Security - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Vault Initialization and Keys Security" />
 <meta property="og:description" content="預備知識 在閱讀下方內容之前，建議先對 Vault 架構有個基本了解，相關官方文章如下：
@@ -51,7 +50,7 @@
  Vault Architecture Vault Key Rotation Vault Seal/Unseal  另外， Barrier 這個元件在 Vault 相當重要，在 Vault Architecture 頁面中有提及，可以先了解其用意，再來看它是如何被實現。">
 <meta itemprop="datePublished" content="2020-09-04T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2020-09-04T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="1316">
+<meta itemprop="wordCount" content="1474">
 <meta itemprop="image" content="https://yushuanhsieh.github.io/posts/vault_1.png">
 
 
@@ -82,7 +81,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -156,7 +155,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -171,6 +170,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -191,7 +200,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -205,16 +214,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -300,132 +299,132 @@
 <p>Seal Initialization 會呼叫底層 seal provider 所提供的 Init function，其行為根據各 provider 需求而有所不同，也有可能這階段什麼都不需要做（例如 GCP seal provider）。</p>
 <h3 id="barrier-initialization">Barrier Initialization</h3>
 <p>Barrier 負責加解密往來於 Vault server 和 storage backend 的資料，因此它的初始化步驟就相當的重要。Barrier 也被抽象成一個 interface，實際實作的 struct 為 <code>AESGCMBarrier</code>。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">AESGCMBarrier</span> <span style="color:#66d9ef">struct</span> {
-    <span style="color:#a6e22e">backend</span> <span style="color:#a6e22e">physical</span>.<span style="color:#a6e22e">Backend</span>
-
-    <span style="color:#a6e22e">l</span>      <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
-    <span style="color:#a6e22e">sealed</span> <span style="color:#66d9ef">bool</span>
-
-    <span style="color:#75715e">// keyring is used to maintain all of the encryption keys, including
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// the active key used for encryption, but also prior keys to allow
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// decryption of keys encrypted under previous terms.
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">keyring</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Keyring</span>
-
-    <span style="color:#75715e">// cache is used to reduce the number of AEAD constructions we do
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">cache</span>     <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">uint32</span>]<span style="color:#a6e22e">cipher</span>.<span style="color:#a6e22e">AEAD</span>
-    <span style="color:#a6e22e">cacheLock</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
-
-    <span style="color:#75715e">// currentAESGCMVersionByte is prefixed to a message to allow for
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// future versioning of barrier implementations. It&#39;s var instead
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// of const to allow for testing
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">currentAESGCMVersionByte</span> <span style="color:#66d9ef">byte</span>
-
-    <span style="color:#a6e22e">initialized</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">Bool</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">type</span> AESGCMBarrier <span style="color:#00f">struct</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    backend physical.Backend
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    l      sync.RWMutex
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    sealed <span style="color:#2b91af">bool</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#008000">// keyring is used to maintain all of the encryption keys, including
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000"></span>    <span style="color:#008000">// the active key used for encryption, but also prior keys to allow
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span>    <span style="color:#008000">// decryption of keys encrypted under previous terms.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>    keyring *Keyring
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#008000">// cache is used to reduce the number of AEAD constructions we do
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000"></span>    cache     <span style="color:#00f">map</span>[<span style="color:#2b91af">uint32</span>]cipher.AEAD
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    cacheLock sync.RWMutex
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#008000">// currentAESGCMVersionByte is prefixed to a message to allow for
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#008000"></span>    <span style="color:#008000">// future versioning of barrier implementations. It&#39;s var instead
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#008000"></span>    <span style="color:#008000">// of const to allow for testing
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#008000"></span>    currentAESGCMVersionByte <span style="color:#2b91af">byte</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    initialized atomic.Bool
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>}
 </code></pre></div><p>首先，在初始化之前，會先產生 master key。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// vault/init.go
-</span><span style="color:#75715e">// BarrierKey is master key. barrierKeyShares is only used for testing. 
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">barrierKey</span>, <span style="color:#a6e22e">barrierKeyShares</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">generateShares</span>(<span style="color:#a6e22e">barrierConfig</span>)
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// vault/init.go
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">// BarrierKey is master key. barrierKeyShares is only used for testing. 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>barrierKey, barrierKeyShares, err := c.generateShares(barrierConfig)
 </code></pre></div><p>接著，進入到 <code>AESGCMBarrier</code> 的 <code>Initialize</code> function：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">AESGCMBarrier</span>) <span style="color:#a6e22e">Initialize</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">sealKey</span> []<span style="color:#66d9ef">byte</span>, <span style="color:#a6e22e">reader</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Reader</span>) <span style="color:#66d9ef">error</span> {
-    <span style="color:#75715e">// ...
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Generate encryption key
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">encrypt</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">GenerateKey</span>(<span style="color:#a6e22e">reader</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to generate encryption key: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
-    }
-
-    <span style="color:#75715e">// Create a new keyring, install the keys
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">keyring</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewKeyring</span>()
-    <span style="color:#a6e22e">keyring</span> = <span style="color:#a6e22e">keyring</span>.<span style="color:#a6e22e">SetMasterKey</span>(<span style="color:#a6e22e">key</span>)
-    <span style="color:#a6e22e">keyring</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">keyring</span>.<span style="color:#a6e22e">AddKey</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Key</span>{
-        <span style="color:#a6e22e">Term</span>:    <span style="color:#ae81ff">1</span>,
-        <span style="color:#a6e22e">Version</span>: <span style="color:#ae81ff">1</span>,
-        <span style="color:#a6e22e">Value</span>:   <span style="color:#a6e22e">encrypt</span>,
-    })
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to create keyring: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
-    }
-
-    <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">persistKeyring</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">keyring</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-    }
-
-    <span style="color:#75715e">// ...
-</span><span style="color:#75715e"></span>}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">func</span> (b *AESGCMBarrier) Initialize(ctx context.Context, key, sealKey []<span style="color:#2b91af">byte</span>, reader io.Reader) <span style="color:#2b91af">error</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#008000">// ...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000"></span>    <span style="color:#008000">// Generate encryption key
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000"></span>    encrypt, err := b.GenerateKey(reader)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        <span style="color:#00f">return</span> errwrap.Wrapf(<span style="color:#a31515">&#34;failed to generate encryption key: {{err}}&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#008000">// Create a new keyring, install the keys
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>    keyring := NewKeyring()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    keyring = keyring.SetMasterKey(key)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    keyring, err = keyring.AddKey(&amp;Key{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        Term:    1,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        Version: 1,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        Value:   encrypt,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        <span style="color:#00f">return</span> errwrap.Wrapf(<span style="color:#a31515">&#34;failed to create keyring: {{err}}&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    err = b.persistKeyring(ctx, keyring)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        <span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    <span style="color:#008000">// ...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#008000"></span>}
 </code></pre></div><p>就可以看到產生 encryption key 的 function <code>b.GenerateKey(reader)</code>。
 其中，這樣的設計很有巧思，<code>reader(io.Reader)</code> parameter 在 Vault 中又稱作 <code>secureRandomReader</code>，實際上就是 random number generator (PNG)。在預設情況下，會使用 OS 本身所提供的 random number generator，但使用者也能根據需求來使用自己想要的 generator，例如 hardware / true number generator。</p>
 <p>此外，這邊也引入 <code>Keyring</code> 來建立起 master key 與 encryption key 的關係。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Keyring</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">masterKey</span>  []<span style="color:#66d9ef">byte</span>
-	<span style="color:#a6e22e">keys</span>       <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">uint32</span>]<span style="color:#f92672">*</span><span style="color:#a6e22e">Key</span>
-	<span style="color:#a6e22e">activeTerm</span> <span style="color:#66d9ef">uint32</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">type</span> Keyring <span style="color:#00f">struct</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	masterKey  []<span style="color:#2b91af">byte</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	keys       <span style="color:#00f">map</span>[<span style="color:#2b91af">uint32</span>]*Key
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>	activeTerm <span style="color:#2b91af">uint32</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 </code></pre></div><p><strong>每個 keyring 由一組 master key 與多組 encryption key 結合而成</strong>，keyring 結構設計對於 keys 來說十分重要，除了方便 Barrier 管理多組 encryption key 之外，同時也實現 master key 與 encryption key 的更新方法。</p>
 <p>產生出 encryption key 之後，透過 <code>persistKeyring</code> 把 encryption key 使用 master key AES 加密後存到 storage 中。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">AESGCMBarrier</span>) <span style="color:#a6e22e">persistKeyring</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">keyring</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Keyring</span>) <span style="color:#66d9ef">error</span> {
-    <span style="color:#75715e">// Create the keyring entry
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">keyringBuf</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">keyring</span>.<span style="color:#a6e22e">Serialize</span>()
-    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">memzero</span>(<span style="color:#a6e22e">keyringBuf</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to serialize keyring: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
-    }
-
-    <span style="color:#75715e">// Create the AES-GCM
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">gcm</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">aeadFromKey</span>(<span style="color:#a6e22e">keyring</span>.<span style="color:#a6e22e">MasterKey</span>())
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-    }
-
-    <span style="color:#75715e">// Encrypt the barrier init value
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">value</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">encrypt</span>(<span style="color:#a6e22e">keyringPath</span>, <span style="color:#a6e22e">initialKeyTerm</span>, <span style="color:#a6e22e">gcm</span>, <span style="color:#a6e22e">keyringBuf</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-    }
-
-    <span style="color:#75715e">// Create the keyring physical entry
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">pe</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">physical</span>.<span style="color:#a6e22e">Entry</span>{
-        <span style="color:#a6e22e">Key</span>:   <span style="color:#a6e22e">keyringPath</span>,
-        <span style="color:#a6e22e">Value</span>: <span style="color:#a6e22e">value</span>,
-    }
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">backend</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">pe</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to persist keyring: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
-    }
-
-    <span style="color:#75715e">// Serialize the master key value
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">key</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Key</span>{
-        <span style="color:#a6e22e">Term</span>:    <span style="color:#ae81ff">1</span>,
-        <span style="color:#a6e22e">Version</span>: <span style="color:#ae81ff">1</span>,
-        <span style="color:#a6e22e">Value</span>:   <span style="color:#a6e22e">keyring</span>.<span style="color:#a6e22e">MasterKey</span>(),
-    }
-    <span style="color:#a6e22e">keyBuf</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">key</span>.<span style="color:#a6e22e">Serialize</span>()
-    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">memzero</span>(<span style="color:#a6e22e">keyBuf</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to serialize master key: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
-    }
-
-    <span style="color:#75715e">// Encrypt the master key
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">activeKey</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">keyring</span>.<span style="color:#a6e22e">ActiveKey</span>()
-    <span style="color:#a6e22e">aead</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">aeadFromKey</span>(<span style="color:#a6e22e">activeKey</span>.<span style="color:#a6e22e">Value</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-    }
-    <span style="color:#a6e22e">value</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">encrypt</span>(<span style="color:#a6e22e">masterKeyPath</span>, <span style="color:#a6e22e">activeKey</span>.<span style="color:#a6e22e">Term</span>, <span style="color:#a6e22e">aead</span>, <span style="color:#a6e22e">keyBuf</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-    }
-
-    <span style="color:#75715e">// Update the masterKeyPath for standby instances
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">pe</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">physical</span>.<span style="color:#a6e22e">Entry</span>{
-        <span style="color:#a6e22e">Key</span>:   <span style="color:#a6e22e">masterKeyPath</span>,
-        <span style="color:#a6e22e">Value</span>: <span style="color:#a6e22e">value</span>,
-    }
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">backend</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">pe</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to persist master key: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
-    }
-    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">func</span> (b *AESGCMBarrier) persistKeyring(ctx context.Context, keyring *Keyring) <span style="color:#2b91af">error</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#008000">// Create the keyring entry
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000"></span>    keyringBuf, err := keyring.Serialize()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#00f">defer</span> memzero(keyringBuf)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        <span style="color:#00f">return</span> errwrap.Wrapf(<span style="color:#a31515">&#34;failed to serialize keyring: {{err}}&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#008000">// Create the AES-GCM
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>    gcm, err := b.aeadFromKey(keyring.MasterKey())
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        <span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#008000">// Encrypt the barrier init value
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#008000"></span>    value, err := b.encrypt(keyringPath, initialKeyTerm, gcm, keyringBuf)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        <span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    <span style="color:#008000">// Create the keyring physical entry
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#008000"></span>    pe := &amp;physical.Entry{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        Key:   keyringPath,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        Value: value,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    <span style="color:#00f">if</span> err := b.backend.Put(ctx, pe); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>        <span style="color:#00f">return</span> errwrap.Wrapf(<span style="color:#a31515">&#34;failed to persist keyring: {{err}}&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>    <span style="color:#008000">// Serialize the master key value
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#008000"></span>    key := &amp;Key{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>        Term:    1,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>        Version: 1,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>        Value:   keyring.MasterKey(),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    keyBuf, err := key.Serialize()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    <span style="color:#00f">defer</span> memzero(keyBuf)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>        <span style="color:#00f">return</span> errwrap.Wrapf(<span style="color:#a31515">&#34;failed to serialize master key: {{err}}&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>    <span style="color:#008000">// Encrypt the master key
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#008000"></span>    activeKey := keyring.ActiveKey()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>    aead, err := b.aeadFromKey(activeKey.Value)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>        <span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>    value, err = b.encrypt(masterKeyPath, activeKey.Term, aead, keyBuf)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>    <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>        <span style="color:#00f">return</span> err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>    <span style="color:#008000">// Update the masterKeyPath for standby instances
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span style="color:#008000"></span>    pe = &amp;physical.Entry{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>        Key:   masterKeyPath,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>        Value: value,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>    <span style="color:#00f">if</span> err := b.backend.Put(ctx, pe); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>        <span style="color:#00f">return</span> errwrap.Wrapf(<span style="color:#a31515">&#34;failed to persist master key: {{err}}&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>    <span style="color:#00f">return</span> <span style="color:#00f">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>}
 </code></pre></div><h4 id="encrypt-the-master-key-using-the-encryption-key">Encrypt the master key using the encryption key</h4>
 <p>上述 source code 可以看到一個很奇怪的地方，就是 <code>Encrypt the master key</code> ，文件說 master key 是由 seal provider 所加密，為什麼這裡的 master key 是由 encryption key 加密呢？</p>
 <p>我們在 <code>vault/barrier.go</code> 可以找到答案：</p>
@@ -433,31 +432,31 @@
 <p>This is encrypted by the latest key in the keyring. This is only used by standby instances to handle the case of a rekey. If the active instance does a rekey, the standby instances can no longer reload the keyring since they have the old master key.</p>
 </blockquote>
 <p>這段把 master key 使用 encryption key 加密，並且儲存在 <code>masterKeyPath</code>，其用途僅是針對 rekey 流程。而把 master key 使用 seal provider 加密後儲存則是在下一段 code 中出現。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// vault/init.go
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">StoredKeysSupported</span>() {
-    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">StoredKeysSupportedShamirMaster</span>:
-        <span style="color:#75715e">// store the master key(barrierKey)
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">keysToStore</span> <span style="color:#f92672">:=</span> [][]<span style="color:#66d9ef">byte</span>{<span style="color:#a6e22e">barrierKey</span>}
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">GetAccess</span>().<span style="color:#a6e22e">Wrapper</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">aeadwrapper</span>.<span style="color:#a6e22e">ShamirWrapper</span>).<span style="color:#a6e22e">SetAESGCMKeyBytes</span>(<span style="color:#a6e22e">sealKey</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#e6db74">&#34;failed to set seal key&#34;</span>, <span style="color:#e6db74">&#34;error&#34;</span>, <span style="color:#a6e22e">err</span>)
-			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to set seal key: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
-		}
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">SetStoredKeys</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">keysToStore</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#e6db74">&#34;failed to store keys&#34;</span>, <span style="color:#e6db74">&#34;error&#34;</span>, <span style="color:#a6e22e">err</span>)
-			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to store keys: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
-		}
-		<span style="color:#a6e22e">results</span>.<span style="color:#a6e22e">SecretShares</span> = <span style="color:#a6e22e">sealKeyShares</span>
-	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">StoredKeysSupportedGeneric</span>:
-		<span style="color:#a6e22e">keysToStore</span> <span style="color:#f92672">:=</span> [][]<span style="color:#66d9ef">byte</span>{<span style="color:#a6e22e">barrierKey</span>}
-		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">seal</span>.<span style="color:#a6e22e">SetStoredKeys</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">keysToStore</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#e6db74">&#34;failed to store keys&#34;</span>, <span style="color:#e6db74">&#34;error&#34;</span>, <span style="color:#a6e22e">err</span>)
-			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errwrap</span>.<span style="color:#a6e22e">Wrapf</span>(<span style="color:#e6db74">&#34;failed to store keys: {{err}}&#34;</span>, <span style="color:#a6e22e">err</span>)
-		}
-	<span style="color:#66d9ef">default</span>:
-		<span style="color:#75715e">// We don&#39;t support initializing an old-style Shamir seal anymore, so
-</span><span style="color:#75715e"></span>		<span style="color:#75715e">// this case is only reachable by tests.
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">results</span>.<span style="color:#a6e22e">SecretShares</span> = <span style="color:#a6e22e">barrierKeyShares</span>
-	}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// vault/init.go
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span><span style="color:#00f">switch</span> c.seal.StoredKeysSupported() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#00f">case</span> seal.StoredKeysSupportedShamirMaster:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        <span style="color:#008000">// store the master key(barrierKey)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000"></span>		keysToStore := [][]<span style="color:#2b91af">byte</span>{barrierKey}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>		<span style="color:#00f">if</span> err := c.seal.GetAccess().Wrapper.(*aeadwrapper.ShamirWrapper).SetAESGCMKeyBytes(sealKey); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>			c.logger.Error(<span style="color:#a31515">&#34;failed to set seal key&#34;</span>, <span style="color:#a31515">&#34;error&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>			<span style="color:#00f">return</span> <span style="color:#00f">nil</span>, errwrap.Wrapf(<span style="color:#a31515">&#34;failed to set seal key: {{err}}&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>		<span style="color:#00f">if</span> err := c.seal.SetStoredKeys(ctx, keysToStore); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>			c.logger.Error(<span style="color:#a31515">&#34;failed to store keys&#34;</span>, <span style="color:#a31515">&#34;error&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>			<span style="color:#00f">return</span> <span style="color:#00f">nil</span>, errwrap.Wrapf(<span style="color:#a31515">&#34;failed to store keys: {{err}}&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>		results.SecretShares = sealKeyShares
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>	<span style="color:#00f">case</span> seal.StoredKeysSupportedGeneric:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>		keysToStore := [][]<span style="color:#2b91af">byte</span>{barrierKey}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>		<span style="color:#00f">if</span> err := c.seal.SetStoredKeys(ctx, keysToStore); err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>			c.logger.Error(<span style="color:#a31515">&#34;failed to store keys&#34;</span>, <span style="color:#a31515">&#34;error&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>			<span style="color:#00f">return</span> <span style="color:#00f">nil</span>, errwrap.Wrapf(<span style="color:#a31515">&#34;failed to store keys: {{err}}&#34;</span>, err)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>		}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>	<span style="color:#00f">default</span>:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>		<span style="color:#008000">// We don&#39;t support initializing an old-style Shamir seal anymore, so
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#008000"></span>		<span style="color:#008000">// this case is only reachable by tests.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#008000"></span>		results.SecretShares = barrierKeyShares
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>	}
 </code></pre></div><h3 id="barrier-unseal">Barrier Unseal</h3>
 <p>所謂的 Vault Unseal，正確來說應該是 Barrier Unseal，實際流程為：</p>
 <ol>
@@ -476,38 +475,38 @@
 <p>在 Vault 初始化時，會需要一組 root token 以供使用者進行初步驗證與設定。Root token 是由 base 62 組合而成的 24bytes 長度字串，當產生出 token 之後，會需要將 token 存入 storage 中，因此在這個階段 barrier 須維持 unseal 狀態。</p>
 <h4 id="entropy-of-token-generation">Entropy of Token Generation</h4>
 <p>產生 token 的 source code 有個很有意思的地方，就是討論 token entropy，<code>Information Entropy</code> 介紹可參考 <a href="https://brilliant.org/wiki/entropy-information-theory/">Entropy (Information Theory)</a>。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">charset</span> = <span style="color:#e6db74">&#34;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#34;</span>
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">csLen</span> = byte(len(<span style="color:#a6e22e">charset</span>))
-
-<span style="color:#75715e">// Resulting entropy is ~5.95 bits/character.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">RandomWithReader</span>(<span style="color:#a6e22e">length</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">reader</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Reader</span>) (<span style="color:#66d9ef">string</span>, <span style="color:#66d9ef">error</span>) {
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">length</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#66d9ef">nil</span>
-    }
-    <span style="color:#a6e22e">output</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">length</span>)
-
-    <span style="color:#75715e">// Request a bit more than length to reduce the chance
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// of needing more than one batch of random bytes
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">batchSize</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">length</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">length</span><span style="color:#f92672">/</span><span style="color:#ae81ff">4</span>
-
-    <span style="color:#66d9ef">for</span> {
-        <span style="color:#a6e22e">buf</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">uuid</span>.<span style="color:#a6e22e">GenerateRandomBytesWithReader</span>(<span style="color:#a6e22e">batchSize</span>, <span style="color:#a6e22e">reader</span>)
-        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#a6e22e">err</span>
-        }
-
-        <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">buf</span> {
-            <span style="color:#75715e">// Avoid bias by using a value range that&#39;s a multiple of 62
-</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span> &lt; (<span style="color:#a6e22e">csLen</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>) {
-                <span style="color:#a6e22e">output</span> = append(<span style="color:#a6e22e">output</span>, <span style="color:#a6e22e">charset</span>[<span style="color:#a6e22e">b</span><span style="color:#f92672">%</span><span style="color:#a6e22e">csLen</span>])
-
-                <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">output</span>) <span style="color:#f92672">==</span> <span style="color:#a6e22e">length</span> {
-                    <span style="color:#66d9ef">return</span> string(<span style="color:#a6e22e">output</span>), <span style="color:#66d9ef">nil</span>
-                }
-            }
-        }
-    }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">const</span> charset = <span style="color:#a31515">&#34;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">const</span> csLen = byte(len(charset))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000">// Resulting entropy is ~5.95 bits/character.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000"></span><span style="color:#00f">func</span> RandomWithReader(length <span style="color:#2b91af">int</span>, reader io.Reader) (<span style="color:#2b91af">string</span>, <span style="color:#2b91af">error</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#00f">if</span> length == 0 {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        <span style="color:#00f">return</span> <span style="color:#a31515">&#34;&#34;</span>, <span style="color:#00f">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    output := make([]<span style="color:#2b91af">byte</span>, 0, length)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#008000">// Request a bit more than length to reduce the chance
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>    <span style="color:#008000">// of needing more than one batch of random bytes
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000"></span>    batchSize := length + length/4
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#00f">for</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        buf, err := uuid.GenerateRandomBytesWithReader(batchSize, reader)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        <span style="color:#00f">if</span> err != <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>            <span style="color:#00f">return</span> <span style="color:#a31515">&#34;&#34;</span>, err
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        <span style="color:#00f">for</span> _, b := <span style="color:#00f">range</span> buf {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>            <span style="color:#008000">// Avoid bias by using a value range that&#39;s a multiple of 62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#008000"></span>            <span style="color:#00f">if</span> b &lt; (csLen * 4) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>                output = append(output, charset[b%csLen])
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>                <span style="color:#00f">if</span> len(output) == length {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>                    <span style="color:#00f">return</span> string(output), <span style="color:#00f">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>                }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>}
 </code></pre></div><p>另一個可以注意的地方是，除了使用 <code>crypto/rand</code> 產生出隨機 byte 之外，由於 token 有特定的 charset，避免某個 char 的分配數量不均，因此還加入 <code>b &lt; (csLen * 4)</code> 此判斷，是一個很簡單但是又易被忽略的地方。</p>
 <blockquote>
 <p><code>uuid.GenerateRandomBytesWithReader(batchSize, reader)</code>，此 reader 在預設情況下為 crypto/rand。</p>
@@ -541,12 +540,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -559,9 +558,14 @@
     <div class="bar-inner">
         <ul class="pager pull-left">
             <li class="prev">
-                <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" title="Operating System Implementation Lab1 - The Stack"><i
+                <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" title="CSE 506 Lab1 - The Stack"><i
                         class="icon icon-angle-left"
                         aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            <li class="next">
+                <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/"
+                    title="CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)"><span>Newer&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
             </li>
             
         </ul>
@@ -583,17 +587,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

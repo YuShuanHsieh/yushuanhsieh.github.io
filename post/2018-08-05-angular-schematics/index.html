@@ -28,12 +28,11 @@
   <title>Angular Schematics - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Angular Schematics" />
 <meta property="og:description" content="前言： 最近專案需要提供工具讓外部人員一同參與 Web App 的開發，由於我們的 Web App 已經有基本架構和開發方式，為了讓外部人員能夠更方便的 follow 架構，所以就決定使用 Schematics 來創建專屬樣板，讓協作開發人員可以迅速地建立專案用的 component page，然後他們只需要修改部分程式碼即可。" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="前言： 最近專案需要提供工具讓外部人員一同參與 Web App 的開發，由於我們的 Web App 已經有基本架構和開發方式，為了讓外部人員能夠更方便的 follow 架構，所以就決定使用 Schematics 來創建專屬樣板，讓協作開發人員可以迅速地建立專案用的 component page，然後他們只需要修改部分程式碼即可。">
 <meta itemprop="datePublished" content="2018-08-05T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2018-08-05T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="633">
+<meta itemprop="wordCount" content="707">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -261,11 +260,11 @@
 Schematics 中可能有不只一個修改步驟，透過先應用在 staging  area ，可以避免中間有錯誤發生，而導致直接影響到既有專案） <img src="https://static1.squarespace.com/static/5618e3e3e4b0b6c3336cd921/t/5b1019b5352f53e4588abea8/1527781833021/GIF1.gif?format=1500w" alt="Schematics are atomic">
 Image source：http://recurship.com/blog/2018/5/31/xfvrq9aauqkayhkd4kzp7gsbfg2bfl</p>
 <p>以下為使用 Angular 內建的 Schematics 範例：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">ng generate component menu
-<span style="color:#75715e"># ng - angular cli</span>
-<span style="color:#75715e"># generate - Angular cli 指令，後面需接 Schematics collections</span>
-<span style="color:#75715e"># component - Angular Schematics 內建的 collection</span>
-<span style="color:#75715e"># menu - collection 中規定的參數，這邊是指 component 的名稱</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>ng generate component menu
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"># ng - angular cli</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"># generate - Angular cli 指令，後面需接 Schematics collections</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"># component - Angular Schematics 內建的 collection</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000"># menu - collection 中規定的參數，這邊是指 component 的名稱</span>
 </code></pre></div><p>這樣就會快速產生出 menu component 的相關檔案。
 ![angular-schematics-1.png]({{ site.url }}/assets/images/angular-schematics-1.png)</p>
 <p>想知道更多 Angular 內建的 schematcis ，可參考 <a href="https://www.npmjs.com/package/@schematics/angular"><code>@schematics/angular</code></a></p>
@@ -273,15 +272,15 @@ Image source：http://recurship.com/blog/2018/5/31/xfvrq9aauqkayhkd4kzp7gsbfg2bf
 <p>透過 Angular Cli 使用 Schematics 功能，不一定要使用 Angular 內建的 Schematics ，而是可以套用他人建立的 Schematics Collections。</p>
 <p>如果有用 Nx(Nrwl Extensions for Angular)，會發現預設的 Angular Schematics Collections 被替換成 <code>@nrwl/schematics</code> 的 Collections，即使還是使用相同的 Command 指令 <code>ng generate component menu</code> ，產生的檔案可能會和之前的有所不同。</p>
 <p>而這樣的差異主要是因為 <code>angular.json</code> 的 <code>defaultCollection</code> 參數從 <code>@schematics/angular</code> 變成 <code>@nrwl/schematics</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#e6db74">&#34;cli&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
-    <span style="color:#f92672">&#34;defaultCollection&#34;</span>: <span style="color:#e6db74">&#34;@nrwl/schematics&#34;</span>
-  }
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#a31515">&#34;cli&#34;</span><span style="">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    &#34;defaultCollection&#34;: <span style="color:#a31515">&#34;@nrwl/schematics&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  }
 </code></pre></div><p>因此，透過修改 <code>angular.json</code> file 的 <code>defaultCollection</code>，你就可將任何第三方的 Schematics 設為預設。（如果沒修改 defaultCollection 也可以使用第三方 Schematics，只是在輸入指令時就必須宣告 Collections 的位置）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 有改變 defaultCollection 參數</span>
-ng generate &lt;schmatics名稱&gt; menu
-
-<span style="color:#75715e"># 沒有改變 defaultCollection 參數</span>
-ng generate &lt;schematics位置&gt;:&lt;schmatics名稱&gt; menu
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000"># 有改變 defaultCollection 參數</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>ng generate &lt;schmatics名稱&gt; menu
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000"># 沒有改變 defaultCollection 參數</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>ng generate &lt;schematics位置&gt;:&lt;schmatics名稱&gt; menu
 </code></pre></div><h2 id="建立自己的-schematics">建立自己的 Schematics</h2>
 <p>我們可以建立自己的 schematics collections，然後透過 ng 指令來使用它。要建立 schematics collections，有幾個檔案很重要：</p>
 <ol>
@@ -291,33 +290,33 @@ ng generate &lt;schematics位置&gt;:&lt;schmatics名稱&gt; menu
 </ol>
 <h3 id="1-collectionjson">1. collection.json</h3>
 <p>一個基本的 collection.json 格式如下，一個 Collection 可以定義多組 Schematic：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;$schema&#34;</span>: <span style="color:#e6db74">&#34;../node_modules/@angular-devkit/schematics/collection-schema.json&#34;</span>,
-  <span style="color:#f92672">&#34;schematics&#34;</span>: {
-    <span style="color:#f92672">&#34;southbound-ui&#34;</span>: {
-      <span style="color:#f92672">&#34;aliases&#34;</span>: [<span style="color:#e6db74">&#34;south&#34;</span>],
-      <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;A blank schematic.&#34;</span>,
-      <span style="color:#f92672">&#34;factory&#34;</span>: <span style="color:#e6db74">&#34;./southbound-ui/index#southboundUi&#34;</span>,
-      <span style="color:#f92672">&#34;schema&#34;</span>: <span style="color:#e6db74">&#34;./southbound-ui/schema.json&#34;</span>
-    }
-  }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  &#34;$schema&#34;: <span style="color:#a31515">&#34;../node_modules/@angular-devkit/schematics/collection-schema.json&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  &#34;schematics&#34;: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    &#34;southbound-ui&#34;: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      &#34;aliases&#34;: [<span style="color:#a31515">&#34;south&#34;</span>],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      &#34;description&#34;: <span style="color:#a31515">&#34;A blank schematic.&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      &#34;factory&#34;: <span style="color:#a31515">&#34;./southbound-ui/index#southboundUi&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      &#34;schema&#34;: <span style="color:#a31515">&#34;./southbound-ui/schema.json&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
 </code></pre></div><h4 id="schema">$schema</h4>
 <p>規範 Collection 的結構，因為要遵守 Angular 的規則才會正確被執行，所以這個 property 的值是不會改變。或是你會看到有人這樣寫：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;extends&#34;</span>: [<span style="color:#e6db74">&#34;@schematics/angular&#34;</span>],
-  <span style="color:#f92672">&#34;schematics&#34;</span>: {
-  }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &#34;extends&#34;: [<span style="color:#a31515">&#34;@schematics/angular&#34;</span>],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  &#34;schematics&#34;: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 </code></pre></div><p>extends 原有 Angular $schema 的設定。</p>
 <h4 id="schematics">schematics</h4>
 <p>此 property 是定義 schematic 的內容，例如 schematic 的名稱，以及 schematic 結構等，例如以下寫法：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#e6db74">&#34;southbound-ui&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
-  <span style="color:#f92672">&#34;aliases&#34;</span>: [<span style="color:#e6db74">&#34;south&#34;</span>],
-  <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;Create a southbound ui&#34;</span>,
-  <span style="color:#f92672">&#34;factory&#34;</span>: <span style="color:#e6db74">&#34;./southbound-ui/index#southboundUi&#34;</span>,
-  <span style="color:#f92672">&#34;schema&#34;</span>: <span style="color:#e6db74">&#34;./southbound-ui/schema.json&#34;</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#a31515">&#34;southbound-ui&#34;</span><span style="">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &#34;aliases&#34;: [<span style="color:#a31515">&#34;south&#34;</span>],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  &#34;description&#34;: <span style="color:#a31515">&#34;Create a southbound ui&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  &#34;factory&#34;: <span style="color:#a31515">&#34;./southbound-ui/index#southboundUi&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  &#34;schema&#34;: <span style="color:#a31515">&#34;./southbound-ui/schema.json&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 </code></pre></div><ol>
 <li><code>southbound-ui</code> <em>(Required)</em> 代表 Schematic 的名稱，所以在 Command line 可以下 <code>ng g southbound-ui</code></li>
 <li><code>aliases</code> 是別名，在 Command line 可以改下 <code>ng g south</code></li>
@@ -327,84 +326,84 @@ ng generate &lt;schematics位置&gt;:&lt;schmatics名稱&gt; menu
 </ol>
 <h3 id="3-schemajson">3. schema.json</h3>
 <p>前面提到，<code>schema.json</code> 定義了 Schematic 的結構，其例子如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;$schema&#34;</span>: <span style="color:#e6db74">&#34;http://json-schema.org/schema&#34;</span>,
-  <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;southbound-ui&#34;</span>,
-  <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;ThingsPro Southbound UI&#34;</span>,
-  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;object&#34;</span>,
-  <span style="color:#f92672">&#34;properties&#34;</span>: {
-    <span style="color:#f92672">&#34;path&#34;</span>: {
-      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;string&#34;</span>,
-      <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;path&#34;</span>,
-      <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;The path to create the component.&#34;</span>
-    },
-    <span style="color:#f92672">&#34;name&#34;</span>: {
-      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;string&#34;</span>
-    },
-    <span style="color:#f92672">&#34;url&#34;</span>: {
-      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;string&#34;</span>
-    }
-  }
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  &#34;$schema&#34;: <span style="color:#a31515">&#34;http://json-schema.org/schema&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  &#34;id&#34;: <span style="color:#a31515">&#34;southbound-ui&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  &#34;title&#34;: <span style="color:#a31515">&#34;ThingsPro Southbound UI&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  &#34;type&#34;: <span style="color:#a31515">&#34;object&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  &#34;properties&#34;: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    &#34;path&#34;: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      &#34;type&#34;: <span style="color:#a31515">&#34;string&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      &#34;format&#34;: <span style="color:#a31515">&#34;path&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      &#34;description&#34;: <span style="color:#a31515">&#34;The path to create the component.&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    &#34;name&#34;: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      &#34;type&#34;: <span style="color:#a31515">&#34;string&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    &#34;url&#34;: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>      &#34;type&#34;: <span style="color:#a31515">&#34;string&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>}
 </code></pre></div><p>其中最重要的 <code>properties</code>，這個屬性定義出可以讓使用者修改的參數，例如上面例子，那使用者就可以透過 <code>--url=/src/app</code> 來設定 url 的數值。</p>
 <h4 id="tips">Tips</h4>
 <p>這邊有個小技巧，如果不想要使用 <code>--url</code> 這個方式來獲得使用者輸入的數值，可以改寫 <code>schema.json</code> 為：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"> <span style="color:#e6db74">&#34;url&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
-  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;string&#34;</span>,
-  <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;The url.&#34;</span>,
-  <span style="color:#f92672">&#34;$default&#34;</span>: {
-    <span style="color:#f92672">&#34;$source&#34;</span>: <span style="color:#e6db74">&#34;argv&#34;</span>,
-    <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
-  }
-}<span style="color:#960050;background-color:#1e0010">,</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span> <span style="color:#a31515">&#34;url&#34;</span><span style="">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &#34;type&#34;: <span style="color:#a31515">&#34;string&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  &#34;description&#34;: <span style="color:#a31515">&#34;The url.&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  &#34;$default&#34;: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    &#34;$source&#34;: <span style="color:#a31515">&#34;argv&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    &#34;index&#34;: 0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}<span style="">,</span>
 </code></pre></div><p>這樣使用 Commnad line <code>ng generate southbound-ui /src/app</code> 系統就會自動抓取 Schematics 名稱後方第一個數值作為 url 的值了。</p>
 <h3 id="3-實作-schematic-的-files">3. 實作 Schematic 的 files</h3>
 <p>以上定義好 Schematic ，那最後就是要來實作它。以下為一個簡單的實作範例：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">Rule</span>, <span style="color:#a6e22e">apply</span>, <span style="color:#a6e22e">url</span>, <span style="color:#a6e22e">template</span>, <span style="color:#a6e22e">move</span>, <span style="color:#a6e22e">branchAndMerge</span>, <span style="color:#a6e22e">chain</span>, <span style="color:#a6e22e">mergeWith</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@angular-devkit/schematics&#39;</span>;
-<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">normalize</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@angular-devkit/core&#39;</span>;
-<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">dasherize</span>, <span style="color:#a6e22e">classify</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@angular-devkit/core/src/utils/strings&#39;</span>;
-<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">schemaOptions</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;./schema&#39;</span>;
-
-<span style="color:#75715e">//這邊的 options  就是 schema.json 中定義的 properties。在執行 Schematics 時，系統會將使用者輸入的設定，轉成一個 object 放入 function 中。
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">southboundUi</span>(<span style="color:#a6e22e">options</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">schemaOptions</span>)<span style="color:#f92672">:</span> <span style="color:#a6e22e">Rule</span> {
-  
-  <span style="color:#75715e">// Angular 內建的 string 方法，可以將使用者輸入的字串改寫成其他形式
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">utils</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">dasherize</span>, <span style="color:#a6e22e">classify</span> };
-  
-  <span style="color:#75715e">// 如果使用者有設定 `--path` 的數值，則套用該數值，沒有的話就使用 default &#39;src/app/&#39;
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">path</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">path</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">normalize</span>(<span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">path</span>) <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;src/app/&#39;</span>;
-
-  <span style="color:#75715e">// 使用設定好的 template files。
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">applyTemplate</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">apply</span>(<span style="color:#a6e22e">url</span>(<span style="color:#e6db74">&#39;./files&#39;</span>), [
-    
-    <span style="color:#75715e">// 將 options 數值和 Angular 內建的 string 方法套用在 template files 上
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">template</span>({
-      ...<span style="color:#a6e22e">utils</span>,
-      ...<span style="color:#a6e22e">options</span>
-    }),
-    
-    <span style="color:#75715e">// 移動到指定位置
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">move</span>(<span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">path</span>)
-  ]);
-
-  <span style="color:#75715e">// 將行為串連起來，這些修改行為會應用在一開始有提到的 staging area，最後套用到既有專案上
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">chain</span>([
-    <span style="color:#a6e22e">branchAndMerge</span>(<span style="color:#a6e22e">chain</span>([
-      <span style="color:#a6e22e">mergeWith</span>(<span style="color:#a6e22e">applyTemplate</span>)
-    ])),
-  ]);
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">import</span> { Rule, apply, url, template, move, branchAndMerge, chain, mergeWith } from <span style="color:#a31515">&#39;@angular-devkit/schematics&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">import</span> { normalize } from <span style="color:#a31515">&#39;@angular-devkit/core&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#00f">import</span> { dasherize, classify } from <span style="color:#a31515">&#39;@angular-devkit/core/src/utils/strings&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#00f">import</span> { schemaOptions } from <span style="color:#a31515">&#39;./schema&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000">//這邊的 options  就是 schema.json 中定義的 properties。在執行 Schematics 時，系統會將使用者輸入的設定，轉成一個 object 放入 function 中。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000"></span><span style="color:#00f">export</span> <span style="color:#00f">function</span> southboundUi(options: schemaOptions): Rule {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#008000">// Angular 內建的 string 方法，可以將使用者輸入的字串改寫成其他形式
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>  <span style="color:#00f">const</span> utils = { dasherize, classify };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#008000">// 如果使用者有設定 `--path` 的數值，則套用該數值，沒有的話就使用 default &#39;src/app/&#39;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000"></span>  options.path = options.path ? normalize(options.path) : <span style="color:#a31515">&#39;src/app/&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  <span style="color:#008000">// 使用設定好的 template files。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#008000"></span>  <span style="color:#00f">const</span> applyTemplate = apply(url(<span style="color:#a31515">&#39;./files&#39;</span>), [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    <span style="color:#008000">// 將 options 數值和 Angular 內建的 string 方法套用在 template files 上
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#008000"></span>    template({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>      ...utils,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>      ...options
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    }),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    <span style="color:#008000">// 移動到指定位置
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#008000"></span>    move(options.path)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  ]);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>  <span style="color:#008000">// 將行為串連起來，這些修改行為會應用在一開始有提到的 staging area，最後套用到既有專案上
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#008000"></span>  <span style="color:#00f">return</span> chain([
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>    branchAndMerge(chain([
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>      mergeWith(applyTemplate)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    ])),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>  ]);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>}
 </code></pre></div><h4 id="template-files">Template Files</h4>
 <p>上面行為之中，有提到所謂的 Template files，這個是指可以<strong>把預設好的檔案，透過 Schematic 方式，加入到專案當中</strong>。例如，如果想要新增一個 component.ts 檔案，就可以事先在 <code>files</code> folder 中寫好 component.ts，當使用者在使用 Schematics 時，就會自動地在目錄中新增這些預設檔案。</p>
 <p>![angular-schematics-2.png]({{ site.url }}/assets/images/angular-schematics-2.png)</p>
 <p>那麼，<strong>將 options 數值和 Angular 內建的 string 方法套用在 template files 上</strong>這又是什麼意思呢？</p>
 <p>仔細看上方 template file 的檔案名稱 <code>__name@dasherize__.compoennt.ts</code>，其中 <code>name</code> 就是 options 中的 name 參數， <code>dasherize</code> 指的則是 dasherize function，所以：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">apply</span>(<span style="color:#a6e22e">url</span>(<span style="color:#e6db74">&#39;./files&#39;</span>), [
-  <span style="color:#a6e22e">template</span>({
-    ...<span style="color:#a6e22e">utils</span>,
-    ...<span style="color:#a6e22e">options</span>
-  })
-]);
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>apply(url(<span style="color:#a31515">&#39;./files&#39;</span>), [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  template({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    ...utils,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    ...options
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>]);
 </code></pre></div><p>的意思就是，將這些 options 參數和 functions 使用在 template file 中。如此一來，透過改寫，原先的 <code>__name@dasherized__.compoennt.ts</code> 就會變成 <code>my-name.component.ts</code> (使用 &ndash;name=&quot;myName&rdquo;)</p>
 <h2 id="在專案中使用自定義的-schematics-測試">在專案中使用自定義的 Schematics (測試)</h2>
 <h4 id="example">Example:</h4>
@@ -438,12 +437,12 @@ ng generate &lt;schematics位置&gt;:&lt;schmatics名稱&gt; menu
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -485,17 +484,6 @@ ng generate &lt;schematics位置&gt;:&lt;schmatics名稱&gt; menu
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>

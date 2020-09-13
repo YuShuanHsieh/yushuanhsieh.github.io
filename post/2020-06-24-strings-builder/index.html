@@ -28,12 +28,11 @@
   <title>Escape analysis issues of strings builder - 文組工程師</title>
   
   
-  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.79b82cf2077bdd3aae7894025fd832885b1bf052912b6efa30dfdc42d7b09d22.css">
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
   
     
-    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.3669452615b597915c93c0200031dbc594c748097c6d3903e07a6f3c65024666.css" async>
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
   <meta property="og:title" content="Escape analysis issues of strings builder" />
 <meta property="og:description" content="在分享 Go string to slice 議題 文章後，有朋友(感謝@陳孝思)在社團裡面分享另一個議題，關於在 strings package 的 builder 中有避免 escape analysis 的方式。基於這個分享，我就去查閱了相關 source code 和 issues ，並且整理成此文章。" />
@@ -45,7 +44,7 @@
 <meta itemprop="description" content="在分享 Go string to slice 議題 文章後，有朋友(感謝@陳孝思)在社團裡面分享另一個議題，關於在 strings package 的 builder 中有避免 escape analysis 的方式。基於這個分享，我就去查閱了相關 source code 和 issues ，並且整理成此文章。">
 <meta itemprop="datePublished" content="2020-06-24T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2020-06-24T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="404">
+<meta itemprop="wordCount" content="428">
 
 
 
@@ -72,7 +71,7 @@
     <div class="slimContent">
       <div class="navbar-header">
         <div class="profile-block text-center">
-          <a id="avatar" href="" target="_blank">
+          <a id="avatar" href="/" target="">
             <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
           </a>
           <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
@@ -146,7 +145,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
@@ -161,6 +160,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
                     </p>
                     <p class="item-date">
@@ -171,7 +180,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">Operating System Implementation Lab1 - The Stack</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/" class="title">CSE 506 Lab1 - The Stack</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-25</time>
@@ -181,7 +190,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">Operating System Implementation Lab 環境建置</a>
+                        <a href="https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/" class="title">CSE 506 Lab 環境建置</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-24</time>
@@ -195,16 +204,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-08-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-08-04</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-07-05-docker-network/" class="title">Cross-Network Container Communication</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-07-05 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-07-05</time>
                     </p>
                 </div>
             </li>
@@ -258,65 +257,65 @@
 <h2 id="escape-analysis">Escape analysis</h2>
 <p>escape analysis 是協助 Go compiler 判斷要將 variable 分配在 goroutine stack 還是 heap 的方式，而由於變數的分配位置會關係到 garbage collection 進而影響效能，因此 escape analysis 也是 Gopher 所在意的議題之一。</p>
 <p>平常我們在 build Go 程式時，可以透過調整 compiler 的 flag 來印出 escape analysis 的過程結果。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># -m: print optimization decisions</span>
-go run -gcflags<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;-m&#39;</span> main.go
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000"># -m: print optimization decisions</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>go run -gcflags=<span style="color:#a31515">&#39;-m&#39;</span> main.go
 </code></pre></div><p>如果想要知道 compiler 的所有 flag 資訊，可以透過 cmd</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">go tool compile -help
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>go tool compile -help
 </code></pre></div><p>就可以知道各支援的 flags 和詳細說明。</p>
 <p>escape analysis 是非常強大的分析工具，但也因為如此，如果 escape analysis 將可能不需要在 heap 的變數判定成要分配在 heap 區域，就會產生效能上的疑慮，因此就產生一些 hack workaround 做法，來規避 escape analysis 的分析。</p>
 <h2 id="hack-workaround-of-go-strings-builder">Hack workaround of Go strings builder</h2>
 <p>在 Go strings/builder.go 裡面就有一個 hack workaround 的例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#75715e">// noescape hides a pointer from escape analysis.  noescape is
-</span><span style="color:#75715e">// the identity function but escape analysis doesn&#39;t think the
-</span><span style="color:#75715e">// output depends on the input. noescape is inlined and currently
-</span><span style="color:#75715e">// compiles down to zero instructions.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">noescape</span>(<span style="color:#a6e22e">p</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>) <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span> {
-	<span style="color:#a6e22e">x</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">p</span>)
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">x</span> ^ <span style="color:#ae81ff">0</span>)
-    <span style="color:#75715e">// x^0 implicitly convert expressions to an integer
-</span><span style="color:#75715e"></span>}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Builder</span>) <span style="color:#a6e22e">copyCheck</span>() {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">addr</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#75715e">// This hack works around a failing of Go&#39;s escape analysis
-</span><span style="color:#75715e"></span>		<span style="color:#75715e">// that was causing b to escape and be heap allocated.
-</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">addr</span> = (<span style="color:#f92672">*</span><span style="color:#a6e22e">Builder</span>)(<span style="color:#a6e22e">noescape</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">b</span>)))
-	} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">addr</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">b</span> {
-		panic(<span style="color:#e6db74">&#34;strings: illegal use of non-zero Builder copied by value&#34;</span>)
-	}
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Go" data-lang="Go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// noescape hides a pointer from escape analysis.  noescape is
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000">// the identity function but escape analysis doesn&#39;t think the
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000">// output depends on the input. noescape is inlined and currently
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000">// compiles down to zero instructions.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000"></span><span style="color:#00f">func</span> noescape(p unsafe.Pointer) unsafe.Pointer {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	x := uintptr(p)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	<span style="color:#00f">return</span> unsafe.Pointer(x ^ 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#008000">// x^0 implicitly convert expressions to an integer
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#00f">func</span> (b *Builder) copyCheck() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>	<span style="color:#00f">if</span> b.addr == <span style="color:#00f">nil</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>		<span style="color:#008000">// This hack works around a failing of Go&#39;s escape analysis
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#008000"></span>		<span style="color:#008000">// that was causing b to escape and be heap allocated.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#008000"></span>		b.addr = (*Builder)(noescape(unsafe.Pointer(b)))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>	} <span style="color:#00f">else</span> <span style="color:#00f">if</span> b.addr != b {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>		panic(<span style="color:#a31515">&#34;strings: illegal use of non-zero Builder copied by value&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>}
 </code></pre></div><p>首先來看 strings Builder struct，為了防止使用者誤用 Builder，因此在 Builder struct 中會有一個 addr pointer 指向自己。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Builder</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">addr</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Builder</span> <span style="color:#75715e">// of receiver, to detect copies by value
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">buf</span>  []<span style="color:#66d9ef">byte</span>
-}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Go" data-lang="Go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">type</span> Builder <span style="color:#00f">struct</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	addr *Builder <span style="color:#008000">// of receiver, to detect copies by value
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>	buf  []<span style="color:#2b91af">byte</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
 </code></pre></div><p>在每次執行 Builder method 前，透過 <code>copyCheck()</code> 檢查 addr pointer 來判斷當前這個 Builder 是不是 copy 來的。</p>
 <h2 id="a-self-referential-issue-of-escape-analysis">A self-referential Issue of escape analysis</h2>
 <p>但這樣的做法，卻產生 <strong>self-reference</strong> 問題，導致 escape analysis 會誤判，進而把有 self-reference 的變數都歸類在 heap 分配。</p>
 <p>早在 2014 年 的 7921 issue <a href="https://github.com/golang/go/issues/7921">cmd/compile, bytes: bootstrap array causes bytes.Buffer to always be heap-allocated</a> 就有提到此問題，而其中舉出一些簡單的 self-reference 例子，都會導致 escape analysis 誤判，例如：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>
-	<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">B</span>) <span style="color:#a6e22e">X</span>() {
-	<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">p</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">n</span>
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">B</span>) <span style="color:#a6e22e">Y</span>() {
-	<span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">4</span>
-	<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">p</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">n</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#a6e22e">B</span>
-	<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">X</span>() <span style="color:#75715e">// escape
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Y</span>() <span style="color:#75715e">// non-escape
-</span><span style="color:#75715e"></span>}
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Go" data-lang="Go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">type</span> B <span style="color:#00f">struct</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	p *<span style="color:#2b91af">int</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>	n <span style="color:#2b91af">int</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#00f">func</span> (b *B) X() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	b.p = &amp;b.n
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#00f">func</span> (b *B) Y() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>	n := 4
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>	b.p = &amp;n
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#00f">func</span> main() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>	<span style="color:#00f">var</span> a, b B
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>	a.X() <span style="color:#008000">// escape
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#008000"></span>	b.Y() <span style="color:#008000">// non-escape
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#008000"></span>}
 </code></pre></div><p>觀察 escap analysis 結果：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">./main.go:13:7: b does not escape
-./main.go:14:2: moved to heap: n
-./main.go:19:6: moved to heap: a
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>./main.go:13:7: b does not escape
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>./main.go:14:2: moved to heap: n
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>./main.go:19:6: moved to heap: a
 </code></pre></div><p><code>Y()</code> 是把一個在 heap 的變數 n assign 給 struct member ，所以不會影想 escap analysis 判斷，但反之 <code>X()</code> 是自身 struct member reference，導致 escap analysis 誤將變數歸在 heap 中。</p>
 <p>雖然從 2014 年發現這個 issue 到現在，目前 Go 1.14 版本還是存在此問題，不過根據 issue 裡面的討論，看來還是有進展的，在 escap analysis 被重新改寫後，大神們是有機會重新 review 此問題並解決。</p>
 <h2 id="結語">結語</h2>
@@ -337,12 +336,12 @@ go run -gcflags<span style="color:#f92672">=</span><span style="color:#e6db74">&
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
         <div>Gopher</div>
       </div>
     </figure>
@@ -384,17 +383,6 @@ go run -gcflags<span style="color:#f92672">=</span><span style="color:#e6db74">&
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/go.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/c.min.js" defer></script><script>
-    hljs.configure({
-        tabReplace: '    ', 
-        classPrefix: ''     
-        
-    })
-    hljs.initHighlightingOnLoad();
 </script>
 <script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
 <script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
