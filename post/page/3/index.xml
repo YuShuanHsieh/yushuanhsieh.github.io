@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 12 Sep 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 14 Nov 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>React Hooks with memoizedState</title>
+      <link>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</link>
+      <pubDate>Wed, 27 Feb 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</guid>
+      <description>前言 React Hooks 自從正式 release 後，就出現很多相關教學文章，所以這篇不是講如何實作，而是說他如何在 stateless functional component 中保存當前 state。 此外，最近也開始嘗試把 class component 轉換成使用 hooks 的 components，但過程中還是需要蠻多調整，包含之前有使用一些 lifecycle functions ，藉此機會順便檢視是否真的必要使用這些 functions，是否可以透過其他架構方式來簡化。</description>
+    </item>
     
     <item>
       <title>2019/01月份自我學習回顧</title>
@@ -186,15 +195,6 @@ The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然
       
       <guid>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</guid>
       <description>前言 在建立表單的部份，Angular 與 AngularJS 最大的不同就是多了 Reactive Form 的方式。由於 Reactive Form 比起一般 Template-Driven Form 更具彈性且好掌控，所以就來大致介紹一下與 Reactive Form 相關的流程機制。</description>
-    </item>
-    
-    <item>
-      <title>Angular - ng-template &amp; ng-container</title>
-      <link>https://yushuanhsieh.github.io/post/2018-05-29-angular-6-ngtemplate/</link>
-      <pubDate>Tue, 29 May 2018 12:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-05-29-angular-6-ngtemplate/</guid>
-      <description>前言： 昨天剛好在看 Angular CDK Overlay (Overlay Document) 這部分，因為 Overlay 是 CDK 中 Portal 的ㄧ種，而 Portal 又和 Angular 中的 Template 機制有關係，這才發現自己對於 Angular 的 ng-template 和 ng-container 概念不是很清楚，所以特別再看了一下這部分的實作原理和應用方式。</description>
     </item>
     
   </channel>

@@ -3,8 +3,38 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://yushuanhsieh.github.io/categories/c/</loc>
+    <lastmod>2020-11-14T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://yushuanhsieh.github.io/categories/</loc>
-    <lastmod>2020-09-12T08:00:00+08:00</lastmod>
+    <lastmod>2020-11-14T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yushuanhsieh.github.io/categories/conference/</loc>
+    <lastmod>2020-11-14T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yushuanhsieh.github.io/categories/go/</loc>
+    <lastmod>2020-11-14T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yushuanhsieh.github.io/post/2020-11-14-gophercon_2020/</loc>
+    <lastmod>2020-11-14T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yushuanhsieh.github.io/post/</loc>
+    <lastmod>2020-11-14T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yushuanhsieh.github.io/</loc>
+    <lastmod>2020-11-14T08:00:00+08:00</lastmod>
   </url>
   
   <url>
@@ -18,22 +48,7 @@
   </url>
   
   <url>
-    <loc>https://yushuanhsieh.github.io/post/</loc>
-    <lastmod>2020-09-12T08:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yushuanhsieh.github.io/</loc>
-    <lastmod>2020-09-12T08:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://yushuanhsieh.github.io/categories/devops/</loc>
-    <lastmod>2020-09-04T08:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yushuanhsieh.github.io/categories/go/</loc>
     <lastmod>2020-09-04T08:00:00+08:00</lastmod>
   </url>
   
@@ -50,11 +65,6 @@
   <url>
     <loc>https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/</loc>
     <lastmod>2020-08-24T08:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yushuanhsieh.github.io/categories/c/</loc>
-    <lastmod>2020-08-04T08:00:00+08:00</lastmod>
   </url>
   
   <url>

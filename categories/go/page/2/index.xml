@@ -6,10 +6,20 @@
     <description>Recent content in Go on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Sep 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 14 Nov 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2019 年度回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-12-30-2019-review/</link>
+      <pubDate>Mon, 30 Dec 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-12-30-2019-review/</guid>
+      <description>2019 年過去了，不免俗地跟風一下，回顧今年做了哪些事情。整體來說 2019 年對我來說是一個正向的轉變，包含職位、生涯、薪資、技術能力等，至於促使這些轉變的時機。我覺得是好好把握突然來的機會，以及當覺得這個方向好像和自己想做的有點不合時，就要勇於開拓新的方向。
+Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變成 back-end 吧。而這個動機在於很多人在聽到我是商科轉職，就說我一定是去做前端，因為前端對他們而言技術能力需求低，即使文組也可以勝任，其他資工系本科出身的不會去寫前端。當然這樣的想法很過時，而且說這些話的人大概也寫不出來像 angular, react 之類的框架，不過為了證明自己能力，還是不爭氣地開始尋求 back-end 的機會，也很幸運地進入趨勢科技開始寫 Go 。</description>
+    </item>
     
     <item>
       <title>2019/11 月份自我學習回顧</title>
@@ -198,15 +208,6 @@
       <description>![study-2019-02]({{ site.url }}/assets/images/study-2019-02.png)
 前言 這個月大多在適應新的生活環境，第一次來新竹工作，不意外地在新手村落腳。在還沒來新竹之前，就聽聞過新竹可能是個比台北無聊的地方，那時候覺得反正我生活也很宅，不是 coding 就是買化妝品，只要有舒適的套房和康是美就可以存活了，但是實際上沒有我想的這麼簡單XD 畢竟新竹的社群活動真的少很多，讓假日少了一些樂趣。既然沒有實體活動，只能在線上多參與一些活動或是多看別人分享的文章了。
 本月份學習內容除了加強 React 之外，也開始加入多一點 Golang 內容，不意外的話，之後工作使用語言應該會是 JavaScript 和 Golang，所以先安排階段性的練習，在之後專案中也能比較快上手。</description>
-    </item>
-    
-    <item>
-      <title>React Hooks with memoizedState</title>
-      <link>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</link>
-      <pubDate>Wed, 27 Feb 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</guid>
-      <description>前言 React Hooks 自從正式 release 後，就出現很多相關教學文章，所以這篇不是講如何實作，而是說他如何在 stateless functional component 中保存當前 state。 此外，最近也開始嘗試把 class component 轉換成使用 hooks 的 components，但過程中還是需要蠻多調整，包含之前有使用一些 lifecycle functions ，藉此機會順便檢視是否真的必要使用這些 functions，是否可以透過其他架構方式來簡化。</description>
     </item>
     
   </channel>

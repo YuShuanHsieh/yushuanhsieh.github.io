@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Conference on 文組工程師</title>
+    <link>https://yushuanhsieh.github.io/categories/conference/</link>
+    <description>Recent content in Conference on 文組工程師</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 14 Nov 2020 08:00:00 +0800</lastBuildDate>
+    
+        <atom:link href="https://yushuanhsieh.github.io/categories/conference/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GopherCon TW 2020 場務組心得</title>
+      <link>https://yushuanhsieh.github.io/post/2020-11-14-gophercon_2020/</link>
+      <pubDate>Sat, 14 Nov 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-11-14-gophercon_2020/</guid>
+      <description>前言 從 2020 年初就開始籌備的第一屆 GopherCon TW ，終於在 11/14(六) 美好地落幕。第一次籌備就遇上疫情問題，導致時程一再延遲，還有首次主辦 conference 經驗不足，有一些遺漏以及沒有注意到的地方，所以自認籌辦期間沒有做的很好 TT</description>
+    </item>
+    
+    <item>
+      <title>CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</title>
+      <link>https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/</link>
+      <pubDate>Sat, 12 Sep 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/</guid>
+      <description>前言 之前是看 COMP790 的課程，但是實作起來發現有點問題，而且題目跟實際 source code 說明不太一樣。在花了很多時間釐清之後，發現原課程內容可能來自於 CSE 506: Lecture from Stony Brook University，仔細看了一下 CSE 506 的 Lab 課程，發現題目與 source code 相符程度較高，因此後續會改看 CSE 506 這系列課程。</description>
+    </item>
+    
+    <item>
+      <title>Vault Initialization and Keys Security</title>
+      <link>https://yushuanhsieh.github.io/post/2020-09-04-vault-security/</link>
+      <pubDate>Fri, 04 Sep 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-09-04-vault-security/</guid>
+      <description>預備知識 在閱讀下方內容之前，建議先對 Vault 架構有個基本了解，相關官方文章如下：
+ Vault Architecture Vault Key Rotation Vault Seal/Unseal  另外， Barrier 這個元件在 Vault 相當重要，在 Vault Architecture 頁面中有提及，可以先了解其用意，再來看它是如何被實現。</description>
+    </item>
+    
+    <item>
+      <title>CSE 506 Lab1 - The Stack</title>
+      <link>https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/</link>
+      <pubDate>Tue, 25 Aug 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-08-25-comp790-lab1/</guid>
+      <description>前言 課程 Operating System Implementation，Lab1 x86 Assembly and Bootloader 是個簡單的實作開場(Lab 源自於 MIT 課程)，不過其中卻有蠻多學習的地方。這次來記錄一下 Lab 1 中的 The Stack 實作部分，實作過程中除了需要用 gdb 之外，也需要搭配 asm code。</description>
+    </item>
+    
+    <item>
+      <title>CSE 506 Lab 環境建置</title>
+      <link>https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/</link>
+      <pubDate>Mon, 24 Aug 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-08-24-comp790-tool/</guid>
+      <description>前言 由於下學期要上計算機結構的課程，所以趁著開課之前來複習一下 OS。這次看的課程是 UNC Operating System Implementation，基本上這課程也是引用 MIT 知名的 JOS 實作，再加上清楚明瞭的 Slides，光是一堂課就能有蠻多地收穫。</description>
+    </item>
+    
+    <item>
+      <title>COSCUP 2020 - Goroutine stack and local variable allocation in Go</title>
+      <link>https://yushuanhsieh.github.io/post/2020-08-04-coscup-go/</link>
+      <pubDate>Tue, 04 Aug 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-08-04-coscup-go/</guid>
+      <description>Q&amp;amp;A 補充 Slides: Goroutine stack and local variable allocation in Go</description>
+    </item>
+    
+    <item>
+      <title>Cross-Network Container Communication</title>
+      <link>https://yushuanhsieh.github.io/post/2020-07-05-docker-network/</link>
+      <pubDate>Sun, 05 Jul 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-07-05-docker-network/</guid>
+      <description>在 Docker 的網路規則中，由於 DOCKER-ISOLATION-STAGE-1、DOCKER-ISOLATION-STAGE-2 兩個 iptables chain 的關係，因此不同 Docker network 連結的 container 是無法互相溝通的。不過，我們可以透過建立 router 的手段來規避掉 chain 的限制，讓 container 收到其他 container 來的packages。此方式涉及到 Linux Bridge 處理封包的方式和基本網路知識，希望透過此介紹，來更了解 network stack 與 packages 處理流程。</description>
+    </item>
+    
+    <item>
+      <title>2020/05 月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2020-06-25-study-05/</link>
+      <pubDate>Thu, 25 Jun 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-06-25-study-05/</guid>
+      <description>間隔了好一陣子沒有寫自我學習回顧，其實還是有持續在記錄，不過因為剛換新工作的關係，就忙著適應～以及學校那邊的課程也是如火如荼的進展中，就沒更新這種閒聊性質的文章了，不過技術相關的還是有努力撰寫唷 ・ω・
+5 月份主要都在念兩大項目：SDN 和 GCP cloud 線上課程。本來是預期在六月的時候去考試的，沒想到 SDN 期末考就先到來了，因此預計 GCP 考試就會延到七月份。另外，七月也要開始準備 COSCUP 分享，這次題目我很喜歡，但是卻也不好準備，希望不要讓底下的聽眾失望，我會好好加油的！</description>
+    </item>
+    
+    <item>
+      <title>Escape analysis issues of strings builder</title>
+      <link>https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/</link>
+      <pubDate>Wed, 24 Jun 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/</guid>
+      <description>在分享 Go string to slice 議題 文章後，有朋友(感謝@陳孝思)在社團裡面分享另一個議題，關於在 strings package 的 builder 中有避免 escape analysis 的方式。基於這個分享，我就去查閱了相關 source code 和 issues ，並且整理成此文章。</description>
+    </item>
+    
+    <item>
+      <title>Go string to slice 議題</title>
+      <link>https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/</link>
+      <pubDate>Mon, 01 Jun 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/</guid>
+      <description>日前在看 Go runtime/string.go source code 的時候，意外看到一篇文章 Go中string转[]byte的陷阱，不過這篇文章的日期間隔已久，Go version 也從文章中的 1.10 改版到 1.</description>
+    </item>
+    
+    <item>
+      <title>Introduction to ingress-gce controller</title>
+      <link>https://yushuanhsieh.github.io/post/2020-05-28-ingress-gce/</link>
+      <pubDate>Thu, 28 May 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-05-28-ingress-gce/</guid>
+      <description>如果想要在 Google Cloud Platform 的 GKE 上使用 Ingress 功能，最簡單的方式就是用 GKE 本身預設提供的 ingress-gce controller。不過不知道大家在設定 ingress yaml 的時候，有沒有留意到 ingress-gce 規定 service type 只能是 NodePort，但是 ingress-nginx 卻沒有這種限制呢？</description>
+    </item>
+    
+    <item>
+      <title>Side Project - Transfer.sh</title>
+      <link>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</link>
+      <pubDate>Tue, 19 May 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</guid>
+      <description>在 Trace transfer.sh open project 有提到我目前正在調整 transfer.sh 這個 open source project，把它修改成內部所需要的一個 service，而之前已經改得差不多了，所以簡單地來介紹一下修改了哪些內容：</description>
+    </item>
+    
+    <item>
+      <title>Side Project - Symlink Generator for Multi-lang Hugo Site</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</link>
+      <pubDate>Wed, 29 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</guid>
+      <description>在 Multilingual Mode in Hugo 這篇文章中有提到目前使用 Hugo site generator 產生 multi-lang site 的問題，使用者必須要為每個語言都建立一個檔案，才不會造成最後在產生網站後，發生某一個語言的頁面遺失問題。（例如，使用者一定要建立 about.</description>
+    </item>
+    
+    <item>
+      <title>Discourse Forums Deployment</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</link>
+      <pubDate>Wed, 22 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</guid>
+      <description>這兩天在試著部署 Discourse －目前主流的 forum open porject。雖然它有 cloud 版本可以用，不過因為基於一些因素，我們打算先自行部署，給團隊成員實際試用測試過後，再來看是否要使用官方提供的 Cloud 付費版本。而在部署的過程中發現蠻多問題的，所以也一併記錄下來，給想要自行部署的人參考。</description>
+    </item>
+    
+    <item>
+      <title>Trace transfer.sh open project</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</link>
+      <pubDate>Wed, 15 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</guid>
+      <description>因為工作需求，需要一個透過 cli 就可以 upload 和 download 的工具，剛好 open project transfer.sh 有提供類似的功能，不過我們有額外的需求，包含每個 request 都要能 fiter IP 和執行 HTTP Basic Auth 驗證，因此就有這個機會來分析一下 transfer.</description>
+    </item>
+    
+    <item>
+      <title>Multilingual Mode in Hugo</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-07-hugo-merge/</link>
+      <pubDate>Tue, 07 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-07-hugo-merge/</guid>
+      <description>紀錄用 Hugo site generator 建立多語言網站時所遇到的問題，與過程中相關的學習內容，包含 Hugo render 過程、source code trace 等。</description>
+    </item>
+    
+    <item>
+      <title>三月起，在竹北定區生活</title>
+      <link>https://yushuanhsieh.github.io/post/2020-03-31-march/</link>
+      <pubDate>Tue, 31 Mar 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-03-31-march/</guid>
+      <description>&lt;p&gt;三月一整月都在非常忙碌的情況下度過。&lt;/p&gt;
+&lt;h2 id=&#34;搬家&#34;&gt;搬家&lt;/h2&gt;
+&lt;p&gt;在經過漫長地油漆、裝系統櫃、打掃等流程，我在竹北的新房終於裝潢完成，因此在三月初的時候就很匆忙地把租屋處退掉，並且搬來新家住。本來租屋只有十坪大小，現在換成近三十坪的生活空間，突然有點不太習慣，需要清潔的區塊也變大不少，也開始體悟掃地機器人的重要性。由於當初在買房子的時候，有點太快做決定，因此一直很擔心新家會不會有什麼不好的地方，不過現在搬進來幾個禮拜，覺得一切都還蠻美好的，樓上樓下鄰居都不會吵鬧，社區環境安靜單純，戶數不多所以整潔還不錯，主委也非常盡責。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>2月雜談</title>
+      <link>https://yushuanhsieh.github.io/post/2020-02-24-february/</link>
+      <pubDate>Mon, 24 Feb 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-02-24-february/</guid>
+      <description>最近一個月發生了一些事情，導致又一陣子沒有更新技術文章或是讀書日誌。
+一月底的時候在工作上發生了一件事情，讓我突然間深深陷入負面情緒中。其實我早在事情發生之前是有所選擇的，我可以選擇穩定或是挑戰，而我在那時候選擇了挑戰，即使這挑戰讓我付出蠻多代價，包含家人的不諒解、長距離通勤等，我在事情沒發生之前都覺得這一切代價都算值得。
+在事情發生後，我其實剛開始的幾天是非常沮喪的，我覺得我那時候做了錯的選擇，才會讓自己陷入進退兩難的局面。我本來就是轉職人生，這樣的背景讓我更難坦然地面對現實，因為我要付出的成本比團隊工程師們都要高。
+不過在冷靜之後，我開始回想，我在這段短暫旅程中，是否有達到我當初的目的。
+我有幸跟強者同事一起工作 有很好的主管讓我 work from home 我接觸到我之前不會碰到的 cloud service 和相關 infrastructure 我開始念起 AWS 和 GCP 並希望可以考過證照</description>
+    </item>
+    
+    <item>
+      <title>Go HTTP Routers - Chi/Echo/Gin/gorilla mux 實作細節與比較</title>
+      <link>https://yushuanhsieh.github.io/post/2020-01-21-golang-router/</link>
+      <pubDate>Tue, 21 Jan 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-01-21-golang-router/</guid>
+      <description>前言 之前做 API server，制定 route path 時有遇到一些問題，於是就順手看了幾個 HTTP router / web framework 的 router 部分實作方式，並且記錄下來，提供給大家做個參考。</description>
+    </item>
+    
+    <item>
+      <title>Implement Memory Allocator - Implicit Free List</title>
+      <link>https://yushuanhsieh.github.io/post/2020-01-19-memory-allocator-implicit-free-list/</link>
+      <pubDate>Sun, 19 Jan 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-01-19-memory-allocator-implicit-free-list/</guid>
+      <description>前言 由前篇文章可以知道，使用 stack data structure 是最簡單的 memory allocator 入門寫法，但是卻會造成一些問題，例如不能任意順序 free 等。既然如此，我們就換成 list 來實作 memory allocator，解決使用 stack 實作的問題。</description>
+    </item>
+    
+  </channel>
+</rss>

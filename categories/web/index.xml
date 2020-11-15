@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>GopherCon TW 2020 場務組心得</title>
+      <link>https://yushuanhsieh.github.io/post/2020-11-14-gophercon_2020/</link>
+      <pubDate>Sat, 14 Nov 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-11-14-gophercon_2020/</guid>
+      <description>前言 從 2020 年初就開始籌備的第一屆 GopherCon TW ，終於在 11/14(六) 美好地落幕。第一次籌備就遇上疫情問題，導致時程一再延遲，還有首次主辦 conference 經驗不足，有一些遺漏以及沒有注意到的地方，所以自認籌辦期間沒有做的很好 TT</description>
+    </item>
+    
+    <item>
       <title>CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</title>
       <link>https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/</link>
       <pubDate>Sat, 12 Sep 2020 08:00:00 +0800</pubDate>
@@ -188,16 +197,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-01-19-memory-allocator-implicit-free-list/</guid>
       <description>前言 由前篇文章可以知道，使用 stack data structure 是最簡單的 memory allocator 入門寫法，但是卻會造成一些問題，例如不能任意順序 free 等。既然如此，我們就換成 list 來實作 memory allocator，解決使用 stack 實作的問題。</description>
-    </item>
-    
-    <item>
-      <title>2019 年度回顧</title>
-      <link>https://yushuanhsieh.github.io/post/2019-12-30-2019-review/</link>
-      <pubDate>Mon, 30 Dec 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-12-30-2019-review/</guid>
-      <description>2019 年過去了，不免俗地跟風一下，回顧今年做了哪些事情。整體來說 2019 年對我來說是一個正向的轉變，包含職位、生涯、薪資、技術能力等，至於促使這些轉變的時機。我覺得是好好把握突然來的機會，以及當覺得這個方向好像和自己想做的有點不合時，就要勇於開拓新的方向。
-Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變成 back-end 吧。而這個動機在於很多人在聽到我是商科轉職，就說我一定是去做前端，因為前端對他們而言技術能力需求低，即使文組也可以勝任，其他資工系本科出身的不會去寫前端。當然這樣的想法很過時，而且說這些話的人大概也寫不出來像 angular, react 之類的框架，不過為了證明自己能力，還是不爭氣地開始尋求 back-end 的機會，也很幸運地進入趨勢科技開始寫 Go 。</description>
     </item>
     
   </channel>
