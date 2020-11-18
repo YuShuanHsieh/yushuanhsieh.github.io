@@ -6,10 +6,19 @@
     <description>Recent content in Categories on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 14 Nov 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 15 Nov 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CSE 506 Lab2 - Memory Management and Virtual Memory Mapping</title>
+      <link>https://yushuanhsieh.github.io/post/2020-11-15-lab2_2/</link>
+      <pubDate>Sun, 15 Nov 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-11-15-lab2_2/</guid>
+      <description>閒聊 上次寫完 Lab 2 source code study 之後，一晃眼就過了近兩個月。中間被各種事物攔截，加上剛好有些機遇和機會，因此挪了一些時間去準備，等事情有比較明朗後再跟大家分享。此外，學校也開學了，這學期修了偏硬體架構的課程，包含 RISC-V 和架構效能分析等，單智君教授的教學內容很好，聲音也很溫柔，非常喜歡這位教授的課程。</description>
+    </item>
     
     <item>
       <title>GopherCon TW 2020 場務組心得</title>
@@ -188,15 +197,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-01-21-golang-router/</guid>
       <description>前言 之前做 API server，制定 route path 時有遇到一些問題，於是就順手看了幾個 HTTP router / web framework 的 router 部分實作方式，並且記錄下來，提供給大家做個參考。</description>
-    </item>
-    
-    <item>
-      <title>Implement Memory Allocator - Implicit Free List</title>
-      <link>https://yushuanhsieh.github.io/post/2020-01-19-memory-allocator-implicit-free-list/</link>
-      <pubDate>Sun, 19 Jan 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-01-19-memory-allocator-implicit-free-list/</guid>
-      <description>前言 由前篇文章可以知道，使用 stack data structure 是最簡單的 memory allocator 入門寫法，但是卻會造成一些問題，例如不能任意順序 free 等。既然如此，我們就換成 list 來實作 memory allocator，解決使用 stack 實作的問題。</description>
     </item>
     
   </channel>

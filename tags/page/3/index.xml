@@ -11,6 +11,17 @@
     
     
     <item>
+      <title>2019/02月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-03-03-study-2019-02/</link>
+      <pubDate>Sun, 03 Mar 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-03-03-study-2019-02/</guid>
+      <description>![study-2019-02]({{ site.url }}/assets/images/study-2019-02.png)
+前言 這個月大多在適應新的生活環境，第一次來新竹工作，不意外地在新手村落腳。在還沒來新竹之前，就聽聞過新竹可能是個比台北無聊的地方，那時候覺得反正我生活也很宅，不是 coding 就是買化妝品，只要有舒適的套房和康是美就可以存活了，但是實際上沒有我想的這麼簡單XD 畢竟新竹的社群活動真的少很多，讓假日少了一些樂趣。既然沒有實體活動，只能在線上多參與一些活動或是多看別人分享的文章了。
+本月份學習內容除了加強 React 之外，也開始加入多一點 Golang 內容，不意外的話，之後工作使用語言應該會是 JavaScript 和 Golang，所以先安排階段性的練習，在之後專案中也能比較快上手。</description>
+    </item>
+    
+    <item>
       <title>React Hooks with memoizedState</title>
       <link>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</link>
       <pubDate>Wed, 27 Feb 2019 08:00:00 +0800</pubDate>
@@ -185,15 +196,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       <guid>https://yushuanhsieh.github.io/post/2018-06-23-browser-render-engine/</guid>
       <description>前言： 最近在寫 CSS Animation 部分，於是比較深入的看瀏覽器渲染流程，希望在進行 Animation 時可以更加地流暢。
 The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然地寫出這樣的頁面：</description>
-    </item>
-    
-    <item>
-      <title>Angular - Reactive Form</title>
-      <link>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</link>
-      <pubDate>Thu, 14 Jun 2018 12:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</guid>
-      <description>前言 在建立表單的部份，Angular 與 AngularJS 最大的不同就是多了 Reactive Form 的方式。由於 Reactive Form 比起一般 Template-Driven Form 更具彈性且好掌控，所以就來大致介紹一下與 Reactive Form 相關的流程機制。</description>
     </item>
     
   </channel>

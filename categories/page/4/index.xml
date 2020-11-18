@@ -6,10 +6,19 @@
     <description>Recent content in Categories on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 14 Nov 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 15 Nov 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Angular - Reactive Form</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</link>
+      <pubDate>Thu, 14 Jun 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</guid>
+      <description>前言 在建立表單的部份，Angular 與 AngularJS 最大的不同就是多了 Reactive Form 的方式。由於 Reactive Form 比起一般 Template-Driven Form 更具彈性且好掌控，所以就來大致介紹一下與 Reactive Form 相關的流程機制。</description>
+    </item>
     
     <item>
       <title>Angular - ng-template &amp; ng-container</title>
