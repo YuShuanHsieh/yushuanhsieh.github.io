@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>CSE 506 Lab 3 - User Environments(Processes)</title>
+      <link>https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/</link>
+      <pubDate>Wed, 25 Nov 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/</guid>
+      <description>閒聊 之前在辦活動的時候，得知有朋友在 follow 我的 Blog ，真是讓我非常訝異，因為我一直是默默撰寫文章，而且雖然我有參與 Golang 和 GDG 社群，但是我寫的內容很常都跟 Golang 和 Google 技術沒什麼太大關係 XD 非常感謝各位的觀看，之前有近兩個月都沒更新，感覺有點罪惡，以後會盡量定期更新的。</description>
+    </item>
+    
+    <item>
       <title>CSE 506 Lab2 - Memory Management and Virtual Memory Mapping</title>
       <link>https://yushuanhsieh.github.io/post/2020-11-15-lab2_2/</link>
       <pubDate>Sun, 15 Nov 2020 08:00:00 +0800</pubDate>
@@ -187,15 +196,6 @@
 在事情發生後，我其實剛開始的幾天是非常沮喪的，我覺得我那時候做了錯的選擇，才會讓自己陷入進退兩難的局面。我本來就是轉職人生，這樣的背景讓我更難坦然地面對現實，因為我要付出的成本比團隊工程師們都要高。
 不過在冷靜之後，我開始回想，我在這段短暫旅程中，是否有達到我當初的目的。
 我有幸跟強者同事一起工作 有很好的主管讓我 work from home 我接觸到我之前不會碰到的 cloud service 和相關 infrastructure 我開始念起 AWS 和 GCP 並希望可以考過證照</description>
-    </item>
-    
-    <item>
-      <title>Go HTTP Routers - Chi/Echo/Gin/gorilla mux 實作細節與比較</title>
-      <link>https://yushuanhsieh.github.io/post/2020-01-21-golang-router/</link>
-      <pubDate>Tue, 21 Jan 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-01-21-golang-router/</guid>
-      <description>前言 之前做 API server，制定 route path 時有遇到一些問題，於是就順手看了幾個 HTTP router / web framework 的 router 部分實作方式，並且記錄下來，提供給大家做個參考。</description>
     </item>
     
   </channel>

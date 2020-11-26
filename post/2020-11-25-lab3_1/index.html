@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        CSE 506 Lab 3 - User Environments(Processes) - 文組工程師
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="閒聊 之前在辦活動的時候，得知有朋友在 follow 我的 Blog ，真是讓我非常訝異，因為我一直是默默撰寫文章，而且雖然我有參與 Golang 和 GDG 社群，但是我寫的內容很常都跟 Golang 和 Google 技術沒什麼太大關係 XD 非常感謝各位的觀看，之前有近兩個月都沒更新，感覺有點罪惡，以後會盡量定期更新的。" />
+    
+      <meta property="og:image" content="https://yushuanhsieh.github.io/posts/CSE506-Lab3_1.png" />
+    
+  <meta name="generator" content="Hugo 0.71.0 with theme pure" />
+  <title>CSE 506 Lab 3 - User Environments(Processes) - 文組工程師</title>
+  
+  
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
+  
+    
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="CSE 506 Lab 3 - User Environments(Processes)" />
+<meta property="og:description" content="閒聊 之前在辦活動的時候，得知有朋友在 follow 我的 Blog ，真是讓我非常訝異，因為我一直是默默撰寫文章，而且雖然我有參與 Golang 和 GDG 社群，但是我寫的內容很常都跟 Golang 和 Google 技術沒什麼太大關係 XD 非常感謝各位的觀看，之前有近兩個月都沒更新，感覺有點罪惡，以後會盡量定期更新的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/" />
+<meta property="og:image" content="https://yushuanhsieh.github.io/posts/CSE506-Lab3_1.png" />
+<meta property="article:published_time" content="2020-11-25T08:00:00+08:00" />
+<meta property="article:modified_time" content="2020-11-25T08:00:00+08:00" />
+<meta itemprop="name" content="CSE 506 Lab 3 - User Environments(Processes)">
+<meta itemprop="description" content="閒聊 之前在辦活動的時候，得知有朋友在 follow 我的 Blog ，真是讓我非常訝異，因為我一直是默默撰寫文章，而且雖然我有參與 Golang 和 GDG 社群，但是我寫的內容很常都跟 Golang 和 Google 技術沒什麼太大關係 XD 非常感謝各位的觀看，之前有近兩個月都沒更新，感覺有點罪惡，以後會盡量定期更新的。">
+<meta itemprop="datePublished" content="2020-11-25T08:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2020-11-25T08:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="1395">
+<meta itemprop="image" content="https://yushuanhsieh.github.io/posts/CSE506-Lab3_1.png">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://yushuanhsieh.github.io/posts/CSE506-Lab3_1.png"/>
+
+<meta name="twitter:title" content="CSE 506 Lab 3 - User Environments(Processes)"/>
+<meta name="twitter:description" content="閒聊 之前在辦活動的時候，得知有朋友在 follow 我的 Blog ，真是讓我非常訝異，因為我一直是默默撰寫文章，而且雖然我有參與 Golang 和 GDG 社群，但是我寫的內容很常都跟 Golang 和 Google 技術沒什麼太大關係 XD 非常感謝各位的觀看，之前有近兩個月都沒更新，感覺有點罪惡，以後會盡量定期更新的。"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="/" target="">
+            <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">Software Engineer</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Taiwan</small>
+        </div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-about">
+                <a href="/post/1900-01-01-about/">
+                  <span class="menu-title">About</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title"> Categories</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/conference/" class="category-list-link">conference</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/coscup/" class="category-list-link">coscup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/devops/" class="category-list-link">devops</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/game/" class="category-list-link">game</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/gnu/" class="category-list-link">gnu</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/go/" class="category-list-link">go</a><span class="category-list-count">15</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/google-cloud-platform/" class="category-list-link">google-cloud-platform</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/kubernetes/" class="category-list-link">kubernetes</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
+        </ul>
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/" class="title">CSE 506 Lab 3 - User Environments(Processes)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-11-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-11-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-11-15-lab2_2/" class="title">CSE 506 Lab2 - Memory Management and Virtual Memory Mapping</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-11-15 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-11-15</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-11-14-gophercon_2020/" class="title">GopherCon TW 2020 場務組心得</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-11-14 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-11-14</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/" class="title">CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-12 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-12</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-09-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-04</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<main class="main" role="main"><div class="content">
+  <article id="single-" class="article article-type-single" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2020-11-25-lab3_1/"
+    >
+    
+      
+        
+          <span class="title-cat">Operating System</span>
+        
+      
+    CSE 506 Lab 3 - User Environments(Processes)</a>
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/" class="article-date">
+  <time datetime="2020-11-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-11-25</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/operating-system/"> Operating System </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/post/2020-11-25-lab3_1/#comments"
+            class="article-comment-link">Comments</a></span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <h2 id="閒聊">閒聊</h2>
+<p>之前在辦活動的時候，得知有朋友在 follow 我的 Blog ，真是讓我非常訝異，因為我一直是默默撰寫文章，而且雖然我有參與 Golang 和 GDG 社群，但是我寫的內容很常都跟 Golang 和 Google 技術沒什麼太大關係 XD 非常感謝各位的觀看，之前有近兩個月都沒更新，感覺有點罪惡，以後會盡量定期更新的。</p>
+<p>目前除了自修 CSE 506 課程之外，還有學習 RISC-V instruction 以及 pipeline，因為過往經驗都是看 x86_64 instruction 居多，現在改看 RISC-V 還蠻不習慣的。另外就是還想學用 Rust 寫 kernel module，目前趨勢是有些 Kernel developers 嘗試將 Rust code 結合進 Linux kernel 中，再加上 Rust 的發展也蠻成熟，是時候抽空來學習一下。</p>
+<h2 id="lab-3-exercise-part-a---user-environments">Lab 3 Exercise Part A - User Environments</h2>
+<p>Lab 3 是我認為蠻重要的一個實驗課程，主要學習 process 的 context 組成、context switch 流程，以及 interupt handlers 的註冊和運作過程。當然，JOS 中簡化了很多步驟，不過透過學習這些概念，再回去看 Linux kernel code 就會有更深的感觸。</p>
+<p>而為了區別與 UNIX processes 的差異，在 JOS 中是使用 <code>ENV(environment)</code> 來代表 JOS 的 process 功能， JOS environment 也有 thread 和 address space，在實驗中我們會去實作這兩個概念。</p>
+<h3 id="user-environments">User Environments</h3>
+<p>JOS 透過三個變數來管理 environments：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">struct</span> Env *envs = NULL;                   <span style="color:#008000">/* All environments */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">struct</span> Env *curenv = NULL;                 <span style="color:#008000">/* the current env */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">static</span> <span style="color:#00f">struct</span> Env *env_free_list;          <span style="color:#008000">/* Free environment list */</span>
+</code></pre></div><p>其中 envs 為 array 結構，在 kernel 初始化時就會分配 1024 個 Env 記憶體空間大小。curenv 就是目前正在使用的 Env，而我們透過 free list 來取得目前可供使用的 Env。因此，我們重新檢視目前的記憶體佔用狀況，其中有一區塊必須用來紀錄所有 Env 狀態。</p>
+<p><img src="/posts/CSE506-Lab3_2.png" alt=""></p>
+<p>接著，來觀察 Env 結構：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">struct</span> Env {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#00f">struct</span> Trapframe env_tf;	<span style="color:#008000">// Saved registers
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000"></span>    <span style="color:#00f">struct</span> Env *env_link;   <span style="color:#008000">// Free list link pointers
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000"></span>    envid_t env_id;			<span style="color:#008000">// Unique environment identifier
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000"></span>    envid_t env_parent_id;		<span style="color:#008000">// env_id of this env&#39;s parent
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000"></span>    <span style="color:#00f">enum</span> EnvType env_type;		<span style="color:#008000">// Indicates special system environments
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000"></span>    <span style="color:#2b91af">unsigned</span> env_status;		<span style="color:#008000">// Status of the environment
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000"></span>    uint32_t env_runs;		<span style="color:#008000">// Number of times environment has run
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#008000">// Address space
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000"></span>    pml4e_t *env_pml4e;		<span style="color:#008000">// Kernel virtual address of top-level page dir,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>    <span style="color:#008000">// or root of extended page tables in guest mode.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000"></span>    physaddr_t env_cr3;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    uint8_t *elf;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>};
+</code></pre></div><p>回顧作業系統的課程中所提到的觀念：</p>
+<ol>
+<li>切換 process 的時候，會需要保存目前狀態，而 <code>struct Trapframe env_tf</code> 就是用來儲存 registers 的數值</li>
+<li>從 interrupt handler 回到指定的 process，依賴 <code>env_id</code></li>
+<li>fork process 時候會有 parent ID，則是 <code>env_parent_id</code></li>
+<li><code>env_status</code> 紀錄當前 process 狀態，例如 running or runnable</li>
+<li>每個 process 有自己的 address space，則是紀錄在 <code>env_pml4e</code> 和 <code>env_cr3</code></li>
+</ol>
+<h4 id="create-an-envs-array">Create an envs array</h4>
+<p>有了概念之後，就先從 envs 實作起。首先分配 size 為 <code>sizeof(struct Env) * NENV</code> 的記憶體空間，接著把該記憶體區段 mapping 到指定的 virtual address <code>UENVS</code>，其權限為 kernel read, user read。（相關 functions 實作可參考 <a href="https://yushuanhsieh.github.io/post/2020-11-15-lab2_2/">CSE 506 Lab2 - Memory Management and Virtual Memory Mapping</a>）</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>uint32_t env_size = <span style="color:#00f">sizeof</span>(<span style="color:#00f">struct</span> Env) * NENV;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>envs = boot_alloc(env_size);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>boot_map_region(boot_pml4e, UENVS, env_size, PADDR(env), PTE_U);
+</code></pre></div><p>初始化 env，並且組成 env free list 供後續使用。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#2b91af">void</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>env_init(<span style="color:#2b91af">void</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	<span style="color:#00f">struct</span> Env *last;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>	last = env_free_list = &amp;envs[0];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	envs[0].env_id = 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	<span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> i = 1; i &lt; NENV; i++) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>		envs[i].env_id = 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>		last-&gt;env_link = &amp;envs[i];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>		last = &amp;envs[i];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>	<span style="color:#008000">// Per-CPU part of the initialization
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#008000"></span>	env_init_percpu();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+</code></pre></div><blockquote>
+<p><strong>Segment Register</strong></p>
+<p>觀察 <code>env_init_percpu();</code> ，留意 segment register 的設定，在 <a href="https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/ref/ia32/IA32-3A.pdf">Developer&rsquo;s Manual: 3.4.2 Segment Selectors</a> 中提到，segment register 紀錄 segment selector 的值，而 segment selector 前 2 個 bit 的值為 <code>Requested Privilege Level </code>，因此 (GD_UD|<strong>3</strong>) 意味著 user level(applications)。其他 Level 可以參考 Developer&rsquo;s Manual： 4.5 PRIVILEGE LEVELS。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">asm</span> volatile(<span style="color:#a31515">&#34;movw %%ax,%%gs&#34;</span> :: <span style="color:#a31515">&#34;a&#34;</span> (GD_UD|3));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">asm</span> volatile(<span style="color:#a31515">&#34;movw %%ax,%%fs&#34;</span> :: <span style="color:#a31515">&#34;a&#34;</span> (GD_UD|3));
+</code></pre></div></blockquote>
+<h4 id="setup-an-address-space-for-env">Setup an address space for env</h4>
+<p>每個 env 會有自己獨立的 address space，而在 JOS 中是透過建立不同 pml4 page table 來達成目的。</p>
+<p>其中要注意的地方是，env 的 pml4[0] 被設定為 user address space，而 pml4[1] - pml4[511] 則是 kernel address space，因此每個 env 的 pml4 1 - 511 entry 都會對應到相同的 kernel page table (boot_pml4)，他們才能取得相同的資訊。而 pml4[0] 則是每個 env 都有自己的一個 table，並對應到不同的 physical memory address。</p>
+<p><img src="/posts/CSE506-Lab3_1.png" alt="CSE506-Lab3"></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">static</span> <span style="color:#2b91af">int</span> env_setup_vm(<span style="color:#00f">struct</span> Env *e)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#2b91af">int</span> i;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#00f">struct</span> PageInfo *p = NULL;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#008000">// Allocate a page for the page directory
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000"></span>    <span style="color:#00f">if</span> (!(p = page_alloc(ALLOC_ZERO)))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        <span style="color:#00f">return</span> -E_NO_MEM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    p-&gt;pp_ref++;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    e-&gt;env_pml4e = page2kva(p); <span style="color:#008000">// entry should be a virtual address
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000"></span>    e-&gt;env_cr3 = page2pa(p);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#008000">// NPMLENTRIES: the num of pml4 entries
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#008000"></span>    <span style="color:#00f">for</span> (i = PML4(UTOP); i &lt; NPMLENTRIES; i++)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>	    e-&gt;env_pml4e[i] = boot_pml4e[i];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    <span style="color:#008000">// UVPT maps the env&#39;s own page table read-only.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#008000"></span>    <span style="color:#008000">// Permissions: kernel R, user R
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#008000"></span>    e-&gt;env_pml4e[PML4(UVPT)] = e-&gt;env_cr3 | PTE_P | PTE_U;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    <span style="color:#00f">return</span> 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>}
+</code></pre></div><h4 id="env-page-allocate-helper">Env page allocate helper</h4>
+<p>為了方便我們分配 physical address 到指定的 virtual address，我們實作一個 helper： <code>region_alloc</code> 來達成目的。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">static</span> <span style="color:#2b91af">void</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>region_alloc(<span style="color:#00f">struct</span> Env *e, <span style="color:#2b91af">void</span> *va, size_t len)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#2b91af">void</span> *start = ROUNDDOWN(va, PGSIZE);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#2b91af">void</span> *end = ROUNDUP(va + len, PGSIZE);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#00f">for</span>(; start &lt; end; start += PGSIZE) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        <span style="color:#00f">struct</span> PageInfo *pp = page_alloc(0);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        <span style="color:#00f">if</span> (pp) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>            pp-&gt;pp_ref++;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>            <span style="color:#2b91af">int</span> ret = page_insert(e-&gt;env_pml4e, pp, start, PTE_W | PTE_U);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>            <span style="color:#00f">if</span> (ret &lt; 0) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                panic(<span style="color:#a31515">&#34;region_alloc: %e </span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>, ret);	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        } <span style="color:#00f">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>            panic(<span style="color:#a31515">&#34;region_alloc: failed to allocate a page </span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>}
+</code></pre></div><h4 id="read-a-program-content-for-user-mode">Read a program content for user mode</h4>
+<p>因為目前 Lab 3 階段的 JOS 還沒有 file system 支援，所以是藉由切換到 user mode 後，直接執行指定 program 的方式來驗證其正確性。而為了實現此驗證方式，我們需要讀取 JOS 已經事先準備好的 program ELF ，接著把 ELF 內的相關資訊放入 Env <code>env_tf</code>。</p>
+<p>在實作之前，要先了解如何讀取 <strong>program header</strong> 內容，以取得 <strong>program segment</strong>。</p>
+<blockquote>
+<p><strong>Program header</strong></p>
+<p>The program header table tells the system how to create a process image.</p>
+</blockquote>
+<p>參考 <a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">Executable and Linkable Format</a>，找到需要資料的對應位置，其中包含：</p>
+<ol>
+<li><code>e_phoff</code> - Program header table 位置</li>
+<li><code>e_phnum</code> - Program header table 的 entry 數量</li>
+<li><code>program_header-&gt;p_memsz</code> - segment 在 memory 佔用的大小</li>
+<li><code>program_header-&gt;p_va</code> - virtual address of segment</li>
+<li><code>program_header-&gt;p_offset</code> - segment 在 file image 的位置</li>
+<li><code>program_header-&gt;p_filesz</code> - segment 在 file system 佔用的大小</li>
+</ol>
+<blockquote>
+<p><strong>The difference between <code>p_memsz</code> and <code>p_filesz</code></strong></p>
+<p>For the PT_LOAD entry describing the data segment, the p_memsz may be greater than the p_filesz. The difference is the size of the .bss section which is not required to be stored on disk.</p>
+</blockquote>
+<p>根據 program header 的資訊，我們就可以來實作 Lab 3 的 load_icode。主要流程：</p>
+<ol>
+<li>從 ELF 中取得 program segment 數量</li>
+<li>根據每個 segment 所需空間來分配適當的記憶體</li>
+<li>把 segment 內容從 file image 複製到指定的 memory address (program_header-&gt;p_va)</li>
+<li>建立 stack 記憶體空間供 user program 使用</li>
+<li>將 Env 的 RIP(instruction pointer) 指向 ELF entry</li>
+</ol>
+<p>這邊有個地方要特別注意，就是在執行複製的時候，<strong>需要將當前 pml4 page table 切換成 Env 的 pml4 page table</strong>，原因是我們使用 region_alloc 來為指定的 Env pml4 分配 program_header-&gt;p_va 的 page，不過當前的執行環境卻是使用 boot_pml4 table，如果我們不切換成 Env pml4 的話，那麼在 <code>memmove</code> 和 <code>memset</code> 階段就會出錯，因為找不到 program_header-&gt;p_va 配置。</p>
+<blockquote>
+<p><strong>e_entry</strong></p>
+<p>The virtual address to which the system first transfers control, thus starting the process.</p>
+</blockquote>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#2b91af">void</span> load_icode(<span style="color:#00f">struct</span> Env *e, uint8_t *binary)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    e-&gt;elf = binary;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#00f">struct</span> Proghdr *program_header, *end_program_header;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#00f">struct</span> Elf *elf = (<span style="color:#00f">struct</span> Elf *) binary;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    program_header = (<span style="color:#00f">struct</span> Proghdr *) (binary + elf-&gt;e_phoff);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    end_program_header = program_header + elf-&gt;e_phnum;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    lcr3(e-&gt;env_cr3); <span style="color:#008000">// Important!
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#00f">for</span> (; program_header &lt; end_program_header; program_header++) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        <span style="color:#00f">if</span> (program_header-&gt;p_type == ELF_PROG_LOAD) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>            region_alloc(e, (<span style="color:#2b91af">void</span> *) program_header-&gt;p_va, program_header-&gt;p_memsz);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>            memmove((<span style="color:#2b91af">void</span> *) program_header-&gt;p_va, (<span style="color:#2b91af">void</span> *)binary + program_header-&gt;p_offset, program_header-&gt;p_filesz);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>            memset((<span style="color:#2b91af">void</span> *)program_header-&gt;p_va + program_header-&gt;p_filesz, 0, program_header-&gt;p_memsz - program_header-&gt;p_filesz);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    lcr3(boot_cr3);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    region_alloc(e, (<span style="color:#2b91af">void</span> *)(USTACKTOP - PGSIZE), PGSIZE); <span style="color:#008000">// the stack for user space
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#008000"></span>    e-&gt;env_tf.tf_rip = elf-&gt;e_entry;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>}
+</code></pre></div><h4 id="create-an-env-and-run-it">Create an env and run it</h4>
+<p>最後步驟是新建一個 Env，並且實作 kernel mode Env 切換 到 user mode Env 的流程。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#2b91af">void</span> env_create(uint8_t *binary, <span style="color:#00f">enum</span> EnvType type)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#00f">struct</span> Env *env;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#2b91af">int</span> ret = env_alloc(&amp;env, 0);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#00f">if</span> (ret &lt; 0) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        panic(<span style="color:#a31515">&#34;env_alloc: %e&#34;</span>, ret);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    load_icode(env, binary);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    env-&gt;env_type = type;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
+</code></pre></div><p>而 JOS Env 共定義了五種狀態：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">enum</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    ENV_FREE = 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    ENV_DYING,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    ENV_RUNNABLE,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    ENV_RUNNING,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    ENV_NOT_RUNNABLE
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>};
+</code></pre></div><p>因此在執行 Env 切換流程時，要確認並且調整 Env 狀態。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#2b91af">void</span> env_run(<span style="color:#00f">struct</span> Env *e)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#00f">if</span> (e-&gt;env_status != ENV_RUNNABLE)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        panic(<span style="color:#a31515">&#34;the env could not run&#34;</span>);	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#00f">if</span> (curenv &amp;&amp; curenv-&gt;env_status == ENV_RUNNING)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        curenv-&gt;env_status = ENV_RUNNABLE;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    curenv = e;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    curenv-&gt;env_status = ENV_RUNNING;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    curenv-&gt;env_runs++;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    lcr3(curenv-&gt;env_cr3);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    env_pop_tf(&amp;(curenv-&gt;env_tf));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+</code></pre></div><p>切換 JOS Env 有兩個重要的條件：</p>
+<ol>
+<li>改變 address space</li>
+<li>復原 register 數值</li>
+</ol>
+<p>其中，改變 address space 是使用 <code>lcr3</code>，<code>env_pop_tf</code> 則是負責將儲存在 Env 的 register 數值放回到 register。我們觀察一下 env_pop_tf 的行為：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#2b91af">void</span> env_pop_tf(<span style="color:#00f">struct</span> Trapframe *tf)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#00f">__asm</span> __volatile(<span style="color:#a31515">&#34;movq %0,%%rsp</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>             POPA <span style="color:#008000">// pop saved registers
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000"></span>             <span style="color:#a31515">&#34;movw (%%rsp),%%es</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>             <span style="color:#a31515">&#34;movw 8(%%rsp),%%ds</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>             <span style="color:#a31515">&#34;addq $16,%%rsp</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>             <span style="color:#a31515">&#34;</span><span style="color:#a31515">\t</span><span style="color:#a31515">addq $16,%%rsp</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span> <span style="color:#008000">/* skip tf_trapno and tf_errcode */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>             <span style="color:#a31515">&#34;</span><span style="color:#a31515">\t</span><span style="color:#a31515">iretq&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>             : : <span style="color:#a31515">&#34;g&#34;</span> (tf) : <span style="color:#a31515">&#34;memory&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    panic(<span style="color:#a31515">&#34;iret failed&#34;</span>);  <span style="color:#008000">/* mostly to placate the compiler */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>}
+</code></pre></div><p>搭配 <code>struct Trapframe</code> format：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">struct</span> Trapframe {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#00f">struct</span> PushRegs tf_regs;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    uint16_t tf_es;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    uint16_t tf_padding1;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    uint32_t tf_padding2;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    uint16_t tf_ds;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    uint16_t tf_padding3;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    uint32_t tf_padding4;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    uint64_t tf_trapno;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#008000">/* below here defined by x86 hardware */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    uint64_t tf_err;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    uintptr_t tf_rip;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    uint16_t tf_cs;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    uint16_t tf_padding5;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    uint32_t tf_padding6;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    uint64_t tf_eflags;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#008000">/* below here only when crossing rings, such as from user to kernel */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    uintptr_t tf_rsp;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    uint16_t tf_ss;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    uint16_t tf_padding7;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    uint32_t tf_padding8;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>} __attribute__((packed));
+</code></pre></div><p>其中 POPA 是將 <code>struct PushRegs</code> 儲存的 register 數值放回到 register，接著 movw 與 addq 的行為其實是把 stack pointer 調整到 tf-&gt;tf_rip 位置，最後使用 <code>iretq</code> instruction，讓指定的 instruction pointer (tf_rip) 可以被執行。</p>
+<h3 id="recap">Recap</h3>
+<p>重新複習上述我們所完成的 Lab 內容：</p>
+<ul>
+<li>在 kernel mode 新建立一個 env (process)</li>
+<li>設置 env 的 address space (pml4 table)</li>
+<li>根據 ELF Program header 資訊配置 env，包含 program entry point</li>
+<li>切換成 env 的 address space 並還原 env 的 registers 值</li>
+<li>跳轉去適當的 instruction 位置 (iret)</li>
+</ul>
+<h2 id="references">References</h2>
+<ol>
+<li><a href="https://www.cs.cmu.edu/~410/doc/segments/segments.html">x86 Segmentation for the 15-410 Student</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">Executable and Linkable Format</a></li>
+<li><a href="https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/ref/ia32/IA32-3A.pdf">IA-32 Developer&rsquo;s Manual</a></li>
+<li><a href="https://wiki.osdev.org/Getting_to_Ring_3">Getting to Ring 3</a></li>
+<li><a href="https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html">GCC-Inline-Assembly-HOWTO</a></li>
+</ol>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permalink: </strong>
+      <a href="https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/" title="CSE 506 Lab 3 - User Environments(Processes)" target="_blank" rel="external">https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <div>Gopher</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://yushuanhsieh.github.io/post/2020-11-15-lab2_2/" title="CSE 506 Lab2 - Memory Management and Virtual Memory Mapping"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            
+        </ul>
+        <div class="bar-right">
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://yushuanhsieh.github.io/cjamhe01385@gmail.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://www.facebook.com/cjamhe01385" target="_blank" title="facebook" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-facebook"></i></a></li>
+    <li><a href="https://yushuanhsieh.github.io/true" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2017  -
+    2020
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: 'https:\/\/yushuanhsieh.github.io',
+            CONTENT_URL: 'https:\/\/yushuanhsieh.github.io\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://yushuanhsieh.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+
+  </body>
+</html>

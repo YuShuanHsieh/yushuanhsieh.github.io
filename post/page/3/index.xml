@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 15 Nov 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 25 Nov 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Functional options pattern in GO</title>
+      <link>https://yushuanhsieh.github.io/post/2019-03-10-functional-options/</link>
+      <pubDate>Sun, 10 Mar 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-03-10-functional-options/</guid>
+      <description>前言 之所以使用 Functional options 的契機，是因為用到 gRPC 的 New Server API，發現他是用 functional options 來讓使用者調整 Server 預設配置，這樣的作法不但兼具了擴充性和可用性，也能避免一些使用者誤用。而除了看 source code 來學習如何實作之外，也找起相關文章，進而發現原來早在 2014 年就有人發表過類似教學文，實在是太孤陋寡聞了～</description>
+    </item>
     
     <item>
       <title>2019/02月份自我學習回顧</title>
@@ -187,16 +196,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       
       <guid>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</guid>
       <description>前言 Chrome 66 版本全新支援 CSS Typed Object Model，透過這種新型的 CSS Typed OM，可以有效提升使用 JavaScript 操作 CSSOM 屬性的效率。雖然目前僅有 Chrome 支援（ Firefox 據說在努力中， Edge 目前沒下文），不過既然此方式能對網頁呈現效能有所提升，讓開發者和使用者都因此受惠，未來想必會成為主流方式。</description>
-    </item>
-    
-    <item>
-      <title>The Main Flow of Rendering Engines</title>
-      <link>https://yushuanhsieh.github.io/post/2018-06-23-browser-render-engine/</link>
-      <pubDate>Sat, 23 Jun 2018 12:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-06-23-browser-render-engine/</guid>
-      <description>前言： 最近在寫 CSS Animation 部分，於是比較深入的看瀏覽器渲染流程，希望在進行 Animation 時可以更加地流暢。
-The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然地寫出這樣的頁面：</description>
     </item>
     
   </channel>
