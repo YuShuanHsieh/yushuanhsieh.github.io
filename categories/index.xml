@@ -6,10 +6,19 @@
     <description>Recent content in Categories on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Nov 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 23 Dec 2020 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>GDG Hsinchu 12 月 Meetup - Improve Your Web Authentication Security</title>
+      <link>https://yushuanhsieh.github.io/post/2020-12-23-web_auth/</link>
+      <pubDate>Wed, 23 Dec 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-12-23-web_auth/</guid>
+      <description>閒聊 12 月份完成好幾項目標，其中一項就是催生 GDG Hsinchu 12 月份的 Meetup 線下聚會。這次活動跟著 Google 在 12 月時舉辦的 Chrome Dev Summit 2020 一同推出，取自 CDS 中的部分 SMS-OTP 內容，並結合既有的 password-based authentication 與未來有可能普及的 FIDO 2 認證機制，整理出一份 Web Authentication Security 的技術分享。其中對我來說，比較有趣的地方在於理解機制的實現原理，包含資料溝通和驗證，以及可能會產生的安全問題。其實標準規範對於開發者來說相當重要，透過分析 protocol 的行為，可以讓開發者在開發整合性功能的時候，更清楚這些 library 要在什麼時機點使用，以及為什麼要使用這些 functions，這也是我每次進行技術分享時，最希望能夠帶給與會者的內容。</description>
+    </item>
     
     <item>
       <title>CSE 506 Lab 3 - User Environments(Processes)</title>
@@ -184,19 +193,6 @@
       <description>&lt;p&gt;三月一整月都在非常忙碌的情況下度過。&lt;/p&gt;
 &lt;h2 id=&#34;搬家&#34;&gt;搬家&lt;/h2&gt;
 &lt;p&gt;在經過漫長地油漆、裝系統櫃、打掃等流程，我在竹北的新房終於裝潢完成，因此在三月初的時候就很匆忙地把租屋處退掉，並且搬來新家住。本來租屋只有十坪大小，現在換成近三十坪的生活空間，突然有點不太習慣，需要清潔的區塊也變大不少，也開始體悟掃地機器人的重要性。由於當初在買房子的時候，有點太快做決定，因此一直很擔心新家會不會有什麼不好的地方，不過現在搬進來幾個禮拜，覺得一切都還蠻美好的，樓上樓下鄰居都不會吵鬧，社區環境安靜單純，戶數不多所以整潔還不錯，主委也非常盡責。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>2月雜談</title>
-      <link>https://yushuanhsieh.github.io/post/2020-02-24-february/</link>
-      <pubDate>Mon, 24 Feb 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-02-24-february/</guid>
-      <description>最近一個月發生了一些事情，導致又一陣子沒有更新技術文章或是讀書日誌。
-一月底的時候在工作上發生了一件事情，讓我突然間深深陷入負面情緒中。其實我早在事情發生之前是有所選擇的，我可以選擇穩定或是挑戰，而我在那時候選擇了挑戰，即使這挑戰讓我付出蠻多代價，包含家人的不諒解、長距離通勤等，我在事情沒發生之前都覺得這一切代價都算值得。
-在事情發生後，我其實剛開始的幾天是非常沮喪的，我覺得我那時候做了錯的選擇，才會讓自己陷入進退兩難的局面。我本來就是轉職人生，這樣的背景讓我更難坦然地面對現實，因為我要付出的成本比團隊工程師們都要高。
-不過在冷靜之後，我開始回想，我在這段短暫旅程中，是否有達到我當初的目的。
-我有幸跟強者同事一起工作 有很好的主管讓我 work from home 我接觸到我之前不會碰到的 cloud service 和相關 infrastructure 我開始念起 AWS 和 GCP 並希望可以考過證照</description>
     </item>
     
   </channel>

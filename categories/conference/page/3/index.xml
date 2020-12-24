@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Golang - Request test using net/http/httptrace</title>
+      <link>https://yushuanhsieh.github.io/post/2019-03-14-http-trace/</link>
+      <pubDate>Thu, 14 Mar 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-03-14-http-trace/</guid>
+      <description>前言 在撰寫 HTTP request test 測試程式時，除了測試 response 結果是否如預期之外，我們還需要知道過程中需要耗費多少時間（request latency）。市面上有一些 libraries (e.</description>
+    </item>
+    
+    <item>
       <title>Functional options pattern in GO</title>
       <link>https://yushuanhsieh.github.io/post/2019-03-10-functional-options/</link>
       <pubDate>Sun, 10 Mar 2019 08:00:00 +0800</pubDate>
@@ -187,15 +196,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       
       <guid>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</guid>
       <description>前言 這篇文章是基於 Redux Anti-Patterns - Part 1. State Management 所進行的探討，包含在專案內是否有犯類似的錯誤，以及後續該如何改善。文章會結合目前專案所使用的 Redux(ngrx)，並檢視使用 Ngrx 是否能避免這些錯誤發生。</description>
-    </item>
-    
-    <item>
-      <title>CSS Typed Object Model</title>
-      <link>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</link>
-      <pubDate>Sun, 24 Jun 2018 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</guid>
-      <description>前言 Chrome 66 版本全新支援 CSS Typed Object Model，透過這種新型的 CSS Typed OM，可以有效提升使用 JavaScript 操作 CSSOM 屬性的效率。雖然目前僅有 Chrome 支援（ Firefox 據說在努力中， Edge 目前沒下文），不過既然此方式能對網頁呈現效能有所提升，讓開發者和使用者都因此受惠，未來想必會成為主流方式。</description>
     </item>
     
   </channel>

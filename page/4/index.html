@@ -37,7 +37,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2020-11-25T08:00:00+08:00" />
+<meta property="og:updated_time" content="2020-12-23T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -120,8 +120,9 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">5</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/security/" class="category-list-link">security</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">28</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">29</span></li>
         </ul>
     </div>
 </div>
@@ -130,6 +131,16 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-12-23-web_auth/" class="title">GDG Hsinchu 12 月 Meetup - Improve Your Web Authentication Security</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-12-23 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-12-23</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -170,16 +181,6 @@
                     </p>
                 </div>
             </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2020-09-04-vault-security/" class="title">Vault Initialization and Keys Security</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-09-04 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-09-04</time>
-                    </p>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
@@ -195,6 +196,48 @@
     
     
     
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2019-08-27-http2-h2c/"
+    >
+    
+      
+        
+          <span class="title-cat">Network</span>
+        
+          <span class="title-cat">Go</span>
+        
+      
+    Start HTTP/2 running over cleartext TCP</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">![flow]({{ site.url }}/assets/images/h2c-flow.png)
+前言 主流使用 HTTP/2 時都是基於 TLS protocol，不過在 HTTP/2 RFC7540 規範中， HTTP/2 其實也可以直接基於 cleartext TCP 來溝通。這次主要介紹 based on cleartext TCP 的 HTTP/2 server 與 client 實作，後續會再加入 HTTP/2 結合 TLS protocol 的相關內容。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2019-08-27-http2-h2c/" class="">
+  <time datetime="2019-08-27 08:00:00 &#43;0800 CST" itemprop="datePublished">2019-08-27</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/network/"> Network </a>
+    <a class="article-category-link" href="/categories/go/"> Go </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2019-08-27-http2-h2c/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
     <article
       class="article article-type-page"
       itemscope
@@ -540,43 +583,6 @@
 </span>
 
         <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2019-04-04-study-201903/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2019-03-14-http-trace/"
-    >
-    
-      
-        <span class="title-cat">Web</span>
-      
-    Golang - Request test using net/http/httptrace</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">前言 在撰寫 HTTP request test 測試程式時，除了測試 response 結果是否如預期之外，我們還需要知道過程中需要耗費多少時間（request latency）。市面上有一些 libraries (e.</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2019-03-14-http-trace/" class="">
-  <time datetime="2019-03-14 08:00:00 &#43;0800 CST" itemprop="datePublished">2019-03-14</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/web/"> Web </a>
-  
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2019-03-14-http-trace/#comments" class="article-comment-link">Comments</a></span>
       </p>
     </article></div>
   
