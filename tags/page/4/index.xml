@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>Redux Anti Pattern</title>
+      <link>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</link>
+      <pubDate>Sun, 15 Jul 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</guid>
+      <description>前言 這篇文章是基於 Redux Anti-Patterns - Part 1. State Management 所進行的探討，包含在專案內是否有犯類似的錯誤，以及後續該如何改善。文章會結合目前專案所使用的 Redux(ngrx)，並檢視使用 Ngrx 是否能避免這些錯誤發生。</description>
+    </item>
+    
+    <item>
       <title>CSS Typed Object Model</title>
       <link>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</link>
       <pubDate>Sun, 24 Jun 2018 08:00:00 +0800</pubDate>

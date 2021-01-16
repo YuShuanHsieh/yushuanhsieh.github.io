@@ -6,10 +6,20 @@
     <description>Recent content in Web on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 23 Dec 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 15 Jan 2021 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/web/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2019/03月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-04-04-study-201903/</link>
+      <pubDate>Wed, 03 Apr 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-04-04-study-201903/</guid>
+      <description>![study]({{ site.url }}/assets/images/golang-meetup.jpeg)
+前言 最近這一個月工作慢慢步上軌道，心情有比較踏實些。剛開始來的時候，實在不太確定自己能幫上什麼忙，不過這個月漸漸地有任務可以做，並且也和其他組員一起合作開發，感覺在團隊中可以發揮自己的價值:) 另外，這個月比較大的轉變是完全負責 back-end ，之前還想說可能會接觸到 React ，所以花了一些時間在看 React 原理，不過目前確定會都以 Go 和 Device application 開發為主，因此後續就會把學習重心放在 Back-end。話雖如此，自己還是有加入公司的 front-end 學習群，跟著裡面的大神們一起念 React Core ，畢竟過去一年蠻大比例是使用 JavaScript 開發，要放棄也是蠻可惜的。</description>
+    </item>
     
     <item>
       <title>Golang - Request test using net/http/httptrace</title>
@@ -187,15 +197,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       
       <guid>https://yushuanhsieh.github.io/post/2018-08-05-angular-schematics/</guid>
       <description>前言： 最近專案需要提供工具讓外部人員一同參與 Web App 的開發，由於我們的 Web App 已經有基本架構和開發方式，為了讓外部人員能夠更方便的 follow 架構，所以就決定使用 Schematics 來創建專屬樣板，讓協作開發人員可以迅速地建立專案用的 component page，然後他們只需要修改部分程式碼即可。</description>
-    </item>
-    
-    <item>
-      <title>Redux Anti Pattern</title>
-      <link>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</link>
-      <pubDate>Sun, 15 Jul 2018 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</guid>
-      <description>前言 這篇文章是基於 Redux Anti-Patterns - Part 1. State Management 所進行的探討，包含在專案內是否有犯類似的錯誤，以及後續該如何改善。文章會結合目前專案所使用的 Redux(ngrx)，並檢視使用 Ngrx 是否能避免這些錯誤發生。</description>
     </item>
     
   </channel>

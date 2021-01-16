@@ -6,10 +6,19 @@
     <description>Recent content on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 23 Dec 2020 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 15 Jan 2021 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Security model of password managers</title>
+      <link>https://yushuanhsieh.github.io/post/2021-01-15-security_module/</link>
+      <pubDate>Fri, 15 Jan 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-01-15-security_module/</guid>
+      <description>閒聊 這篇算是接續上次 Meetup 分享會的內容，由於有人提出 password manager 的相關疑問，覺得會不會因為使用 password manager 導致所有隱私資料被看光。與其猜測，不如來看看他們所提出的 security 方案，這篇以 1password 為例，整理其中 security white paper 所提到的保存資料方式，來檢視是不是能夠防止資料被盜取。</description>
+    </item>
     
     <item>
       <title>GDG Hsinchu 12 月 Meetup - Improve Your Web Authentication Security</title>
@@ -182,17 +191,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-04-07-hugo-merge/</guid>
       <description>紀錄用 Hugo site generator 建立多語言網站時所遇到的問題，與過程中相關的學習內容，包含 Hugo render 過程、source code trace 等。</description>
-    </item>
-    
-    <item>
-      <title>三月起，在竹北定區生活</title>
-      <link>https://yushuanhsieh.github.io/post/2020-03-31-march/</link>
-      <pubDate>Tue, 31 Mar 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-03-31-march/</guid>
-      <description>&lt;p&gt;三月一整月都在非常忙碌的情況下度過。&lt;/p&gt;
-&lt;h2 id=&#34;搬家&#34;&gt;搬家&lt;/h2&gt;
-&lt;p&gt;在經過漫長地油漆、裝系統櫃、打掃等流程，我在竹北的新房終於裝潢完成，因此在三月初的時候就很匆忙地把租屋處退掉，並且搬來新家住。本來租屋只有十坪大小，現在換成近三十坪的生活空間，突然有點不太習慣，需要清潔的區塊也變大不少，也開始體悟掃地機器人的重要性。由於當初在買房子的時候，有點太快做決定，因此一直很擔心新家會不會有什麼不好的地方，不過現在搬進來幾個禮拜，覺得一切都還蠻美好的，樓上樓下鄰居都不會吵鬧，社區環境安靜單純，戶數不多所以整潔還不錯，主委也非常盡責。&lt;/p&gt;</description>
     </item>
     
   </channel>

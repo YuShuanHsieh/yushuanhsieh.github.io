@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        文組工程師</title>
+        Security model of password managers - 文組工程師
+      </title>
     <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -21,9 +22,10 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  
+  <meta name="description" content="閒聊 這篇算是接續上次 Meetup 分享會的內容，由於有人提出 password manager 的相關疑問，覺得會不會因為使用 password manager 導致所有隱私資料被看光。與其猜測，不如來看看他們所提出的 security 方案，這篇以 1password 為例，整理其中 security white paper 所提到的保存資料方式，來檢視是不是能夠防止資料被盜取。" />
+    
   <meta name="generator" content="Hugo 0.71.0 with theme pure" />
-  <title>文組工程師</title>
+  <title>Security model of password managers - 文組工程師</title>
   
   
   <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
@@ -32,15 +34,23 @@
     <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
-  <meta property="og:title" content="404 Page not found" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://yushuanhsieh.github.io/404.html" />
+  <meta property="og:title" content="Security model of password managers" />
+<meta property="og:description" content="閒聊 這篇算是接續上次 Meetup 分享會的內容，由於有人提出 password manager 的相關疑問，覺得會不會因為使用 password manager 導致所有隱私資料被看光。與其猜測，不如來看看他們所提出的 security 方案，這篇以 1password 為例，整理其中 security white paper 所提到的保存資料方式，來檢視是不是能夠防止資料被盜取。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yushuanhsieh.github.io/post/2021-01-15-security_module/" />
+<meta property="article:published_time" content="2021-01-15T08:00:00+08:00" />
+<meta property="article:modified_time" content="2021-01-15T08:00:00+08:00" />
+<meta itemprop="name" content="Security model of password managers">
+<meta itemprop="description" content="閒聊 這篇算是接續上次 Meetup 分享會的內容，由於有人提出 password manager 的相關疑問，覺得會不會因為使用 password manager 導致所有隱私資料被看光。與其猜測，不如來看看他們所提出的 security 方案，這篇以 1password 為例，整理其中 security white paper 所提到的保存資料方式，來檢視是不是能夠防止資料被盜取。">
+<meta itemprop="datePublished" content="2021-01-15T08:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2021-01-15T08:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="339">
 
-<meta itemprop="name" content="404 Page not found">
-<meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="404 Page not found"/>
-<meta name="twitter:description" content=""/>
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Security model of password managers"/>
+<meta name="twitter:description" content="閒聊 這篇算是接續上次 Meetup 分享會的內容，由於有人提出 password manager 的相關疑問，覺得會不會因為使用 password manager 導致所有隱私資料被看光。與其猜測，不如來看看他們所提出的 security 方案，這篇以 1password 為例，整理其中 security white paper 所提到的保存資料方式，來檢視是不是能夠防止資料被盜取。"/>
 
   <!--[if lte IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -188,31 +198,109 @@
 
     
     
-<main class="main" role="main">
-    <div class="content">
-        <article class="article">
-            <div class="article-header">
-                <h1 class="article-title" itemprop="name">
-                    <a href="#">404 Not Found</a>
-                </h1>
-            </div>
-            <div class="article-meta">
-                
+<main class="main" role="main"><div class="content">
+  <article id="single-" class="article article-type-single" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2021-01-15-security_module/"
+    >
+    
+      
+        
+          <span class="title-cat">Web</span>
+        
+          <span class="title-cat">Security</span>
+        
+      
+    Security model of password managers</a>
+</h1>
 
-                <span class="post-comment"><i class="icon icon-comment"></i> <a href="/404.html#comments"
-                        class="article-comment-link">Comments</a></span>
-            </div>
-            <div class="article-entry marked-body" itemprop="articleBody">
-                <br>
-                <p>The page you are looking for might have been removed, had its name changed or is temporarily unavailable.</p>
-                <a href="/">Go Back</a>
-            </div>
-            <div class="article-footer">
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2021-01-15-security_module/" class="article-date">
+  <time datetime="2021-01-15 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-01-15</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/web/"> Web </a>
+    <a class="article-category-link" href="/categories/security/"> Security </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/post/2021-01-15-security_module/#comments"
+            class="article-comment-link">Comments</a></span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <h2 id="閒聊">閒聊</h2>
+<p>這篇算是接續上次 Meetup 分享會的內容，由於有人提出 password manager 的相關疑問，覺得會不會因為使用 password manager 導致所有隱私資料被看光。與其猜測，不如來看看他們所提出的 security 方案，這篇以 1password 為例，整理其中 security white paper 所提到的保存資料方式，來檢視是不是能夠防止資料被盜取。</p>
+<h2 id="master-password--secret-key--vault">Master Password / Secret Key / Vault</h2>
+<p>在說明 security model 之前，要先了解幾個基本的要素：</p>
+<ol>
+<li>Master password (your password)</li>
+<li>Secret key (account + 26 bytes random data)</li>
+<li>Vault (sensitive data)</li>
+</ol>
+<p><img src="/posts/password_1.png" alt="password_1"></p>
+<p>當我們在首次建立帳號的時候，會需要我們輸入 <code>Master Password</code>，而這個 master password 就是存取隱私資料的核心要素，此外，系統同時會產生另一個核心要素 <code>Secret Key</code>，secret key 是由 user account 結合 26 bytes 的隨機亂數，這兩個核心要素將會用來解密隱私資料。<code>Vault</code> 則是泛指我們所記錄的隱私資料庫，例如 account / password、credit card 等。</p>
+<p>由於用戶會希望能在多個平台使用 password manager，例如可以手機和桌機都能夠取得個人 password 紀錄，如此一來，這些隱私資料勢必要上傳到 cloud storage 才能供多台設備讀取。不過，這些隱私資料會在經由 AES256 加密後才上傳，避免 storage 被盜時讓 hacker 看光所有資料。</p>
+<h2 id="隱私資料-vault-是如何被加解密的">隱私資料 (Vault) 是如何被加解密的？</h2>
+<p>Password manager 最重要的就是安全地處理用戶隱私資料的加解密過程，因此以下將逐步地說明大致流程。</p>
+<h3 id="vault-加密">Vault 加密</h3>
+<p>Vault 是使用對稱式加密法 <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES256-GCM</a> 進行加密，而加密所使用的 32-byte key (vault key) 是透過 software 方式去產生 (e.g. Linux /dev/urandom)。當然，vault key 既然是拿來解密 vault 的重要鑰匙，它當然也會被加密，vault key 會被非對稱式加密法的 <code>Public Key</code> 所加密。</p>
+<p>當用戶在建立帳號的時候，系統會在 <strong>Client 端 (Local 端)</strong> 產生非對稱式加密所需的 <code>Private Key</code> &amp; <code>Public Key</code> pair，而 vault key 即是使用這階段所產生的 public key 所加密。</p>
+<p><img src="/posts/password_2.png" alt="password_1"></p>
+<p>而為了能實現跨設備使用的目的，我們必須將幾個資料上傳到 cloud ，包含：</p>
+<ul>
+<li>encrypted vault</li>
+<li>encrypted vault key</li>
+<li>public key</li>
+<li>encrypted private key</li>
+</ul>
+<p>這邊有個比較不常見的使用方式，就是通常在使用非對稱式加密的場景下，只會傳送 public key，而 private key 是不會外流，但是由於 vault key 是使用 public key 加密，為了解密 vault key ，就必須也將 private key 上傳到 cloud 上，如此一來才能在換設備時使用 private key 解密。當然我們不能直接將 private key 上傳，而是再次使用對稱式加密 AES256-GCM 的方式將 private key 加密後上傳。</p>
+<h3 id="生成-encryption-key">生成 Encryption Key</h3>
+<p>Private key 需要被加密才能上傳，那麼到底加密 private key 所使用的 key 從哪裡來？</p>
+<p>這把 key 被稱作 <code>Encryption Key</code>，它是由一開始所提到的 <code>Master Password</code> 和 <code>Secret Key</code> 所產生，而這也是 vault 加解密過程中最為重要的 key。其產生的流程為：</p>
+<p><img src="/posts/password_3.png" alt="password_1"></p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/HKDF">HKDF (HMAC-based Extract-and-Expand Key Derivation Function)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/PBKDF2">PBKDF2 (Password-Based Key Derivation Function 2)</a></li>
+</ul>
+<p>產生 Encryption Key 的過程涉及到兩個演算法 <code>HKDF</code> 和 <code>PBKDF2</code>。使用 HKDF 的最主要原因是要將不定長度的 master password 和 secret key 轉換為固定長度 32-byte 的 key。而使用 PBKDF2 是由於 PBKDF2 算法中加入了 iteration，提高 key 的複雜度，並且 input 的長度不像 Bcrypt 一樣有所限制。</p>
+<p>此外，之所以產出的 key 要限制在 32 bytes，是因為後續加密是使用 AES256 方式。</p>
+<p>這邊要特別注意的地方是：<strong>encryption key 只在 local 端生成</strong>，因此 private key 解密行為只能在 local 端進行，這也意味著 <strong>vault 的解密也只能在 local 端完成</strong>。這個概念十分重要，因為用戶最擔心的地方就是上傳到 cloud 的隱私資料會不會被盜取，而透過這種方式，所有隱私資料只會在 local 端被解密，透過這樣的機制來保護用戶資料。</p>
+<h2 id="security-model-要點">Security model 要點</h2>
+<ol>
+<li>
+<p>永遠只在 local 端解密<br>
+如果用戶要使用其他裝置，就必須把加密後的隱私資料下載到新的裝置 (local 端)，並且在 local 端輸入一開始建立帳號用戶指定的 <code>Master Password</code> 以及系統自動生成的 <code>Secret Key</code>，如此一來才能夠產生出同一把 <code>Encryption Key</code>，並且解密隱私資料。</p>
+</li>
+<li>
+<p>用戶所記的 Master Password 和亂數生成的 Secret Key<br>
+由於 Master Password 是由用戶指定，因此可能會是風險性高的常用 password，所以在 1password 中額外加入了部分亂數的 <code>Secret Key</code>，以提高安全。</p>
+</li>
+<li>
+<p>Server 端不會紀錄 Master Password 和 Secret Key<br>
+為了確保 password manager 能夠維護用戶的隱私，在 1password 中提到，用戶的 Master Password 和 Secret Key 都不會被記錄在 server 端，這也意味著用戶必須自行保存這兩個重要的 key，如果遺失了將無法透過 server 端來取回。</p>
+</li>
+</ol>
+<h2 id="結論">結論</h2>
+<p>在這篇雖然是以 1password 為例，不過我查看其他家的 password manager 實作概念，基本上大同小異，如果 password manager 真的能夠依循上述的流程來實作，那我覺得安全性是蠻足夠的。但這還是取決於用戶到底信不信任此公司的技術能力，畢竟概念是概念，但是在實作過程中如果有差錯，還是有可能將資料暴露於危險之中。如果有疑慮的話，我是覺得可以從 Google Chrome 或是 Apple Safari 開始使用瀏覽器自建的 password manager，畢竟這兩大科技巨頭在實作這類功能，一定會有資安專家來檢視實作方式，相對上也比較安心。</p>
+
+    </div>
+    <div class="article-footer">
 <blockquote class="mt-2x">
   <ul class="post-copyright list-unstyled">
     <li class="post-copyright-link hidden-xs">
       <strong>Permalink: </strong>
-      <a href="https://yushuanhsieh.github.io/404.html" title="404 Page not found" target="_blank" rel="external">https://yushuanhsieh.github.io/404.html</a>
+      <a href="https://yushuanhsieh.github.io/post/2021-01-15-security_module/" title="Security model of password managers" target="_blank" rel="external">https://yushuanhsieh.github.io/post/2021-01-15-security_module/</a>
     </li>
   </ul>
 </blockquote>
@@ -232,10 +320,24 @@
     </figure>
   </div>
 </div>
-            </div>
-        </article>
-
     </div>
+  </article>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://yushuanhsieh.github.io/post/2020-12-23-web_auth/" title="GDG Hsinchu 12 月 Meetup - Improve Your Web Authentication Security"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            
+        </ul>
+        <div class="bar-right">
+        </div>
+    </div>
+</nav>
+
 </main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
 <ul class="social-links">
     <li><a href="https://yushuanhsieh.github.io/cjamhe01385@gmail.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
@@ -291,6 +393,7 @@
         hasInnerContainers: true,
     });
 </script>
+
 
   </body>
 </html>
