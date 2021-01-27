@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>grpc-go source code trace - gRPC client 與 server 建立連線過程</title>
+      <link>https://yushuanhsieh.github.io/post/2019-04-05-grpc-dial/</link>
+      <pubDate>Fri, 05 Apr 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-04-05-grpc-dial/</guid>
+      <description>前言 其實一開始的目的是想要研究 gRPC 的 retry 機制，不過在了解 retry 之前勢必要先說明整個 gRPC client 與 server 建立連線的過程，因此就先用 source code trace 的方式簡單說明在呼叫 grpc.</description>
+    </item>
+    
+    <item>
       <title>2019/03月份自我學習回顧</title>
       <link>https://yushuanhsieh.github.io/post/2019-04-04-study-201903/</link>
       <pubDate>Wed, 03 Apr 2019 08:00:00 +0800</pubDate>
@@ -188,15 +197,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       
       <guid>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</guid>
       <description>前言 最近在學 Go，而之前有一些 C 的基礎，因此在學到 Go 的 Array 時，發現它和 C 的 Array 差異性蠻大的，所以特別記錄下來。</description>
-    </item>
-    
-    <item>
-      <title>Angular Schematics</title>
-      <link>https://yushuanhsieh.github.io/post/2018-08-05-angular-schematics/</link>
-      <pubDate>Sun, 05 Aug 2018 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-08-05-angular-schematics/</guid>
-      <description>前言： 最近專案需要提供工具讓外部人員一同參與 Web App 的開發，由於我們的 Web App 已經有基本架構和開發方式，為了讓外部人員能夠更方便的 follow 架構，所以就決定使用 Schematics 來創建專屬樣板，讓協作開發人員可以迅速地建立專案用的 component page，然後他們只需要修改部分程式碼即可。</description>
     </item>
     
   </channel>

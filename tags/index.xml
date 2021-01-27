@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>CSE 506 Lab 3 - Interrupts</title>
+      <link>https://yushuanhsieh.github.io/post/2021-01-26-lab3_2/</link>
+      <pubDate>Tue, 26 Jan 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-01-26-lab3_2/</guid>
+      <description>閒聊 2020 年過去了，因為年底各種考試和工作， Lab3 下半部份延遲到現在才完成。雖然拖蠻久的，但是往好的方向看就是有在持續進行下去，沒有放棄就是好結局！最近心境上有蠻多變化的，其中本來對於目前工作內容很疑惑，覺得跟純軟生活落差太大，但是在工作中慢慢地發現自己對於 security 領域的認知嚴重不足，如果能好好學習 security 相關知識，對於自己和未來發展還是挺有幫助的，結合 security 與 embedded or cloud 去發展，是一個有趣又有挑戰性的目標，因此目前就朝著這方向努力，希望今年可以在 COSCUP 分享 security 相關議題。</description>
+    </item>
+    
+    <item>
       <title>Security model of password managers</title>
       <link>https://yushuanhsieh.github.io/post/2021-01-15-security_module/</link>
       <pubDate>Fri, 15 Jan 2021 08:00:00 +0800</pubDate>
@@ -181,15 +190,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</guid>
       <description>因為工作需求，需要一個透過 cli 就可以 upload 和 download 的工具，剛好 open project transfer.sh 有提供類似的功能，不過我們有額外的需求，包含每個 request 都要能 fiter IP 和執行 HTTP Basic Auth 驗證，因此就有這個機會來分析一下 transfer.</description>
-    </item>
-    
-    <item>
-      <title>Multilingual Mode in Hugo</title>
-      <link>https://yushuanhsieh.github.io/post/2020-04-07-hugo-merge/</link>
-      <pubDate>Tue, 07 Apr 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-04-07-hugo-merge/</guid>
-      <description>紀錄用 Hugo site generator 建立多語言網站時所遇到的問題，與過程中相關的學習內容，包含 Hugo render 過程、source code trace 等。</description>
     </item>
     
   </channel>
