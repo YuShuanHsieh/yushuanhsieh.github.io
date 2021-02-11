@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux Kernel on 文組工程師</title>
+    <link>https://yushuanhsieh.github.io/categories/linux-kernel/</link>
+    <description>Recent content in Linux Kernel on 文組工程師</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 10 Feb 2021 08:00:00 +0800</lastBuildDate>
+    
+        <atom:link href="https://yushuanhsieh.github.io/categories/linux-kernel/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>2019/04月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-05-04-study-201904/</link>
+      <pubDate>Sat, 04 May 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-05-04-study-201904/</guid>
+      <description>![study]({{ site.url }}/assets/images/golang.jpg)
+前言 不知不覺又過了一個月了，本來想說一週要產出一篇文章，結果發現技術文章真的蠻容易難產的，主要原因是我希望能盡可能地從根本去探討這些技術背後運作模式和原理，因此會花費大量時間在整理內容和實驗上。不過部分原因也可能是因為資歷不夠，所以這些內容要思考很久，才會下筆去寫，希望之後慢慢熟稔之後可以加快產出速度。
+上個月曾經提到，我會開始複習大學 CS 基礎課程，因為工作後會隨著時間漸漸地把這些基礎原理忘掉，所以這個月就從離散數學開始看起。說到數學，我覺得現在的我把數學當作一種訓練自己思考邏輯的方式，雖然他對我來說真的有點挑戰性，但是在了解這些數學是如何解出最終解的過程中，其實蠻有樂趣，會讓我很訝異原來可以透過這樣子的方式去找答案。當然我在大學時期也很討厭上課，之所有會有這樣體悟，真的是要等待我出社會累積經歷後，才會認知到這樣邏輯訓練很有助於工作效率。
+除了念書之外，4月份我也去擔任志工協助 Golang Taipei 的擺攤宣傳。在參加活動上我是超級菜逼八，不過真的蠻有意思，可以認識到不同社群的人，能夠互相交流。雖然目前因為工作關係定居在新竹，但還是希望自己能夠多多參與這樣的活動，看看別人如何推廣技術社群也是一種學習！</description>
+    </item>
+    
+    <item>
+      <title>grpc-go source code trace - gRPC client 與 server 建立連線過程</title>
+      <link>https://yushuanhsieh.github.io/post/2019-04-05-grpc-dial/</link>
+      <pubDate>Fri, 05 Apr 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-04-05-grpc-dial/</guid>
+      <description>前言 其實一開始的目的是想要研究 gRPC 的 retry 機制，不過在了解 retry 之前勢必要先說明整個 gRPC client 與 server 建立連線的過程，因此就先用 source code trace 的方式簡單說明在呼叫 grpc.</description>
+    </item>
+    
+    <item>
+      <title>2019/03月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-04-04-study-201903/</link>
+      <pubDate>Wed, 03 Apr 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-04-04-study-201903/</guid>
+      <description>![study]({{ site.url }}/assets/images/golang-meetup.jpeg)
+前言 最近這一個月工作慢慢步上軌道，心情有比較踏實些。剛開始來的時候，實在不太確定自己能幫上什麼忙，不過這個月漸漸地有任務可以做，並且也和其他組員一起合作開發，感覺在團隊中可以發揮自己的價值:) 另外，這個月比較大的轉變是完全負責 back-end ，之前還想說可能會接觸到 React ，所以花了一些時間在看 React 原理，不過目前確定會都以 Go 和 Device application 開發為主，因此後續就會把學習重心放在 Back-end。話雖如此，自己還是有加入公司的 front-end 學習群，跟著裡面的大神們一起念 React Core ，畢竟過去一年蠻大比例是使用 JavaScript 開發，要放棄也是蠻可惜的。</description>
+    </item>
+    
+    <item>
+      <title>Golang - Request test using net/http/httptrace</title>
+      <link>https://yushuanhsieh.github.io/post/2019-03-14-http-trace/</link>
+      <pubDate>Thu, 14 Mar 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-03-14-http-trace/</guid>
+      <description>前言 在撰寫 HTTP request test 測試程式時，除了測試 response 結果是否如預期之外，我們還需要知道過程中需要耗費多少時間（request latency）。市面上有一些 libraries (e.</description>
+    </item>
+    
+    <item>
+      <title>Functional options pattern in GO</title>
+      <link>https://yushuanhsieh.github.io/post/2019-03-10-functional-options/</link>
+      <pubDate>Sun, 10 Mar 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-03-10-functional-options/</guid>
+      <description>前言 之所以使用 Functional options 的契機，是因為用到 gRPC 的 New Server API，發現他是用 functional options 來讓使用者調整 Server 預設配置，這樣的作法不但兼具了擴充性和可用性，也能避免一些使用者誤用。而除了看 source code 來學習如何實作之外，也找起相關文章，進而發現原來早在 2014 年就有人發表過類似教學文，實在是太孤陋寡聞了～</description>
+    </item>
+    
+    <item>
+      <title>2019/02月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-03-03-study-2019-02/</link>
+      <pubDate>Sun, 03 Mar 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-03-03-study-2019-02/</guid>
+      <description>![study-2019-02]({{ site.url }}/assets/images/study-2019-02.png)
+前言 這個月大多在適應新的生活環境，第一次來新竹工作，不意外地在新手村落腳。在還沒來新竹之前，就聽聞過新竹可能是個比台北無聊的地方，那時候覺得反正我生活也很宅，不是 coding 就是買化妝品，只要有舒適的套房和康是美就可以存活了，但是實際上沒有我想的這麼簡單XD 畢竟新竹的社群活動真的少很多，讓假日少了一些樂趣。既然沒有實體活動，只能在線上多參與一些活動或是多看別人分享的文章了。
+本月份學習內容除了加強 React 之外，也開始加入多一點 Golang 內容，不意外的話，之後工作使用語言應該會是 JavaScript 和 Golang，所以先安排階段性的練習，在之後專案中也能比較快上手。</description>
+    </item>
+    
+    <item>
+      <title>React Hooks with memoizedState</title>
+      <link>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</link>
+      <pubDate>Wed, 27 Feb 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-02-27-react-hooks/</guid>
+      <description>前言 React Hooks 自從正式 release 後，就出現很多相關教學文章，所以這篇不是講如何實作，而是說他如何在 stateless functional component 中保存當前 state。 此外，最近也開始嘗試把 class component 轉換成使用 hooks 的 components，但過程中還是需要蠻多調整，包含之前有使用一些 lifecycle functions ，藉此機會順便檢視是否真的必要使用這些 functions，是否可以透過其他架構方式來簡化。</description>
+    </item>
+    
+    <item>
+      <title>2019/01月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-02-03-study-2019-01/</link>
+      <pubDate>Sun, 03 Feb 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-02-03-study-2019-01/</guid>
+      <description>又到了每個月檢討念書進度的日子了，這次 2019 新的一年有蠻多人生大轉變，像是離職換了一個新的工作環境，以及脫離媽寶身份，跑去新竹生活等。 Moxa 算是我轉職後第一份的正式工作，而在這一年中其實學到很多經驗，但是也對一些流程和開發方式有些疑問。我很想要根據這些問題提出自己的見解，可惜經驗少，又沒有其他公司經驗可以參考，因此總有很想要提出改善，卻又不知道該如何改善的感覺。
+而在年底時，剛好有這個機會可以去趨勢工作，在考量趨勢科技是一家成熟軟體公司的情況下，雖然目前開發經驗還累積不足，但還是決定前往了。我不能説決定是不是正確的，但是我覺得人生就是充滿各種契機，只要在過程中很努力的學習，相信最後都還是值得的結果。
+話又說回來，這次學習主軸又拉回前端，並且參雜一點 Network 理論。這次學習是以 React 以及相關 lib 為主，而 network 則是清大開放課程的 區域網路，之前上完這位教授的網路概論，覺得收穫良多，所以繼續上教授的另一門課程。</description>
+    </item>
+    
+    <item>
+      <title>工作 - Redux State 被異常更新除錯紀錄</title>
+      <link>https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/</link>
+      <pubDate>Wed, 23 Jan 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-01-23-redux-problems/</guid>
+      <description>問題： 今天收到 back-end 同事回饋，說是在新版本的 APP UI 中出現不正常行為。由於我們的 menu 必須根據 Embedded System 中的 Applcation 來增減，因此就使用 menu state 來讓其他 component 也可以透過 dispatch 控制 menu 項目。</description>
+    </item>
+    
+    <item>
+      <title>使用 React-Redux 注意事項和運作原理</title>
+      <link>https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/</link>
+      <pubDate>Thu, 17 Jan 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-01-17-react-and-redux/</guid>
+      <description>前言 網路上有很多關於如何使用 redux and react-redux 的教學文章，所以在這邊就不寫如何去應用，而是會著重在一些可能會忽略的細節以及大概的 實作原理。其實這些細節都寫在官網上，不過一般在教學文章內較少著墨，所以特別摘錄出來，讓大家在使用 react-redux 時能注意到可能會發生的問題。
+mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapStateToProps，由於這個 function 關係到 component props，所以就容易產生沒有發生 render 或是 render 次數過多的問題。</description>
+    </item>
+    
+    <item>
+      <title>2018/12月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-01-01-12-study/</link>
+      <pubDate>Tue, 01 Jan 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-01-01-12-study/</guid>
+      <description>前言 其實可以看到，我從 11 月開始發文量變少（雖然本來就不多XD），主要是因為目前在複習一些理論課程，我又是手寫筆記派，所以自然地就比較少用 blog 記錄，反而是都寫成筆記，不但能強化當下的記憶，也方便日後複習。 ![12-study]({{ site.url }}/assets/images/12-study.jpg)
+學習回顧 Network Principle 本月份主力衝刺在 Network 基本概念，這個月複習 Network Layer 和 Data Link Layer，雖然對於其中所使用到的 algorithm implementation 方式不熟悉，不過至少找回了概念，之後在 trace network protocol code 的時候也會更有方向。</description>
+    </item>
+    
+    <item>
+      <title>11月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-12-01-11-study/</link>
+      <pubDate>Sat, 01 Dec 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-12-01-11-study/</guid>
+      <description>前言 這個月學習內容主要集中在 Embedded System 和 Network，說來慚愧，雖然大學有修網際網路，但是過了這麼久，很多知識都還給老師了。因為目前在網通廠工作，常常會接觸到 Application Layer Protocol 和使用 UNIX Socket，所以趁這機會再一次把網路課程複習一下，混搭上個月沒有學完的 Embedded System。</description>
+    </item>
+    
+    <item>
+      <title>Node-Red - Node 坑坑紀錄</title>
+      <link>https://yushuanhsieh.github.io/post/2018-11-15-node-red/</link>
+      <pubDate>Thu, 15 Nov 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-11-15-node-red/</guid>
+      <description>前言 最近工作接觸到 Node-RED，需要建立專屬的 Node，而在這過程中遇到蠻多坑的，所以特別紀錄一下。
+相關技術  Node.js v10.11.0 node-gyp docker arm cross compile Node-RED node development  坑坑相連 1.</description>
+    </item>
+    
+    <item>
+      <title>Microprocessor System Lab. - Cross Compiler</title>
+      <link>https://yushuanhsieh.github.io/post/2018-11-04-mcu-cross-compiler/</link>
+      <pubDate>Sun, 04 Nov 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-11-04-mcu-cross-compiler/</guid>
+      <description>前言 其實整個課程已經看完了，只是因為寫 blog 需要準備很多資料，畢竟有些部分老師快速帶過，所以生產文章的速度遠不及看課程速度XD 這次要說的是 Cross Compiler，因為如果是安裝像是 SW4STM32 IDE，它所有 cross compiler 設定都已經備妥妥了，使用者只要按一個蟲蟲鍵便能快速 Debugger，不過實際上它背後執行許多程序，只是因為都被自動配置好了，因此使用者不太需要去處理這些額外的環境設定。</description>
+    </item>
+    
+    <item>
+      <title>10月份自我學習日誌回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</link>
+      <pubDate>Fri, 02 Nov 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</guid>
+      <description>前言 這次十月份的學習方向和預設有點不太一樣，主要是因為某天在因緣際會之下，接觸到交大開放式課程 微處理機系統實驗 Microprocessor System Lab.，覺得實在是太有趣了，所以就欲罷不能的聽下去，順便把一些相關教學材料也買齊，好好學一下 MCU 。可以預知，接下來會繼續上曹孝櫟老師的 嵌入式系統設計概論與實作 Introduction to Embedded Systems Design and Implementation ，剛好本身也是在 IOT 產業，每天都要接觸到 Embedded Systems，這老師說的很好，讓我學習到很多 :D</description>
+    </item>
+    
+    <item>
+      <title>Microprocessor System Lab. - Nucleo-64 development board</title>
+      <link>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</link>
+      <pubDate>Wed, 24 Oct 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</guid>
+      <description>前言： 在英國的時候，學校大多專注在純軟開發課程上，例如敏捷開發(Agile Development), Web Development, database 等。其中有一堂課令我印象深刻，就是用 logic Unit, MUX 零件自組 16 Instruction Processor，然後自己手動按 Clock 去 fetch / execute instrction，透過這樣的學習，讓我更清楚整個電腦實際運作 Code 的流程。</description>
+    </item>
+    
+    <item>
+      <title>9月份自我學習日誌回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</link>
+      <pubDate>Fri, 05 Oct 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</guid>
+      <description>9月份目標  把 Effective Go 看完 複習 JavaScript 概念，釐清各細節 工作上用到的 Protocol 相關知識  目標回顧 1.</description>
+    </item>
+    
+    <item>
+      <title>Node.js Addons N-API example (v10.11.0)</title>
+      <link>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</link>
+      <pubDate>Mon, 24 Sep 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</guid>
+      <description>前言 由於專案需要整合 Node-RED ，我們必須開發自己的 Node 來讓用戶可以直接透過視覺化方式來建立簡單邏輯，又我們的 SDK 是 C 版本，因此有這機會可以接觸 Node.</description>
+    </item>
+    
+    <item>
+      <title>Go - Archive files with archive/tar lib</title>
+      <link>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</link>
+      <pubDate>Sun, 09 Sep 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</guid>
+      <description>前言 由於專案要提供 API 來讓使用者 export 匯出檔案， 因此需要將所需檔案集結成一個 archive file。這個流程是透過 Go 的標準 lib archive/tar 來處理，以下文章將簡單介紹流程和實作方式，並於最後附上完整程式碼。</description>
+    </item>
+    
+    <item>
+      <title>Google Sign-in with OAuth 2.0</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</link>
+      <pubDate>Sat, 25 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</guid>
+      <description>前言： 由於目前專案是以 Embedded System 為主，比較少有機會接入第三方 api 的機會，所以這次 side project 就以 Google Sign-in for Web application with Go 的流程當作練習。由於網路上可以找到很多範例，所以在以下文章中會側重在原理 + 為什麼要這樣做，希望除了寫 code 之外，還能建立起基本概念。</description>
+    </item>
+    
+  </channel>
+</rss>

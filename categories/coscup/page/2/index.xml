@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Trace transfer.sh open project</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</link>
+      <pubDate>Wed, 15 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</guid>
+      <description>因為工作需求，需要一個透過 cli 就可以 upload 和 download 的工具，剛好 open project transfer.sh 有提供類似的功能，不過我們有額外的需求，包含每個 request 都要能 fiter IP 和執行 HTTP Basic Auth 驗證，因此就有這個機會來分析一下 transfer.</description>
+    </item>
+    
+    <item>
       <title>Multilingual Mode in Hugo</title>
       <link>https://yushuanhsieh.github.io/post/2020-04-07-hugo-merge/</link>
       <pubDate>Tue, 07 Apr 2020 08:00:00 +0800</pubDate>
@@ -199,18 +208,6 @@ Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變�
       <guid>https://yushuanhsieh.github.io/post/2019-06-04-study-201906/</guid>
       <description>![study]({{ site.url }}/assets/images/study-201906.png)
 前言 五月的時候，團隊來了一位經驗豐富的瑞典人，而剛好有這個機會跟他合作，除了跟他練練英文口說能力之外，順便學習一下他的程式經驗。瑞典人是一位懂很多層面的工程師，從韌體到 Web Front-end 都有實務經驗，而且為人也不錯，會很認真地看每個 Pull Request，並給予架構上或是程式寫法上的回饋，能有這樣的同事真的很開心，即使在當個碼農趕專案，也會覺得從中學習到不少。</description>
-    </item>
-    
-    <item>
-      <title>2019/04月份自我學習回顧</title>
-      <link>https://yushuanhsieh.github.io/post/2019-05-04-study-201904/</link>
-      <pubDate>Sat, 04 May 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-05-04-study-201904/</guid>
-      <description>![study]({{ site.url }}/assets/images/golang.jpg)
-前言 不知不覺又過了一個月了，本來想說一週要產出一篇文章，結果發現技術文章真的蠻容易難產的，主要原因是我希望能盡可能地從根本去探討這些技術背後運作模式和原理，因此會花費大量時間在整理內容和實驗上。不過部分原因也可能是因為資歷不夠，所以這些內容要思考很久，才會下筆去寫，希望之後慢慢熟稔之後可以加快產出速度。
-上個月曾經提到，我會開始複習大學 CS 基礎課程，因為工作後會隨著時間漸漸地把這些基礎原理忘掉，所以這個月就從離散數學開始看起。說到數學，我覺得現在的我把數學當作一種訓練自己思考邏輯的方式，雖然他對我來說真的有點挑戰性，但是在了解這些數學是如何解出最終解的過程中，其實蠻有樂趣，會讓我很訝異原來可以透過這樣子的方式去找答案。當然我在大學時期也很討厭上課，之所有會有這樣體悟，真的是要等待我出社會累積經歷後，才會認知到這樣邏輯訓練很有助於工作效率。
-除了念書之外，4月份我也去擔任志工協助 Golang Taipei 的擺攤宣傳。在參加活動上我是超級菜逼八，不過真的蠻有意思，可以認識到不同社群的人，能夠互相交流。雖然目前因為工作關係定居在新竹，但還是希望自己能夠多多參與這樣的活動，看看別人如何推廣技術社群也是一種學習！</description>
     </item>
     
   </channel>

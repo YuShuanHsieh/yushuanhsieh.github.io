@@ -6,10 +6,20 @@
     <description>Recent content on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 26 Jan 2021 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 10 Feb 2021 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>TH02 sensor device driver</title>
+      <link>https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/</link>
+      <pubDate>Wed, 10 Feb 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/</guid>
+      <description>馬上就要過年了，最近在整理物品的時候，突然找到一年前為了玩板子而亂買的 Grove sensor，回想當時雖然對於韌體很感興趣，不過由於工作關係，因此把大部分進修時間都花在 Web 議題，沒能完成 sensor 韌體，留下一個遺憾。而既然這次被我找出來，近期工作又是都以 FPGA 板子居多，對於相關概念已有基本認知，覺得是時候把它實作出來，了結一年前給自己的課題。
+硬體  Grove Temperature&amp;amp;Humidity Sensor (High-Accuracy &amp;amp; Mini) Raspberry Pi 3 Model B (Linux kernel 5.</description>
+    </item>
     
     <item>
       <title>CSE 506 Lab 3 - Interrupts</title>
@@ -182,15 +192,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</guid>
       <description>這兩天在試著部署 Discourse －目前主流的 forum open porject。雖然它有 cloud 版本可以用，不過因為基於一些因素，我們打算先自行部署，給團隊成員實際試用測試過後，再來看是否要使用官方提供的 Cloud 付費版本。而在部署的過程中發現蠻多問題的，所以也一併記錄下來，給想要自行部署的人參考。</description>
-    </item>
-    
-    <item>
-      <title>Trace transfer.sh open project</title>
-      <link>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</link>
-      <pubDate>Wed, 15 Apr 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</guid>
-      <description>因為工作需求，需要一個透過 cli 就可以 upload 和 download 的工具，剛好 open project transfer.sh 有提供類似的功能，不過我們有額外的需求，包含每個 request 都要能 fiter IP 和執行 HTTP Basic Auth 驗證，因此就有這個機會來分析一下 transfer.</description>
     </item>
     
   </channel>

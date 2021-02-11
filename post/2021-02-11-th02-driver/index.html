@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        TH02 sensor device driver - 文組工程師
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="馬上就要過年了，最近在整理物品的時候，突然找到一年前為了玩板子而亂買的 Grove sensor，回想當時雖然對於韌體很感興趣，不過由於工作關係，因此把大部分進修時間都花在 Web 議題，沒能完成 sensor 韌體，留下一個遺憾。而既然這次被我找出來，近期工作又是都以 FPGA 板子居多，對於相關概念已有基本認知，覺得是時候把它實作出來，了結一年前給自己的課題。
+硬體  Grove Temperature&amp;amp;Humidity Sensor (High-Accuracy &amp;amp; Mini) Raspberry Pi 3 Model B (Linux kernel 5." />
+    
+      <meta property="og:image" content="https://yushuanhsieh.github.io/posts/i2c-driver_5.png" />
+    
+  <meta name="generator" content="Hugo 0.71.0 with theme pure" />
+  <title>TH02 sensor device driver - 文組工程師</title>
+  
+  
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
+  
+    
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="TH02 sensor device driver" />
+<meta property="og:description" content="馬上就要過年了，最近在整理物品的時候，突然找到一年前為了玩板子而亂買的 Grove sensor，回想當時雖然對於韌體很感興趣，不過由於工作關係，因此把大部分進修時間都花在 Web 議題，沒能完成 sensor 韌體，留下一個遺憾。而既然這次被我找出來，近期工作又是都以 FPGA 板子居多，對於相關概念已有基本認知，覺得是時候把它實作出來，了結一年前給自己的課題。
+硬體  Grove Temperature&amp;Humidity Sensor (High-Accuracy &amp; Mini) Raspberry Pi 3 Model B (Linux kernel 5." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/" />
+<meta property="og:image" content="https://yushuanhsieh.github.io/posts/i2c-driver_5.png" />
+<meta property="article:published_time" content="2021-02-10T08:00:00+08:00" />
+<meta property="article:modified_time" content="2021-02-10T08:00:00+08:00" />
+<meta itemprop="name" content="TH02 sensor device driver">
+<meta itemprop="description" content="馬上就要過年了，最近在整理物品的時候，突然找到一年前為了玩板子而亂買的 Grove sensor，回想當時雖然對於韌體很感興趣，不過由於工作關係，因此把大部分進修時間都花在 Web 議題，沒能完成 sensor 韌體，留下一個遺憾。而既然這次被我找出來，近期工作又是都以 FPGA 板子居多，對於相關概念已有基本認知，覺得是時候把它實作出來，了結一年前給自己的課題。
+硬體  Grove Temperature&amp;Humidity Sensor (High-Accuracy &amp; Mini) Raspberry Pi 3 Model B (Linux kernel 5.">
+<meta itemprop="datePublished" content="2021-02-10T08:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2021-02-10T08:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="687">
+<meta itemprop="image" content="https://yushuanhsieh.github.io/posts/i2c-driver_5.png">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://yushuanhsieh.github.io/posts/i2c-driver_5.png"/>
+
+<meta name="twitter:title" content="TH02 sensor device driver"/>
+<meta name="twitter:description" content="馬上就要過年了，最近在整理物品的時候，突然找到一年前為了玩板子而亂買的 Grove sensor，回想當時雖然對於韌體很感興趣，不過由於工作關係，因此把大部分進修時間都花在 Web 議題，沒能完成 sensor 韌體，留下一個遺憾。而既然這次被我找出來，近期工作又是都以 FPGA 板子居多，對於相關概念已有基本認知，覺得是時候把它實作出來，了結一年前給自己的課題。
+硬體  Grove Temperature&amp;Humidity Sensor (High-Accuracy &amp; Mini) Raspberry Pi 3 Model B (Linux kernel 5."/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="/" target="">
+            <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">Software Engineer</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Taiwan</small>
+        </div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-about">
+                <a href="/post/1900-01-01-about/">
+                  <span class="menu-title">About</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title"> Categories</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/conference/" class="category-list-link">conference</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/coscup/" class="category-list-link">coscup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/devops/" class="category-list-link">devops</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/game/" class="category-list-link">game</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/gnu/" class="category-list-link">gnu</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/go/" class="category-list-link">go</a><span class="category-list-count">15</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/google-cloud-platform/" class="category-list-link">google-cloud-platform</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/kubernetes/" class="category-list-link">kubernetes</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/linux-kernel/" class="category-list-link">linux-kernel</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">6</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/security/" class="category-list-link">security</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">30</span></li>
+        </ul>
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/" class="title">TH02 sensor device driver</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-02-10 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-01-26-lab3_2/" class="title">CSE 506 Lab 3 - Interrupts</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-01-26 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-01-26</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-01-15-security_module/" class="title">Security model of password managers</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-01-15 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-01-15</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-12-23-web_auth/" class="title">GDG Hsinchu 12 月 Meetup - Improve Your Web Authentication Security</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-12-23 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-12-23</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/" class="title">CSE 506 Lab 3 - User Environments(Processes)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-11-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-11-25</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<main class="main" role="main"><div class="content">
+  <article id="single-" class="article article-type-single" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2021-02-11-th02-driver/"
+    >
+    
+      
+        
+          <span class="title-cat">Linux Kernel</span>
+        
+      
+    TH02 sensor device driver</a>
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/" class="article-date">
+  <time datetime="2021-02-10 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-10</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/linux-kernel/"> Linux Kernel </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/post/2021-02-11-th02-driver/#comments"
+            class="article-comment-link">Comments</a></span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>馬上就要過年了，最近在整理物品的時候，突然找到一年前為了玩板子而亂買的 Grove sensor，回想當時雖然對於韌體很感興趣，不過由於工作關係，因此把大部分進修時間都花在 Web 議題，沒能完成 sensor 韌體，留下一個遺憾。而既然這次被我找出來，近期工作又是都以 FPGA 板子居多，對於相關概念已有基本認知，覺得是時候把它實作出來，了結一年前給自己的課題。</p>
+<p><img src="/posts/i2c-driver_4.png" alt=""></p>
+<h2 id="硬體">硬體</h2>
+<ul>
+<li>Grove Temperature&amp;Humidity Sensor (High-Accuracy &amp; Mini)</li>
+<li>Raspberry Pi 3 Model B (Linux kernel 5.4.x)</li>
+</ul>
+<p><img src="/posts/i2c-driver_5.png" alt=""></p>
+<h2 id="技術">技術</h2>
+<ul>
+<li>I2C linux driver</li>
+<li>linux Industrial I/O</li>
+<li>device tree</li>
+</ul>
+<p>由於買的 sensor 有支援 I2C bus protocol，因此這次實作的 driver 就會基於 I2C driver 架構上實作。搭配 iio (Industrial I/O) 來讀取溫度和濕度。</p>
+<h2 id="overview">Overview</h2>
+<p><img src="/posts/i2c-driver_1.png" alt=""></p>
+<p>首先來看整個執行流程： application 透過 sysfs 與 industrial I/O device 進行互動，在 iio device 接收到 read 指令後，透過 I2C device driver 將對應的操作行為藉由 I2C bus adapter 與實際 sensor 進行溝通。</p>
+<p>其中我們需要實作的部分包含：</p>
+<ul>
+<li>iio device</li>
+<li>Th02 device driver</li>
+</ul>
+<p>而之所以採用 iio device，是因為 linux industrial I/O framework 提供便利的機制，會在 file system 中生成代表各 sensor info 的 file node，如此一來就可以藉由常見的寫入、讀取行為來操作 sensor(當然也不只有 iio system 可以實現這機制，也可以透過其他方法實現)。</p>
+<h2 id="th02-device">Th02 Device</h2>
+<p>Device 和 device driver 是相生相依的關係，但 I2C device 無法像 PCI or USB device 一樣在 runtime 時被主動 detect 且生成對應之 device instance，因此我們需要透過其他方式來產生 device instance(<a href="https://www.kernel.org/doc/html/latest/i2c/instantiating-devices.html">How to instantiate I2C devices</a>)。</p>
+<p>本次實作中是使用 device tree 來宣告 Th02 device tree node，並透過 <code>dynamic loading of overlays</code> 機制來生成 device。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>/dts-v1/;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>/plugin/;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>/ {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    compatible = <span style="color:#a31515">&#34;brcm,bcm2837&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    fragment<span style="">@</span>0 {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        target = &lt;&amp;i2c1&gt;;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        __overlay__ {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>            th02<span style="">@</span>40 {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>              compatible = <span style="color:#a31515">&#34;cherie,th02&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>              reg = &lt;0x40&gt;;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>              status = <span style="color:#a31515">&#34;okay&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>            };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>};
+</code></pre></div><p>Raspi 3B 中有兩組 I2C BUS：<code>i2c0</code> for GPU (GPIO 0, GPIO 1) 和 <code>i2c1</code> for CPU (GPIO 2, GPIO 3)，一般 i2c sensor 設備使用 <code>i2c1</code> bus 即可。</p>
+<p>生成後的 I2C device instance 在 linux kernel 正式名稱叫做 <code>i2c_client</code>：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">struct</span> i2c_client {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	<span style="color:#2b91af">unsigned</span> <span style="color:#2b91af">short</span> flags;		<span style="color:#008000">/* div., see below		*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#00f">#define I2C_CLIENT_PEC		0x04	</span><span style="color:#008000">/* Use Packet Error Checking */</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#00f">#define I2C_CLIENT_TEN		0x10	</span><span style="color:#008000">/* we have a ten bit chip address */</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#00f"></span>					<span style="color:#008000">/* Must equal I2C_M_TEN below */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#00f">#define I2C_CLIENT_SLAVE	0x20	</span><span style="color:#008000">/* we are the slave */</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#00f">#define I2C_CLIENT_HOST_NOTIFY	0x40	</span><span style="color:#008000">/* We want to use I2C host notify */</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#00f">#define I2C_CLIENT_WAKE		0x80	</span><span style="color:#008000">/* for board_info; true iff can wake */</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#00f">#define I2C_CLIENT_SCCB		0x9000	</span><span style="color:#008000">/* Use Omnivision SCCB protocol */</span><span style="color:#00f">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#00f"></span>					<span style="color:#008000">/* Must match I2C_M_STOP|IGNORE_NAK */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>	<span style="color:#2b91af">unsigned</span> <span style="color:#2b91af">short</span> addr;		<span style="color:#008000">/* chip address - NOTE: 7bit	*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>					<span style="color:#008000">/* addresses are stored in the	*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>					<span style="color:#008000">/* _LOWER_ 7 bits		*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>	<span style="color:#2b91af">char</span> name[I2C_NAME_SIZE];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>	<span style="color:#00f">struct</span> i2c_adapter *adapter;	<span style="color:#008000">/* the adapter we sit on	*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>	<span style="color:#00f">struct</span> device dev;		<span style="color:#008000">/* the device structure		*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>	<span style="color:#2b91af">int</span> init_irq;			<span style="color:#008000">/* irq set at initialization	*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>	<span style="color:#2b91af">int</span> irq;			<span style="color:#008000">/* irq issued by device		*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>	<span style="color:#00f">struct</span> list_head detected;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#00f">#if IS_ENABLED(CONFIG_I2C_SLAVE)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#00f"></span>	i2c_slave_cb_t slave_cb;	<span style="color:#008000">/* callback for slave mode	*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#00f">#endif
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#00f"></span>};
+</code></pre></div><p>可以看到其 structure 包含 adapter (I2C bus) 和 general device struct。以 Th02 sensor 為例，i2c_client 就是 Th02 sensor 的抽象設備層，其中 sensor 接在 I2C1 bus 上 (adapter)，而此 adapter 在 raspi 3B 是指 bcm2835-i2c bus driver。另外，我們所撰寫的 device tree node 描述則會在 struct device。</p>
+<p><img src="/posts/i2c-driver_2.png" alt=""></p>
+<h2 id="th02-device-driver">Th02 Device Driver</h2>
+<p>實作 Th02 device driver 有兩個很重要的部分：</p>
+<ol>
+<li>建立 i2c device (i2c_client) 與 iio device 的關聯</li>
+<li>依照 Th02 sensor hardware spce 來完成數據溝通</li>
+</ol>
+<h3 id="建立-i2c-device-i2c_client-與-iio-device-的關聯">建立 i2c device (i2c_client) 與 iio device 的關聯</h3>
+<p>Application 透過 sysfs 來與 iio device 互動，而 iio device 必須要有方法與 i2c deivce 溝通以取得 sensor 數據。因此，我們利用 device struct 中的 private_data，在 probe 階段，將 i2c_client 放入 iio device 的 private_data，就可以在後續流程中使用。</p>
+<p><img src="/posts/i2c-driver_3.png" alt=""></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">struct</span> iio_dev *th02_iio = devm_iio_device_alloc(&amp;client-&gt;dev, <span style="color:#00f">sizeof</span>(<span style="color:#00f">struct</span> th02_device));
+</code></pre></div><p>上述實作的 code，新建的 iio device 中 parent 會指向 i2c_client 的 device struct，並且分配一個空間存放 private_data。當然，因為我實作的 code 比較簡單，或許用 container_of 就可以藉由 device-&gt;parent 來取得 i2c_client。</p>
+<h3 id="th02-sensor-communication">Th02 sensor communication</h3>
+<p>再來就是根據 Th02 sensor document 來完成讀取濕度、溫度等流程。以讀取溫度為例，其流程為：</p>
+<ol>
+<li>Set START (D0) and TEMP (D4) in CONFIG (register 0x03) to begin a new conversion, i.e., write CONFIG with 0x11</li>
+<li>Poll RDY (D0) in STATUS (register 0) until it is low (=0)</li>
+<li>Read the upper and lower bytes of the temperature value from DATAh and DATAl (registers 0x01 and 0x02)</li>
+</ol>
+<p>Linux kernel 已有封裝好的 function <code>i2c_master_send</code> 與 <code>i2c_master_recv</code> 可供使用，因此搭配上面 document 流程就能夠實現數據溝通。</p>
+<p>以 read status 為例，要先寫入 Th02 <code>STATUS</code> address pointer，接著再進行 status value 的讀取。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">static</span> <span style="color:#2b91af">int</span> read_status(<span style="color:#00f">struct</span> i2c_client *client, u8 *status)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#2b91af">int</span> ret;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    u8 reg = TH02_STATUS;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    ret = i2c_master_send(client, &amp;reg, 1);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#00f">if</span> (ret &lt; 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        dev_err(&amp;client-&gt;dev, <span style="color:#a31515">&#34;%s: failed to send data</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>, __func__);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        <span style="color:#00f">return</span> ret;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    ret = i2c_master_recv(client, status, 1);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#00f">if</span> (ret &lt; 0)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        dev_err(&amp;client-&gt;dev, <span style="color:#a31515">&#34;%s: failed to receive data</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>, __func__);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        <span style="color:#00f">return</span> ret;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    <span style="color:#00f">return</span> 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>}
+</code></pre></div><h2 id="source-code">Source code</h2>
+<p>完整 source code 可以參考：
+<a href="https://github.com/YuShuanHsieh/th02_device_driver">https://github.com/YuShuanHsieh/th02_device_driver</a></p>
+<p>已在 raspi 3B 板子上測試過，如果在使用時出現 error，可以看看 i2c bus 是否有 enable，並且是否有載入 industrialio module。</p>
+<h2 id="結論">結論</h2>
+<p>老實說有蠻多內容想講的，包含 iio system、i2c structure 等。不過這幾個內容都相當龐大，如果都打出來怕有點偏離主題，因此只提及實作的部分，後續再來整理各細節。網路上可以找到相當多 Linux kernel 解析，不過看來看去其實蠻抽象的，希望用實際例子能讓這些抽象概念具現化，像是 i2c adapter ，如果根據板子深入研究，就可以發現實作 adapter 的 driver，如此一來就可以很清楚地了解實際是如何運作的。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permalink: </strong>
+      <a href="https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/" title="TH02 sensor device driver" target="_blank" rel="external">https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <div>Gopher</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://yushuanhsieh.github.io/post/2021-01-26-lab3_2/" title="CSE 506 Lab 3 - Interrupts"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            
+        </ul>
+        <div class="bar-right">
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://yushuanhsieh.github.io/cjamhe01385@gmail.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://www.facebook.com/cjamhe01385" target="_blank" title="facebook" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-facebook"></i></a></li>
+    <li><a href="https://yushuanhsieh.github.io/true" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2017  -
+    2021
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: 'https:\/\/yushuanhsieh.github.io',
+            CONTENT_URL: 'https:\/\/yushuanhsieh.github.io\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://yushuanhsieh.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+
+  </body>
+</html>

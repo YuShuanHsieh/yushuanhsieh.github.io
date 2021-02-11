@@ -6,10 +6,19 @@
     <description>Recent content in Categories on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 26 Jan 2021 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 10 Feb 2021 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Go Fundamental - Array</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</link>
+      <pubDate>Sat, 11 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</guid>
+      <description>前言 最近在學 Go，而之前有一些 C 的基礎，因此在學到 Go 的 Array 時，發現它和 C 的 Array 差異性蠻大的，所以特別記錄下來。</description>
+    </item>
     
     <item>
       <title>Angular Schematics</title>

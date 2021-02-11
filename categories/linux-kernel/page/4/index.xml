@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux Kernel on 文組工程師</title>
+    <link>https://yushuanhsieh.github.io/categories/linux-kernel/</link>
+    <description>Recent content in Linux Kernel on 文組工程師</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 10 Feb 2021 08:00:00 +0800</lastBuildDate>
+    
+        <atom:link href="https://yushuanhsieh.github.io/categories/linux-kernel/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Go Fundamental - Array</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</link>
+      <pubDate>Sat, 11 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</guid>
+      <description>前言 最近在學 Go，而之前有一些 C 的基礎，因此在學到 Go 的 Array 時，發現它和 C 的 Array 差異性蠻大的，所以特別記錄下來。</description>
+    </item>
+    
+    <item>
+      <title>Angular Schematics</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-05-angular-schematics/</link>
+      <pubDate>Sun, 05 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-05-angular-schematics/</guid>
+      <description>前言： 最近專案需要提供工具讓外部人員一同參與 Web App 的開發，由於我們的 Web App 已經有基本架構和開發方式，為了讓外部人員能夠更方便的 follow 架構，所以就決定使用 Schematics 來創建專屬樣板，讓協作開發人員可以迅速地建立專案用的 component page，然後他們只需要修改部分程式碼即可。</description>
+    </item>
+    
+    <item>
+      <title>Redux Anti Pattern</title>
+      <link>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</link>
+      <pubDate>Sun, 15 Jul 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</guid>
+      <description>前言 這篇文章是基於 Redux Anti-Patterns - Part 1. State Management 所進行的探討，包含在專案內是否有犯類似的錯誤，以及後續該如何改善。文章會結合目前專案所使用的 Redux(ngrx)，並檢視使用 Ngrx 是否能避免這些錯誤發生。</description>
+    </item>
+    
+    <item>
+      <title>CSS Typed Object Model</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</link>
+      <pubDate>Sun, 24 Jun 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</guid>
+      <description>前言 Chrome 66 版本全新支援 CSS Typed Object Model，透過這種新型的 CSS Typed OM，可以有效提升使用 JavaScript 操作 CSSOM 屬性的效率。雖然目前僅有 Chrome 支援（ Firefox 據說在努力中， Edge 目前沒下文），不過既然此方式能對網頁呈現效能有所提升，讓開發者和使用者都因此受惠，未來想必會成為主流方式。</description>
+    </item>
+    
+    <item>
+      <title>The Main Flow of Rendering Engines</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-23-browser-render-engine/</link>
+      <pubDate>Sat, 23 Jun 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-23-browser-render-engine/</guid>
+      <description>前言： 最近在寫 CSS Animation 部分，於是比較深入的看瀏覽器渲染流程，希望在進行 Animation 時可以更加地流暢。
+The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然地寫出這樣的頁面：</description>
+    </item>
+    
+    <item>
+      <title>Angular - Reactive Form</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</link>
+      <pubDate>Thu, 14 Jun 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</guid>
+      <description>前言 在建立表單的部份，Angular 與 AngularJS 最大的不同就是多了 Reactive Form 的方式。由於 Reactive Form 比起一般 Template-Driven Form 更具彈性且好掌控，所以就來大致介紹一下與 Reactive Form 相關的流程機制。</description>
+    </item>
+    
+    <item>
+      <title>Angular - ng-template &amp; ng-container</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-29-angular-6-ngtemplate/</link>
+      <pubDate>Tue, 29 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-29-angular-6-ngtemplate/</guid>
+      <description>前言： 昨天剛好在看 Angular CDK Overlay (Overlay Document) 這部分，因為 Overlay 是 CDK 中 Portal 的ㄧ種，而 Portal 又和 Angular 中的 Template 機制有關係，這才發現自己對於 Angular 的 ng-template 和 ng-container 概念不是很清楚，所以特別再看了一下這部分的實作原理和應用方式。</description>
+    </item>
+    
+    <item>
+      <title>Understanding Router in Angular 6</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</link>
+      <pubDate>Thu, 24 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</guid>
+      <description>前言： 這陣子在看 Reactive Extension (Rx) 和 Angular ，而 Angular 中常使用的 Router 內就有些 Observable Type 的 instance，因此就打算從這邊深入了解一下 Angular Router 的流程和 Observable 應用方式。</description>
+    </item>
+    
+    <item>
+      <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Fast Property Access</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-16-javascript-optimization-property/</link>
+      <pubDate>Wed, 16 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-16-javascript-optimization-property/</guid>
+      <description>Properties Access in V8 前言 傳統的 JavaScript 引擎，在抓取 object 內的 property 位置時，常常是利用 object 內的 hash table 來取得對應 property (通常稱為 dictionary )。不過這樣需要花費搜尋時間，相對來說效率就不是太好。也因此在現代的 JavaScript 引擎，會根據 object 內的 property 架構來進行不同方式的效能處理，避免一直使用 hash table，而是改採其他更有效率的結構，來達成快速得到 property 的目的。</description>
+    </item>
+    
+    <item>
+      <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Elements</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-15-javascript-optimization-elements/</link>
+      <pubDate>Tue, 15 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-15-javascript-optimization-elements/</guid>
+      <description>前言 JavaScript 是種弱型態語言，而 JavaScript Engine (V8) 透過對於 JavaScript object 的型態強化來提升 JavaScript 執行效率。</description>
+    </item>
+    
+    <item>
+      <title>JavaScript - Pass Params Into Functions</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-07-javascript-basic-concept/</link>
+      <pubDate>Mon, 07 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-07-javascript-basic-concept/</guid>
+      <description>前言 這篇文章起源於我為了瞭解瀏覽器的運作原理，以利針對瀏覽器進行效能優化時，所延伸出來的基礎文章。剛開始學習切入點是 Chrome 的 V8 JavaScript Engine，看到有一位作者仔細地說明 V8 Engine 如何 Compile JavaScript 的流程，進而引發我對 JavaScript Memory Allocation 的興趣。此外，剛好最近也在用 TypeScript 寫類 static type object，所以想更清楚知道使用 TypeScript 這個 pre-processor，在瀏覽器中會怎樣提高 JavaScript Compile 的性能。</description>
+    </item>
+    
+    <item>
+      <title>Cypress &amp; Cucumber Introduction</title>
+      <link>https://yushuanhsieh.github.io/post/2018-01-29-cypress-basic-usage/</link>
+      <pubDate>Mon, 29 Jan 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-01-29-cypress-basic-usage/</guid>
+      <description>Cypress E2E Testing Framework Features  No more async hell</description>
+    </item>
+    
+    <item>
+      <title>AngularJS - angular-formly study notes</title>
+      <link>https://yushuanhsieh.github.io/post/2018-01-06-angular-formly-basic-usage/</link>
+      <pubDate>Fri, 05 Jan 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-01-06-angular-formly-basic-usage/</guid>
+      <description>Angular formly 運作原理 將 form 中的每個 field 獨立出來寫成共用 template，並供整個 app 使用。使用者先在 angular-formly 中進行 configuration，包含設定 type 和 wrapper ，接著只要在 component 的 controller 中建立指定 type 的 field objects 之後，angular-formly 就會結合之前設定好的 field template 和 objects， render 出完整的表單。 !</description>
+    </item>
+    
+    <item>
+      <title>AngularJS - Two way data binding</title>
+      <link>https://yushuanhsieh.github.io/post/2017-12-08-two-way-binding/</link>
+      <pubDate>Fri, 08 Dec 2017 21:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-12-08-two-way-binding/</guid>
+      <description>前言 最近開始接觸前端技術，預計以Angular和NodeJS為主。之前其實有稍微點一些網頁相關技能，不過大概都才Lv.1，知道大概怎麼使用，卻不太清楚背後的原理和概念。所以這次在學習的時候，會著重在框架理論和實作方式上，希望自己除了能應用這些框架之外，還可以了解這些框架背後的原理，並且進而有能力比較各框架之間的好壞。雖然Angular目前已經出到v5.1.0，但起點會從Angular1開始學起，之後文章預計會去比較新版的Angular和Angular1有怎樣的差異，以及新版的運作方式可以帶來怎樣的好處。
+Angular1主打特色之一包含 Two-way data binding (這邊先不在意這種方式帶來怎樣的壞處xD)，這篇文章紀錄 Two-way data binding 的原理和實現方式，以及對網站來說會帶來怎樣的影響。文章將不會示範如何去應用 Two-way data binding，因為我覺得隨便 Google 就可以找到很多例子，就不特別介紹了。</description>
+    </item>
+    
+    <item>
+      <title>新手入門 - Gitlab Continuous Integration &amp; Deployment</title>
+      <link>https://yushuanhsieh.github.io/post/2017-10-08-ci-tools/</link>
+      <pubDate>Sun, 08 Oct 2017 14:18:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-10-08-ci-tools/</guid>
+      <description>前言 之前雖然有聽聞過CI(Continuous Integration)相關工具，但是一直沒有好好認真地研究，畢竟都是一個人寫，總認為自己也不太需要用到CI。直到最近開始上班了，看到了公司如何使用CI來進行build package流程，頓時覺得這工具實在很便利～而因為公司也早已經有完整架構，因此雖然看得到介面，卻還是不太清楚實際上到底是如何運作的，所以就趁雙十連假期間，決定自己來實際嘗試一下整個CI運作流程。
+涉及內容  Gitlab CI Docker  Gitlab底下的CI流程  GitLab offers a continuous integration service.</description>
+    </item>
+    
+    <item>
+      <title>Discussing the Action Manager in Cocos2d-x</title>
+      <link>https://yushuanhsieh.github.io/post/2017-09-15-cocos-action-manager/</link>
+      <pubDate>Fri, 15 Sep 2017 14:18:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-09-15-cocos-action-manager/</guid>
+      <description>[前言]
+前陣子才剛從英國完成論文返回台灣。因為忙論文 / 忙搬家 / 忙調作息，所以好些時間沒有更新相關知識，覺得自己好像停滯了&amp;hellip;明天就是轉職人生的開始，趕緊來繼續惡補Cocos2d-x知識。API使用方式和理解固然很重要，不過我也相當喜歡探討一些運作流程和結構方式，所以文章內容也會比較著重在這部分。這次來看的是有關於node-&amp;gt;runAction(Action* action);之前我寫遊戲時使用完全不同的方式來讓遊戲像素變動，因此會比較想了解引擎是如何讓node根據我們設定的動作來變化。
+[涉及Class]
+ActionManager
+UT_hash_handle</description>
+    </item>
+    
+    <item>
+      <title>Write a collection</title>
+      <link>https://yushuanhsieh.github.io/post/2017-08-24-write-a-collection/</link>
+      <pubDate>Thu, 24 Aug 2017 19:57:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-08-24-write-a-collection/</guid>
+      <description>前言
+記得在6月份面試的時候，有考到自己寫Stack時，應該注意什麼地方，不過那時候很緊張，只有說到使用array來建構stack會有極限值或空值的問題，後來想想，其實還有element被pop之後的記憶體問題。剛好最近在看書複習時，書中只有簡單將top index - 1來限制可取得的element，導致即使array[index]的值被return後，array[index]實際上還是存在於記憶體中。
+處理方式
+Java
+針對這個問題，去看了一下Java原始碼對於這部分的處理(arraydeque)，果然它會先建立一個Result物件，然後將array[index] = null之後，返回Result，來避免上述所提到的問題。</description>
+    </item>
+    
+    <item>
+      <title>Jekyll</title>
+      <link>https://yushuanhsieh.github.io/post/2017-08-23-welcome-to-jekyll/</link>
+      <pubDate>Thu, 24 Aug 2017 10:55:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-08-23-welcome-to-jekyll/</guid>
+      <description>這是第一次用Jekyll寫紀錄，雖然我Project是使用Jekyll的概念來開發的，不過實際上我並沒有真的使用它過，主要原因是怕自己想法會因為這樣而被定型，所以當初在開發的時候，只有參考Jekyll網站上的流程圖而已。現在Project的Prototype已完成，就來使用一下，看有什麼可以改進的地方。就整體架構來說，其實差沒有很多，不過Jekyll在程式上分得更細，提供相當多的參數供開發者設定，以及很有彈性而且完整的template render，這些都是值得我後續學習。
+This my first time to write articles with Jekyll.</description>
+    </item>
+    
+    <item>
+      <title>About Me</title>
+      <link>https://yushuanhsieh.github.io/post/1900-01-01-about/</link>
+      <pubDate>Mon, 01 Jan 1900 10:55:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/1900-01-01-about/</guid>
+      <description>Cherie Hsieh Experience  Principle Cloud Engineer at PUFsecurity (2020/04 – present) Back-End Engineer at UmboCV (2019/12 - 2020/03) Back-End Engineer at TrendMicro (2019/01 – 2019/11) Front-End Engineer at MOXA Inc.</description>
+    </item>
+    
+  </channel>
+</rss>

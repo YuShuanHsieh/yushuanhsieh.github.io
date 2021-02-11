@@ -11,6 +11,18 @@
     
     
     <item>
+      <title>2019/04月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-05-04-study-201904/</link>
+      <pubDate>Sat, 04 May 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-05-04-study-201904/</guid>
+      <description>![study]({{ site.url }}/assets/images/golang.jpg)
+前言 不知不覺又過了一個月了，本來想說一週要產出一篇文章，結果發現技術文章真的蠻容易難產的，主要原因是我希望能盡可能地從根本去探討這些技術背後運作模式和原理，因此會花費大量時間在整理內容和實驗上。不過部分原因也可能是因為資歷不夠，所以這些內容要思考很久，才會下筆去寫，希望之後慢慢熟稔之後可以加快產出速度。
+上個月曾經提到，我會開始複習大學 CS 基礎課程，因為工作後會隨著時間漸漸地把這些基礎原理忘掉，所以這個月就從離散數學開始看起。說到數學，我覺得現在的我把數學當作一種訓練自己思考邏輯的方式，雖然他對我來說真的有點挑戰性，但是在了解這些數學是如何解出最終解的過程中，其實蠻有樂趣，會讓我很訝異原來可以透過這樣子的方式去找答案。當然我在大學時期也很討厭上課，之所有會有這樣體悟，真的是要等待我出社會累積經歷後，才會認知到這樣邏輯訓練很有助於工作效率。
+除了念書之外，4月份我也去擔任志工協助 Golang Taipei 的擺攤宣傳。在參加活動上我是超級菜逼八，不過真的蠻有意思，可以認識到不同社群的人，能夠互相交流。雖然目前因為工作關係定居在新竹，但還是希望自己能夠多多參與這樣的活動，看看別人如何推廣技術社群也是一種學習！</description>
+    </item>
+    
+    <item>
       <title>grpc-go source code trace - gRPC client 與 server 建立連線過程</title>
       <link>https://yushuanhsieh.github.io/post/2019-04-05-grpc-dial/</link>
       <pubDate>Fri, 05 Apr 2019 08:00:00 +0800</pubDate>
@@ -187,15 +199,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       
       <guid>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</guid>
       <description>前言： 由於目前專案是以 Embedded System 為主，比較少有機會接入第三方 api 的機會，所以這次 side project 就以 Google Sign-in for Web application with Go 的流程當作練習。由於網路上可以找到很多範例，所以在以下文章中會側重在原理 + 為什麼要這樣做，希望除了寫 code 之外，還能建立起基本概念。</description>
-    </item>
-    
-    <item>
-      <title>Go Fundamental - Array</title>
-      <link>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</link>
-      <pubDate>Sat, 11 Aug 2018 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</guid>
-      <description>前言 最近在學 Go，而之前有一些 C 的基礎，因此在學到 Go 的 Array 時，發現它和 C 的 Array 差異性蠻大的，所以特別記錄下來。</description>
     </item>
     
   </channel>
