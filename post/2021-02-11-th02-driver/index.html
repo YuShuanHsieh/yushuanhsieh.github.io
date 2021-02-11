@@ -50,7 +50,7 @@
 硬體  Grove Temperature&amp;Humidity Sensor (High-Accuracy &amp; Mini) Raspberry Pi 3 Model B (Linux kernel 5.">
 <meta itemprop="datePublished" content="2021-02-10T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-02-10T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="687">
+<meta itemprop="wordCount" content="757">
 <meta itemprop="image" content="https://yushuanhsieh.github.io/posts/i2c-driver_5.png">
 
 
@@ -258,22 +258,23 @@
 <h2 id="技術">技術</h2>
 <ul>
 <li>I2C linux driver</li>
-<li>linux Industrial I/O</li>
+<li>linux Industrial I/O subsystem</li>
 <li>device tree</li>
 </ul>
-<p>由於買的 sensor 有支援 I2C bus protocol，因此這次實作的 driver 就會基於 I2C driver 架構上實作。搭配 iio (Industrial I/O) 來讀取溫度和濕度。</p>
+<p>由於買的 sensor 有支援 I2C bus protocol，因此這次實作的 driver 就會基於 I2C driver 架構上實作。搭配 iio (Industrial I/O) subsystem 來讓 user space 能夠透過 file system 來讀取溫度和濕度。</p>
 <h2 id="overview">Overview</h2>
 <p><img src="/posts/i2c-driver_1.png" alt=""></p>
-<p>首先來看整個執行流程： application 透過 sysfs 與 industrial I/O device 進行互動，在 iio device 接收到 read 指令後，透過 I2C device driver 將對應的操作行為藉由 I2C bus adapter 與實際 sensor 進行溝通。</p>
+<p>首先來看概略運作流程： application 透過 sysfs 與 industrial I/O device 進行互動，在 iio device driver 接收到 read 指令後，將對應的操作行為藉由 I2C bus adapter 與 I2C device 進行溝通。</p>
 <p>其中我們需要實作的部分包含：</p>
 <ul>
-<li>iio device</li>
+<li>Th02 device</li>
 <li>Th02 device driver</li>
+<li>iio device driver</li>
 </ul>
-<p>而之所以採用 iio device，是因為 linux industrial I/O framework 提供便利的機制，會在 file system 中生成代表各 sensor info 的 file node，如此一來就可以藉由常見的寫入、讀取行為來操作 sensor(當然也不只有 iio system 可以實現這機制，也可以透過其他方法實現)。</p>
+<p>之所以採用 Industrial I/O subsystem，是因為此 framework 提供便利的機制，在註冊 iio device driver 後，會根據設定在 file system 中生成代表各 sensor info 的 file node，如此一來就可以藉由常見的寫入、讀取行為來操作 sensor (當然也不只有 iio subsystem 能夠實現這機制，也可以透過其他方法實現)。</p>
 <h2 id="th02-device">Th02 Device</h2>
-<p>Device 和 device driver 是相生相依的關係，但 I2C device 無法像 PCI or USB device 一樣在 runtime 時被主動 detect 且生成對應之 device instance，因此我們需要透過其他方式來產生 device instance(<a href="https://www.kernel.org/doc/html/latest/i2c/instantiating-devices.html">How to instantiate I2C devices</a>)。</p>
-<p>本次實作中是使用 device tree 來宣告 Th02 device tree node，並透過 <code>dynamic loading of overlays</code> 機制來生成 device。</p>
+<p>Device 和 device driver 是相生相依的關係，但 I2C device 無法像 PCI or USB device 一樣在 runtime 時被主動 detect 且生成對應之 device instance，因此我們需要透過外在方式來產生(<a href="https://www.kernel.org/doc/html/latest/i2c/instantiating-devices.html">How to instantiate I2C devices</a>)。</p>
+<p>本次實作中是使用 device tree overlays 機制來宣告 Th02 device tree node，並透過 dynamic loading 方式來註冊 device。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>/dts-v1/;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>/plugin/;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
@@ -292,8 +293,8 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        };
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    };
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>};
-</code></pre></div><p>Raspi 3B 中有兩組 I2C BUS：<code>i2c0</code> for GPU (GPIO 0, GPIO 1) 和 <code>i2c1</code> for CPU (GPIO 2, GPIO 3)，一般 i2c sensor 設備使用 <code>i2c1</code> bus 即可。</p>
-<p>生成後的 I2C device instance 在 linux kernel 正式名稱叫做 <code>i2c_client</code>：</p>
+</code></pre></div><p>本次實作使用 Raspi 3B 板子，其中有兩組 I2C BUS：<code>i2c0</code> for GPU (GPIO 0, GPIO 1) 和 <code>i2c1</code> for CPU (GPIO 2, GPIO 3)，一般 i2c sensor 設備使用 <code>i2c1</code> bus 即可。</p>
+<p>而代表 I2C device 的抽象結構，在 linux kernel 正式名稱叫做 <code>i2c_client</code>：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">struct</span> i2c_client {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	<span style="color:#2b91af">unsigned</span> <span style="color:#2b91af">short</span> flags;		<span style="color:#008000">/* div., see below		*/</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#00f">#define I2C_CLIENT_PEC		0x04	</span><span style="color:#008000">/* Use Packet Error Checking */</span><span style="color:#00f">
@@ -318,27 +319,39 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#00f"></span>	i2c_slave_cb_t slave_cb;	<span style="color:#008000">/* callback for slave mode	*/</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#00f">#endif
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#00f"></span>};
-</code></pre></div><p>可以看到其 structure 包含 adapter (I2C bus) 和 general device struct。以 Th02 sensor 為例，i2c_client 就是 Th02 sensor 的抽象設備層，其中 sensor 接在 I2C1 bus 上 (adapter)，而此 adapter 在 raspi 3B 是指 bcm2835-i2c bus driver。另外，我們所撰寫的 device tree node 描述則會在 struct device。</p>
+</code></pre></div><p>可以看到其 structure 包含 adapter (I2C bus) 和 general device struct。以 Th02 sensor 為例，i2c_client 就是 Th02 sensor 的抽象設備層，其中 sensor 接在 I2C1 bus 上，此 bus 在 raspi 3B 是指 bcm2835-i2c bus driver。另外，我們所撰寫的 device tree node 描述則會在 struct device。</p>
 <p><img src="/posts/i2c-driver_2.png" alt=""></p>
 <h2 id="th02-device-driver">Th02 Device Driver</h2>
-<p>實作 Th02 device driver 有兩個很重要的部分：</p>
+<p>註冊好 device，接下來就是實作 I2C device driver 來進行 I2C device initialization。Th02 device driver 最重要的職責就是在 I2C device initialization 階段生成 iio device driver，並且建立起 iio device driver 與 i2c client 的關聯，如此一來 iio device driver 就能針對指定 i2c client 下指令。</p>
+<p>我們利用 device struct 的 private_data，將 i2c_client 放入 iio device driver 的 device private_data 中，即可在後續流程中使用。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// custom struct th02_device
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span><span style="color:#00f">struct</span> iio_dev *th02_iio = devm_iio_device_alloc(&amp;client-&gt;dev, <span style="color:#00f">sizeof</span>(<span style="color:#00f">struct</span> th02_device));
+</code></pre></div><p><img src="/posts/i2c-driver_3.png" alt=""></p>
+<p>其中可以注意到，透過 <code>devm_iio_device_alloc</code> 生成 iio device driver(struct iio_dev)， iio device driver 的 device-&gt;parent 會指向 I2C device，這意味著也可以使用 container_of 的方式來取得 i2c_client。</p>
+<h2 id="iio-device-driver">iio device driver</h2>
+<p>最後一個步驟就是實作 iio device driver，包含：</p>
 <ol>
-<li>建立 i2c device (i2c_client) 與 iio device 的關聯</li>
-<li>依照 Th02 sensor hardware spce 來完成數據溝通</li>
+<li>設定 <code>iio_chan_spec</code>，以讓 iio subSystem 來建立 file node 供 user space 操作</li>
+<li>實作 <code>iio_info.read_raw</code> function</li>
 </ol>
-<h3 id="建立-i2c-device-i2c_client-與-iio-device-的關聯">建立 i2c device (i2c_client) 與 iio device 的關聯</h3>
-<p>Application 透過 sysfs 來與 iio device 互動，而 iio device 必須要有方法與 i2c deivce 溝通以取得 sensor 數據。因此，我們利用 device struct 中的 private_data，在 probe 階段，將 i2c_client 放入 iio device 的 private_data，就可以在後續流程中使用。</p>
-<p><img src="/posts/i2c-driver_3.png" alt=""></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">struct</span> iio_dev *th02_iio = devm_iio_device_alloc(&amp;client-&gt;dev, <span style="color:#00f">sizeof</span>(<span style="color:#00f">struct</span> th02_device));
-</code></pre></div><p>上述實作的 code，新建的 iio device 中 parent 會指向 i2c_client 的 device struct，並且分配一個空間存放 private_data。當然，因為我實作的 code 比較簡單，或許用 container_of 就可以藉由 device-&gt;parent 來取得 i2c_client。</p>
-<h3 id="th02-sensor-communication">Th02 sensor communication</h3>
-<p>再來就是根據 Th02 sensor document 來完成讀取濕度、溫度等流程。以讀取溫度為例，其流程為：</p>
+<p>由於 Th02 sensor 只提供濕度和溫度的測量，因此設定為：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">static</span> <span style="color:#00f">const</span> <span style="color:#00f">struct</span> iio_chan_spec th02_channels[] = {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>		.type = IIO_TEMP,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>	},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  { .type = IIO_HUMIDITYRELATIVE,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>};
+</code></pre></div><p>從 <code>IIO_HUMIDITYRELATIVE</code> 和 <code>IIO_TEMP</code> 就可以看到 iio system 將常見的測量類別都已定義好，對開發者來說相當方便。</p>
+<p>再來就是根據 Th02 sensor document 來實作 <code>iio_info.read_raw</code>，完成讀取濕度、溫度等流程。以讀取溫度為例，其流程為：</p>
 <ol>
 <li>Set START (D0) and TEMP (D4) in CONFIG (register 0x03) to begin a new conversion, i.e., write CONFIG with 0x11</li>
 <li>Poll RDY (D0) in STATUS (register 0) until it is low (=0)</li>
 <li>Read the upper and lower bytes of the temperature value from DATAh and DATAl (registers 0x01 and 0x02)</li>
 </ol>
-<p>Linux kernel 已有封裝好的 function <code>i2c_master_send</code> 與 <code>i2c_master_recv</code> 可供使用，因此搭配上面 document 流程就能夠實現數據溝通。</p>
+<p>Linux kernel 已有封裝好的 function <code>i2c_master_send</code> 與 <code>i2c_master_recv</code> 可供使用，因此搭配上面 document 流程就能夠透過 i2c bus protocol 下達正確指令。</p>
 <p>以 read status 為例，要先寫入 Th02 <code>STATUS</code> address pointer，接著再進行 status value 的讀取。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">static</span> <span style="color:#2b91af">int</span> read_status(<span style="color:#00f">struct</span> i2c_client *client, u8 *status)
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>{
