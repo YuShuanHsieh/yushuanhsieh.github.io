@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Discourse Forums Deployment</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</link>
+      <pubDate>Wed, 22 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</guid>
+      <description>這兩天在試著部署 Discourse －目前主流的 forum open porject。雖然它有 cloud 版本可以用，不過因為基於一些因素，我們打算先自行部署，給團隊成員實際試用測試過後，再來看是否要使用官方提供的 Cloud 付費版本。而在部署的過程中發現蠻多問題的，所以也一併記錄下來，給想要自行部署的人參考。</description>
+    </item>
+    
+    <item>
       <title>Trace transfer.sh open project</title>
       <link>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</link>
       <pubDate>Wed, 15 Apr 2020 08:00:00 +0800</pubDate>
@@ -198,16 +207,6 @@ Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變�
       
       <guid>https://yushuanhsieh.github.io/post/2019-06-22-tail-recuriosn-optimization/</guid>
       <description>前言 最近在實驗效能分析時，有使用到 Tail Recursion 寫法，因此也好奇在 Go 中是否有跟 C 一樣進行 Tail Recursion optimization 優化。在文章中，首先會用 C asm 來說明 tail call optimization，接著 dump Go asm code 來觀察結果。</description>
-    </item>
-    
-    <item>
-      <title>2019/05月份自我學習回顧</title>
-      <link>https://yushuanhsieh.github.io/post/2019-06-04-study-201906/</link>
-      <pubDate>Tue, 04 Jun 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-06-04-study-201906/</guid>
-      <description>![study]({{ site.url }}/assets/images/study-201906.png)
-前言 五月的時候，團隊來了一位經驗豐富的瑞典人，而剛好有這個機會跟他合作，除了跟他練練英文口說能力之外，順便學習一下他的程式經驗。瑞典人是一位懂很多層面的工程師，從韌體到 Web Front-end 都有實務經驗，而且為人也不錯，會很認真地看每個 Pull Request，並給予架構上或是程式寫法上的回饋，能有這樣的同事真的很開心，即使在當個碼農趕專案，也會覺得從中學習到不少。</description>
     </item>
     
   </channel>

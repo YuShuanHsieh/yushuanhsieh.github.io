@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>L1 Cache architecture in ARM</title>
+      <link>https://yushuanhsieh.github.io/post/2021-02-18-l1-cache-arm/</link>
+      <pubDate>Thu, 18 Feb 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-02-18-l1-cache-arm/</guid>
+      <description>L1 Cache architecture 之所以會看這個主題，是因為網路黑貓(Champ Yen)大大分享 ARM 從 virtual cache 轉到 physical cache 的利弊。雖然曾經從書上看過兩者差異性，不過沒搭配硬體架構，總覺得沒有好好了解。因此這篇整理了 ARM Programmer’s Guide 的內容，並透過實際例子來探討 VIVT (virtual indexed vritual tagged)、VIPT(virtual indexed physical tagged)、PIPT(physical indexed physical tagged) 的差異性。</description>
+    </item>
+    
+    <item>
       <title>TH02 sensor device driver</title>
       <link>https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/</link>
       <pubDate>Wed, 10 Feb 2021 08:00:00 +0800</pubDate>
@@ -182,15 +191,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</guid>
       <description>在 Multilingual Mode in Hugo 這篇文章中有提到目前使用 Hugo site generator 產生 multi-lang site 的問題，使用者必須要為每個語言都建立一個檔案，才不會造成最後在產生網站後，發生某一個語言的頁面遺失問題。（例如，使用者一定要建立 about.</description>
-    </item>
-    
-    <item>
-      <title>Discourse Forums Deployment</title>
-      <link>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</link>
-      <pubDate>Wed, 22 Apr 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</guid>
-      <description>這兩天在試著部署 Discourse －目前主流的 forum open porject。雖然它有 cloud 版本可以用，不過因為基於一些因素，我們打算先自行部署，給團隊成員實際試用測試過後，再來看是否要使用官方提供的 Cloud 付費版本。而在部署的過程中發現蠻多問題的，所以也一併記錄下來，給想要自行部署的人參考。</description>
     </item>
     
   </channel>

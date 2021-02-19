@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Google Sign-in with OAuth 2.0</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</link>
+      <pubDate>Sat, 25 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</guid>
+      <description>前言： 由於目前專案是以 Embedded System 為主，比較少有機會接入第三方 api 的機會，所以這次 side project 就以 Google Sign-in for Web application with Go 的流程當作練習。由於網路上可以找到很多範例，所以在以下文章中會側重在原理 + 為什麼要這樣做，希望除了寫 code 之外，還能建立起基本概念。</description>
+    </item>
+    
+    <item>
       <title>Go Fundamental - Array</title>
       <link>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</link>
       <pubDate>Sat, 11 Aug 2018 08:00:00 +0800</pubDate>

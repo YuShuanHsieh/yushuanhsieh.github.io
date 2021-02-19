@@ -12,6 +12,16 @@
     
     
     <item>
+      <title>2019/05月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-06-04-study-201906/</link>
+      <pubDate>Tue, 04 Jun 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-06-04-study-201906/</guid>
+      <description>![study]({{ site.url }}/assets/images/study-201906.png)
+前言 五月的時候，團隊來了一位經驗豐富的瑞典人，而剛好有這個機會跟他合作，除了跟他練練英文口說能力之外，順便學習一下他的程式經驗。瑞典人是一位懂很多層面的工程師，從韌體到 Web Front-end 都有實務經驗，而且為人也不錯，會很認真地看每個 Pull Request，並給予架構上或是程式寫法上的回饋，能有這樣的同事真的很開心，即使在當個碼農趕專案，也會覺得從中學習到不少。</description>
+    </item>
+    
+    <item>
       <title>2019/04月份自我學習回顧</title>
       <link>https://yushuanhsieh.github.io/post/2019-05-04-study-201904/</link>
       <pubDate>Sat, 04 May 2019 08:00:00 +0800</pubDate>
@@ -191,15 +201,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       
       <guid>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</guid>
       <description>前言 由於專案要提供 API 來讓使用者 export 匯出檔案， 因此需要將所需檔案集結成一個 archive file。這個流程是透過 Go 的標準 lib archive/tar 來處理，以下文章將簡單介紹流程和實作方式，並於最後附上完整程式碼。</description>
-    </item>
-    
-    <item>
-      <title>Google Sign-in with OAuth 2.0</title>
-      <link>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</link>
-      <pubDate>Sat, 25 Aug 2018 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</guid>
-      <description>前言： 由於目前專案是以 Embedded System 為主，比較少有機會接入第三方 api 的機會，所以這次 side project 就以 Google Sign-in for Web application with Go 的流程當作練習。由於網路上可以找到很多範例，所以在以下文章中會側重在原理 + 為什麼要這樣做，希望除了寫 code 之外，還能建立起基本概念。</description>
     </item>
     
   </channel>
