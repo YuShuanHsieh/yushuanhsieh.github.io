@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>COSCUP on 文組工程師</title>
+    <link>https://yushuanhsieh.github.io/categories/coscup/</link>
+    <description>Recent content in COSCUP on 文組工程師</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 04 Aug 2020 08:00:00 +0800</lastBuildDate>
+    
+        <atom:link href="https://yushuanhsieh.github.io/categories/coscup/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About Me</title>
+      <link>https://yushuanhsieh.github.io/post/1900-01-01-about/</link>
+      <pubDate>Mon, 01 Jan 1900 10:55:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/1900-01-01-about/</guid>
+      <description>Cherie Hsieh Experience  Principle Cloud Engineer at PUFsecurity (2020/04 – present) Back-End Engineer at UmboCV (2019/12 - 2020/03) Back-End Engineer at TrendMicro (2019/01 – 2019/11) Front-End Engineer at MOXA Inc.</description>
+    </item>
+    
+  </channel>
+</rss>

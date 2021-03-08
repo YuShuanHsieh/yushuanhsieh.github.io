@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        CSE 506 Lab 4 - Multiprocessor Support - 文組工程師
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。" />
+    
+      <meta property="og:image" content="https://yushuanhsieh.github.io/posts/lab4-BSP-flow_1.png" />
+    
+  <meta name="generator" content="Hugo 0.71.0 with theme pure" />
+  <title>CSE 506 Lab 4 - Multiprocessor Support - 文組工程師</title>
+  
+  
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
+  
+    
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="CSE 506 Lab 4 - Multiprocessor Support" />
+<meta property="og:description" content="Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/" />
+<meta property="og:image" content="https://yushuanhsieh.github.io/posts/lab4-BSP-flow_1.png" />
+<meta property="article:published_time" content="2021-03-07T08:00:00+08:00" />
+<meta property="article:modified_time" content="2021-03-07T08:00:00+08:00" />
+<meta itemprop="name" content="CSE 506 Lab 4 - Multiprocessor Support">
+<meta itemprop="description" content="Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。">
+<meta itemprop="datePublished" content="2021-03-07T08:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2021-03-07T08:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="571">
+<meta itemprop="image" content="https://yushuanhsieh.github.io/posts/lab4-BSP-flow_1.png">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://yushuanhsieh.github.io/posts/lab4-BSP-flow_1.png"/>
+
+<meta name="twitter:title" content="CSE 506 Lab 4 - Multiprocessor Support"/>
+<meta name="twitter:description" content="Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="/" target="">
+            <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">Software Engineer</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Taiwan</small>
+        </div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-about">
+                <a href="/post/1900-01-01-about/">
+                  <span class="menu-title">About</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title"> Categories</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/conference/" class="category-list-link">conference</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/coscup/" class="category-list-link">coscup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/devops/" class="category-list-link">devops</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/game/" class="category-list-link">game</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/gnu/" class="category-list-link">gnu</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/go/" class="category-list-link">go</a><span class="category-list-count">15</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/google-cloud-platform/" class="category-list-link">google-cloud-platform</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/kubernetes/" class="category-list-link">kubernetes</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/linux-kernel/" class="category-list-link">linux-kernel</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">6</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">10</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/security/" class="category-list-link">security</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">30</span></li>
+        </ul>
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/" class="title">CSE 506 Lab 4 - Multiprocessor Support</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-07 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-03-07</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-02-18-l1-cache-arm/" class="title">L1 Cache architecture in ARM</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-02-18 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-18</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/" class="title">TH02 sensor device driver</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-02-10 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-01-26-lab3_2/" class="title">CSE 506 Lab 3 - Interrupts</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-01-26 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-01-26</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-01-15-security_module/" class="title">Security model of password managers</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-01-15 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-01-15</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<main class="main" role="main"><div class="content">
+  <article id="single-" class="article article-type-single" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2021-03-07-lab4-multiprocessor/"
+    >
+    
+      
+        
+          <span class="title-cat">other</span>
+        
+      
+    CSE 506 Lab 4 - Multiprocessor Support</a>
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/" class="article-date">
+  <time datetime="2021-03-07 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-03-07</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/other/"> other </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/post/2021-03-07-lab4-multiprocessor/#comments"
+            class="article-comment-link">Comments</a></span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。</p>
+<p>JOS 實作 intel <a href="https://en.wikipedia.org/wiki/MultiProcessor_Specification">MultiProcessor Specification(MPS)</a> 標準，在看 source code 的時候，搭配這個文件來看會更加理解每項步驟的用意。</p>
+<p><strong>Note:</strong>
+Multiprocessor 架構會依據設計而有所不同，以下所提到的內容皆以 x86 MPS 制定的規格為主。</p>
+<h2 id="multiprocessor-architecture">Multiprocessor Architecture</h2>
+<p>Multiprocessor 架構下，每個 processor 有各自的 L1 cache 和 APIC，並且透過 ICC (interrupt controller communications) bus 進行溝通。</p>
+<p><img src="/posts/lab4-Page-1.png" alt="">
+(MPS設計當時，一個 CPU 是一個 core)</p>
+<p>在 MPS 中 processor 被定義成兩種類型：</p>
+<ol>
+<li>bootstrap processor (BSP)
+BSP 通常由硬體決定，負責執行 BIOS 和 bootloader code 並且啟動作業系統。</li>
+<li>application processor (AP)
+於作業系統啟動後，負責執行程式。</li>
+</ol>
+<p>MPS 提到 CPU 1 會被指定為 bootstrap processor，負責喚起其他的 application processor，當然這樣的機制會造成一個問題，當 CPU 1 啟動過程中失敗，整個系統都無法運作。（在 <a href="https://patents.google.com/patent/US5904733A/en">bootstrap processor selection architecture in SMP systems</a> 中整理了幾個常見的硬體選擇 bootstrap processor 的方式，並且提出可擴展的選擇機制）</p>
+<p>實驗中我們使用 qemu 來執行 JOS kernel，而在 qemu x86 的 SMP 模擬，也是簡單地使用 cpu[0] 來當作 bootstrap processor。</p>
+<h3 id="bootstrap-processor">Bootstrap Processor</h3>
+<p>Bootstrap processor 負責執行部分硬體與作業系統的初始化，首先來複習一下 JOS 從開機到執行 kernel code 所需要的概要流程：</p>
+<p><img src="/posts/lab4-BSP-flow_1.png" alt=""></p>
+<p>流程中可以看到針對單一 processor 的初始化配置，例如 page table(每個 processor 有各自的 MMU)，這也意味著我們在喚起 application processor 時也需要再對每個 AP(application processor) 進行相同的配置，以讓它們能夠正確地執行 code 和 address translation。</p>
+<p>另外，我們也注意到當 JOS kernel 的 global variables 都初始化完成後，才會執行 boot application processor，這是因為我們只需要一個 core 去完成 kernel 初始化即可。</p>
+<h3 id="application-processor">Application processor</h3>
+<h4 id="read-multiprocessor-info">Read Multiprocessor Info</h4>
+<p>要喚起 application processor 之前，作業系統需要取得相關的資訊，才能知道系統內有多少 AP 需要喚醒。在 x86 中提供了 MP configuration table，每個 table entry 代表一個 CPU，並提供初始化必要的資訊，包含：APIC (advanced programming interrupt controller) ID、CPU flag (usable / bootstrap) 等。</p>
+<p>MP configuration table 是由 BIOS 準備，並放置在 MPS 指定的記憶體區塊內。喚起 AP 前，作業系統會先搜尋特定記憶體位置，判別是否有設置 MP configuration table，再來進行後續配置。不過 MP configuration table 並不是必須的，如果沒有此資訊，就是使用 uniprocessor 的方式來運行，或是採用預設的 configuration 來設定系統 (可以想成有幾組預設的系統模組，因此 BIOS 只需要知道模組 ID 就好，不需要逐一組織各 CPU 的資訊)。</p>
+<blockquote>
+<p><strong>BIOS</strong><br>
+For a multiprocessor system, the BIOS may perform the following additional functions:</p>
+<ul>
+<li>Pass configuration information to the operating system that identifies all processors and other multiprocessing components of the system.</li>
+<li>Initialize all processors and the rest of the multiprocessing components to a known state.</li>
+</ul>
+</blockquote>
+<h4 id="boot-application-processor">Boot application processor</h4>
+<p>有了 processor 資訊，接下來等到 kernel 初始化完後就可以來喚醒剩下的 application processor。 MPS 規範的喚醒流程為：</p>
+<ol>
+<li>設置 code entry point 到 warn reset vector</li>
+<li>發送 INIT IPI 重置 AP 狀態</li>
+<li>發送 STARTUP IPI 讓 AP 執行指定位置的 code</li>
+<li>持續 Polling 直到 AP 的狀態改變，確認 AP 初始化完成</li>
+</ol>
+<p>其中有幾個重點需注意：</p>
+<ol>
+<li>LAPIC (local advanced programming interrupt controller) 在 disable 狀態下，還是能被動接受特定 IPI (interprocessor interrupt)，因此 BSP 才可以透過上述所提及的 <code>INIT</code> 和 <code>STARTUP</code> 來與 AP 溝通。</li>
+</ol>
+<blockquote>
+<p>the AP’s local APICs are passively monitoring the APIC bus and will react only to INIT or STARTUP interprocessor interrupts (IPIs)</p>
+</blockquote>
+<ol start="2">
+<li>要注意 AP LAPIC interrupt enable 的時間點，以避免 interrupt 會被發送到還沒有初始化完成的 AP，導致 AP 無法正確的處理 interrupt。(這邊說的比較概念，主要是這取決於 interrupt mode 和如何 route interrupt，因此沒有制式的答案)</li>
+</ol>
+<h4 id="local-apic-registers">Local APIC registers</h4>
+<p>上述有提到發送 STARTUP IPI 這類的操作，其實就是修改 local APIC register 的值，因此我們需要對照著 local APIC registers 的表格，才能下達正確指令。另外一點要注意的是，此時 JOS 的 BSP 已設置好 page talbe 和 enable paging，因此要先將 register 的 physical address 對應到 virtual address，才可以正確操作。</p>
+<p>接著來觀察 JOS 如何操作 local APIC registers，首先，每個 local APIC registers 為 4 bytes，因此 JOS 透過：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// Local APIC registers, divided by 4 for use as uint32_t[] indices.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span><span style="color:#00f">#define ID      (0x0020/4)   </span><span style="color:#008000">// ID
+</span></code></pre></div><p>一次位移 4 bytes 的方式來 access 指定 register 位置。</p>
+<p>接著參照 local APIC register 文件來設置對應數值，舉例來說，向特定的 LAPIC 發送 STARTUP IPI command：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>lapicw(ICRHI, apicid &lt;&lt; 24);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>lapicw(ICRLO, STARTUP | (addr &gt;&gt; 12));
+</code></pre></div><blockquote>
+<p>To send an interrupt command one should first write to 0x310, then to 0x300. At 0x310 there is one field at bits 24-27, which is local APIC ID of the target processor.</p>
+</blockquote>
+<p>ICRHI 和 ICRLO 就是指 interrupt command register，根據要求，我們需要先設置 high reigster，其值為 LAPIC ID，再來設置 low reigster。</p>
+<p>low reigster 的值 <code>STARTUP | (addr &gt;&gt; 12)</code> 要參考 interrupt command register 表格：</p>
+<ul>
+<li>Bits 0-7
+The vector number, or starting page number for SIPIs</li>
+<li>Bits 8-10
+The destination mode. 0 is normal, 1 is lowest priority, 2 is SMI, 4 is NMI, 5 can be INIT or INIT level de-assert, 6 is a SIPI.</li>
+</ul>
+<p>如此一來，就很清楚 JOS 的 lapic.c source code 進行的每個操作所表示的含義了。</p>
+<h2 id="結論">結論</h2>
+<p>MultiProcessor Specification(MPS) 從 1994 年正式釋出以來，雖然已經過了很多年，不過從文件中可以看到各個軟體層(BIOS/OS)需要負責的工作，以及更具體地讓作業系統開發者了解 enable multi processor 的流程，讓使用者了解到 linux kernel 設置 SMP configuration 的意義。</p>
+<h2 id="references">References</h2>
+<ol>
+<li><a href="https://pdos.csail.mit.edu/6.828/2008/readings/ia32/MPspec.pdf">https://pdos.csail.mit.edu/6.828/2008/readings/ia32/MPspec.pdf</a></li>
+</ol>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permalink: </strong>
+      <a href="https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/" title="CSE 506 Lab 4 - Multiprocessor Support" target="_blank" rel="external">https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <div>Gopher</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://yushuanhsieh.github.io/post/2021-02-18-l1-cache-arm/" title="L1 Cache architecture in ARM"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            
+        </ul>
+        <div class="bar-right">
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://yushuanhsieh.github.io/cjamhe01385@gmail.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://www.facebook.com/cjamhe01385" target="_blank" title="facebook" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-facebook"></i></a></li>
+    <li><a href="https://yushuanhsieh.github.io/true" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2017  -
+    2021
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: 'https:\/\/yushuanhsieh.github.io',
+            CONTENT_URL: 'https:\/\/yushuanhsieh.github.io\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://yushuanhsieh.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+
+  </body>
+</html>

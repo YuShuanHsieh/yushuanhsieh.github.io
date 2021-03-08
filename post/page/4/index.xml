@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 Feb 2021 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 07 Mar 2021 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Go - Archive files with archive/tar lib</title>
+      <link>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</link>
+      <pubDate>Sun, 09 Sep 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</guid>
+      <description>前言 由於專案要提供 API 來讓使用者 export 匯出檔案， 因此需要將所需檔案集結成一個 archive file。這個流程是透過 Go 的標準 lib archive/tar 來處理，以下文章將簡單介紹流程和實作方式，並於最後附上完整程式碼。</description>
+    </item>
     
     <item>
       <title>Google Sign-in with OAuth 2.0</title>
@@ -192,15 +201,6 @@ Java
       <guid>https://yushuanhsieh.github.io/post/2017-08-23-welcome-to-jekyll/</guid>
       <description>這是第一次用Jekyll寫紀錄，雖然我Project是使用Jekyll的概念來開發的，不過實際上我並沒有真的使用它過，主要原因是怕自己想法會因為這樣而被定型，所以當初在開發的時候，只有參考Jekyll網站上的流程圖而已。現在Project的Prototype已完成，就來使用一下，看有什麼可以改進的地方。就整體架構來說，其實差沒有很多，不過Jekyll在程式上分得更細，提供相當多的參數供開發者設定，以及很有彈性而且完整的template render，這些都是值得我後續學習。
 This my first time to write articles with Jekyll.</description>
-    </item>
-    
-    <item>
-      <title>About Me</title>
-      <link>https://yushuanhsieh.github.io/post/1900-01-01-about/</link>
-      <pubDate>Mon, 01 Jan 1900 10:55:11 +0100</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/1900-01-01-about/</guid>
-      <description>Cherie Hsieh Experience  Principle Cloud Engineer at PUFsecurity (2020/04 – present) Back-End Engineer at UmboCV (2019/12 - 2020/03) Back-End Engineer at TrendMicro (2019/01 – 2019/11) Front-End Engineer at MOXA Inc.</description>
     </item>
     
   </channel>

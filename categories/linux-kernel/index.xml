@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>CSE 506 Lab 4 - Multiprocessor Support</title>
+      <link>https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/</link>
+      <pubDate>Sun, 07 Mar 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/</guid>
+      <description>Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。</description>
+    </item>
+    
+    <item>
       <title>L1 Cache architecture in ARM</title>
       <link>https://yushuanhsieh.github.io/post/2021-02-18-l1-cache-arm/</link>
       <pubDate>Thu, 18 Feb 2021 08:00:00 +0800</pubDate>
@@ -183,15 +192,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</guid>
       <description>在 Trace transfer.sh open project 有提到我目前正在調整 transfer.sh 這個 open source project，把它修改成內部所需要的一個 service，而之前已經改得差不多了，所以簡單地來介紹一下修改了哪些內容：</description>
-    </item>
-    
-    <item>
-      <title>Side Project - Symlink Generator for Multi-lang Hugo Site</title>
-      <link>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</link>
-      <pubDate>Wed, 29 Apr 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</guid>
-      <description>在 Multilingual Mode in Hugo 這篇文章中有提到目前使用 Hugo site generator 產生 multi-lang site 的問題，使用者必須要為每個語言都建立一個檔案，才不會造成最後在產生網站後，發生某一個語言的頁面遺失問題。（例如，使用者一定要建立 about.</description>
     </item>
     
   </channel>

@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>Side Project - Symlink Generator for Multi-lang Hugo Site</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</link>
+      <pubDate>Wed, 29 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</guid>
+      <description>在 Multilingual Mode in Hugo 這篇文章中有提到目前使用 Hugo site generator 產生 multi-lang site 的問題，使用者必須要為每個語言都建立一個檔案，才不會造成最後在產生網站後，發生某一個語言的頁面遺失問題。（例如，使用者一定要建立 about.</description>
+    </item>
+    
+    <item>
       <title>Discourse Forums Deployment</title>
       <link>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</link>
       <pubDate>Wed, 22 Apr 2020 08:00:00 +0800</pubDate>
@@ -197,15 +206,6 @@ Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變�
       <guid>https://yushuanhsieh.github.io/post/2019-06-15-side-project/</guid>
       <description>![study]({{ site.url }}/assets/images/side-project.png)
 前言 用 Trello 紀錄自己的每日學習進度也好一陣子了，雖然 Trello board 搭配 plugin Calendar 很好用，但是卻有資訊分散在各張卡的問題。因此為了便於在月末寫當月學習報告，以及整理所有曾經讀過的 article/post link，就開發了一個小工具 trello-transform 來從 trello cards 中擷取資訊。其實這個 side project 寫了有一段時間了，之前曾經立志要寫一個有前後端的小網站，這樣不會寫 code 的人也可以使用，但是後來就有點擱置了 XD 原因是我把這個功能寫成一個小框架，以因應每個人紀錄習慣不同，不過這樣的調整就需要會寫一點 code 並知道如何修改，對於不會寫 code 的人來說，可能便利性就沒這麼高。另外就是寫成網頁反而不利於我寫 blog，基於這個 side project 本來就是希望先滿足自己需求，因此後來目標就改成就先以 cli tool 實作為主。</description>
-    </item>
-    
-    <item>
-      <title>Tail Recursion in Go</title>
-      <link>https://yushuanhsieh.github.io/post/2019-06-22-tail-recuriosn-optimization/</link>
-      <pubDate>Fri, 14 Jun 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-06-22-tail-recuriosn-optimization/</guid>
-      <description>前言 最近在實驗效能分析時，有使用到 Tail Recursion 寫法，因此也好奇在 Go 中是否有跟 C 一樣進行 Tail Recursion optimization 優化。在文章中，首先會用 C asm 來說明 tail call optimization，接著 dump Go asm code 來觀察結果。</description>
     </item>
     
   </channel>
