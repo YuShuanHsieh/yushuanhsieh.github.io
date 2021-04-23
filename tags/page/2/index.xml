@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>Side Project - Transfer.sh</title>
+      <link>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</link>
+      <pubDate>Tue, 19 May 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</guid>
+      <description>在 Trace transfer.sh open project 有提到我目前正在調整 transfer.sh 這個 open source project，把它修改成內部所需要的一個 service，而之前已經改得差不多了，所以簡單地來介紹一下修改了哪些內容：</description>
+    </item>
+    
+    <item>
       <title>Side Project - Symlink Generator for Multi-lang Hugo Site</title>
       <link>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</link>
       <pubDate>Wed, 29 Apr 2020 08:00:00 +0800</pubDate>
@@ -196,16 +205,6 @@ Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變�
       <guid>https://yushuanhsieh.github.io/post/2019-07-01-201906-study/</guid>
       <description>前言 六月份安排了一趟北海道旅遊，因此整體唸書時間相較少些。北海道旅遊中，在富良野鄉村地區待了兩日，雖然只有短短時間，但卻讓我體驗到完全不同的生活環境，遼闊無際的花園農田、路上慢步行走的當地居民們、以及寬廣的生活空間，都令人非常嚮往。我很喜歡在都市的緊湊步調，跟公司同事們努力開發以及學習各種新知原理的過程，但有時候也會想過過這種悠閒沒有太多物質壓力的人生，可能是自己從來沒有過如此的生活方式，所以會有種美麗的幻想吧。
 學習部分，六月份的專注力明顯好很多，因此整體自學的時數有變多，也覺得自己成長了不少。主要原因是因為這個月花了更多時間在學習 linux 以及看 linux kernel source code，有感覺到自己對於作業系統是有比較多興趣的，會自主投入很多時間在理解原理和實驗上。不過因為在看 linux 會碰到很多數學相關的優化內容，因此數學訓練還是要維持固定的進度。</description>
-    </item>
-    
-    <item>
-      <title>Side Project for daily study trello</title>
-      <link>https://yushuanhsieh.github.io/post/2019-06-15-side-project/</link>
-      <pubDate>Fri, 14 Jun 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-06-15-side-project/</guid>
-      <description>![study]({{ site.url }}/assets/images/side-project.png)
-前言 用 Trello 紀錄自己的每日學習進度也好一陣子了，雖然 Trello board 搭配 plugin Calendar 很好用，但是卻有資訊分散在各張卡的問題。因此為了便於在月末寫當月學習報告，以及整理所有曾經讀過的 article/post link，就開發了一個小工具 trello-transform 來從 trello cards 中擷取資訊。其實這個 side project 寫了有一段時間了，之前曾經立志要寫一個有前後端的小網站，這樣不會寫 code 的人也可以使用，但是後來就有點擱置了 XD 原因是我把這個功能寫成一個小框架，以因應每個人紀錄習慣不同，不過這樣的調整就需要會寫一點 code 並知道如何修改，對於不會寫 code 的人來說，可能便利性就沒這麼高。另外就是寫成網頁反而不利於我寫 blog，基於這個 side project 本來就是希望先滿足自己需求，因此後來目標就改成就先以 cli tool 實作為主。</description>
     </item>
     
   </channel>

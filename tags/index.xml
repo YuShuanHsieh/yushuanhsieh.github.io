@@ -11,11 +11,20 @@
     
     
     <item>
-      <title>CSE 506 Lab 4 - Multiprocessor Support</title>
+      <title>近況雜談</title>
       <link>https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/</link>
-      <pubDate>Sun, 07 Mar 2021 08:00:00 +0800</pubDate>
+      <pubDate>Thu, 22 Apr 2021 08:00:00 +0800</pubDate>
       
       <guid>https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/</guid>
+      <description>一個月沒有更新 blog，因為遇上了一些事情要處理，再加上剛好正值工作轉換之際，以及面對研究所考試和 paper study，所以就停筆了，不過還是有在持續地進修，學習的包含 security 和 system design 部分，並且每天刷 leetcode 訓練邏輯能力防失智。</description>
+    </item>
+    
+    <item>
+      <title>CSE 506 Lab 4 - Multiprocessor Support</title>
+      <link>https://yushuanhsieh.github.io/post/2021-04-23-life/</link>
+      <pubDate>Sun, 07 Mar 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-04-23-life/</guid>
       <description>Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。</description>
     </item>
     
@@ -182,15 +191,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-05-28-ingress-gce/</guid>
       <description>如果想要在 Google Cloud Platform 的 GKE 上使用 Ingress 功能，最簡單的方式就是用 GKE 本身預設提供的 ingress-gce controller。不過不知道大家在設定 ingress yaml 的時候，有沒有留意到 ingress-gce 規定 service type 只能是 NodePort，但是 ingress-nginx 卻沒有這種限制呢？</description>
-    </item>
-    
-    <item>
-      <title>Side Project - Transfer.sh</title>
-      <link>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</link>
-      <pubDate>Tue, 19 May 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</guid>
-      <description>在 Trace transfer.sh open project 有提到我目前正在調整 transfer.sh 這個 open source project，把它修改成內部所需要的一個 service，而之前已經改得差不多了，所以簡單地來介紹一下修改了哪些內容：</description>
     </item>
     
   </channel>

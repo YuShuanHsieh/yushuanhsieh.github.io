@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Node.js Addons N-API example (v10.11.0)</title>
+      <link>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</link>
+      <pubDate>Mon, 24 Sep 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</guid>
+      <description>前言 由於專案需要整合 Node-RED ，我們必須開發自己的 Node 來讓用戶可以直接透過視覺化方式來建立簡單邏輯，又我們的 SDK 是 C 版本，因此有這機會可以接觸 Node.</description>
+    </item>
+    
+    <item>
       <title>Go - Archive files with archive/tar lib</title>
       <link>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</link>
       <pubDate>Sun, 09 Sep 2018 08:00:00 +0800</pubDate>
@@ -191,16 +200,6 @@ UT_hash_handle</description>
 處理方式
 Java
 針對這個問題，去看了一下Java原始碼對於這部分的處理(arraydeque)，果然它會先建立一個Result物件，然後將array[index] = null之後，返回Result，來避免上述所提到的問題。</description>
-    </item>
-    
-    <item>
-      <title>Jekyll</title>
-      <link>https://yushuanhsieh.github.io/post/2017-08-23-welcome-to-jekyll/</link>
-      <pubDate>Thu, 24 Aug 2017 10:55:11 +0100</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2017-08-23-welcome-to-jekyll/</guid>
-      <description>這是第一次用Jekyll寫紀錄，雖然我Project是使用Jekyll的概念來開發的，不過實際上我並沒有真的使用它過，主要原因是怕自己想法會因為這樣而被定型，所以當初在開發的時候，只有參考Jekyll網站上的流程圖而已。現在Project的Prototype已完成，就來使用一下，看有什麼可以改進的地方。就整體架構來說，其實差沒有很多，不過Jekyll在程式上分得更細，提供相當多的參數供開發者設定，以及很有彈性而且完整的template render，這些都是值得我後續學習。
-This my first time to write articles with Jekyll.</description>
     </item>
     
   </channel>

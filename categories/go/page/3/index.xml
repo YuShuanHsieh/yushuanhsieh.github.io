@@ -12,6 +12,16 @@
     
     
     <item>
+      <title>Side Project for daily study trello</title>
+      <link>https://yushuanhsieh.github.io/post/2019-06-15-side-project/</link>
+      <pubDate>Fri, 14 Jun 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-06-15-side-project/</guid>
+      <description>![study]({{ site.url }}/assets/images/side-project.png)
+前言 用 Trello 紀錄自己的每日學習進度也好一陣子了，雖然 Trello board 搭配 plugin Calendar 很好用，但是卻有資訊分散在各張卡的問題。因此為了便於在月末寫當月學習報告，以及整理所有曾經讀過的 article/post link，就開發了一個小工具 trello-transform 來從 trello cards 中擷取資訊。其實這個 side project 寫了有一段時間了，之前曾經立志要寫一個有前後端的小網站，這樣不會寫 code 的人也可以使用，但是後來就有點擱置了 XD 原因是我把這個功能寫成一個小框架，以因應每個人紀錄習慣不同，不過這樣的調整就需要會寫一點 code 並知道如何修改，對於不會寫 code 的人來說，可能便利性就沒這麼高。另外就是寫成網頁反而不利於我寫 blog，基於這個 side project 本來就是希望先滿足自己需求，因此後來目標就改成就先以 cli tool 實作為主。</description>
+    </item>
+    
+    <item>
       <title>Tail Recursion in Go</title>
       <link>https://yushuanhsieh.github.io/post/2019-06-22-tail-recuriosn-optimization/</link>
       <pubDate>Fri, 14 Jun 2019 08:00:00 +0800</pubDate>
@@ -192,15 +202,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       
       <guid>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</guid>
       <description>9月份目標  把 Effective Go 看完 複習 JavaScript 概念，釐清各細節 工作上用到的 Protocol 相關知識  目標回顧 1.</description>
-    </item>
-    
-    <item>
-      <title>Node.js Addons N-API example (v10.11.0)</title>
-      <link>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</link>
-      <pubDate>Mon, 24 Sep 2018 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</guid>
-      <description>前言 由於專案需要整合 Node-RED ，我們必須開發自己的 Node 來讓用戶可以直接透過視覺化方式來建立簡單邏輯，又我們的 SDK 是 C 版本，因此有這機會可以接觸 Node.</description>
     </item>
     
   </channel>
