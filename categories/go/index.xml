@@ -6,7 +6,7 @@
     <description>Recent content in Go on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 24 Apr 2021 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 24 Apr 2021 01:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>Switch to a register-based calling convention for Go functions</title>
       <link>https://yushuanhsieh.github.io/post/2021-04-24-go-calling-convention/</link>
-      <pubDate>Sat, 24 Apr 2021 08:00:00 +0800</pubDate>
+      <pubDate>Sat, 24 Apr 2021 01:00:00 +0800</pubDate>
       
       <guid>https://yushuanhsieh.github.io/post/2021-04-24-go-calling-convention/</guid>
       <description>自己對於 memory layout 相關議題都蠻感興趣的，而這次 Go 1.17 有一項效能改善的 proposal: switch to a register-based calling convention for Go functions 剛好跟 memory 有相關，因此就看了一下 proposal 文件介紹，不但複習了在計算機架構中曾接觸到的 calling convention 知識，也對於 Go 內部機制有更多認識。</description>
