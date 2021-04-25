@@ -37,7 +37,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2021-04-22T08:00:00+08:00" />
+<meta property="og:updated_time" content="2021-04-24T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -112,7 +112,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/game/" class="category-list-link">game</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/gnu/" class="category-list-link">gnu</a><span class="category-list-count">1</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/go/" class="category-list-link">go</a><span class="category-list-count">15</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/go/" class="category-list-link">go</a><span class="category-list-count">16</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/google-cloud-platform/" class="category-list-link">google-cloud-platform</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/kubernetes/" class="category-list-link">kubernetes</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
@@ -135,20 +135,20 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/" class="title">近況雜談</a>
+                        <a href="https://yushuanhsieh.github.io/post/2021-04-24-go-calling-convention/" class="title">Switch to a register-based calling convention for Go functions</a>
                     </p>
                     <p class="item-date">
-                        <time datetime="2021-04-22 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-04-22</time>
+                        <time datetime="2021-04-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-04-24</time>
                     </p>
                 </div>
             </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-04-23-life/" class="title">CSE 506 Lab 4 - Multiprocessor Support</a>
+                        <a href="https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/" class="title">近況雜談</a>
                     </p>
                     <p class="item-date">
-                        <time datetime="2021-03-07 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-03-07</time>
+                        <time datetime="2021-04-22 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-04-22</time>
                     </p>
                 </div>
             </li>
@@ -206,6 +206,44 @@
         <h1 itemprop="name">
   <a
     class="article-title"
+    href="/post/2021-04-24-go-calling-convention/"
+    >
+    
+      
+        
+          <span class="title-cat">Go</span>
+        
+      
+    Switch to a register-based calling convention for Go functions</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">自己對於 memory layout 相關議題都蠻感興趣的，而這次 Go 1.17 有一項效能改善的 proposal: switch to a register-based calling convention for Go functions 剛好跟 memory 有相關，因此就看了一下 proposal 文件介紹，不但複習了在計算機架構中曾接觸到的 calling convention 知識，也對於 Go 內部機制有更多認識。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2021-04-24-go-calling-convention/" class="">
+  <time datetime="2021-04-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-04-24</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/go/"> Go </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2021-04-24-go-calling-convention/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
     href="/post/2021-03-07-lab4-multiprocessor/"
     >
     
@@ -233,44 +271,6 @@
 </span>
 
         <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2021-03-07-lab4-multiprocessor/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2021-04-23-life/"
-    >
-    
-      
-        
-          <span class="title-cat">other</span>
-        
-      
-    CSE 506 Lab 4 - Multiprocessor Support</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2021-04-23-life/" class="">
-  <time datetime="2021-03-07 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-03-07</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/other/"> other </a>
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2021-04-23-life/#comments" class="article-comment-link">Comments</a></span>
       </p>
     </article>
     <article

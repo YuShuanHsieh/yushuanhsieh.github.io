@@ -6,10 +6,19 @@
     <description>Recent content on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 22 Apr 2021 08:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 24 Apr 2021 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Switch to a register-based calling convention for Go functions</title>
+      <link>https://yushuanhsieh.github.io/post/2021-04-24-go-calling-convention/</link>
+      <pubDate>Sat, 24 Apr 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-04-24-go-calling-convention/</guid>
+      <description>自己對於 memory layout 相關議題都蠻感興趣的，而這次 Go 1.17 有一項效能改善的 proposal: switch to a register-based calling convention for Go functions 剛好跟 memory 有相關，因此就看了一下 proposal 文件介紹，不但複習了在計算機架構中曾接觸到的 calling convention 知識，也對於 Go 內部機制有更多認識。</description>
+    </item>
     
     <item>
       <title>近況雜談</title>
@@ -18,15 +27,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/</guid>
       <description>一個月沒有更新 blog，因為遇上了一些事情要處理，再加上剛好正值工作轉換之際，以及面對研究所考試和 paper study，所以就停筆了，不過還是有在持續地進修，學習的包含 security 和 system design 部分，並且每天刷 leetcode 訓練邏輯能力防失智。</description>
-    </item>
-    
-    <item>
-      <title>CSE 506 Lab 4 - Multiprocessor Support</title>
-      <link>https://yushuanhsieh.github.io/post/2021-04-23-life/</link>
-      <pubDate>Sun, 07 Mar 2021 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2021-04-23-life/</guid>
-      <description>Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。</description>
     </item>
     
     <item>

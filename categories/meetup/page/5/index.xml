@@ -30,5 +30,14 @@ This my first time to write articles with Jekyll.</description>
       <description>Cherie Hsieh Experience  Principle Cloud Engineer at PUFsecurity (2020/04 – present) Back-End Engineer at UmboCV (2019/12 - 2020/03) Back-End Engineer at TrendMicro (2019/01 – 2019/11) Front-End Engineer at MOXA Inc.</description>
     </item>
     
+    <item>
+      <title>CSE 506 Lab 4 - Multiprocessor Support</title>
+      <link>https://yushuanhsieh.github.io/post/2021-04-23-life/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-04-23-life/</guid>
+      <description>Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。</description>
+    </item>
+    
   </channel>
 </rss>
