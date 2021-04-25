@@ -47,7 +47,7 @@
 <meta itemprop="description" content="自己對於 memory layout 相關議題都蠻感興趣的，而這次 Go 1.17 有一項效能改善的 proposal: switch to a register-based calling convention for Go functions 剛好跟 memory 有相關，因此就看了一下 proposal 文件介紹，不但複習了在計算機架構中曾接觸到的 calling convention 知識，也對於 Go 內部機制有更多認識。">
 <meta itemprop="datePublished" content="2021-04-24T01:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-04-24T01:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="643">
+<meta itemprop="wordCount" content="642">
 <meta itemprop="image" content="https://yushuanhsieh.github.io/posts/stack.png">
 
 
@@ -246,7 +246,7 @@
       <p>自己對於 memory layout 相關議題都蠻感興趣的，而這次 Go 1.17 有一項效能改善的 proposal: <a href="https://go.googlesource.com/proposal/+/master/design/40724-register-calling.md"><strong>switch to a register-based calling convention for Go functions</strong></a> 剛好跟 memory 有相關，因此就看了一下 proposal 文件介紹，不但複習了在計算機架構中曾接觸到的 calling convention 知識，也對於 Go 內部機制有更多認識。</p>
 <h3 id="application-binary-interface-abi">Application Binary Interface (ABI)</h3>
 <p>在談 calling convention 之前，先來談 ABI。Calling convention 是 <a href="https://en.wikipedia.org/wiki/Application_binary_interface">application binary interface (ABI)</a> 的一部分，而定義 ABI 最主要的目的是建立應用程式與其他應用程式或是與作業系統服務之間低階溝通方式 (依賴 machine code) ，讓應用程式能夠在特定的環境下正確執行。</p>
-<p>在早期，通常提供硬體的廠商也會提供對應的作業系統和編譯器，因此 ABI 也就由硬體廠商所定義規範。不過現在硬體、作業系統、編譯器都可能由獨立的廠商所負責，所以具體 ABI 的實作內容會根據不同廠商而有所不同（當然愈上層的 ABI 規範要能相容底層的規範）。舉例來說，amd64 有 System V ABI，而 windows 作業系統有自己的 ABI，再來 Go compiler 又因為其語言特性而定義 Go ABI。</p>
+<p>在早期，通常提供硬體的廠商也會提供對應的作業系統和編譯器，因此 ABI 也就由硬體廠商所定義規範。不過現在硬體、作業系統、編譯器都可能由獨立的廠商所負責，所以具體 ABI 的實作內容會根據不同廠商而有所不同（當然愈上層的 ABI 規範要能相容底層的規範）。舉例來說，ARM 有 <a href="https://developer.arm.com/architectures/system-architectures/software-standards/abi">arm ABI</a>，而 Microsoft 作業系統有自己的 ABI，再來 Go compiler 又因為其語言特性而定義 Go ABI。</p>
 <p><img src="/posts/stack_2.png" alt=""></p>
 <h3 id="calling-convention">Calling Convention</h3>
 <p>Calling convention 主要定義 callee function 要如何處理從 caller function 接收傳遞過來的 parameters 和如何回傳結果的規範，其中具體實作方式可能包含：</p>
