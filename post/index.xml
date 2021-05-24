@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 文組工程師</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 24 Apr 2021 01:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 23 May 2021 08:00:00 +0800</lastBuildDate>
     
         <atom:link href="https://yushuanhsieh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CSE 506 Lab 4 - Multiprocessor Support and Cooperative Multitasking</title>
+      <link>https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/</link>
+      <pubDate>Sun, 23 May 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/</guid>
+      <description>Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。</description>
+    </item>
     
     <item>
       <title>Switch to a register-based calling convention for Go functions</title>
@@ -22,10 +31,10 @@
     
     <item>
       <title>近況雜談</title>
-      <link>https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/</link>
+      <link>https://yushuanhsieh.github.io/post/2021-04-22-life/</link>
       <pubDate>Thu, 22 Apr 2021 08:00:00 +0800</pubDate>
       
-      <guid>https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/</guid>
+      <guid>https://yushuanhsieh.github.io/post/2021-04-22-life/</guid>
       <description>一個月沒有更新 blog，因為遇上了一些事情要處理，再加上剛好正值工作轉換之際，以及面對研究所考試和 paper study，所以就停筆了，不過還是有在持續地進修，學習的包含 security 和 system design 部分，並且每天刷 leetcode 訓練邏輯能力防失智。</description>
     </item>
     
@@ -183,15 +192,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/</guid>
       <description>日前在看 Go runtime/string.go source code 的時候，意外看到一篇文章 Go中string转[]byte的陷阱，不過這篇文章的日期間隔已久，Go version 也從文章中的 1.10 改版到 1.</description>
-    </item>
-    
-    <item>
-      <title>Introduction to ingress-gce controller</title>
-      <link>https://yushuanhsieh.github.io/post/2020-05-28-ingress-gce/</link>
-      <pubDate>Thu, 28 May 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-05-28-ingress-gce/</guid>
-      <description>如果想要在 Google Cloud Platform 的 GKE 上使用 Ingress 功能，最簡單的方式就是用 GKE 本身預設提供的 ingress-gce controller。不過不知道大家在設定 ingress yaml 的時候，有沒有留意到 ingress-gce 規定 service type 只能是 NodePort，但是 ingress-nginx 卻沒有這種限制呢？</description>
     </item>
     
   </channel>

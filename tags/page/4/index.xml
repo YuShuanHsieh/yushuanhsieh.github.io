@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>9月份自我學習日誌回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</link>
+      <pubDate>Fri, 05 Oct 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</guid>
+      <description>9月份目標  把 Effective Go 看完 複習 JavaScript 概念，釐清各細節 工作上用到的 Protocol 相關知識  目標回顧 1.</description>
+    </item>
+    
+    <item>
       <title>Node.js Addons N-API example (v10.11.0)</title>
       <link>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</link>
       <pubDate>Mon, 24 Sep 2018 08:00:00 +0800</pubDate>
@@ -186,19 +195,6 @@ Angular1主打特色之一包含 Two-way data binding (這邊先不在意這種�
 [涉及Class]
 ActionManager
 UT_hash_handle</description>
-    </item>
-    
-    <item>
-      <title>Write a collection</title>
-      <link>https://yushuanhsieh.github.io/post/2017-08-24-write-a-collection/</link>
-      <pubDate>Thu, 24 Aug 2017 19:57:11 +0100</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2017-08-24-write-a-collection/</guid>
-      <description>前言
-記得在6月份面試的時候，有考到自己寫Stack時，應該注意什麼地方，不過那時候很緊張，只有說到使用array來建構stack會有極限值或空值的問題，後來想想，其實還有element被pop之後的記憶體問題。剛好最近在看書複習時，書中只有簡單將top index - 1來限制可取得的element，導致即使array[index]的值被return後，array[index]實際上還是存在於記憶體中。
-處理方式
-Java
-針對這個問題，去看了一下Java原始碼對於這部分的處理(arraydeque)，果然它會先建立一個Result物件，然後將array[index] = null之後，返回Result，來避免上述所提到的問題。</description>
     </item>
     
   </channel>

@@ -37,7 +37,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2021-04-24T01:00:00+08:00" />
+<meta property="og:updated_time" content="2021-05-23T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -119,7 +119,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/linux-kernel/" class="category-list-link">linux-kernel</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">6</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">11</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/security/" class="category-list-link">security</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
@@ -135,6 +135,16 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/" class="title">CSE 506 Lab 4 - Multiprocessor Support and Cooperative Multitasking</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-05-23 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-05-23</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
                         <a href="https://yushuanhsieh.github.io/post/2021-04-24-go-calling-convention/" class="title">Switch to a register-based calling convention for Go functions</a>
                     </p>
                     <p class="item-date">
@@ -145,7 +155,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-03-07-lab4-multiprocessor/" class="title">近況雜談</a>
+                        <a href="https://yushuanhsieh.github.io/post/2021-04-22-life/" class="title">近況雜談</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2021-04-22 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-04-22</time>
@@ -172,16 +182,6 @@
                     </p>
                 </div>
             </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-01-26-lab3_2/" class="title">CSE 506 Lab 3 - Interrupts</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2021-01-26 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-01-26</time>
-                    </p>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
@@ -197,6 +197,47 @@
     
     
     
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2017-08-24-write-a-collection/"
+    >
+    
+      
+        <span class="title-cat">other</span>
+      
+    Write a collection</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">前言
+記得在6月份面試的時候，有考到自己寫Stack時，應該注意什麼地方，不過那時候很緊張，只有說到使用array來建構stack會有極限值或空值的問題，後來想想，其實還有element被pop之後的記憶體問題。剛好最近在看書複習時，書中只有簡單將top index - 1來限制可取得的element，導致即使array[index]的值被return後，array[index]實際上還是存在於記憶體中。
+處理方式
+Java
+針對這個問題，去看了一下Java原始碼對於這部分的處理(arraydeque)，果然它會先建立一個Result物件，然後將array[index] = null之後，返回Result，來避免上述所提到的問題。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2017-08-24-write-a-collection/" class="">
+  <time datetime="2017-08-24 19:57:11 &#43;0100 &#43;0100" itemprop="datePublished">2017-08-24</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/other/"> other </a>
+  
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2017-08-24-write-a-collection/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
     <article
       class="article article-type-page"
       itemscope

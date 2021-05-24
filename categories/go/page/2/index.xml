@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Introduction to ingress-gce controller</title>
+      <link>https://yushuanhsieh.github.io/post/2020-05-28-ingress-gce/</link>
+      <pubDate>Thu, 28 May 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-05-28-ingress-gce/</guid>
+      <description>如果想要在 Google Cloud Platform 的 GKE 上使用 Ingress 功能，最簡單的方式就是用 GKE 本身預設提供的 ingress-gce controller。不過不知道大家在設定 ingress yaml 的時候，有沒有留意到 ingress-gce 規定 service type 只能是 NodePort，但是 ingress-nginx 卻沒有這種限制呢？</description>
+    </item>
+    
+    <item>
       <title>Side Project - Transfer.sh</title>
       <link>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</link>
       <pubDate>Tue, 19 May 2020 08:00:00 +0800</pubDate>
@@ -196,16 +205,6 @@ Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變�
       <description>前言 時間超快地又到了八月了～七月整個月天氣都蠻悶熱的，加上小套房也不是很通風，想要好好在房間念書就只能一直開冷氣，偶爾再去金山街星巴克當假文青。除了進修之外，還跟公司旅遊補助團去了一趟高雄、台南小旅行，去高雄的那天剛好遇到輕颱大淹水，在開高速公路的時候，風雨交加，旁邊的大遊覽車不斷踩水激起大浪花，整個過程蠻膽戰心驚，深怕一個不注意會發生意外，幸好還是平安回來了。
 ![study]({{ site.url }}/assets/images/study-2019-07.jpg)
 學習部分，七月份其實吸收蠻多內容的，收穫滿滿，可惜因為時間關係，筆記大多很潦草，還不足以登上檯面，就沒有放在 blog 上了。七月份學到最多的就是 Linux kernel 和 network 相關知識，而其中印象讓我深刻的是，我在學習過程中遇到一個不太確定的問題，因此花時間在查閱相關內容並找答案，那時候心中覺得這個答案可能是正確的，但是基於經驗不足的關係，還是去請教了韌體相關的資深同事，結果他給了我一個完全不同方向的答案。這令我蠻訝異的，因為我的確沒想到會不同方向的思考路線，也讓我在後續學習時更加注意各面向的思考。不過會導致這原因，深究起來還是對於 kernel 理論不夠熟悉的緣故，所以在學習中加入了 Linux kernel development 書籍，希望能多加深理論基礎。</description>
-    </item>
-    
-    <item>
-      <title>2019/06月份自我學習回顧</title>
-      <link>https://yushuanhsieh.github.io/post/2019-07-01-201906-study/</link>
-      <pubDate>Mon, 01 Jul 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-07-01-201906-study/</guid>
-      <description>前言 六月份安排了一趟北海道旅遊，因此整體唸書時間相較少些。北海道旅遊中，在富良野鄉村地區待了兩日，雖然只有短短時間，但卻讓我體驗到完全不同的生活環境，遼闊無際的花園農田、路上慢步行走的當地居民們、以及寬廣的生活空間，都令人非常嚮往。我很喜歡在都市的緊湊步調，跟公司同事們努力開發以及學習各種新知原理的過程，但有時候也會想過過這種悠閒沒有太多物質壓力的人生，可能是自己從來沒有過如此的生活方式，所以會有種美麗的幻想吧。
-學習部分，六月份的專注力明顯好很多，因此整體自學的時數有變多，也覺得自己成長了不少。主要原因是因為這個月花了更多時間在學習 linux 以及看 linux kernel source code，有感覺到自己對於作業系統是有比較多興趣的，會自主投入很多時間在理解原理和實驗上。不過因為在看 linux 會碰到很多數學相關的優化內容，因此數學訓練還是要維持固定的進度。</description>
     </item>
     
   </channel>

@@ -12,6 +12,16 @@
     
     
     <item>
+      <title>2019/06月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-07-01-201906-study/</link>
+      <pubDate>Mon, 01 Jul 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-07-01-201906-study/</guid>
+      <description>前言 六月份安排了一趟北海道旅遊，因此整體唸書時間相較少些。北海道旅遊中，在富良野鄉村地區待了兩日，雖然只有短短時間，但卻讓我體驗到完全不同的生活環境，遼闊無際的花園農田、路上慢步行走的當地居民們、以及寬廣的生活空間，都令人非常嚮往。我很喜歡在都市的緊湊步調，跟公司同事們努力開發以及學習各種新知原理的過程，但有時候也會想過過這種悠閒沒有太多物質壓力的人生，可能是自己從來沒有過如此的生活方式，所以會有種美麗的幻想吧。
+學習部分，六月份的專注力明顯好很多，因此整體自學的時數有變多，也覺得自己成長了不少。主要原因是因為這個月花了更多時間在學習 linux 以及看 linux kernel source code，有感覺到自己對於作業系統是有比較多興趣的，會自主投入很多時間在理解原理和實驗上。不過因為在看 linux 會碰到很多數學相關的優化內容，因此數學訓練還是要維持固定的進度。</description>
+    </item>
+    
+    <item>
       <title>Side Project for daily study trello</title>
       <link>https://yushuanhsieh.github.io/post/2019-06-15-side-project/</link>
       <pubDate>Fri, 14 Jun 2019 08:00:00 +0800</pubDate>
@@ -193,15 +203,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       
       <guid>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</guid>
       <description>前言： 在英國的時候，學校大多專注在純軟開發課程上，例如敏捷開發(Agile Development), Web Development, database 等。其中有一堂課令我印象深刻，就是用 logic Unit, MUX 零件自組 16 Instruction Processor，然後自己手動按 Clock 去 fetch / execute instrction，透過這樣的學習，讓我更清楚整個電腦實際運作 Code 的流程。</description>
-    </item>
-    
-    <item>
-      <title>9月份自我學習日誌回顧</title>
-      <link>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</link>
-      <pubDate>Fri, 05 Oct 2018 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</guid>
-      <description>9月份目標  把 Effective Go 看完 複習 JavaScript 概念，釐清各細節 工作上用到的 Protocol 相關知識  目標回顧 1.</description>
     </item>
     
   </channel>
