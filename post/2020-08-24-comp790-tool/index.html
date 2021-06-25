@@ -44,7 +44,7 @@
 <meta itemprop="description" content="前言 由於下學期要上計算機結構的課程，所以趁著開課之前來複習一下 OS。這次看的課程是 UNC Operating System Implementation，基本上這課程也是引用 MIT 知名的 JOS 實作，再加上清楚明瞭的 Slides，光是一堂課就能有蠻多地收穫。">
 <meta itemprop="datePublished" content="2020-08-24T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2020-08-24T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="247">
+<meta itemprop="wordCount" content="250">
 
 
 
@@ -114,7 +114,7 @@
     <h3 class="widget-title"> Categories</h3>
     <div class="widget-body">
         <ul class="category-list">
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">4</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/conference/" class="category-list-link">conference</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/coscup/" class="category-list-link">coscup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/devops/" class="category-list-link">devops</a><span class="category-list-count">1</span></li>
@@ -141,6 +141,16 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-06-23-c-extern/" class="title">C extern keyword</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-06-23 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-23</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -178,16 +188,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2021-02-18 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-18</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/" class="title">TH02 sensor device driver</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2021-02-10 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-10</time>
                     </p>
                 </div>
             </li>
@@ -268,13 +268,13 @@ configuration，可以參考 <a href="https://www.danirod.es/blog/2015/i386-elf-
 <ol>
 <li>binutils</li>
 </ol>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>../binutils-2.19/configure --target=i386-jos-elf --disable-nls
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>../binutils-2.19/configure --target=i386-jos-elf --disable-nls --disable-multilib --disable-werror
 </code></pre></div><ol start="2">
 <li>gcc</li>
 </ol>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>../gcc-4.1.2/configure --target=i386-jos-elf --disable-nls --without-headers <span style="color:#a31515">\
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#a31515"></span>    --with-newlib --disable-threads --disable-shared <span style="color:#a31515">\
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#a31515"></span>    --disable-libmudflap --disable-libssp --disable-werror
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#a31515"></span>    --disable-libmudflap --disable-libssp --disable-werror --disable-multilib
 </code></pre></div><ol start="3">
 <li>gdb</li>
 </ol>

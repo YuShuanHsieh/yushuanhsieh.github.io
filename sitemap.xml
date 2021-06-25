@@ -3,8 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://yushuanhsieh.github.io/categories/c/</loc>
+    <lastmod>2021-06-23T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yushuanhsieh.github.io/post/2021-06-23-c-extern/</loc>
+    <lastmod>2021-06-23T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://yushuanhsieh.github.io/categories/</loc>
-    <lastmod>2021-05-23T08:00:00+08:00</lastmod>
+    <lastmod>2021-06-23T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yushuanhsieh.github.io/post/</loc>
+    <lastmod>2021-06-23T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yushuanhsieh.github.io/</loc>
+    <lastmod>2021-06-23T08:00:00+08:00</lastmod>
   </url>
   
   <url>
@@ -14,16 +34,6 @@
   
   <url>
     <loc>https://yushuanhsieh.github.io/categories/operating-system/</loc>
-    <lastmod>2021-05-23T08:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yushuanhsieh.github.io/post/</loc>
-    <lastmod>2021-05-23T08:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yushuanhsieh.github.io/</loc>
     <lastmod>2021-05-23T08:00:00+08:00</lastmod>
   </url>
   
@@ -95,11 +105,6 @@
   <url>
     <loc>https://yushuanhsieh.github.io/post/2020-11-15-lab2_2/</loc>
     <lastmod>2020-11-15T08:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yushuanhsieh.github.io/categories/c/</loc>
-    <lastmod>2020-11-14T08:00:00+08:00</lastmod>
   </url>
   
   <url>

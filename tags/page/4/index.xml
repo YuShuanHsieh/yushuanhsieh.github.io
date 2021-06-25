@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>Microprocessor System Lab. - Nucleo-64 development board</title>
+      <link>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</link>
+      <pubDate>Wed, 24 Oct 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</guid>
+      <description>前言： 在英國的時候，學校大多專注在純軟開發課程上，例如敏捷開發(Agile Development), Web Development, database 等。其中有一堂課令我印象深刻，就是用 logic Unit, MUX 零件自組 16 Instruction Processor，然後自己手動按 Clock 去 fetch / execute instrction，透過這樣的學習，讓我更清楚整個電腦實際運作 Code 的流程。</description>
+    </item>
+    
+    <item>
       <title>9月份自我學習日誌回顧</title>
       <link>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</link>
       <pubDate>Fri, 05 Oct 2018 08:00:00 +0800</pubDate>
@@ -182,19 +191,6 @@ Angular1主打特色之一包含 Two-way data binding (這邊先不在意這種�
       <guid>https://yushuanhsieh.github.io/post/2017-10-08-ci-tools/</guid>
       <description>前言 之前雖然有聽聞過CI(Continuous Integration)相關工具，但是一直沒有好好認真地研究，畢竟都是一個人寫，總認為自己也不太需要用到CI。直到最近開始上班了，看到了公司如何使用CI來進行build package流程，頓時覺得這工具實在很便利～而因為公司也早已經有完整架構，因此雖然看得到介面，卻還是不太清楚實際上到底是如何運作的，所以就趁雙十連假期間，決定自己來實際嘗試一下整個CI運作流程。
 涉及內容  Gitlab CI Docker  Gitlab底下的CI流程  GitLab offers a continuous integration service.</description>
-    </item>
-    
-    <item>
-      <title>Discussing the Action Manager in Cocos2d-x</title>
-      <link>https://yushuanhsieh.github.io/post/2017-09-15-cocos-action-manager/</link>
-      <pubDate>Fri, 15 Sep 2017 14:18:11 +0100</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2017-09-15-cocos-action-manager/</guid>
-      <description>[前言]
-前陣子才剛從英國完成論文返回台灣。因為忙論文 / 忙搬家 / 忙調作息，所以好些時間沒有更新相關知識，覺得自己好像停滯了&amp;hellip;明天就是轉職人生的開始，趕緊來繼續惡補Cocos2d-x知識。API使用方式和理解固然很重要，不過我也相當喜歡探討一些運作流程和結構方式，所以文章內容也會比較著重在這部分。這次來看的是有關於node-&amp;gt;runAction(Action* action);之前我寫遊戲時使用完全不同的方式來讓遊戲像素變動，因此會比較想了解引擎是如何讓node根據我們設定的動作來變化。
-[涉及Class]
-ActionManager
-UT_hash_handle</description>
     </item>
     
   </channel>

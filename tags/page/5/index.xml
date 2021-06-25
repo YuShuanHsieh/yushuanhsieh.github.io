@@ -11,6 +11,19 @@
     
     
     <item>
+      <title>Discussing the Action Manager in Cocos2d-x</title>
+      <link>https://yushuanhsieh.github.io/post/2017-09-15-cocos-action-manager/</link>
+      <pubDate>Fri, 15 Sep 2017 14:18:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-09-15-cocos-action-manager/</guid>
+      <description>[前言]
+前陣子才剛從英國完成論文返回台灣。因為忙論文 / 忙搬家 / 忙調作息，所以好些時間沒有更新相關知識，覺得自己好像停滯了&amp;hellip;明天就是轉職人生的開始，趕緊來繼續惡補Cocos2d-x知識。API使用方式和理解固然很重要，不過我也相當喜歡探討一些運作流程和結構方式，所以文章內容也會比較著重在這部分。這次來看的是有關於node-&amp;gt;runAction(Action* action);之前我寫遊戲時使用完全不同的方式來讓遊戲像素變動，因此會比較想了解引擎是如何讓node根據我們設定的動作來變化。
+[涉及Class]
+ActionManager
+UT_hash_handle</description>
+    </item>
+    
+    <item>
       <title>Write a collection</title>
       <link>https://yushuanhsieh.github.io/post/2017-08-24-write-a-collection/</link>
       <pubDate>Thu, 24 Aug 2017 19:57:11 +0100</pubDate>

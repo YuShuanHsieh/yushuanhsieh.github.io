@@ -11,6 +11,16 @@
     
     
     <item>
+      <title>C extern keyword</title>
+      <link>https://yushuanhsieh.github.io/post/2021-06-23-c-extern/</link>
+      <pubDate>Wed, 23 Jun 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-06-23-c-extern/</guid>
+      <description>最近在參與面試的時候，我方考了 extern 關鍵字，雖然這個關鍵字很常用，但是很少有應試者答的完整。因為自己也是韌體新手，因此就參照 ISO/IEC 9899:2011(C11) 的標準，把 extern 的定義和用法紀錄一下。
+Declaration &amp;amp; Definition 在討論 extern 之前，先釐清 C 的 declaration 和 definition 差異性。在 C11: 6.</description>
+    </item>
+    
+    <item>
       <title>CSE 506 Lab 4 - Multiprocessor Support and Cooperative Multitasking</title>
       <link>https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/</link>
       <pubDate>Sun, 23 May 2021 08:00:00 +0800</pubDate>
@@ -182,15 +192,6 @@
       
       <guid>https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/</guid>
       <description>在分享 Go string to slice 議題 文章後，有朋友(感謝@陳孝思)在社團裡面分享另一個議題，關於在 strings package 的 builder 中有避免 escape analysis 的方式。基於這個分享，我就去查閱了相關 source code 和 issues ，並且整理成此文章。</description>
-    </item>
-    
-    <item>
-      <title>Go string to slice 議題</title>
-      <link>https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/</link>
-      <pubDate>Mon, 01 Jun 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/</guid>
-      <description>日前在看 Go runtime/string.go source code 的時候，意外看到一篇文章 Go中string转[]byte的陷阱，不過這篇文章的日期間隔已久，Go version 也從文章中的 1.10 改版到 1.</description>
     </item>
     
   </channel>

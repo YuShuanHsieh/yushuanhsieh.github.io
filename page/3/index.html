@@ -37,7 +37,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2021-05-23T08:00:00+08:00" />
+<meta property="og:updated_time" content="2021-06-23T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -105,7 +105,7 @@
     <h3 class="widget-title"> Categories</h3>
     <div class="widget-body">
         <ul class="category-list">
-            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">4</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/conference/" class="category-list-link">conference</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/coscup/" class="category-list-link">coscup</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/devops/" class="category-list-link">devops</a><span class="category-list-count">1</span></li>
@@ -132,6 +132,16 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-06-23-c-extern/" class="title">C extern keyword</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-06-23 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-23</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -172,16 +182,6 @@
                     </p>
                 </div>
             </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-02-11-th02-driver/" class="title">TH02 sensor device driver</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2021-02-10 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-10</time>
-                    </p>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
@@ -197,6 +197,45 @@
     
     
     
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2020-06-01-string-to-slice/"
+    >
+    
+      
+        
+          <span class="title-cat">Go</span>
+        
+      
+    Go string to slice 議題</a>
+</h1>
+
+      </div>
+          <img class="summary-img" src=/posts/string-to-slice.png />
+      <div class="article-entry text-muted" itemprop="description">日前在看 Go runtime/string.go source code 的時候，意外看到一篇文章 Go中string转[]byte的陷阱，不過這篇文章的日期間隔已久，Go version 也從文章中的 1.10 改版到 1.</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/" class="">
+  <time datetime="2020-06-01 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-06-01</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/go/"> Go </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-06-01-string-to-slice/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
     <article
       class="article article-type-page"
       itemscope
@@ -546,44 +585,6 @@
 </span>
 
         <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-01-21-golang-router/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2020-01-19-memory-allocator-implicit-free-list/"
-    >
-    
-      
-        
-          <span class="title-cat">C</span>
-        
-      
-    Implement Memory Allocator - Implicit Free List</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">前言 由前篇文章可以知道，使用 stack data structure 是最簡單的 memory allocator 入門寫法，但是卻會造成一些問題，例如不能任意順序 free 等。既然如此，我們就換成 list 來實作 memory allocator，解決使用 stack 實作的問題。</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2020-01-19-memory-allocator-implicit-free-list/" class="">
-  <time datetime="2020-01-19 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-01-19</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/c/"> C </a>
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-01-19-memory-allocator-implicit-free-list/#comments" class="article-comment-link">Comments</a></span>
       </p>
     </article></div>
   
