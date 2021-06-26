@@ -47,7 +47,7 @@ Declaration &amp; Definition 在討論 extern 之前，先釐清 C 的 declarati
 Declaration &amp; Definition 在討論 extern 之前，先釐清 C 的 declaration 和 definition 差異性。在 C11: 6.">
 <meta itemprop="datePublished" content="2021-06-23T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-06-23T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="666">
+<meta itemprop="wordCount" content="728">
 
 
 
@@ -255,22 +255,22 @@ Declaration &amp; Definition 在討論 extern 之前，先釐清 C 的 declarati
 <li>for an enumeration constant or typedef name, is the (only) declaration of the identifier.</li>
 </ul>
 </blockquote>
-<p>其中最大的差異，除了 function 的 definition 是有包含 body 之外，對 variable 來說，declaration 僅是標示了 variable 的名稱和特性，definition 才會真正的分配對應的儲存空間。</p>
-<p>此外，同一個 variable 是可以多次 declaration，但是 definition 只能有一次。舉例來說：</p>
+<p>其中明顯的差異，除了 function definition 會包含 body <code>{ }</code> 之外，對 variable 來說，declaration 僅是標示了 variable 的名稱和特性，definition 才會真正分配對應的儲存空間。</p>
+<p>此外，相同 variable 可以多次 declaration，但是 definition 只能有一次。舉例來說：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// parent.h
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span><span style="color:#00f">#ifndef _PARENT_H
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">#define _PARENT_H
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f"></span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#00f">extern</span> <span style="color:#2b91af">int</span> a;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#00f">extern</span> <span style="color:#2b91af">int</span> a; <span style="color:#008000">// declaration
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000"></span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#2b91af">void</span> print_parent(<span style="color:#2b91af">void</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#00f">#endif
 </span></code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// parent.c
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdio.h&gt;</span><span style="color:#00f">
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#00f">#include</span> <span style="color:#00f">&#34;parent.h&#34;</span><span style="color:#00f">
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#00f"></span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#2b91af">int</span> a = 1;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#2b91af">int</span> a = 1; <span style="color:#008000">// definition
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000"></span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#2b91af">void</span> print_parent(<span style="color:#2b91af">void</span>)
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>{
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span> printf(<span style="color:#a31515">&#34;parent %d&#34;</span>,a);
@@ -279,8 +279,8 @@ Declaration &amp; Definition 在討論 extern 之前，先釐清 C 的 declarati
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdio.h&gt;</span><span style="color:#00f">
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#00f">#include</span> <span style="color:#00f">&#34;parent.h&#34;</span><span style="color:#00f">
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#00f"></span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#2b91af">int</span> a = 2;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#2b91af">int</span> a = 2; <span style="color:#008000">// definition
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000"></span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#2b91af">void</span> print_child(<span style="color:#2b91af">void</span>)
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>{
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>printf(<span style="color:#a31515">&#34;child %d&#34;</span>,a);
@@ -288,45 +288,51 @@ Declaration &amp; Definition 在討論 extern 之前，先釐清 C 的 declarati
 </code></pre></div><p>gcc 時會出現：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>/usr/bin/ld: /tmp/ccSHHFEz.o:(.data+0x0): multiple definition of <span style="color:#a31515">`</span>a<span style="">&#39;</span>; /tmp/ccjpc0mC.o:(.data+0x0): first defined here
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>collect2: error: ld returned 1 exit status
-</code></pre></div><p>可以發現，這個錯誤是在 linker 階段產生的，在 source file build 成 translation unit 時並不會出錯。</p>
-<p>把 child.c code 改成：</p>
+</code></pre></div><p>由於在 <code>parent.c</code> 和 <code>child.c</code> 皆有 <code>a definition</code>，因此 gnu gcc 在 link 階段會產生重複 definition 的錯誤訊息。</p>
+<p>我們把 child.c code 改成：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdio.h&gt;</span><span style="color:#00f">
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">#include</span> <span style="color:#00f">&#34;parent.h&#34;</span><span style="color:#00f">
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f"></span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">extern</span> <span style="color:#2b91af">int</span> a;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">extern</span> <span style="color:#2b91af">int</span> a; <span style="color:#008000">// declaration
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000"></span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#2b91af">void</span> print_child(<span style="color:#2b91af">void</span>)
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>{
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  printf(<span style="color:#a31515">&#34;child %d&#34;</span>,a);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>}
-</code></pre></div><p>即使在 <code>parent.h</code> 和 <code>child.c</code> 都有 <code>extern int a</code>，但因為兩者都是 declaration，因此可以正確 compile 成功。</p>
-<p>而在 C11: 6.2.2 Linkages of identifiers 提到：</p>
+</code></pre></div><p>即使在 <code>parent.h</code> 和 <code>child.c</code> 都有 <code>extern int a;</code>，但因為兩者都是 declaration，因此可以正確 compile。</p>
+<p>在 C11: 6.2.2 Linkages of identifiers 提到：</p>
 <blockquote>
 <p>An identifier declared in different scopes or in the same scope more than once can be made to refer to the same object or function by a process called linkage.</p>
 </blockquote>
-<p>因此即使在多個 source file 有相同命名的 variable declaration，在 linker 階段會將他們關聯為同一個物件。</p>
-<p>我們可以透過觀察 link map (gcc -Wl,-M) 來查看 link 狀況：</p>
+<p>根據以上敘述，就能知道上述例子可以 compile 成功的原因，及即使在多個 source file 有相同命名的 variable declaration，在 link 階段會將他們關聯為同一個物件。</p>
+<p>我們透過觀察 link map <code>(gcc -Wl,-M)</code> 來查看 <code>variable a</code> link 狀況：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000"># section, memory, size</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span> .data 0x0000000000004010 0x0 /tmp/ccALo656.o <span style="color:#008000"># child.o</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span> .data 0x0000000000004010 0x4 /tmp/cc3dGS27.o <span style="color:#008000"># parent.o</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>       0x0000000000004010     a
-</code></pre></div><h2 id="linkages-of-identifiers">Linkages of identifiers</h2>
+</code></pre></div><p>由於 <code>a</code> definition 是在 parent.c，因此可以看到 0x4 的空間分配，並且 child.o 和 parent.o 的 variable <code>a</code> 會連結成相同物件。</p>
+<h2 id="linkages-of-identifiers">Linkages of identifiers</h2>
 <p>
-<code>extern</code> 關鍵字與 Linkages 有關係，因此也來複習一下 Linkages：</p>
+由於 <code>extern</code> 關鍵字與 Linkages 有關係，因此也來複習一下 Linkages：</p>
 <ol>
 <li><strong>external linkage</strong>：一個 identifier 具有 external linkage 屬性時，同一個 program 中不同 translation unit 如果包含此 identifier，則會視為同一個物件。</li>
 <li><strong>internal linkage</strong>：反之，如果是 internal linkage，則同一個 translation unit 的 同名 identifier 會視為同一個物件。</li>
 <li><strong>no linkage</strong>：像是 function 的參數或是 local 變數，則歸類為 no linkage 屬性。</li>
 </ol>
-<h2 id="extern-keyword"><code>extern</code> keyword</h2>
+<p>例子：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#2b91af">int</span> external_var = 2; <span style="color:#008000">// external linkage
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span><span style="color:#00f">static</span> <span style="color:#2b91af">int</span> internal_var = 1; <span style="color:#008000">// internal linkage
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#2b91af">int</span> add(<span style="color:#2b91af">int</span> a, <span style="color:#2b91af">int</span> b) <span style="color:#008000">// no linkage
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000"></span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  <span style="color:#00f">return</span> a + b;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+</code></pre></div><h2 id="extern-keyword"><code>extern</code> keyword</h2>
 <p>結合上述的資訊，現在來看 <code>extern</code> 關鍵字有什麼特性：</p>
 <h3 id="1">1.</h3>
 <blockquote>
 <p>extern declarations, which don&rsquo;t change the linkage of an identifier if a previous declaration established it (<a href="https://en.cppreference.com/w/c/language/extern">more</a>).</p>
-<p>If the prior declaration specifies internal or
-external linkage, the linkage of the identifier at the later declaration is the same as the
-linkage specified at the prior declaration. If no prior declaration is visible, or if the prior
-declaration specifies no linkage, then the identifier has external linkage (C11: 6.2.2 Linkages of identifiers).</p>
+<p>If the prior declaration specifies internal or external linkage, the linkage of the identifier at the later declaration is the same as the linkage specified at the prior declaration. If no prior declaration is visible, or if the prior declaration specifies no linkage, then the identifier has external linkage (C11: 6.2.2 Linkages of identifiers).</p>
 </blockquote>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">// example from https://en.cppreference.com/w/c/language/extern
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000"></span><span style="color:#00f">static</span> <span style="color:#2b91af">int</span> i4 = 2; <span style="color:#008000">// definition, internal linkage
@@ -335,7 +341,7 @@ declaration specifies no linkage, then the identifier has external linkage (C11:
 <blockquote>
 <p>A variable declaration that uses extern and has no initializer is <strong>not a definition</strong>.</p>
 </blockquote>
-<p>參考一開始所給的例子，即使在不同 tranlation unit 中有 <code>extern int a;</code>，但因為都沒有 initializer，所以只是 declaration，在 linker 階段會將這些同名 declaration 連結成同一個物件。</p>
+<p>參考一開始所給的例子，即使在不同 tranlation unit 中有 <code>extern int a;</code>，但因為都沒有 initializer，所以只是 declaration，在 link 階段會將這些同名 declaration 連結成同一個物件。</p>
 <h3 id="3">3.</h3>
 <blockquote>
 <p><code>extern</code> is a <strong>storage-class</strong> specifiers. Items declared with the extern specifier have global lifetimes.</p>
@@ -346,7 +352,7 @@ declaration specifies no linkage, then the identifier has external linkage (C11:
 </blockquote>
 <p>預設情況下，使用 extern 代表此 identifer 具有 <code>global lifetime</code> 和 <code>external linkage</code> 兩個屬性。</p>
 <h2 id="tentative-definitions">Tentative definitions</h2>
-<p>以下例子：</p>
+<p>先看以下的例子：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f"># parent.h
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">#ifndef _PARENT_H
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">#define _PARENT_H
@@ -383,7 +389,7 @@ declaration specifies no linkage, then the identifier has external linkage (C11:
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  print_child();
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  <span style="color:#00f">return</span> 0;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>}
-</code></pre></div><p>即使在多處 declare <code>int a;</code>，但可以 compiler 成功，且最後output 會是 <code>parent 1child 1</code>，也就是 parent 和 child 的 translation unit 都是使用同一個 a 變數。其中最主要的原因是 <code>int a;</code> 是一個 <strong>tentative definition</strong>。</p>
+</code></pre></div><p>即使在多處 declare <code>int a;</code>，但可以正確 compile，且最後output 會是 <code>parent 1child 1</code>，也就是 parent 和 child 的 translation unit 都是使用同一個 a 變數。其中最主要的原因是 <code>int a;</code> 是一個 <strong>tentative definition</strong>。</p>
 <p>在 C11: 6.9.2 External object definitions 提到：</p>
 <blockquote>
 <p>A declaration of an identifier for an object that has file scope <strong>without an initializer</strong>, and <strong>without a storage-class specifier</strong> or with the storage-class specifier static, constitutes a
