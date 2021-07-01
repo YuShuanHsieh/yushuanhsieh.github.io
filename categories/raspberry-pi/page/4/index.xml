@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Raspberry Pi on 文組工程師</title>
+    <link>https://yushuanhsieh.github.io/categories/raspberry-pi/</link>
+    <description>Recent content in Raspberry Pi on 文組工程師</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 30 Jun 2021 08:00:00 +0800</lastBuildDate>
+    
+        <atom:link href="https://yushuanhsieh.github.io/categories/raspberry-pi/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>10月份自我學習日誌回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</link>
+      <pubDate>Fri, 02 Nov 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</guid>
+      <description>前言 這次十月份的學習方向和預設有點不太一樣，主要是因為某天在因緣際會之下，接觸到交大開放式課程 微處理機系統實驗 Microprocessor System Lab.，覺得實在是太有趣了，所以就欲罷不能的聽下去，順便把一些相關教學材料也買齊，好好學一下 MCU 。可以預知，接下來會繼續上曹孝櫟老師的 嵌入式系統設計概論與實作 Introduction to Embedded Systems Design and Implementation ，剛好本身也是在 IOT 產業，每天都要接觸到 Embedded Systems，這老師說的很好，讓我學習到很多 :D</description>
+    </item>
+    
+    <item>
+      <title>Microprocessor System Lab. - Nucleo-64 development board</title>
+      <link>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</link>
+      <pubDate>Wed, 24 Oct 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</guid>
+      <description>前言： 在英國的時候，學校大多專注在純軟開發課程上，例如敏捷開發(Agile Development), Web Development, database 等。其中有一堂課令我印象深刻，就是用 logic Unit, MUX 零件自組 16 Instruction Processor，然後自己手動按 Clock 去 fetch / execute instrction，透過這樣的學習，讓我更清楚整個電腦實際運作 Code 的流程。</description>
+    </item>
+    
+    <item>
+      <title>9月份自我學習日誌回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</link>
+      <pubDate>Fri, 05 Oct 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-10-05-study-9/</guid>
+      <description>9月份目標  把 Effective Go 看完 複習 JavaScript 概念，釐清各細節 工作上用到的 Protocol 相關知識  目標回顧 1.</description>
+    </item>
+    
+    <item>
+      <title>Node.js Addons N-API example (v10.11.0)</title>
+      <link>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</link>
+      <pubDate>Mon, 24 Sep 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-09-24-node-js-napi/</guid>
+      <description>前言 由於專案需要整合 Node-RED ，我們必須開發自己的 Node 來讓用戶可以直接透過視覺化方式來建立簡單邏輯，又我們的 SDK 是 C 版本，因此有這機會可以接觸 Node.</description>
+    </item>
+    
+    <item>
+      <title>Go - Archive files with archive/tar lib</title>
+      <link>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</link>
+      <pubDate>Sun, 09 Sep 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-09-09-go-tar-file/</guid>
+      <description>前言 由於專案要提供 API 來讓使用者 export 匯出檔案， 因此需要將所需檔案集結成一個 archive file。這個流程是透過 Go 的標準 lib archive/tar 來處理，以下文章將簡單介紹流程和實作方式，並於最後附上完整程式碼。</description>
+    </item>
+    
+    <item>
+      <title>Google Sign-in with OAuth 2.0</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</link>
+      <pubDate>Sat, 25 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-25-go-google-oauth/</guid>
+      <description>前言： 由於目前專案是以 Embedded System 為主，比較少有機會接入第三方 api 的機會，所以這次 side project 就以 Google Sign-in for Web application with Go 的流程當作練習。由於網路上可以找到很多範例，所以在以下文章中會側重在原理 + 為什麼要這樣做，希望除了寫 code 之外，還能建立起基本概念。</description>
+    </item>
+    
+    <item>
+      <title>Go Fundamental - Array</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</link>
+      <pubDate>Sat, 11 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-11-go-fundamental-array/</guid>
+      <description>前言 最近在學 Go，而之前有一些 C 的基礎，因此在學到 Go 的 Array 時，發現它和 C 的 Array 差異性蠻大的，所以特別記錄下來。</description>
+    </item>
+    
+    <item>
+      <title>Angular Schematics</title>
+      <link>https://yushuanhsieh.github.io/post/2018-08-05-angular-schematics/</link>
+      <pubDate>Sun, 05 Aug 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-08-05-angular-schematics/</guid>
+      <description>前言： 最近專案需要提供工具讓外部人員一同參與 Web App 的開發，由於我們的 Web App 已經有基本架構和開發方式，為了讓外部人員能夠更方便的 follow 架構，所以就決定使用 Schematics 來創建專屬樣板，讓協作開發人員可以迅速地建立專案用的 component page，然後他們只需要修改部分程式碼即可。</description>
+    </item>
+    
+    <item>
+      <title>Redux Anti Pattern</title>
+      <link>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</link>
+      <pubDate>Sun, 15 Jul 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-07-15-redux-anti-pattern/</guid>
+      <description>前言 這篇文章是基於 Redux Anti-Patterns - Part 1. State Management 所進行的探討，包含在專案內是否有犯類似的錯誤，以及後續該如何改善。文章會結合目前專案所使用的 Redux(ngrx)，並檢視使用 Ngrx 是否能避免這些錯誤發生。</description>
+    </item>
+    
+    <item>
+      <title>CSS Typed Object Model</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</link>
+      <pubDate>Sun, 24 Jun 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-24-css-typed-om/</guid>
+      <description>前言 Chrome 66 版本全新支援 CSS Typed Object Model，透過這種新型的 CSS Typed OM，可以有效提升使用 JavaScript 操作 CSSOM 屬性的效率。雖然目前僅有 Chrome 支援（ Firefox 據說在努力中， Edge 目前沒下文），不過既然此方式能對網頁呈現效能有所提升，讓開發者和使用者都因此受惠，未來想必會成為主流方式。</description>
+    </item>
+    
+    <item>
+      <title>The Main Flow of Rendering Engines</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-23-browser-render-engine/</link>
+      <pubDate>Sat, 23 Jun 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-23-browser-render-engine/</guid>
+      <description>前言： 最近在寫 CSS Animation 部分，於是比較深入的看瀏覽器渲染流程，希望在進行 Animation 時可以更加地流暢。
+The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然地寫出這樣的頁面：</description>
+    </item>
+    
+    <item>
+      <title>Angular - Reactive Form</title>
+      <link>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</link>
+      <pubDate>Thu, 14 Jun 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-06-14-angular-reactive-form/</guid>
+      <description>前言 在建立表單的部份，Angular 與 AngularJS 最大的不同就是多了 Reactive Form 的方式。由於 Reactive Form 比起一般 Template-Driven Form 更具彈性且好掌控，所以就來大致介紹一下與 Reactive Form 相關的流程機制。</description>
+    </item>
+    
+    <item>
+      <title>Angular - ng-template &amp; ng-container</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-29-angular-6-ngtemplate/</link>
+      <pubDate>Tue, 29 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-29-angular-6-ngtemplate/</guid>
+      <description>前言： 昨天剛好在看 Angular CDK Overlay (Overlay Document) 這部分，因為 Overlay 是 CDK 中 Portal 的ㄧ種，而 Portal 又和 Angular 中的 Template 機制有關係，這才發現自己對於 Angular 的 ng-template 和 ng-container 概念不是很清楚，所以特別再看了一下這部分的實作原理和應用方式。</description>
+    </item>
+    
+    <item>
+      <title>Understanding Router in Angular 6</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</link>
+      <pubDate>Thu, 24 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-24-angular-6-router/</guid>
+      <description>前言： 這陣子在看 Reactive Extension (Rx) 和 Angular ，而 Angular 中常使用的 Router 內就有些 Observable Type 的 instance，因此就打算從這邊深入了解一下 Angular Router 的流程和 Observable 應用方式。</description>
+    </item>
+    
+    <item>
+      <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Fast Property Access</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-16-javascript-optimization-property/</link>
+      <pubDate>Wed, 16 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-16-javascript-optimization-property/</guid>
+      <description>Properties Access in V8 前言 傳統的 JavaScript 引擎，在抓取 object 內的 property 位置時，常常是利用 object 內的 hash table 來取得對應 property (通常稱為 dictionary )。不過這樣需要花費搜尋時間，相對來說效率就不是太好。也因此在現代的 JavaScript 引擎，會根據 object 內的 property 架構來進行不同方式的效能處理，避免一直使用 hash table，而是改採其他更有效率的結構，來達成快速得到 property 的目的。</description>
+    </item>
+    
+    <item>
+      <title>How Does JavaScript Engine (V8) Optimize JavaScript code - Elements</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-15-javascript-optimization-elements/</link>
+      <pubDate>Tue, 15 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-15-javascript-optimization-elements/</guid>
+      <description>前言 JavaScript 是種弱型態語言，而 JavaScript Engine (V8) 透過對於 JavaScript object 的型態強化來提升 JavaScript 執行效率。</description>
+    </item>
+    
+    <item>
+      <title>JavaScript - Pass Params Into Functions</title>
+      <link>https://yushuanhsieh.github.io/post/2018-05-07-javascript-basic-concept/</link>
+      <pubDate>Mon, 07 May 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-05-07-javascript-basic-concept/</guid>
+      <description>前言 這篇文章起源於我為了瞭解瀏覽器的運作原理，以利針對瀏覽器進行效能優化時，所延伸出來的基礎文章。剛開始學習切入點是 Chrome 的 V8 JavaScript Engine，看到有一位作者仔細地說明 V8 Engine 如何 Compile JavaScript 的流程，進而引發我對 JavaScript Memory Allocation 的興趣。此外，剛好最近也在用 TypeScript 寫類 static type object，所以想更清楚知道使用 TypeScript 這個 pre-processor，在瀏覽器中會怎樣提高 JavaScript Compile 的性能。</description>
+    </item>
+    
+    <item>
+      <title>Cypress &amp; Cucumber Introduction</title>
+      <link>https://yushuanhsieh.github.io/post/2018-01-29-cypress-basic-usage/</link>
+      <pubDate>Mon, 29 Jan 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-01-29-cypress-basic-usage/</guid>
+      <description>Cypress E2E Testing Framework Features  No more async hell</description>
+    </item>
+    
+    <item>
+      <title>AngularJS - angular-formly study notes</title>
+      <link>https://yushuanhsieh.github.io/post/2018-01-06-angular-formly-basic-usage/</link>
+      <pubDate>Fri, 05 Jan 2018 12:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-01-06-angular-formly-basic-usage/</guid>
+      <description>Angular formly 運作原理 將 form 中的每個 field 獨立出來寫成共用 template，並供整個 app 使用。使用者先在 angular-formly 中進行 configuration，包含設定 type 和 wrapper ，接著只要在 component 的 controller 中建立指定 type 的 field objects 之後，angular-formly 就會結合之前設定好的 field template 和 objects， render 出完整的表單。 !</description>
+    </item>
+    
+    <item>
+      <title>AngularJS - Two way data binding</title>
+      <link>https://yushuanhsieh.github.io/post/2017-12-08-two-way-binding/</link>
+      <pubDate>Fri, 08 Dec 2017 21:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-12-08-two-way-binding/</guid>
+      <description>前言 最近開始接觸前端技術，預計以Angular和NodeJS為主。之前其實有稍微點一些網頁相關技能，不過大概都才Lv.1，知道大概怎麼使用，卻不太清楚背後的原理和概念。所以這次在學習的時候，會著重在框架理論和實作方式上，希望自己除了能應用這些框架之外，還可以了解這些框架背後的原理，並且進而有能力比較各框架之間的好壞。雖然Angular目前已經出到v5.1.0，但起點會從Angular1開始學起，之後文章預計會去比較新版的Angular和Angular1有怎樣的差異，以及新版的運作方式可以帶來怎樣的好處。
+Angular1主打特色之一包含 Two-way data binding (這邊先不在意這種方式帶來怎樣的壞處xD)，這篇文章紀錄 Two-way data binding 的原理和實現方式，以及對網站來說會帶來怎樣的影響。文章將不會示範如何去應用 Two-way data binding，因為我覺得隨便 Google 就可以找到很多例子，就不特別介紹了。</description>
+    </item>
+    
+  </channel>
+</rss>

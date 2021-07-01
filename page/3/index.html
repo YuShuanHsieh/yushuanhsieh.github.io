@@ -37,7 +37,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2021-06-23T08:00:00+08:00" />
+<meta property="og:updated_time" content="2021-06-30T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -121,6 +121,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">11</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/raspberry-pi/" class="category-list-link">raspberry-pi</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/security/" class="category-list-link">security</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">30</span></li>
@@ -132,6 +133,16 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" class="title">Raspberry Pi Pico</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-06-30 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-30</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -172,16 +183,6 @@
                     </p>
                 </div>
             </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-02-18-l1-cache-arm/" class="title">L1 Cache architecture in ARM</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2021-02-18 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-18</time>
-                    </p>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
@@ -197,6 +198,44 @@
     
     
     
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2020-06-24-strings-builder/"
+    >
+    
+      
+        
+          <span class="title-cat">Go</span>
+        
+      
+    Escape analysis issues of strings builder</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">在分享 Go string to slice 議題 文章後，有朋友(感謝@陳孝思)在社團裡面分享另一個議題，關於在 strings package 的 builder 中有避免 escape analysis 的方式。基於這個分享，我就去查閱了相關 source code 和 issues ，並且整理成此文章。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/" class="">
+  <time datetime="2020-06-24 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-06-24</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/go/"> Go </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-06-24-strings-builder/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
     <article
       class="article article-type-page"
       itemscope
@@ -547,44 +586,6 @@
 </span>
 
         <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-02-24-february/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2020-01-21-golang-router/"
-    >
-    
-      
-        
-          <span class="title-cat">Go</span>
-        
-      
-    Go HTTP Routers - Chi/Echo/Gin/gorilla mux 實作細節與比較</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">前言 之前做 API server，制定 route path 時有遇到一些問題，於是就順手看了幾個 HTTP router / web framework 的 router 部分實作方式，並且記錄下來，提供給大家做個參考。</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2020-01-21-golang-router/" class="">
-  <time datetime="2020-01-21 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-01-21</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/go/"> Go </a>
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-01-21-golang-router/#comments" class="article-comment-link">Comments</a></span>
       </p>
     </article></div>
   

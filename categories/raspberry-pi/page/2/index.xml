@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Raspberry Pi on 文組工程師</title>
+    <link>https://yushuanhsieh.github.io/categories/raspberry-pi/</link>
+    <description>Recent content in Raspberry Pi on 文組工程師</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 30 Jun 2021 08:00:00 +0800</lastBuildDate>
+    
+        <atom:link href="https://yushuanhsieh.github.io/categories/raspberry-pi/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Escape analysis issues of strings builder</title>
+      <link>https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/</link>
+      <pubDate>Wed, 24 Jun 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/</guid>
+      <description>在分享 Go string to slice 議題 文章後，有朋友(感謝@陳孝思)在社團裡面分享另一個議題，關於在 strings package 的 builder 中有避免 escape analysis 的方式。基於這個分享，我就去查閱了相關 source code 和 issues ，並且整理成此文章。</description>
+    </item>
+    
+    <item>
+      <title>Go string to slice 議題</title>
+      <link>https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/</link>
+      <pubDate>Mon, 01 Jun 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/</guid>
+      <description>日前在看 Go runtime/string.go source code 的時候，意外看到一篇文章 Go中string转[]byte的陷阱，不過這篇文章的日期間隔已久，Go version 也從文章中的 1.10 改版到 1.</description>
+    </item>
+    
+    <item>
+      <title>Introduction to ingress-gce controller</title>
+      <link>https://yushuanhsieh.github.io/post/2020-05-28-ingress-gce/</link>
+      <pubDate>Thu, 28 May 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-05-28-ingress-gce/</guid>
+      <description>如果想要在 Google Cloud Platform 的 GKE 上使用 Ingress 功能，最簡單的方式就是用 GKE 本身預設提供的 ingress-gce controller。不過不知道大家在設定 ingress yaml 的時候，有沒有留意到 ingress-gce 規定 service type 只能是 NodePort，但是 ingress-nginx 卻沒有這種限制呢？</description>
+    </item>
+    
+    <item>
+      <title>Side Project - Transfer.sh</title>
+      <link>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</link>
+      <pubDate>Tue, 19 May 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-05-19-transfer.sh/</guid>
+      <description>在 Trace transfer.sh open project 有提到我目前正在調整 transfer.sh 這個 open source project，把它修改成內部所需要的一個 service，而之前已經改得差不多了，所以簡單地來介紹一下修改了哪些內容：</description>
+    </item>
+    
+    <item>
+      <title>Side Project - Symlink Generator for Multi-lang Hugo Site</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</link>
+      <pubDate>Wed, 29 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-29-hugo-symlinks/</guid>
+      <description>在 Multilingual Mode in Hugo 這篇文章中有提到目前使用 Hugo site generator 產生 multi-lang site 的問題，使用者必須要為每個語言都建立一個檔案，才不會造成最後在產生網站後，發生某一個語言的頁面遺失問題。（例如，使用者一定要建立 about.</description>
+    </item>
+    
+    <item>
+      <title>Discourse Forums Deployment</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</link>
+      <pubDate>Wed, 22 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-22-discourse-deployment/</guid>
+      <description>這兩天在試著部署 Discourse －目前主流的 forum open porject。雖然它有 cloud 版本可以用，不過因為基於一些因素，我們打算先自行部署，給團隊成員實際試用測試過後，再來看是否要使用官方提供的 Cloud 付費版本。而在部署的過程中發現蠻多問題的，所以也一併記錄下來，給想要自行部署的人參考。</description>
+    </item>
+    
+    <item>
+      <title>Trace transfer.sh open project</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</link>
+      <pubDate>Wed, 15 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-15-transfer-sh-refactor/</guid>
+      <description>因為工作需求，需要一個透過 cli 就可以 upload 和 download 的工具，剛好 open project transfer.sh 有提供類似的功能，不過我們有額外的需求，包含每個 request 都要能 fiter IP 和執行 HTTP Basic Auth 驗證，因此就有這個機會來分析一下 transfer.</description>
+    </item>
+    
+    <item>
+      <title>Multilingual Mode in Hugo</title>
+      <link>https://yushuanhsieh.github.io/post/2020-04-07-hugo-merge/</link>
+      <pubDate>Tue, 07 Apr 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-04-07-hugo-merge/</guid>
+      <description>紀錄用 Hugo site generator 建立多語言網站時所遇到的問題，與過程中相關的學習內容，包含 Hugo render 過程、source code trace 等。</description>
+    </item>
+    
+    <item>
+      <title>三月起，在竹北定區生活</title>
+      <link>https://yushuanhsieh.github.io/post/2020-03-31-march/</link>
+      <pubDate>Tue, 31 Mar 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-03-31-march/</guid>
+      <description>&lt;p&gt;三月一整月都在非常忙碌的情況下度過。&lt;/p&gt;
+&lt;h2 id=&#34;搬家&#34;&gt;搬家&lt;/h2&gt;
+&lt;p&gt;在經過漫長地油漆、裝系統櫃、打掃等流程，我在竹北的新房終於裝潢完成，因此在三月初的時候就很匆忙地把租屋處退掉，並且搬來新家住。本來租屋只有十坪大小，現在換成近三十坪的生活空間，突然有點不太習慣，需要清潔的區塊也變大不少，也開始體悟掃地機器人的重要性。由於當初在買房子的時候，有點太快做決定，因此一直很擔心新家會不會有什麼不好的地方，不過現在搬進來幾個禮拜，覺得一切都還蠻美好的，樓上樓下鄰居都不會吵鬧，社區環境安靜單純，戶數不多所以整潔還不錯，主委也非常盡責。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>2月雜談</title>
+      <link>https://yushuanhsieh.github.io/post/2020-02-24-february/</link>
+      <pubDate>Mon, 24 Feb 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-02-24-february/</guid>
+      <description>最近一個月發生了一些事情，導致又一陣子沒有更新技術文章或是讀書日誌。
+一月底的時候在工作上發生了一件事情，讓我突然間深深陷入負面情緒中。其實我早在事情發生之前是有所選擇的，我可以選擇穩定或是挑戰，而我在那時候選擇了挑戰，即使這挑戰讓我付出蠻多代價，包含家人的不諒解、長距離通勤等，我在事情沒發生之前都覺得這一切代價都算值得。
+在事情發生後，我其實剛開始的幾天是非常沮喪的，我覺得我那時候做了錯的選擇，才會讓自己陷入進退兩難的局面。我本來就是轉職人生，這樣的背景讓我更難坦然地面對現實，因為我要付出的成本比團隊工程師們都要高。
+不過在冷靜之後，我開始回想，我在這段短暫旅程中，是否有達到我當初的目的。
+我有幸跟強者同事一起工作 有很好的主管讓我 work from home 我接觸到我之前不會碰到的 cloud service 和相關 infrastructure 我開始念起 AWS 和 GCP 並希望可以考過證照</description>
+    </item>
+    
+    <item>
+      <title>Go HTTP Routers - Chi/Echo/Gin/gorilla mux 實作細節與比較</title>
+      <link>https://yushuanhsieh.github.io/post/2020-01-21-golang-router/</link>
+      <pubDate>Tue, 21 Jan 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-01-21-golang-router/</guid>
+      <description>前言 之前做 API server，制定 route path 時有遇到一些問題，於是就順手看了幾個 HTTP router / web framework 的 router 部分實作方式，並且記錄下來，提供給大家做個參考。</description>
+    </item>
+    
+    <item>
+      <title>Implement Memory Allocator - Implicit Free List</title>
+      <link>https://yushuanhsieh.github.io/post/2020-01-19-memory-allocator-implicit-free-list/</link>
+      <pubDate>Sun, 19 Jan 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-01-19-memory-allocator-implicit-free-list/</guid>
+      <description>前言 由前篇文章可以知道，使用 stack data structure 是最簡單的 memory allocator 入門寫法，但是卻會造成一些問題，例如不能任意順序 free 等。既然如此，我們就換成 list 來實作 memory allocator，解決使用 stack 實作的問題。</description>
+    </item>
+    
+    <item>
+      <title>2019 年度回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-12-30-2019-review/</link>
+      <pubDate>Mon, 30 Dec 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-12-30-2019-review/</guid>
+      <description>2019 年過去了，不免俗地跟風一下，回顧今年做了哪些事情。整體來說 2019 年對我來說是一個正向的轉變，包含職位、生涯、薪資、技術能力等，至於促使這些轉變的時機。我覺得是好好把握突然來的機會，以及當覺得這個方向好像和自己想做的有點不合時，就要勇於開拓新的方向。
+Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變成 back-end 吧。而這個動機在於很多人在聽到我是商科轉職，就說我一定是去做前端，因為前端對他們而言技術能力需求低，即使文組也可以勝任，其他資工系本科出身的不會去寫前端。當然這樣的想法很過時，而且說這些話的人大概也寫不出來像 angular, react 之類的框架，不過為了證明自己能力，還是不爭氣地開始尋求 back-end 的機會，也很幸運地進入趨勢科技開始寫 Go 。</description>
+    </item>
+    
+    <item>
+      <title>2019/11 月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-12-05-study-11/</link>
+      <pubDate>Thu, 05 Dec 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-12-05-study-11/</guid>
+      <description>前言 12/01是我生日，於是給自己放了一個禮拜的休息假，每天下班回去就是睡覺或是滑手機放空，除非公司 slack 出現訊息，不然很少打開電腦。老實說放假的感覺挺好的，沒有進修進度壓力，也可以好好休養身心～不知道是不是剛換環境以及天氣變化的關係，感冒時好時壞，這幾天就去大醫院照內視鏡和超音波做詳細檢查，幸好沒有什麼問題，就是抵抗力弱了一點（該不會是身體又發現我早午餐都沒怎麼吃吧QQ）
+剛到職新創公司滿一個月，來說說感想～其實還沒加入之前蠻擔心的，畢竟聽說新創公司變動很快，不太清楚自己能不能適應，之所以加入完全是賭上對於主管和同事能力的信任。不過來了一個多月，感覺還不錯，除了福利好之外，還接觸到之前沒有機會實戰的技術。更有意思的是，每個產業都有自己的特色，去吸收那些產業知識和市場訊息，可以擴大自己的眼界。現在唯一比較有壓力的是英文口說 XD 還有許多年紀輕輕但是身懷絕技的同事們，進而督促自己不能懈怠才行。我覺得新創公司的好處是，每個同事都有自己的理想和態度主動積極，在那種氛圍下，自己也比較不容易懈怠。
+生日剛過完，對自己也有些期許，其中最大的目標就是對 Google cloud platform 熟悉並且考到證照，既然決定要走 Cloud 開發，那當然要耕耘相關 infrastructure ，才能更妥善地利用這些服務來開發 application。當然我對作業系統還是很有愛，希望今年可以多讀一些相關論文，甚至可以啟發自己寫一點寫論文出來。之所以會這樣想，是因為發現自己還蠻喜歡做 research 的，可以讓自己對某些領域的學術知識更加了解。</description>
+    </item>
+    
+    <item>
+      <title>GDG Hsinchu Meetup Sharing #3 Move from C to Go</title>
+      <link>https://yushuanhsieh.github.io/post/2019-11-19-go-meetup-2/</link>
+      <pubDate>Tue, 19 Nov 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-11-19-go-meetup-2/</guid>
+      <description>前言 這次又來挑戰在新竹分享啦！每次來工程師大本營分享主題都蠻緊張的，很怕會被下面的工程師夥伴慘電，但即使如此，還是非常希望可以在新竹開講，畢竟新竹很多軟韌體工程師，講起 Operating System 時候，共鳴點比較多～ 本次主題主要是想針對使用 C 的工程師來說明 Go 語言的特性，因此在內容上可能相對比較抽象，沒有太多 Coding 部分，絕大多數都是在 Go 是用什麼樣的方式來實現他的特色，例如 user-space scheduler。而這場參加的人數竟然有 20 幾位，算是 GDG Hsinchu 開辦以來人數最多的一次，由此可知大家對於偏底層的內容還是很感興趣，希望之後有機會可以討論到更深的主題！ !</description>
+    </item>
+    
+    <item>
+      <title>2019/10 月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-11-07-study-10/</link>
+      <pubDate>Tue, 05 Nov 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-11-07-study-10/</guid>
+      <description>前言 應該是開始要努力分享一些學習到的內容了，十月份又變成只有學習日記，快要變成流水帳版了(誤)。十月卡了一個期中考大魔王，而且更可怕的是出社會太久都把微積分忘光，所以又回去複習。這次考試大多是證明，證明就是一個如果一開始錯誤，後面就會接連錯下去的東西～雖然證明不太好念，不過覺得過程中可以幫助釐清邏輯，再加上有考試壓力，還是收穫不少，當然考試分數也沒有太低啦哈。
+十月依然是一個不是很平靜的月份，花了不少時間在處理人生大事上，中間還發生跑去韓國旅遊，結果不是很好玩的慘痛回憶。不過有一位姊姊跟我說，最令人印象深刻的通常不是什麼美好的回憶，所以雖然這次經驗不太好，但是下次就會知道如何應付，也是一種人生學習～這樣聽起來好像感覺就好很多，默默地放下這事情了。
+希望十一月份可以更好。
+預定目標回顧 1. 其他語言或工具學習 (100%) 這個月看了蠻多 database 的影片和寫作業。我在英國上過資料庫導論，其實英國教授那時候就教的不錯，只可惜 CMU Database 上的更完整一點。印象深刻的部分包含：DB 是用什麼方式來儲存 tuple、DB 可能會有自己的 scheduling 來進行寫入、以及 DB 也是有 free list 來管理目前 tuple 紀錄。對於這些關於 DB internel 的學習，覺得非常有收獲，所以非常有收穫～</description>
+    </item>
+    
+    <item>
+      <title>2019/09 月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-10-05-study/</link>
+      <pubDate>Sat, 05 Oct 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-10-05-study/</guid>
+      <description>前言 這個月是一個比較多事的月份，主要原因是重新調整了生涯規劃。雖然自己出社會也快要十年了，但是轉職成 Engineer 也才不過這兩年的事情，因此自己還像是一名剛出社會的半新鮮人一樣，到處地探索自己喜歡的事物，不斷地從過程中試圖挖掘出自己的熱情所在。
+很好運的是，我覺得我在這過程中一直有貴人相助，例如我加入 Moxa，再因緣際會地加入趨勢科技，進而進入 Golang 社群開始與其他 co-organizer 辦活動等。老實說，我在群體中一直都是最菜的那位，但是大家給予我很多機會成長，讓我有機會接觸到各種事務，雖然依舊還是很菜，但至少開始有點經驗，知道自己該用什麼方式來找出問題點，在面對新技術的時候，可以從哪個方向下手讓自己快速學習。</description>
+    </item>
+    
+    <item>
+      <title>Implement Memory Allocator</title>
+      <link>https://yushuanhsieh.github.io/post/2019-09-24-stack-memory-allocator/</link>
+      <pubDate>Tue, 24 Sep 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-09-24-stack-memory-allocator/</guid>
+      <description>前言 在很多程式語言都會看到 memory allocator，也可以看到陸續發表的 allocator 實作方式，例如 microsoft mimalloc。與其用看 source code 的方式來了解其原理，倒不如從基本學起，並且從實作過程中了解到為什麼他們要這樣設計 allocator。</description>
+    </item>
+    
+    <item>
+      <title>2019/08月份自我學習回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2019-09-07-201908-study/</link>
+      <pubDate>Sat, 07 Sep 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-09-07-201908-study/</guid>
+      <description>前言 8月份有蠻多事情要處理，首先是 Go Taipei 社群和 DigitalOcean Hsinchu 合辦 Meetup，這也是我第二次在 Go 社群分享主題。而這次探討的主題和 Lock 相關，再加上會涉及一些系統相關議題，因此花了蠻多時間在看相關素材和實作細節，非常怕在 QA 時間被問到什麼很艱深的問題XD 其實每次分享，對分享者來說都是一個蠻有挑戰性的任務，主要是因為這些內容都需要蠻多時間去準備，而這次在工程師大本營新竹來分享，更是膽戰心驚，深怕不能帶給聽者有幫助的知識。不過，幸好這次 Meetup 安然度過了（所以才有時間來整理 8 月份的學習心得），當面認識了一些人，也交流了不少，很開心 :)</description>
+    </item>
+    
+    <item>
+      <title>Start HTTP/2 running over cleartext TCP</title>
+      <link>https://yushuanhsieh.github.io/post/2019-08-27-http2-h2c/</link>
+      <pubDate>Tue, 27 Aug 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-08-27-http2-h2c/</guid>
+      <description>![flow]({{ site.url }}/assets/images/h2c-flow.png)
+前言 主流使用 HTTP/2 時都是基於 TLS protocol，不過在 HTTP/2 RFC7540 規範中， HTTP/2 其實也可以直接基於 cleartext TCP 來溝通。這次主要介紹 based on cleartext TCP 的 HTTP/2 server 與 client 實作，後續會再加入 HTTP/2 結合 TLS protocol 的相關內容。</description>
+    </item>
+    
+  </channel>
+</rss>

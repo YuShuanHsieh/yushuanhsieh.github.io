@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>10月份自我學習日誌回顧</title>
+      <link>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</link>
+      <pubDate>Fri, 02 Nov 2018 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</guid>
+      <description>前言 這次十月份的學習方向和預設有點不太一樣，主要是因為某天在因緣際會之下，接觸到交大開放式課程 微處理機系統實驗 Microprocessor System Lab.，覺得實在是太有趣了，所以就欲罷不能的聽下去，順便把一些相關教學材料也買齊，好好學一下 MCU 。可以預知，接下來會繼續上曹孝櫟老師的 嵌入式系統設計概論與實作 Introduction to Embedded Systems Design and Implementation ，剛好本身也是在 IOT 產業，每天都要接觸到 Embedded Systems，這老師說的很好，讓我學習到很多 :D</description>
+    </item>
+    
+    <item>
       <title>Microprocessor System Lab. - Nucleo-64 development board</title>
       <link>https://yushuanhsieh.github.io/post/2018-10-24-mcu-study-1/</link>
       <pubDate>Wed, 24 Oct 2018 08:00:00 +0800</pubDate>
@@ -181,16 +190,6 @@ The Main Flow of Rendering Engines 在寫 HTML 的時候，我們很理所當然
       <guid>https://yushuanhsieh.github.io/post/2017-12-08-two-way-binding/</guid>
       <description>前言 最近開始接觸前端技術，預計以Angular和NodeJS為主。之前其實有稍微點一些網頁相關技能，不過大概都才Lv.1，知道大概怎麼使用，卻不太清楚背後的原理和概念。所以這次在學習的時候，會著重在框架理論和實作方式上，希望自己除了能應用這些框架之外，還可以了解這些框架背後的原理，並且進而有能力比較各框架之間的好壞。雖然Angular目前已經出到v5.1.0，但起點會從Angular1開始學起，之後文章預計會去比較新版的Angular和Angular1有怎樣的差異，以及新版的運作方式可以帶來怎樣的好處。
 Angular1主打特色之一包含 Two-way data binding (這邊先不在意這種方式帶來怎樣的壞處xD)，這篇文章紀錄 Two-way data binding 的原理和實現方式，以及對網站來說會帶來怎樣的影響。文章將不會示範如何去應用 Two-way data binding，因為我覺得隨便 Google 就可以找到很多例子，就不特別介紹了。</description>
-    </item>
-    
-    <item>
-      <title>新手入門 - Gitlab Continuous Integration &amp; Deployment</title>
-      <link>https://yushuanhsieh.github.io/post/2017-10-08-ci-tools/</link>
-      <pubDate>Sun, 08 Oct 2017 14:18:11 +0100</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2017-10-08-ci-tools/</guid>
-      <description>前言 之前雖然有聽聞過CI(Continuous Integration)相關工具，但是一直沒有好好認真地研究，畢竟都是一個人寫，總認為自己也不太需要用到CI。直到最近開始上班了，看到了公司如何使用CI來進行build package流程，頓時覺得這工具實在很便利～而因為公司也早已經有完整架構，因此雖然看得到介面，卻還是不太清楚實際上到底是如何運作的，所以就趁雙十連假期間，決定自己來實際嘗試一下整個CI運作流程。
-涉及內容  Gitlab CI Docker  Gitlab底下的CI流程  GitLab offers a continuous integration service.</description>
     </item>
     
   </channel>

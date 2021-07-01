@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Raspberry Pi Pico</title>
+      <link>https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/</link>
+      <pubDate>Wed, 30 Jun 2021 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/</guid>
+      <description>之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0+ CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。</description>
+    </item>
+    
+    <item>
       <title>C extern keyword</title>
       <link>https://yushuanhsieh.github.io/post/2021-06-23-c-extern/</link>
       <pubDate>Wed, 23 Jun 2021 08:00:00 +0800</pubDate>
@@ -184,15 +193,6 @@ Declaration &amp;amp; Definition 在討論 extern 之前，先釐清 C 的 decla
       <guid>https://yushuanhsieh.github.io/post/2020-06-25-study-05/</guid>
       <description>間隔了好一陣子沒有寫自我學習回顧，其實還是有持續在記錄，不過因為剛換新工作的關係，就忙著適應～以及學校那邊的課程也是如火如荼的進展中，就沒更新這種閒聊性質的文章了，不過技術相關的還是有努力撰寫唷 ・ω・
 5 月份主要都在念兩大項目：SDN 和 GCP cloud 線上課程。本來是預期在六月的時候去考試的，沒想到 SDN 期末考就先到來了，因此預計 GCP 考試就會延到七月份。另外，七月也要開始準備 COSCUP 分享，這次題目我很喜歡，但是卻也不好準備，希望不要讓底下的聽眾失望，我會好好加油的！</description>
-    </item>
-    
-    <item>
-      <title>Escape analysis issues of strings builder</title>
-      <link>https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/</link>
-      <pubDate>Wed, 24 Jun 2020 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/</guid>
-      <description>在分享 Go string to slice 議題 文章後，有朋友(感謝@陳孝思)在社團裡面分享另一個議題，關於在 strings package 的 builder 中有避免 escape analysis 的方式。基於這個分享，我就去查閱了相關 source code 和 issues ，並且整理成此文章。</description>
     </item>
     
   </channel>

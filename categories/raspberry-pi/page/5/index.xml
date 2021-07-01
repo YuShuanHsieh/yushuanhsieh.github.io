@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Raspberry Pi on 文組工程師</title>
+    <link>https://yushuanhsieh.github.io/categories/raspberry-pi/</link>
+    <description>Recent content in Raspberry Pi on 文組工程師</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 30 Jun 2021 08:00:00 +0800</lastBuildDate>
+    
+        <atom:link href="https://yushuanhsieh.github.io/categories/raspberry-pi/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>新手入門 - Gitlab Continuous Integration &amp; Deployment</title>
+      <link>https://yushuanhsieh.github.io/post/2017-10-08-ci-tools/</link>
+      <pubDate>Sun, 08 Oct 2017 14:18:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-10-08-ci-tools/</guid>
+      <description>前言 之前雖然有聽聞過CI(Continuous Integration)相關工具，但是一直沒有好好認真地研究，畢竟都是一個人寫，總認為自己也不太需要用到CI。直到最近開始上班了，看到了公司如何使用CI來進行build package流程，頓時覺得這工具實在很便利～而因為公司也早已經有完整架構，因此雖然看得到介面，卻還是不太清楚實際上到底是如何運作的，所以就趁雙十連假期間，決定自己來實際嘗試一下整個CI運作流程。
+涉及內容  Gitlab CI Docker  Gitlab底下的CI流程  GitLab offers a continuous integration service.</description>
+    </item>
+    
+    <item>
+      <title>Discussing the Action Manager in Cocos2d-x</title>
+      <link>https://yushuanhsieh.github.io/post/2017-09-15-cocos-action-manager/</link>
+      <pubDate>Fri, 15 Sep 2017 14:18:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-09-15-cocos-action-manager/</guid>
+      <description>[前言]
+前陣子才剛從英國完成論文返回台灣。因為忙論文 / 忙搬家 / 忙調作息，所以好些時間沒有更新相關知識，覺得自己好像停滯了&amp;hellip;明天就是轉職人生的開始，趕緊來繼續惡補Cocos2d-x知識。API使用方式和理解固然很重要，不過我也相當喜歡探討一些運作流程和結構方式，所以文章內容也會比較著重在這部分。這次來看的是有關於node-&amp;gt;runAction(Action* action);之前我寫遊戲時使用完全不同的方式來讓遊戲像素變動，因此會比較想了解引擎是如何讓node根據我們設定的動作來變化。
+[涉及Class]
+ActionManager
+UT_hash_handle</description>
+    </item>
+    
+    <item>
+      <title>Write a collection</title>
+      <link>https://yushuanhsieh.github.io/post/2017-08-24-write-a-collection/</link>
+      <pubDate>Thu, 24 Aug 2017 19:57:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-08-24-write-a-collection/</guid>
+      <description>前言
+記得在6月份面試的時候，有考到自己寫Stack時，應該注意什麼地方，不過那時候很緊張，只有說到使用array來建構stack會有極限值或空值的問題，後來想想，其實還有element被pop之後的記憶體問題。剛好最近在看書複習時，書中只有簡單將top index - 1來限制可取得的element，導致即使array[index]的值被return後，array[index]實際上還是存在於記憶體中。
+處理方式
+Java
+針對這個問題，去看了一下Java原始碼對於這部分的處理(arraydeque)，果然它會先建立一個Result物件，然後將array[index] = null之後，返回Result，來避免上述所提到的問題。</description>
+    </item>
+    
+    <item>
+      <title>Jekyll</title>
+      <link>https://yushuanhsieh.github.io/post/2017-08-23-welcome-to-jekyll/</link>
+      <pubDate>Thu, 24 Aug 2017 10:55:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-08-23-welcome-to-jekyll/</guid>
+      <description>這是第一次用Jekyll寫紀錄，雖然我Project是使用Jekyll的概念來開發的，不過實際上我並沒有真的使用它過，主要原因是怕自己想法會因為這樣而被定型，所以當初在開發的時候，只有參考Jekyll網站上的流程圖而已。現在Project的Prototype已完成，就來使用一下，看有什麼可以改進的地方。就整體架構來說，其實差沒有很多，不過Jekyll在程式上分得更細，提供相當多的參數供開發者設定，以及很有彈性而且完整的template render，這些都是值得我後續學習。
+This my first time to write articles with Jekyll.</description>
+    </item>
+    
+    <item>
+      <title>About Me</title>
+      <link>https://yushuanhsieh.github.io/post/1900-01-01-about/</link>
+      <pubDate>Mon, 01 Jan 1900 10:55:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/1900-01-01-about/</guid>
+      <description>Cherie Hsieh Experience  Principle Cloud Engineer at PUFsecurity (2020/04 – present) Back-End Engineer at UmboCV (2019/12 - 2020/03) Back-End Engineer at TrendMicro (2019/01 – 2019/11) Front-End Engineer at MOXA Inc.</description>
+    </item>
+    
+    <item>
+      <title>CSE 506 Lab 4 - Multiprocessor Support</title>
+      <link>https://yushuanhsieh.github.io/post/2021-04-23-life/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2021-04-23-life/</guid>
+      <description>Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。</description>
+    </item>
+    
+  </channel>
+</rss>

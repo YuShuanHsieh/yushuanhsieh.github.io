@@ -11,6 +11,16 @@
     
     
     <item>
+      <title>新手入門 - Gitlab Continuous Integration &amp; Deployment</title>
+      <link>https://yushuanhsieh.github.io/post/2017-10-08-ci-tools/</link>
+      <pubDate>Sun, 08 Oct 2017 14:18:11 +0100</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2017-10-08-ci-tools/</guid>
+      <description>前言 之前雖然有聽聞過CI(Continuous Integration)相關工具，但是一直沒有好好認真地研究，畢竟都是一個人寫，總認為自己也不太需要用到CI。直到最近開始上班了，看到了公司如何使用CI來進行build package流程，頓時覺得這工具實在很便利～而因為公司也早已經有完整架構，因此雖然看得到介面，卻還是不太清楚實際上到底是如何運作的，所以就趁雙十連假期間，決定自己來實際嘗試一下整個CI運作流程。
+涉及內容  Gitlab CI Docker  Gitlab底下的CI流程  GitLab offers a continuous integration service.</description>
+    </item>
+    
+    <item>
       <title>Discussing the Action Manager in Cocos2d-x</title>
       <link>https://yushuanhsieh.github.io/post/2017-09-15-cocos-action-manager/</link>
       <pubDate>Fri, 15 Sep 2017 14:18:11 +0100</pubDate>

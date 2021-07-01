@@ -37,7 +37,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2021-06-23T08:00:00+08:00" />
+<meta property="og:updated_time" content="2021-06-30T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -121,6 +121,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">11</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/raspberry-pi/" class="category-list-link">raspberry-pi</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/security/" class="category-list-link">security</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">30</span></li>
@@ -132,6 +133,16 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" class="title">Raspberry Pi Pico</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-06-30 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-30</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -172,16 +183,6 @@
                     </p>
                 </div>
             </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-02-18-l1-cache-arm/" class="title">L1 Cache architecture in ARM</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2021-02-18 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-18</time>
-                    </p>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
@@ -197,6 +198,44 @@
     
     
     
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2021-06-19-pico-memory/"
+    >
+    
+      
+        
+          <span class="title-cat">Raspberry Pi</span>
+        
+      
+    Raspberry Pi Pico</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0+ CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" class="">
+  <time datetime="2021-06-30 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-30</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/raspberry-pi/"> Raspberry Pi </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2021-06-19-pico-memory/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
     <article
       class="article article-type-page"
       itemscope
@@ -261,7 +300,7 @@ Declaration &amp; Definition 在討論 extern 之前，先釐清 C 的 declarati
       <p class="article-meta">
 <span class="article-date">
   <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/" class="article-date">
+<a href="https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/" class="">
   <time datetime="2021-05-23 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-05-23</time>
 </a>
 </span>
@@ -545,44 +584,6 @@ Declaration &amp; Definition 在討論 extern 之前，先釐清 C 的 declarati
 </span>
 
         <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-12-23-web_auth/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2020-11-25-lab3_1/"
-    >
-    
-      
-        
-          <span class="title-cat">Operating System</span>
-        
-      
-    CSE 506 Lab 3 - User Environments(Processes)</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">閒聊 之前在辦活動的時候，得知有朋友在 follow 我的 Blog ，真是讓我非常訝異，因為我一直是默默撰寫文章，而且雖然我有參與 Golang 和 GDG 社群，但是我寫的內容很常都跟 Golang 和 Google 技術沒什麼太大關係 XD 非常感謝各位的觀看，之前有近兩個月都沒更新，感覺有點罪惡，以後會盡量定期更新的。</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/" class="">
-  <time datetime="2020-11-25 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-11-25</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/operating-system/"> Operating System </a>
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-11-25-lab3_1/#comments" class="article-comment-link">Comments</a></span>
       </p>
     </article></div>
   

@@ -37,7 +37,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/" />
-<meta property="og:updated_time" content="2021-06-23T08:00:00+08:00" />
+<meta property="og:updated_time" content="2021-06-30T08:00:00+08:00" />
 <meta itemprop="name" content="文組工程師">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="文組工程師"/>
@@ -121,6 +121,7 @@
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">7</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">11</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/raspberry-pi/" class="category-list-link">raspberry-pi</a><span class="category-list-count">1</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/security/" class="category-list-link">security</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
             <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">30</span></li>
@@ -132,6 +133,16 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" class="title">Raspberry Pi Pico</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-06-30 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-30</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -172,16 +183,6 @@
                     </p>
                 </div>
             </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-02-18-l1-cache-arm/" class="title">L1 Cache architecture in ARM</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2021-02-18 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-02-18</time>
-                    </p>
-                </div>
-            </li>
         </ul>
     </div>
 </div>
@@ -197,6 +198,44 @@
     
     
     
+    <article
+      class="article article-type-page"
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+    >
+      <div class="article-header">
+        <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2020-01-21-golang-router/"
+    >
+    
+      
+        
+          <span class="title-cat">Go</span>
+        
+      
+    Go HTTP Routers - Chi/Echo/Gin/gorilla mux 實作細節與比較</a>
+</h1>
+
+      </div>
+      <div class="article-entry text-muted" itemprop="description">前言 之前做 API server，制定 route path 時有遇到一些問題，於是就順手看了幾個 HTTP router / web framework 的 router 部分實作方式，並且記錄下來，提供給大家做個參考。</div>
+      <p class="article-meta">
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2020-01-21-golang-router/" class="">
+  <time datetime="2020-01-21 08:00:00 &#43;0800 CST" itemprop="datePublished">2020-01-21</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/go/"> Go </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2020-01-21-golang-router/#comments" class="article-comment-link">Comments</a></span>
+      </p>
+    </article>
     <article
       class="article article-type-page"
       itemscope
@@ -548,47 +587,6 @@ Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變�
 </span>
 
         <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2019-08-27-http2-h2c/#comments" class="article-comment-link">Comments</a></span>
-      </p>
-    </article>
-    <article
-      class="article article-type-page"
-      itemscope
-      itemtype="http://schema.org/BlogPosting"
-    >
-      <div class="article-header">
-        <h1 itemprop="name">
-  <a
-    class="article-title"
-    href="/post/2019-08-18-sem-glibc/"
-    >
-    
-      
-        
-          <span class="title-cat">GNU</span>
-        
-          <span class="title-cat">C</span>
-        
-      
-    semaphore sem_post 在 glibc v2.0 v2.1 之比較</a>
-</h1>
-
-      </div>
-      <div class="article-entry text-muted" itemprop="description">前言 在翻 futex man document 的時候，不小心看到 Linux Futex的设计与实现 這篇文章。文章中有提到在執行 sem_post 的時候，雖然沒有與其他 thread 競爭，還是會用到 fuxtex system call。當然文章中有提到原因，不過看了原因，覺得這看起來很明顯的效能問題，應該會被提出來並改進吧？後來翻了一下目前的 source code ，看到這個是 GLIBC_2_0 的版本（那篇文章也很久了，所以能想見當時的版本應該蠻舊的），而現在 GLIBC_2_1 就有把這部分改進，因此就來簡單記錄一下差異在哪裡吧～</div>
-      <p class="article-meta">
-<span class="article-date">
-  <i class="icon icon-calendar-check"></i>&nbsp;
-<a href="https://yushuanhsieh.github.io/post/2019-08-18-sem-glibc/" class="">
-  <time datetime="2019-08-17 08:00:00 &#43;0800 CST" itemprop="datePublished">2019-08-17</time>
-</a>
-</span>
-<span class="article-category">
-  <i class="icon icon-folder"></i>
-  
-    <a class="article-category-link" href="/categories/gnu/"> GNU </a>
-    <a class="article-category-link" href="/categories/c/"> C </a>
-</span>
-
-        <span class="post-comment"><i class="icon icon-comment"></i> &nbsp;<a href="/post/2019-08-18-sem-glibc/#comments" class="article-comment-link">Comments</a></span>
       </p>
     </article></div>
   

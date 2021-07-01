@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>semaphore sem_post 在 glibc v2.0 v2.1 之比較</title>
+      <link>https://yushuanhsieh.github.io/post/2019-08-18-sem-glibc/</link>
+      <pubDate>Sat, 17 Aug 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2019-08-18-sem-glibc/</guid>
+      <description>前言 在翻 futex man document 的時候，不小心看到 Linux Futex的设计与实现 這篇文章。文章中有提到在執行 sem_post 的時候，雖然沒有與其他 thread 競爭，還是會用到 fuxtex system call。當然文章中有提到原因，不過看了原因，覺得這看起來很明顯的效能問題，應該會被提出來並改進吧？後來翻了一下目前的 source code ，看到這個是 GLIBC_2_0 的版本（那篇文章也很久了，所以能想見當時的版本應該蠻舊的），而現在 GLIBC_2_1 就有把這部分改進，因此就來簡單記錄一下差異在哪裡吧～</description>
+    </item>
+    
+    <item>
       <title>2019/07月份自我學習回顧</title>
       <link>https://yushuanhsieh.github.io/post/2019-08-05-201907-study/</link>
       <pubDate>Thu, 08 Aug 2019 08:00:00 +0800</pubDate>
@@ -195,15 +204,6 @@ mapStateToProps Issues 首先來談談在建立 connectHOC 常用到的 mapState
       
       <guid>https://yushuanhsieh.github.io/post/2018-11-04-mcu-cross-compiler/</guid>
       <description>前言 其實整個課程已經看完了，只是因為寫 blog 需要準備很多資料，畢竟有些部分老師快速帶過，所以生產文章的速度遠不及看課程速度XD 這次要說的是 Cross Compiler，因為如果是安裝像是 SW4STM32 IDE，它所有 cross compiler 設定都已經備妥妥了，使用者只要按一個蟲蟲鍵便能快速 Debugger，不過實際上它背後執行許多程序，只是因為都被自動配置好了，因此使用者不太需要去處理這些額外的環境設定。</description>
-    </item>
-    
-    <item>
-      <title>10月份自我學習日誌回顧</title>
-      <link>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</link>
-      <pubDate>Fri, 02 Nov 2018 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2018-11-02-aug-study/</guid>
-      <description>前言 這次十月份的學習方向和預設有點不太一樣，主要是因為某天在因緣際會之下，接觸到交大開放式課程 微處理機系統實驗 Microprocessor System Lab.，覺得實在是太有趣了，所以就欲罷不能的聽下去，順便把一些相關教學材料也買齊，好好學一下 MCU 。可以預知，接下來會繼續上曹孝櫟老師的 嵌入式系統設計概論與實作 Introduction to Embedded Systems Design and Implementation ，剛好本身也是在 IOT 產業，每天都要接觸到 Embedded Systems，這老師說的很好，讓我學習到很多 :D</description>
     </item>
     
   </channel>

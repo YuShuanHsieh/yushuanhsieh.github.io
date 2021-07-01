@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Escape analysis issues of strings builder</title>
+      <link>https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/</link>
+      <pubDate>Wed, 24 Jun 2020 08:00:00 +0800</pubDate>
+      
+      <guid>https://yushuanhsieh.github.io/post/2020-06-24-strings-builder/</guid>
+      <description>在分享 Go string to slice 議題 文章後，有朋友(感謝@陳孝思)在社團裡面分享另一個議題，關於在 strings package 的 builder 中有避免 escape analysis 的方式。基於這個分享，我就去查閱了相關 source code 和 issues ，並且整理成此文章。</description>
+    </item>
+    
+    <item>
       <title>Go string to slice 議題</title>
       <link>https://yushuanhsieh.github.io/post/2020-06-01-string-to-slice/</link>
       <pubDate>Mon, 01 Jun 2020 08:00:00 +0800</pubDate>
@@ -194,15 +203,6 @@ Front-End to Back-End 首先，最大的轉變大概是從專職 front-end 變�
       <guid>https://yushuanhsieh.github.io/post/2019-08-27-http2-h2c/</guid>
       <description>![flow]({{ site.url }}/assets/images/h2c-flow.png)
 前言 主流使用 HTTP/2 時都是基於 TLS protocol，不過在 HTTP/2 RFC7540 規範中， HTTP/2 其實也可以直接基於 cleartext TCP 來溝通。這次主要介紹 based on cleartext TCP 的 HTTP/2 server 與 client 實作，後續會再加入 HTTP/2 結合 TLS protocol 的相關內容。</description>
-    </item>
-    
-    <item>
-      <title>semaphore sem_post 在 glibc v2.0 v2.1 之比較</title>
-      <link>https://yushuanhsieh.github.io/post/2019-08-18-sem-glibc/</link>
-      <pubDate>Sat, 17 Aug 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://yushuanhsieh.github.io/post/2019-08-18-sem-glibc/</guid>
-      <description>前言 在翻 futex man document 的時候，不小心看到 Linux Futex的设计与实现 這篇文章。文章中有提到在執行 sem_post 的時候，雖然沒有與其他 thread 競爭，還是會用到 fuxtex system call。當然文章中有提到原因，不過看了原因，覺得這看起來很明顯的效能問題，應該會被提出來並改進吧？後來翻了一下目前的 source code ，看到這個是 GLIBC_2_0 的版本（那篇文章也很久了，所以能想見當時的版本應該蠻舊的），而現在 GLIBC_2_1 就有把這部分改進，因此就來簡單記錄一下差異在哪裡吧～</description>
     </item>
     
   </channel>

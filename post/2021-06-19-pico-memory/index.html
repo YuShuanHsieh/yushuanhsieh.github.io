@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Raspberry Pi Pico - 文組工程師
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。" />
+    
+  <meta name="generator" content="Hugo 0.71.0 with theme pure" />
+  <title>Raspberry Pi Pico - 文組工程師</title>
+  
+  
+  <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
+  
+    
+    <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="Raspberry Pi Pico" />
+<meta property="og:description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" />
+<meta property="article:published_time" content="2021-06-30T08:00:00+08:00" />
+<meta property="article:modified_time" content="2021-06-30T08:00:00+08:00" />
+<meta itemprop="name" content="Raspberry Pi Pico">
+<meta itemprop="description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。">
+<meta itemprop="datePublished" content="2021-06-30T08:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2021-06-30T08:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="510">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Raspberry Pi Pico"/>
+<meta name="twitter:description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="/" target="">
+            <img class="img-circle img-rotate" src="https://yushuanhsieh.github.io/author.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">Cherie Hsieh</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">Software Engineer</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Taiwan</small>
+        </div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-about">
+                <a href="/post/1900-01-01-about/">
+                  <span class="menu-title">About</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title"> Categories</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/c/" class="category-list-link">c</a><span class="category-list-count">4</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/conference/" class="category-list-link">conference</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/coscup/" class="category-list-link">coscup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/devops/" class="category-list-link">devops</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/game/" class="category-list-link">game</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/gnu/" class="category-list-link">gnu</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/go/" class="category-list-link">go</a><span class="category-list-count">16</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/google-cloud-platform/" class="category-list-link">google-cloud-platform</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/kubernetes/" class="category-list-link">kubernetes</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/life/" class="category-list-link">life</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/linux-kernel/" class="category-list-link">linux-kernel</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/meetup/" class="category-list-link">meetup</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/network/" class="category-list-link">network</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/operating-system/" class="category-list-link">operating-system</a><span class="category-list-count">7</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/other/" class="category-list-link">other</a><span class="category-list-count">11</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/raspberry-pi/" class="category-list-link">raspberry-pi</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/security/" class="category-list-link">security</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/study/" class="category-list-link">study</a><span class="category-list-count">10</span></li>
+            <li class="category-list-item"><a href="https://yushuanhsieh.github.io/categories/web/" class="category-list-link">web</a><span class="category-list-count">30</span></li>
+        </ul>
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" class="title">Raspberry Pi Pico</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-06-30 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-30</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-06-23-c-extern/" class="title">C extern keyword</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-06-23 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-23</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/" class="title">CSE 506 Lab 4 - Multiprocessor Support and Cooperative Multitasking</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-05-23 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-05-23</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-04-24-go-calling-convention/" class="title">Switch to a register-based calling convention for Go functions</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-04-24 01:00:00 &#43;0800 CST" itemprop="datePublished">2021-04-24</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://yushuanhsieh.github.io/post/2021-04-22-life/" class="title">近況雜談</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-04-22 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-04-22</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<main class="main" role="main"><div class="content">
+  <article id="single-" class="article article-type-single" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/post/2021-06-19-pico-memory/"
+    >
+    
+      
+        
+          <span class="title-cat">Raspberry Pi</span>
+        
+      
+    Raspberry Pi Pico</a>
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" class="article-date">
+  <time datetime="2021-06-30 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-30</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>
+  
+    <a class="article-category-link" href="/categories/raspberry-pi/"> Raspberry Pi </a>
+</span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/post/2021-06-19-pico-memory/#comments"
+            class="article-comment-link">Comments</a></span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>之前 blog 文章有提到 <a href="https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/">JOS 作業系統初始化流程</a>，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0+ CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。</p>
+<p>Note：以下的 boot flow 是指開發板上電後，硬體完成 hardware controlled boot sequence ，從 processor controlled boot sequence 開始，更多說明可以參考 <a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">datasheet:2.7. Boot Sequence</a>。</p>
+<h2 id="boot-sequence">Boot Sequence</h2>
+<p><img src="/posts/pico-boot-flow.png" alt=""></p>
+<p><a href="https://github.com/raspberrypi/pico-bootrom">pico-bootrom</a>。bootrom 是 Raspberry Pi Pico 在出廠時燒在 ROM 上的 boot 程式，其大小為 16 KB，其最主要目的在於提供 processor 初始化行為和提供不同的 boot mode 切換。</p>
+<h3 id="boot-flow-diagram">Boot Flow Diagram</h3>
+<p><img src="/posts/Raspi-pico.png" alt=""></p>
+<h3 id="memory-map--memory-layout">Memory Map &amp; Memory Layout</h3>
+<p>參考 datasheet 所提供的 flow diagram，以及根據 source code 所整理的 memory map，搭配 source code 來分析 boot 和 application 執行流程。</p>
+<p>Raspberry Pi Pico 有兩個 processor，一開始兩個 processor 都會去讀取位於 <code>0x00000000</code> 位置以取得 <a href="https://developer.arm.com/documentation/dui0497/a/the-cortex-m0-processor/exception-model/vector-table">vector table</a>。vector table 有兩個重要資訊：initial stack pointer (MSP) 和 reset handler，在 <code>bootrom.ld</code> 可以看到 MSP 被設置在 SRAM address end - 256 bytes 的位置。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">/* Leave room above the stack for stage 2 load, so that stage 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">       can image SRAM from its beginning */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    _stacktop = ORIGIN(SRAM) + LENGTH(SRAM) - 256;
+</code></pre></div><p>再看 <code>bootrom_rt0.S</code> 找到 vector table 的內容：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// bootrom_rt0.S
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span>.cpu cortex-m0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>.thumb
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>.section .vectors
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>.balign 2
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>.global __vectors
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>__vectors:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>.word _stacktop <span style="color:#008000">// MSP
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>.word _start    <span style="color:#008000">// Reset
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000"></span>.word _nmi      <span style="color:#008000">// NMI
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>.word _dead     <span style="color:#008000">// HardFault
+</span></code></pre></div><p>processor 會設置 stack pointer，並且執行在 reset handler address 的 entry point <code>_start</code>。而在 boot 階段，僅需要一個 processor 來完成啟動流程，因此會先判斷當前執行的 processor 是 CPU-0 還是 CPU-1，如果是 1 的話則將此 processor 直接切換成 sleep 模式。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>check_core:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    ldr r0, =SIO_BASE <span style="color:#008000">// SIO_BASE (Single-cycle IO block) see. 2.3.1. SIO
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>    ldr r1, [r0, <span style="">#</span>SIO_CPUID_OFFSET]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    cmp r1, <span style="">#</span>0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    bne wait_for_vector
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    bl _nmi
+</code></pre></div><p>bootrom 是透過讀取 <code>SIO_BASE + SIO_CPUID_OFFSET</code> SIO CPUID register (<a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">2.3.1.7. List of Registers</a>) 的值來判斷 processor 編號。</p>
+<p>接下來，檢查 Rescue DP flag 和 watchdog register 是否有設置，如有的話需進行額外處理。由於使用者在正常流程中比較少會需要處理這兩個狀況，因此就省略不說，詳細內容可以參考 <a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">2.3.4.2. Rescue DP</a>、<a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">2.8.1.1. Watchdog Boot</a>。</p>
+<p>最後就是選擇進入 flash boot 或是 USB device boot。flash boot 讓開發板正常執行已放在 flash 的使用者程式；而如果要將程式透過 USB massive storage 模式放入到 flash，則是 USB device boot。</p>
+<p>選擇的方式是透過讀取 flash(QSPI interface) CS(Chip Select) pin 的電位，如果高電位是 flash boot 反之低電位是 USB device boot。在開發板上可以看到一個 <code>BOOTSEL</code> 按鈕，可以控制 flash CS pin 的電位，因此當使用者按下按鈕不放時，此時 flash CS pin 為 0，因此進入 USB device boot 模式。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>uint32_t sum = 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> i = 0; i &lt; 9; ++i) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  delay(1 * ROSC_MHZ_MAX / 3);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  sum += (sio_hw-&gt;gpio_hi_in &gt;&gt; 1) &amp; 1u;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#00f">if</span> (sum &gt;= 5)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  _flash_boot();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000">// note this never returns (and is marked as such)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000"></span>_usb_boot(0, 0);
+</code></pre></div><p>為了確保資料讀取的正確性，會連續讀取 flash CS pin 數次，再根據 sum 值決定最後電位的值是 1 或是 0。</p>
+<p>這邊要注意的是，當跳轉至 <code>_flash_boot</code>，就不會再跳轉回來並且繼續執行 <code>_usb_boot</code>，其原因在於：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">static</span> <span style="color:#2b91af">void</span> _flash_boot() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span> <span style="color:#008000">// more code ...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span> <span style="color:#00f">asm</span> <span style="color:#00f">volatile</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#a31515">&#34;add %0, #1</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#a31515">&#34;mov lr, %1</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#a31515">&#34;bx %0</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  : <span style="color:#a31515">&#34;+r&#34;</span> (boot2_entry) : <span style="color:#a31515">&#34;l&#34;</span> (boot2_exit) :
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  __builtin_unreachable();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>}
+</code></pre></div><p>在 asm code 中執行 bx instruction 跳轉至 boot 2 entry point，意味著無透過 link register 儲存當前 PC。</p>
+<blockquote>
+<ol>
+<li>
+<p><strong>BX</strong> Branch and exchange instruction set. (<a href="https://developer.arm.com/documentation/ddi0484/b/CHDCICDF">source</a>)</p>
+</li>
+<li>
+<p><code>__builtin_unreachable()</code> the built-in function is useful in situations where the compiler cannot deduce the unreachability of the code.(<a href="https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html">read more</a>)</p>
+</li>
+</ol>
+</blockquote>
+<p>另外要注意的是： <code>&quot;add %0, #1\n&quot;</code>，之所以會 +1 的原因是：</p>
+<blockquote>
+<p>For BX and BLX, bit[0] of Rm <strong>must be 1</strong> for correct execution. (<a href="https://developer.arm.com/documentation/dui0662/b/The-Cortex-M0--Instruction-Set/Branch-and-control-instructions/B--BL--BX--and-BLX?lang=en">Cortex-M0+ Devices Generic User Guide</a>)</p>
+</blockquote>
+<p>跳轉目標位置的 bit[0] 在 ARM B instruction 是代表切換 ARM / Thumb state，而 cortex-M0+ 實作 The ARMv6-M Thumb® instruction set，所以要設為 1。</p>
+<h3 id="references">References</h3>
+<ol>
+<li><a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf</a></li>
+</ol>
+<h2 id="結語">結語</h2>
+<p>不得不說 Raspberry Pi 提供非常完整的文件和教學內容，不論是初學者或是進階者都能夠很快上手。而對於想要細部了解其運作流程的開發者來說，只要將 <a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">RP2040 Datasheet</a> 搭配 source code 一起看，就可以很快地了解整個運作流程。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permalink: </strong>
+      <a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" title="Raspberry Pi Pico" target="_blank" rel="external">https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://yushuanhsieh.github.io/author.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Cherie Hsieh</span><small class="ml-1x">Software Engineer</small></a></h3>
+        <div>Gopher</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://yushuanhsieh.github.io/post/2021-06-23-c-extern/" title="C extern keyword"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            
+        </ul>
+        <div class="bar-right">
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://yushuanhsieh.github.io/cjamhe01385@gmail.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://www.facebook.com/cjamhe01385" target="_blank" title="facebook" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-facebook"></i></a></li>
+    <li><a href="https://yushuanhsieh.github.io/true" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2017  -
+    2021
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="https://yushuanhsieh.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://yushuanhsieh.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: 'https:\/\/yushuanhsieh.github.io',
+            CONTENT_URL: 'https:\/\/yushuanhsieh.github.io\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://yushuanhsieh.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+
+  </body>
+</html>
