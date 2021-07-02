@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/</loc>
+    <lastmod>2021-06-30T08:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://yushuanhsieh.github.io/categories/</loc>
     <lastmod>2021-06-30T08:00:00+08:00</lastmod>
   </url>
@@ -14,11 +19,6 @@
   
   <url>
     <loc>https://yushuanhsieh.github.io/categories/raspberry-pi/</loc>
-    <lastmod>2021-06-30T08:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/</loc>
     <lastmod>2021-06-30T08:00:00+08:00</lastmod>
   </url>
   

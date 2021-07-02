@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Raspberry Pi Pico - 文組工程師
+        Boot Flow of Raspberry Pi Pico - 文組工程師
       </title>
     <head>
   <meta charset="utf-8">
@@ -22,10 +22,10 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <meta name="description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。" />
+  <meta name="description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootrom、memory map 和 layout 等。" />
     
   <meta name="generator" content="Hugo 0.71.0 with theme pure" />
-  <title>Raspberry Pi Pico - 文組工程師</title>
+  <title>Boot Flow of Raspberry Pi Pico - 文組工程師</title>
   
   
   <link rel="stylesheet" href="https://yushuanhsieh.github.io/css/style.min.77e7a4b079ffc2025082028f8e6fe3266891d5a844d08c55dc4edb39079aa481.css">
@@ -34,23 +34,23 @@
     <link rel="stylesheet" href="https://yushuanhsieh.github.io/scss/cherie.min.9d783e1aff5bd8d61fd74551461bf2a5c62c232caf17ddaef3c681e53b429d8e.css" async>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
-  <meta property="og:title" content="Raspberry Pi Pico" />
-<meta property="og:description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。" />
+  <meta property="og:title" content="Boot Flow of Raspberry Pi Pico" />
+<meta property="og:description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootrom、memory map 和 layout 等。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" />
 <meta property="article:published_time" content="2021-06-30T08:00:00+08:00" />
 <meta property="article:modified_time" content="2021-06-30T08:00:00+08:00" />
-<meta itemprop="name" content="Raspberry Pi Pico">
-<meta itemprop="description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。">
+<meta itemprop="name" content="Boot Flow of Raspberry Pi Pico">
+<meta itemprop="description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootrom、memory map 和 layout 等。">
 <meta itemprop="datePublished" content="2021-06-30T08:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-06-30T08:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="510">
+<meta itemprop="wordCount" content="518">
 
 
 
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Raspberry Pi Pico"/>
-<meta name="twitter:description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。"/>
+<meta name="twitter:title" content="Boot Flow of Raspberry Pi Pico"/>
+<meta name="twitter:description" content="之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0&#43; CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootrom、memory map 和 layout 等。"/>
 
   <!--[if lte IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -145,7 +145,7 @@
             <li>
                 <div class="item-inner">
                     <p class="item-title">
-                        <a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" class="title">Raspberry Pi Pico</a>
+                        <a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" class="title">Boot Flow of Raspberry Pi Pico</a>
                     </p>
                     <p class="item-date">
                         <time datetime="2021-06-30 08:00:00 &#43;0800 CST" itemprop="datePublished">2021-06-30</time>
@@ -216,7 +216,7 @@
           <span class="title-cat">Raspberry Pi</span>
         
       
-    Raspberry Pi Pico</a>
+    Boot Flow of Raspberry Pi Pico</a>
 </h1>
 
       <div class="article-meta">
@@ -238,20 +238,20 @@
       </div>
     </div>
     <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
-      <p>之前 blog 文章有提到 <a href="https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/">JOS 作業系統初始化流程</a>，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0+ CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。</p>
-<p>Note：以下的 boot flow 是指開發板上電後，硬體完成 hardware controlled boot sequence ，從 processor controlled boot sequence 開始，更多說明可以參考 <a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">datasheet:2.7. Boot Sequence</a>。</p>
+      <p>之前 blog 文章有提到 <a href="https://yushuanhsieh.github.io/post/2021-05-23-lab4-multiprocessor/">JOS 作業系統初始化流程</a>，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0+ CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootrom、memory map 和 layout 等。</p>
+<p><em>（以下的 boot flow 是指開發板上電後，硬體完成 hardware controlled boot sequence ，從 processor controlled boot sequence 開始，更多說明可以參考 <a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">datasheet:2.7. Boot Sequence</a>）</em></p>
 <h2 id="boot-sequence">Boot Sequence</h2>
-<p><img src="/posts/pico-boot-flow.png" alt=""></p>
-<p><a href="https://github.com/raspberrypi/pico-bootrom">pico-bootrom</a>。bootrom 是 Raspberry Pi Pico 在出廠時燒在 ROM 上的 boot 程式，其大小為 16 KB，其最主要目的在於提供 processor 初始化行為和提供不同的 boot mode 切換。</p>
+<p><a href="https://github.com/raspberrypi/pico-bootrom">pico-bootrom</a> 是 Raspberry Pi Pico 在出廠時燒在 ROM 上的 boot 程式，大小為 16 KB，它最主要目的在於提供 processor 初始化行為和提供不同的 boot mode 切換。</p>
 <h3 id="boot-flow-diagram">Boot Flow Diagram</h3>
-<p><img src="/posts/Raspi-pico.png" alt=""></p>
+<p><img src="/posts/pico-boot-flow.png" alt=""></p>
 <h3 id="memory-map--memory-layout">Memory Map &amp; Memory Layout</h3>
+<p><img src="/posts/Raspi-pico.png" alt=""></p>
 <p>參考 datasheet 所提供的 flow diagram，以及根據 source code 所整理的 memory map，搭配 source code 來分析 boot 和 application 執行流程。</p>
-<p>Raspberry Pi Pico 有兩個 processor，一開始兩個 processor 都會去讀取位於 <code>0x00000000</code> 位置以取得 <a href="https://developer.arm.com/documentation/dui0497/a/the-cortex-m0-processor/exception-model/vector-table">vector table</a>。vector table 有兩個重要資訊：initial stack pointer (MSP) 和 reset handler，在 <code>bootrom.ld</code> 可以看到 MSP 被設置在 SRAM address end - 256 bytes 的位置。</p>
+<p>Raspberry Pi Pico 有兩個 processor，一開始兩個 processor 都會去讀取位於 <code>0x00000000</code> ROM 的起始位置以取得 <a href="https://developer.arm.com/documentation/dui0497/a/the-cortex-m0-processor/exception-model/vector-table">vector table</a>。vector table 有兩個重要資訊：<strong>initial stack pointer (MSP)</strong> 和 <strong>reset handler</strong>，在 bootrom.ld 可以看到 MSP 被設置在 SRAM address end - 256 bytes 的位置。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">/* Leave room above the stack for stage 2 load, so that stage 2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">       can image SRAM from its beginning */</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    _stacktop = ORIGIN(SRAM) + LENGTH(SRAM) - 256;
-</code></pre></div><p>再看 <code>bootrom_rt0.S</code> 找到 vector table 的內容：</p>
+</code></pre></div><p>再看 bootrom_rt0.S 找到 vector table 的內容：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000">// bootrom_rt0.S
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#008000"></span>.cpu cortex-m0
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>.thumb
@@ -264,17 +264,18 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000"></span>.word _start    <span style="color:#008000">// Reset
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000"></span>.word _nmi      <span style="color:#008000">// NMI
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000"></span>.word _dead     <span style="color:#008000">// HardFault
-</span></code></pre></div><p>processor 會設置 stack pointer，並且執行在 reset handler address 的 entry point <code>_start</code>。而在 boot 階段，僅需要一個 processor 來完成啟動流程，因此會先判斷當前執行的 processor 是 CPU-0 還是 CPU-1，如果是 1 的話則將此 processor 直接切換成 sleep 模式。</p>
+</span></code></pre></div><p>processor 會設置 stack pointer，並且執行在 reset handler address 的 entry point <code>_start</code>。</p>
+<p>而在 boot 階段，由於僅能使用一個 processor 來完成啟動流程，因此會先判斷當前執行的 processor 是 CPU-0 還是 CPU-1：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>check_core:
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    ldr r0, =SIO_BASE <span style="color:#008000">// SIO_BASE (Single-cycle IO block) see. 2.3.1. SIO
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#008000"></span>    ldr r1, [r0, <span style="">#</span>SIO_CPUID_OFFSET]
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    cmp r1, <span style="">#</span>0
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    bne wait_for_vector
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    bl _nmi
-</code></pre></div><p>bootrom 是透過讀取 <code>SIO_BASE + SIO_CPUID_OFFSET</code> SIO CPUID register (<a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">2.3.1.7. List of Registers</a>) 的值來判斷 processor 編號。</p>
-<p>接下來，檢查 Rescue DP flag 和 watchdog register 是否有設置，如有的話需進行額外處理。由於使用者在正常流程中比較少會需要處理這兩個狀況，因此就省略不說，詳細內容可以參考 <a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">2.3.4.2. Rescue DP</a>、<a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">2.8.1.1. Watchdog Boot</a>。</p>
+</code></pre></div><p>bootrom 是透過讀取 <code>SIO_BASE + SIO_CPUID_OFFSET</code> SIO CPUID register (<a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">2.3.1.7. List of Registers</a>) 的值來判斷當前 processor 編號，如果是 1 的話則將此 processor 直接切換成 sleep 模式。</p>
+<p>接下來，檢查 Rescue DP flag 和 watchdog register 是否有設置，如有設置的話則需進行額外處理。由於使用者在正常流程中比較少會需要處理這兩個狀況，因此就省略不說，詳細內容可以參考 <a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">2.3.4.2. Rescue DP</a>、<a href="https://datasheets.raspberrypi.org/rp2040/rp2040-datasheet.pdf">2.8.1.1. Watchdog Boot</a>。</p>
 <p>最後就是選擇進入 flash boot 或是 USB device boot。flash boot 讓開發板正常執行已放在 flash 的使用者程式；而如果要將程式透過 USB massive storage 模式放入到 flash，則是 USB device boot。</p>
-<p>選擇的方式是透過讀取 flash(QSPI interface) CS(Chip Select) pin 的電位，如果高電位是 flash boot 反之低電位是 USB device boot。在開發板上可以看到一個 <code>BOOTSEL</code> 按鈕，可以控制 flash CS pin 的電位，因此當使用者按下按鈕不放時，此時 flash CS pin 為 0，因此進入 USB device boot 模式。</p>
+<p>選擇的方式是透過讀取 flash(QSPI interface) CS(Chip Select) pin 的電位，如果高電位是 flash boot ，反之低電位是 USB device boot。在 Raspberry Pi Pico 開發板上可以看到一個 <code>BOOTSEL</code> 按鈕，用來控制 flash CS pin 的電位，因此當使用者按下按鈕不放時，此時 flash CS pin 為 0，進入 USB device boot 模式。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>uint32_t sum = 0;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">for</span> (<span style="color:#2b91af">int</span> i = 0; i &lt; 9; ++i) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  delay(1 * ROSC_MHZ_MAX / 3);
@@ -286,8 +287,8 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000">// note this never returns (and is marked as such)
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000"></span>_usb_boot(0, 0);
-</code></pre></div><p>為了確保資料讀取的正確性，會連續讀取 flash CS pin 數次，再根據 sum 值決定最後電位的值是 1 或是 0。</p>
-<p>這邊要注意的是，當跳轉至 <code>_flash_boot</code>，就不會再跳轉回來並且繼續執行 <code>_usb_boot</code>，其原因在於：</p>
+</code></pre></div><p>為了確保資料讀取的正確性，會連續讀取 flash CS pin 數次，再根據 sum 決定最後電位值是 1 或是 0。</p>
+<p>這邊要注意的是，當跳轉至 <code>_flash_boot</code>，是不會再跳轉回來並且繼續執行 <code>_usb_boot</code>，其原因在於：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">static</span> <span style="color:#2b91af">void</span> _flash_boot() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span> <span style="color:#008000">// more code ...
@@ -311,7 +312,7 @@
 </li>
 </ol>
 </blockquote>
-<p>另外要注意的是： <code>&quot;add %0, #1\n&quot;</code>，之所以會 +1 的原因是：</p>
+<p>另外要注意的 asm code 中： <code>&quot;add %0, #1\n&quot;</code>，之所以會 +1 的原因是：</p>
 <blockquote>
 <p>For BX and BLX, bit[0] of Rm <strong>must be 1</strong> for correct execution. (<a href="https://developer.arm.com/documentation/dui0662/b/The-Cortex-M0--Instruction-Set/Branch-and-control-instructions/B--BL--BX--and-BLX?lang=en">Cortex-M0+ Devices Generic User Guide</a>)</p>
 </blockquote>
@@ -329,7 +330,7 @@
   <ul class="post-copyright list-unstyled">
     <li class="post-copyright-link hidden-xs">
       <strong>Permalink: </strong>
-      <a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" title="Raspberry Pi Pico" target="_blank" rel="external">https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/</a>
+      <a href="https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/" title="Boot Flow of Raspberry Pi Pico" target="_blank" rel="external">https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/</a>
     </li>
   </ul>
 </blockquote>

@@ -12,12 +12,12 @@
     
     
     <item>
-      <title>Raspberry Pi Pico</title>
+      <title>Boot Flow of Raspberry Pi Pico</title>
       <link>https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/</link>
       <pubDate>Wed, 30 Jun 2021 08:00:00 +0800</pubDate>
       
       <guid>https://yushuanhsieh.github.io/post/2021-06-19-pico-memory/</guid>
-      <description>之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0+ CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootloader，以及 memory map 和 layout 等。</description>
+      <description>之前 blog 文章有提到 JOS 作業系統初始化流程，包含 x86_64 架構下 muticore 喚醒過程等。而剛好前陣子入手採用 ARM Cortex-M0+ CPU 的 Raspberry Pi Pico 開發板，因此就研究了一下 Raspberry Pi 為 Pico 開發板所撰寫的 bootrom、memory map 和 layout 等。</description>
     </item>
     
     <item>
