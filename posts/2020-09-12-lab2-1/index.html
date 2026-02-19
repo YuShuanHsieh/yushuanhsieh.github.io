@@ -1,0 +1,330 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>CSE 506 Lab2 - E820 Memory Map & Page Translation (1) — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>CSE 506 Lab2 - E820 Memory Map & Page Translation (1)</h1><div class=post-meta><time datetime=2020-09-12>September 12, 2020</time>
+<span class=separator>·</span>
+<span class=reading-time>16 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/operating-system/>Operating System</a></div></header><div class=post-content><h2 id=前言>前言</h2><p>之前是看 <a href=https://www.cs.unc.edu/~porter/courses/comp790/s20/index.html>COMP790</a> 的課程，但是實作起來發現有點問題，而且題目跟實際 source code 說明不太一樣。在花了很多時間釐清之後，發現原課程內容可能來自於 <a href=https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/schedule.html>CSE 506: Lecture from Stony Brook University</a>，仔細看了一下 CSE 506 的 Lab 課程，發現題目與 source code 相符程度較高，因此後續會改看 CSE 506 這系列課程。</p><p>這次 Lab 花了大概 20 小時來實作，主要原因是有些 source code 的註解是錯誤的，所以單看註解會產生很多疑問，必須實作和觀察才能釐清。這次實驗也讓我體會到，如果覺得哪邊有不太理解的地方，就直接做實驗來驗證，而不要單看註解來去試圖理解它上面的意思，因為如果註解不是正確的，那這些時間也就浪費了。</p><p>因為這次實驗要整理的內容蠻多的，擔心文章太長，所以會分成數篇來貼！</p><h2 id=lab-實驗介紹>Lab 實驗介紹</h2><p>Lab 2 是實作 physical memory allocator 和 virtual memory allocator，其中最重要的是清楚 physical memory 與 virtual memory 之間的轉換，以及如何運用 Lab 2 的 <code>PageInfo</code> c structure 把兩者 mapping 起來。</p><h3 id=預前知識>預前知識</h3><ol><li><p><a href=https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/ref/amd64/AMD64_Architecture_Programmers_Manual.pdf>AMD64 Architecture Programmer&rsquo;s Reference Manual: Chapter 5 Page Translation and Protection</a>
+JOS 大量使用 paging 進行 virtual memory 與 physical memory 轉換，因此首要知識就是要了解 processor 的 page translation 規則，尤其是 long mode page translation。另外，flag 解釋也要先行看過，這樣在看 source code 的時候可以更快進入狀況。</p></li><li><p><a href=https://www.gnu.org/software/grub/manual/multiboot/multiboot.html>GNU Multiboot Specification</a>
+在 boot loader 階段，會透過 BIOS function 來取得當前 physical memory 的配置狀態(<a href=https://wiki.osdev.org/Detecting_Memory_(x86)#Getting_an_E820_Memory_Map>Getting an E820 Memory Map</a>)，其中我們需要解讀回傳後的 buffer 的資訊，而 GNU Multiboot Specification 提供完整的解讀說明。</p></li></ol><h2 id=問題>問題</h2><p>在進入實驗之前，有幾個問題需要先釐清：</p><ol><li>文件說明提到 JOS kernel 在執行時，是以 <code>0x8004000000</code> 位置開始執行，那這麼 address 是在哪裡設置的？又，processor 是如何知道該怎麼解析這個 virtual address？</li><li></li><li>我們可以使用的 physical memory 上限？</li></ol><p>為了瞭解這些問題，就要先從 bootloader / bootstrap source code 著手。</p><h3 id=1-get-e820-memory-map>1. Get E820 Memory Map</h3><p>首先，在 bootloader 階段，JOS 透過 x86 的 BIOS function 來取得目前記憶體配置狀態。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>.set multiboot_info<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x7000</span> <span style=color:#0550ae>//</span> After the boot block
+</span></span><span style=display:flex><span>.set e820_map<span style=color:#1f2328>,</span> multiboot_info <span style=color:#0550ae>+</span> <span style=color:#0550ae>52</span>
+</span></span><span style=display:flex><span>.set e820_map4<span style=color:#1f2328>,</span> multiboot_info <span style=color:#0550ae>+</span> <span style=color:#0550ae>56</span>
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>.set MB_flag<span style=color:#1f2328>,</span> multiboot_info
+</span></span><span style=display:flex><span>.set MB_mmap_len<span style=color:#1f2328>,</span> multiboot_info <span style=color:#0550ae>+</span> <span style=color:#0550ae>44</span>
+</span></span><span style=display:flex><span>.set MB_mmap_addr<span style=color:#1f2328>,</span> multiboot_info <span style=color:#0550ae>+</span> <span style=color:#0550ae>48</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>do_e820<span style=color:#0550ae>:</span>
+</span></span><span style=display:flex><span>  movl <span style=color:#0550ae>$</span><span style=color:#0550ae>0xe820</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>%eax
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>  movl $e820_map4, %</span>edi <span style=color:#57606a># e820_map4 = buffer address of destination</span>
+</span></span><span style=display:flex><span>  xorl <span style=color:#0550ae>%ebx, %</span>ebx
+</span></span><span style=display:flex><span>  movl <span style=color:#0550ae>$</span><span style=color:#0550ae>0x534D4150</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>%edx # 0x534D4150 = ASCII for &#39;SMAP&#39;
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>  movl $24, %</span>ecx <span style=color:#57606a># 24bytes = the size of destination buffer</span>
+</span></span><span style=display:flex><span>  int <span style=color:#0550ae>$</span><span style=color:#0550ae>0x15</span>
+</span></span><span style=display:flex><span>  jc failed
+</span></span><span style=display:flex><span>  cmpl <span style=color:#0550ae>%eax, %</span>edx <span style=color:#57606a># %eax will be set to 0x534D4150 if succeed</span>
+</span></span><span style=display:flex><span>  jne failed
+</span></span><span style=display:flex><span>  testl <span style=color:#0550ae>%ebx, %</span>ebx
+</span></span><span style=display:flex><span>  je failed
+</span></span><span style=display:flex><span>  movl <span style=color:#0550ae>$</span><span style=color:#0550ae>24</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>%ebp # %</span>ebp records the length of result
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>next_entry<span style=color:#0550ae>:</span>
+</span></span><span style=display:flex><span>  <span style=color:#57606a>#increment di</span>
+</span></span><span style=display:flex><span>  movl <span style=color:#0550ae>%ecx, -4(%</span>edi<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>  addl <span style=color:#0550ae>$</span><span style=color:#0550ae>24</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>%edi
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>  movl $0xe820, %</span>eax
+</span></span><span style=display:flex><span>  movl <span style=color:#0550ae>$</span><span style=color:#0550ae>24</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>%ecx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>  int $0x15
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>  jc done
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>  addl $24, %</span>ebp
+</span></span><span style=display:flex><span>  testl <span style=color:#0550ae>%ebx, %</span>ebx
+</span></span><span style=display:flex><span>  jne next_entry
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>done<span style=color:#0550ae>:</span>
+</span></span><span style=display:flex><span>  movl <span style=color:#0550ae>%ecx, -4(%</span>edi<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>  movw <span style=color:#0550ae>$</span><span style=color:#0550ae>0x40</span><span style=color:#1f2328>,</span> <span style=color:#1f2328>(</span>MB_flag<span style=color:#1f2328>)</span> <span style=color:#57606a># the flag value for multiboot_info</span>
+</span></span><span style=display:flex><span>  movl <span style=color:#0550ae>$</span>e820_map<span style=color:#1f2328>,</span> <span style=color:#1f2328>(</span>MB_mmap_addr<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>  movl %ebp<span style=color:#1f2328>,</span> <span style=color:#1f2328>(</span>MB_mmap_len<span style=color:#1f2328>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>每次執行 e820 BIOS function 會得到一條 memory map entry 的資訊(<code>%ebx</code> value 表示 entry 的 index，所以在一開始執行時先將 <code>%ebx</code> index 設置為 0)，透過 loop 的方式來獲得所有的 entries。</p><h4 id=note-1-the-address-of-multiboot_info>Note 1: The address of <code>multiboot_info</code></h4><p>在 code 會看到關於 multiboot_info address 設定：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>.set multiboot_info<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x7000</span> <span style=color:#0550ae>//</span> After the boot block
+</span></span><span style=display:flex><span>.set e820_map<span style=color:#1f2328>,</span> multiboot_info <span style=color:#0550ae>+</span> <span style=color:#0550ae>52</span>
+</span></span><span style=display:flex><span>.set e820_map4<span style=color:#1f2328>,</span> multiboot_info <span style=color:#0550ae>+</span> <span style=color:#0550ae>56</span>
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>.set MB_flag<span style=color:#1f2328>,</span> multiboot_info
+</span></span><span style=display:flex><span>.set MB_mmap_len<span style=color:#1f2328>,</span> multiboot_info <span style=color:#0550ae>+</span> <span style=color:#0550ae>44</span>
+</span></span><span style=display:flex><span>.set MB_mmap_addr<span style=color:#1f2328>,</span> multiboot_info <span style=color:#0550ae>+</span> <span style=color:#0550ae>48</span>
+</span></span></code></pre></td></tr></table></div></div><p>multiboot_info 的起始 address 被設定在<code>0x7000</code>，根據 <a href=https://wiki.osdev.org/Memory_Map_(x86)>Memory Map (x86)</a> ，<code>0x7C00</code> 是 bootloader sector 位置，而 BIOS data 後的 <code>0x00000500 - 0x00007BFF</code> 這段 30 KiB 記憶體位置可供使用，因此才設定在 <code>0x7000</code> 此位置，只要有足夠的 buffer 來放 multiboot_info 資訊，那麼將 <code>0x7C00</code> 調整成其他位址也可以。</p><p>有了 multiboot_info 起始位址之後，就可以根據 <a href=https://www.gnu.org/software/grub/manual/multiboot/multiboot.html>GNU Multiboot Specification</a> 中的 multiboot information structure 來推算 <code>e820_map</code>、<code>MB_mmap_len</code>、<code>MB_mmap_addr</code> 的位址，所以<code>+52</code>、<code>+56</code> 等看似 magic number 的數字，其實只是 multiboot information structure 的對應位置。</p><h3 id=2-switch-from-bootloader-to-kernel-bootstrap>2. Switch from bootloader to kernel bootstrap</h3><p>取得 e820 memory map 資訊後，還有幾個步驟需要執行，包含：</p><ol><li>Load e820 map -> 目前完成階段</li><li>Switch from real mode to protcted mode (這樣才能使用 1MB 以上的 memory)</li><li>Load kernel (ELF)</li><li>Execute the entry point of ELF and pass multiboot_info to kernel</li></ol><p>其中，processor 在執行 code 時是使用哪些記憶體區段，是值得注意的地方。</p><p>x86 BIOS 會將 bootloader load 到 <code>0x7C00 - 0x7DFF</code> 記憶體區段，那麼 kernel code 會是在哪個記憶體區段呢？我們查看 GNU JOS 的 GNU link script <code>kernel.ld</code> 得到解答。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>SECTIONS
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    . <span style=color:#0550ae>=</span> <span style=color:#0550ae>0x100000</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    .bootstrap <span style=color:#0550ae>:</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>        obj<span style=color:#0550ae>/</span>kern<span style=color:#0550ae>/</span><span style=color:#6639ba>bootstrap.o </span><span style=color:#1f2328>(</span>.text .data .bss<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#0550ae>/*</span> Link the kernel at this address<span style=color:#0550ae>:</span> <span style=color:#0a3069>&#34;.&#34;</span> means the current address <span style=color:#0550ae>*/</span>
+</span></span><span style=display:flex><span>    . <span style=color:#0550ae>=</span> <span style=color:#0550ae>0x8004200000</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    .text <span style=color:#0550ae>:</span> <span style=color:#6639ba>AT</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x200000</span><span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#0550ae>*</span><span style=color:#1f2328>(</span><span style=color:#6639ba>EXCLUDE_FILE</span><span style=color:#1f2328>(</span>obj<span style=color:#0550ae>/</span>kern<span style=color:#0550ae>/</span>bootstrap.o<span style=color:#1f2328>)</span> .text .stub .text.<span style=color:#0550ae>*</span> .gnu.linkonce.t.<span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>PROVIDE</span><span style=color:#1f2328>(</span>etext <span style=color:#0550ae>=</span> .)<span style=color:#1f2328>;</span>	<span style=color:#0550ae>/*</span> Define the <span style=color:#0a3069>&#39;etext&#39;</span> symbol to this value <span style=color:#0550ae>*/</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    .rodata <span style=color:#0550ae>:</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#0550ae>*</span><span style=color:#1f2328>(</span><span style=color:#6639ba>EXCLUDE_FILE</span><span style=color:#1f2328>(</span>obj<span style=color:#0550ae>/</span>kern<span style=color:#0550ae>/</span>bootstrap.o<span style=color:#1f2328>)</span> .rodata .rodata.<span style=color:#0550ae>*</span> .gnu.linkonce.r.<span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#0550ae>/*</span> Adjust the address <span style=color:#cf222e>for</span> the data segment to the <span style=color:#cf222e>next</span> page <span style=color:#0550ae>*/</span>
+</span></span><span style=display:flex><span>    . <span style=color:#0550ae>=</span> <span style=color:#6639ba>ALIGN</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x1000</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#0550ae>/*</span> The data segment <span style=color:#0550ae>*/</span>
+</span></span><span style=display:flex><span>    .data <span style=color:#0550ae>:</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#0550ae>*</span><span style=color:#1f2328>(</span><span style=color:#6639ba>EXCLUDE_FILE</span><span style=color:#1f2328>(</span>obj<span style=color:#0550ae>/</span>kern<span style=color:#0550ae>/</span>bootstrap.o<span style=color:#1f2328>)</span> .data<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>PROVIDE</span><span style=color:#1f2328>(</span>edata <span style=color:#0550ae>=</span> .)<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    .bss <span style=color:#0550ae>:</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#0550ae>*</span><span style=color:#1f2328>(</span><span style=color:#6639ba>EXCLUDE_FILE</span><span style=color:#1f2328>(</span>obj<span style=color:#0550ae>/</span>kern<span style=color:#0550ae>/</span>bootstrap.o<span style=color:#1f2328>)</span> .bss<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>上面 code 可以看到兩個關鍵 address <code>0x100000</code> 與 <code>0x8004200000</code>。</p><p>透過 script 可以知道，<code>bootstrap.o</code> 的 start address 為 <code>0x100000</code>，而 <code>0x100000</code> 還在 256 MB 實體記憶體的範圍，只要該記憶體段是可被使用的，那 processor 就可以正常執行 code。不過 <code>0x8004200000</code> 可就超出實體記憶體範圍，所以可以猜想在 bootstrap 階段，勢必要進行一些配置，才能讓 processor 正確地處理 <code>0x8004200000</code> 位址。</p><p>了解 excute code 和 data 被放在哪些記憶體區段，對於看 asm code 來說很重要。舉例來說，上面有提及我們要把 multiboot_info 位址 pass 到 kernel 中，在 bootstrap.S 可以看到這段：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span><span style=color:#57606a># Save multiboot_info addr passed by bootloader</span>
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>movl <span style=color:#0550ae>$</span>multiboot_info<span style=color:#1f2328>,</span> <span style=color:#0550ae>%eax # the address of multiboot_info is 0x107000
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>movl %</span>ebx<span style=color:#1f2328>,</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>%eax) # %</span>ebx value is <span style=color:#0550ae>0x7000</span>
+</span></span></code></pre></td></tr></table></div></div><p>要注意，<strong>bootloader boot.S 中定義的 multiboot_info 位址和 bootstrap.S 中定義的 multiboot_info 位址是不一樣的</strong>，因為 bootstrap.S 經過 linker re-location，multiboot_info 的位址會以 <code>0x100000</code> 為基準點。因此，上述這段 code 的解釋會變成：在 0x107000 記憶體位址的值是 0x7000，而 0x7000 才是我們真正儲存 multiboot_info 資訊的位址。</p><h3 id=3-setup-page-translation-in-bootstrap-stage>3. Setup page translation in bootstrap stage</h3><p>在真正進入 kernel main function 之前，我們還有一些事情需要先做，而 bootstrap 階段就是用來進行這些準備任務，包含：</p><ol><li>setup page translation</li><li>switch from protected mode to long mode</li></ol><p>其中 page translation 是重點，bootstrap 階段的 page translation 設置是讓 kernel code 可以正確被執行，而我們在 kerel code 中會再根據需求來配置<strong>新的</strong> page translation (就是 Lab 2的實作內容)，最後切換到我們所配置的 page translation。</p><p>所以，我們可以先透過觀察 bootstrap 的 page translation 配置方式，搭配 <a href=https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/ref/amd64/AMD64_Architecture_Programmers_Manual.pdf>AMD64 Architecture Programmer&rsquo;s Reference Manual</a>，來實際理解 page translation 的運作流程，有助於我們後續實作。</p><h4 id=setup-page-translation>Setup page translation</h4><p>首先，來看一下 long mode 如何進行 page translation (<a href=https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/ref/amd64/AMD64_Architecture_Programmers_Manual.pdf>image source</a>)。</p><p><img src=https://i.imgur.com/sDBkI9T.png alt></p><p>從圖中可以看到，long mode 的 page translation 被分成四個階層的 page table：</p><ol><li>Level 4 - PML4</li><li>Level 3 - PDPT</li><li>Level 2 - PDT</li><li>Level 1 - PT</li></ol><p>而 processor 透過 <code>CR3 register</code> 來獲得 PML4 位址，接著解析 virtual address 來取得各階層 table 的 offset，最後逐步得到實體記憶體位置。</p><p>有了這個概念之後，再來看 bootstrap.S 的 code：</p><p>起初，配置 PML4、PDPT 和 PDT ，每個 table 大小為 4096 bytes。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>.set pml4<span style=color:#1f2328>,</span> pml4phys
+</span></span><span style=display:flex><span>.set pdpt1<span style=color:#1f2328>,</span>  pml4 <span style=color:#0550ae>+</span> <span style=color:#0550ae>0x1000</span>
+</span></span><span style=display:flex><span>.set pdpt2<span style=color:#1f2328>,</span>  pml4 <span style=color:#0550ae>+</span> <span style=color:#0550ae>2</span><span style=color:#0550ae>*</span><span style=color:#0550ae>0x1000</span>
+</span></span><span style=display:flex><span>.set pde1<span style=color:#1f2328>,</span> pml4 <span style=color:#0550ae>+</span> <span style=color:#0550ae>3</span><span style=color:#0550ae>*</span><span style=color:#0550ae>0x1000</span>
+</span></span><span style=display:flex><span>.set pde2<span style=color:#1f2328>,</span> pml4 <span style=color:#0550ae>+</span> <span style=color:#0550ae>4</span><span style=color:#0550ae>*</span><span style=color:#0550ae>0x1000</span>
+</span></span></code></pre></td></tr></table></div></div><p>再將這些 table 的 entry 初始化為 0。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>movl <span style=color:#0550ae>$</span>pml4<span style=color:#1f2328>,</span><span style=color:#0550ae>%edi
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>xorl %</span>eax<span style=color:#1f2328>,</span><span style=color:#0550ae>%eax
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>movl $((4096/4)*5),%</span>ecx
+</span></span><span style=display:flex><span>rep stosl <span style=color:#57606a># 將 eax 的值儲存到 edi 中，重複 (4096/4)*5 次，每次 edi 增加 4</span>
+</span></span></code></pre></td></tr></table></div></div><p>接著配置 PML4 table 的 entry，從下方 code 可以知道有兩個 PML4 entry 指向 pdpt1 和 pdpt2，其權限 PTE_P(present) 和 PTE_W (write)。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>movl <span style=color:#0550ae>$</span>pml4<span style=color:#1f2328>,</span><span style=color:#0550ae>%eax
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>movl $pdpt1, %</span>ebx
+</span></span><span style=display:flex><span>orl <span style=color:#0550ae>$</span>PTE_P<span style=color:#1f2328>,</span><span style=color:#0550ae>%ebx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>orl $PTE_W,%</span>ebx
+</span></span><span style=display:flex><span>movl <span style=color:#0550ae>%ebx,(%</span>eax<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>movl <span style=color:#0550ae>$</span>pdpt2<span style=color:#1f2328>,</span> <span style=color:#0550ae>%ebx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>orl $PTE_P,%</span>ebx
+</span></span><span style=display:flex><span>orl <span style=color:#0550ae>$</span>PTE_W<span style=color:#1f2328>,</span><span style=color:#0550ae>%ebx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>movl %</span>ebx<span style=color:#1f2328>,</span><span style=color:#0550ae>0x8</span><span style=color:#1f2328>(</span>%eax<span style=color:#1f2328>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>再來配置 PDPT 的 entry。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>movl <span style=color:#0550ae>$</span>pdpt1<span style=color:#1f2328>,</span><span style=color:#0550ae>%edi
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>movl $pde1,%</span>ebx
+</span></span><span style=display:flex><span>orl <span style=color:#0550ae>$</span>PTE_P<span style=color:#1f2328>,</span><span style=color:#0550ae>%ebx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>orl $PTE_W,%</span>ebx
+</span></span><span style=display:flex><span>movl <span style=color:#0550ae>%ebx,(%</span>edi<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>movl <span style=color:#0550ae>$</span>pdpt2<span style=color:#1f2328>,</span><span style=color:#0550ae>%edi
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>movl $pde2,%</span>ebx
+</span></span><span style=display:flex><span>orl <span style=color:#0550ae>$</span>PTE_P<span style=color:#1f2328>,</span><span style=color:#0550ae>%ebx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>orl $PTE_W,%</span>ebx
+</span></span><span style=display:flex><span>movl <span style=color:#0550ae>%ebx,(%</span>edi<span style=color:#1f2328>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>接下來到比較核心的配置。
+上面提到，kernel 的 start address 是 <code>0x8004000000</code>，我們根據 page translation 的格式，將 <code>0x8004000000</code> 拆解開來，會發現 <code>0x8004000000</code> 是指：</p><ul><li>PML4 table offset 1</li><li>PDPT table offset 0</li><li>PD table offset 32</li></ul><p>這也就是為什麼下方 code <code>addl $256,%ebx</code> 的原因，因為 256/8(一個 entry 佔 8 bytes) = 32 entry offset。我們需要配置 32th PDE 才能夠讓 processor 解讀 <code>0x8004000000</code> 位址。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>movl <span style=color:#0550ae>$</span><span style=color:#0550ae>128</span><span style=color:#1f2328>,</span><span style=color:#0550ae>%ecx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>movl $pde1,%</span>edi
+</span></span><span style=display:flex><span>movl <span style=color:#0550ae>$</span>pde2<span style=color:#1f2328>,</span><span style=color:#0550ae>%ebx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>addl $256,%</span>ebx 
+</span></span><span style=display:flex><span><span style=color:#57606a># PTE_P|PTE_W|PSE</span>
+</span></span><span style=display:flex><span>movl <span style=color:#0550ae>$</span><span style=color:#0550ae>0x00000183</span><span style=color:#1f2328>,</span><span style=color:#0550ae>%eax
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>1:
+</span></span></span><span style=display:flex><span><span style=color:#0550ae> movl %</span>eax<span style=color:#1f2328>,(</span><span style=color:#0550ae>%edi)
+</span></span></span><span style=display:flex><span><span style=color:#0550ae> movl %</span>eax<span style=color:#1f2328>,(</span><span style=color:#0550ae>%ebx)
+</span></span></span><span style=display:flex><span><span style=color:#0550ae> addl $0x8,%</span>edi
+</span></span><span style=display:flex><span> addl <span style=color:#0550ae>$</span><span style=color:#0550ae>0x8</span><span style=color:#1f2328>,</span><span style=color:#0550ae>%ebx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae> addl $0x00200000,%</span>eax
+</span></span><span style=display:flex><span> subl <span style=color:#0550ae>$</span><span style=color:#0550ae>1</span><span style=color:#1f2328>,</span><span style=color:#0550ae>%ecx
+</span></span></span><span style=display:flex><span><span style=color:#0550ae> cmp $0x0,%</span>ecx
+</span></span><span style=display:flex><span> jne <span style=color:#0550ae>1</span>b
+</span></span></code></pre></td></tr></table></div></div><p>此外，code 中也額外配置 128 個 PDE ($128,%ecx，然後跑 loop)，其中重點是 PDE 的 flag 設定：PTE_P|PTE_W | <strong>PSE</strong>，PSE 是特殊 flag，根據手冊說明：</p><blockquote><p>PS bit in the page directory entry (PDE.PS) selects between 4-Kbyte and 2-Mbyte page sizes。</p></blockquote><p>因此， page translation 會變成下圖，取消 Level 1 PT 這層級 (<a href=https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/ref/amd64/AMD64_Architecture_Programmers_Manual.pdf>image source</a>)：</p><p><img src=https://i.imgur.com/uLJV9hh.png alt></p><p>配置好各階層的 table 之後，最後把 PML4 table 位址記錄在 CR3 register 上。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>movl <span style=color:#0550ae>$</span>pml4<span style=color:#1f2328>,</span><span style=color:#0550ae>%eax
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>movl %</span>eax<span style=color:#1f2328>,</span> %cr3
+</span></span></code></pre></td></tr></table></div></div><p>如此一來就完成 page translation 的重點配置，最後再 enable paging 功能，processor 就會根據這些配置來查找出實體記憶體位址。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span>movl <span style=color:#0550ae>%cr0,%</span>eax
+</span></span><span style=display:flex><span>orl <span style=color:#0550ae>$</span>CR0_PE<span style=color:#1f2328>,</span><span style=color:#0550ae>%eax
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>orl $CR0_PG,%</span>eax
+</span></span><span style=display:flex><span>orl <span style=color:#0550ae>$</span>CR0_AM<span style=color:#1f2328>,</span><span style=color:#0550ae>%eax
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>orl $CR0_WP,%</span>eax
+</span></span><span style=display:flex><span>orl <span style=color:#0550ae>$</span>CR0_MP<span style=color:#1f2328>,</span><span style=color:#0550ae>%eax
+</span></span></span><span style=display:flex><span><span style=color:#0550ae>movl %</span>eax<span style=color:#1f2328>,</span>%cr0
+</span></span></code></pre></td></tr></table></div></div><h3 id=4-switch-from-bootstrap-to-kernel-main-function-and-parse-multiboot_info>4. Switch From bootstrap to kernel main function and parse <code>multiboot_info</code></h3><p>Page translation 設置好後，就可以進入到 kernel main function 並且使用定義好的 c multiboot_info structure 解析 e820 memory map 的資料，解析完的資料會如下：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#900;font-weight:700>size</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>address</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x0000000000000000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>length</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x000000000009fc00</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>type</span><span style=color:#1f2328>:</span> USABLE
+</span></span><span style=display:flex><span><span style=color:#900;font-weight:700>size</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>address</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x000000000009fc00</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>length</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x0000000000000400</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>type</span><span style=color:#1f2328>:</span> RESERVED
+</span></span><span style=display:flex><span><span style=color:#900;font-weight:700>size</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>address</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x00000000000f0000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>length</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x0000000000010000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>type</span><span style=color:#1f2328>:</span> RESERVED
+</span></span><span style=display:flex><span><span style=color:#900;font-weight:700>size</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>address</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x0000000000100000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>length</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x000000000fefe000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>type</span><span style=color:#1f2328>:</span> USABLE
+</span></span><span style=display:flex><span><span style=color:#900;font-weight:700>size</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>address</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x000000000fffe000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>length</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x0000000000002000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>type</span><span style=color:#1f2328>:</span> RESERVED
+</span></span><span style=display:flex><span><span style=color:#900;font-weight:700>size</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>address</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x00000000feffc000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>length</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x0000000000004000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>type</span><span style=color:#1f2328>:</span> RESERVED
+</span></span><span style=display:flex><span><span style=color:#900;font-weight:700>size</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>address</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x00000000fffc0000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>length</span><span style=color:#1f2328>:</span> <span style=color:#0550ae>0x0000000000040000</span><span style=color:#1f2328>,</span> <span style=color:#900;font-weight:700>type</span><span style=color:#1f2328>:</span> RESERVED
+</span></span></code></pre></td></tr></table></div></div><p>可以看到起始位址為 <code>0x100000</code> 的記憶體區段（<code>Extended Memory</code>），而這會是我們主要用來執行 code 的區段。</p><p>另外，透過 MIT 特製的 qemu monitor 來查看 page translation 配置情況，驗證是否與我們所推想的一致（正常版本的 qemu 沒有此功能）：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-s data-lang=s><span style=display:flex><span><span style=color:#1f2328>(</span>qemu<span style=color:#1f2328>)</span> info pg
+</span></span><span style=display:flex><span>VPN range             Entry         Flags            Physical page
+</span></span><span style=display:flex><span>[000000000<span style=color:#0550ae>-000000000</span>] PML4[000]     <span style=color:#0550ae>----</span>A<span style=color:#0550ae>---</span>WP
+</span></span><span style=display:flex><span>  [000000000<span style=color:#0550ae>-00003</span>ffff]  PDP[000]     <span style=color:#0550ae>----</span>A<span style=color:#0550ae>---</span>WP
+</span></span><span style=display:flex><span>    [000000000<span style=color:#0550ae>-0000001</span>ff]  PDE[000]     <span style=color:#0550ae>-</span>GSDA<span style=color:#0550ae>---</span>WP <span style=color:#0550ae>0000000000-00000001</span>ff
+</span></span><span style=display:flex><span>    [000000200<span style=color:#0550ae>-0000003</span>ff]  PDE[001]     <span style=color:#0550ae>-</span>GS<span style=color:#0550ae>-</span>A<span style=color:#0550ae>---</span>WP <span style=color:#0550ae>0000000200-00000003</span>ff
+</span></span><span style=display:flex><span>    [000000400<span style=color:#0550ae>-00000</span>ffff]  PDE[002<span style=color:#0550ae>-07</span>f] <span style=color:#0550ae>-</span>GS<span style=color:#0550ae>-----</span>WP <span style=color:#0550ae>0000000400-000000</span>ffff
+</span></span><span style=display:flex><span>[008000000<span style=color:#0550ae>-008000000</span>] PML4[001]     <span style=color:#0550ae>----</span>A<span style=color:#0550ae>---</span>WP
+</span></span><span style=display:flex><span>  [008000000<span style=color:#0550ae>-00803</span>ffff]  PDP[000]     <span style=color:#0550ae>----</span>A<span style=color:#0550ae>---</span>WP
+</span></span><span style=display:flex><span>    [008004000<span style=color:#0550ae>-0080043</span>ff]  PDE[020<span style=color:#0550ae>-021</span>] <span style=color:#0550ae>-</span>GSDA<span style=color:#0550ae>---</span>WP <span style=color:#0550ae>0000000000-00000003</span>ff
+</span></span><span style=display:flex><span>    [008004400<span style=color:#0550ae>-008013</span>fff]  PDE[022<span style=color:#0550ae>-09</span>f] <span style=color:#0550ae>-</span>GS<span style=color:#0550ae>-----</span>WP <span style=color:#0550ae>0000000400-000000</span>ffff    
+</span></span></code></pre></td></tr></table></div></div><h2 id=問題解答>問題解答</h2><p><strong>1. 文件說明提到 JOS kernel 在執行時，是以 <code>0x8004000000</code> 位址開始執行，那這麼 address 是在哪裡設置的？又，processor 是如何知道該怎麼解析這個 virtual address？</strong></p><p><code>0x8004000000</code> 位址是在 JOS 的 linker script 中定義的，而在進入 kernel main function 之前，先配置好 page translation (PML4, PDPT, PDT, PT 等)並且 enable page translation 功能，就能讓 processor 解讀 virtual memory address。</p><p><strong>2. 我們可以使用的 physical memory 上限？</strong></p><p>根據 e820 memory map 資訊，可以得知 USABLE 的記憶體空間約為 256 MiB。</p></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2020-09-04-vault-security/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>Vault Initialization and Keys Security</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2020-11-14-gophercon_2020/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>GopherCon TW 2020 場務組心得</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

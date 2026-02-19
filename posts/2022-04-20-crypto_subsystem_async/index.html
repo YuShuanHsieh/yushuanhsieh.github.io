@@ -1,0 +1,262 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>Crypto Subsystem of Linux Kernel - Asynchronous Request Handling Mechanism — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>Crypto Subsystem of Linux Kernel - Asynchronous Request Handling Mechanism</h1><div class=post-meta><time datetime=2022-04-20>April 20, 2022</time>
+<span class=separator>·</span>
+<span class=reading-time>9 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/security/>Security</a>
+<a href=https://yushuanhsieh.github.io/categories/linux-kernel/>Linux Kernel</a></div></header><div class=post-content><p>由於在 crypto subsystem 中預期多個 crypto request 可以同時向同一個 crypto engine 發出請求 ，因此 crypto engine driver 必須實作對應機制，使其有能力能應付此情況。此外，結合在前一節有提到 crypto subsystem 的 asynchronous crypto API 流程，較常見的實作方式就是 crypto queue 搭配 worker，額外開一個 kernel thread 來與 crypto engine 進行溝通，並讓 crypto request 按照 FIFO 順序處理，而本文主要針對此設計方式，說明整個運作流程和細節。</p><h2 id=overview>Overview</h2><p><img src=/posts/crypto-subsystem-async.png alt></p><h2 id=條件>條件</h2><ol><li>假設 hardware crypto engine 一次只能處理一個 request，將 request 根據需求設置好 register 之後，啟動 crypto engine 進行運算，運算完結果後才能換下一個 request。</li><li>當運算出結果後，crypto engine 會舉起 status interrupt，通知外部已運算完成。</li><li>多個 Request 有可能同時對 hardware crypto engine 發出請求。</li><li>一個完整的 crypto request 流程包含三個 API call: Init → Update → Final， Final 結果回傳後，則此 crypto request 將會被釋放，不再使用。</li></ol><h2 id=想法>想法</h2><ol><li>建立一個全域的 crypto request list，將進來的 request 依序排到 list 當中。</li><li>建立一個 worker (kernel thread) 和對應的 work queue 來與 hardware crypto engine 進行溝通。worker 的任務除了從 crypto request list 中取出 request 來處理之外，也可能會包含 crypto engine 的初始化和資源釋放等工作。</li><li>註冊 interrupt handler，當 status interrupt 舉起時，呼叫 user 自定義的 completion callback function 來完成最後的流程。如果當前是執行最後的 final API call 且 request 有自定義的 resource 需要被釋放，則會在呼叫完 callback function 後執行。</li></ol><h2 id=實作>實作</h2><p>Linux kernel version: v5.17.3</p><h3 id=crypto-queue>Crypto Queue</h3><p>Linux kernel 有實作通用型的 crypto queue structure 以及對應的操作 API：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> crypto_queue <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> list_head list<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> list_head <span style=color:#0550ae>*</span>backlog<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> qlen<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> max_qlen<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>crypto_init_queue</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> crypto_queue <span style=color:#0550ae>*</span>queue<span style=color:#1f2328>,</span> <span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> max_qlen<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>crypto_enqueue_request</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> crypto_queue <span style=color:#0550ae>*</span>queue<span style=color:#1f2328>,</span> <span style=color:#cf222e>struct</span> crypto_async_request <span style=color:#0550ae>*</span>request<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>crypto_enqueue_request_head</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> crypto_queue <span style=color:#0550ae>*</span>queue<span style=color:#1f2328>,</span> <span style=color:#cf222e>struct</span> crypto_async_request <span style=color:#0550ae>*</span>request<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> crypto_async_request <span style=color:#0550ae>*</span><span style=color:#6639ba>crypto_dequeue_request</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> crypto_queue <span style=color:#0550ae>*</span>queue<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>inline</span> <span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> <span style=color:#6639ba>crypto_queue_len</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> crypto_queue <span style=color:#0550ae>*</span>queue<span style=color:#1f2328>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>在大多數情況下，我們可以直接利用此 structure 來實現 crypto request list，不過根據我們上述的場景，request list 可能會被多個 request 同時操作，因此要再加上 lock 機制保護。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> cherie_crypto_engine <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>struct</span> device  <span style=color:#0550ae>*</span>dev<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>struct</span> crypto_queue  	  queue<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>struct</span> kthread_worker   <span style=color:#0550ae>*</span>kworker<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	  <span style=color:#cf222e>struct</span> kthread_work     do_requests<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>spinlock_t</span>		          queue_lock<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>struct</span> crypto_async_request <span style=color:#0550ae>*</span>current_req<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>int</span> <span style=color:#6639ba>cherie_request_enqueue</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> ahash_request <span style=color:#0550ae>*</span>req<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> ret<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>long</span> flags<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> cherie_crypto_engine <span style=color:#0550ae>*</span>engine <span style=color:#0550ae>=</span> <span style=color:#6639ba>get_engine</span><span style=color:#1f2328>();</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>spin_lock_irqsave</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>engine<span style=color:#0550ae>-&gt;</span>queue_lock<span style=color:#1f2328>,</span> flags<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	ret <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_enqueue_request</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>engine<span style=color:#0550ae>-&gt;</span>queue<span style=color:#1f2328>,</span> <span style=color:#0550ae>&amp;</span>req<span style=color:#0550ae>-&gt;</span>base<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>spin_unlock_irqrestore</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>engine<span style=color:#0550ae>-&gt;</span>queue_lock<span style=color:#1f2328>,</span> flags<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>return</span> ret<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=worker--worker-queue>Worker & Worker Queue</h3><p>Worker 是唯一可以操作 crypto engine 的 kernel thread，以確保 crypto engine 一次只會執行一個任務。同樣地，我們也利用 Linux kernel 本身提供的 worker API 來實現：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> kthread_worker <span style=color:#0550ae>*</span><span style=color:#6639ba>kthread_create_worker</span><span style=color:#1f2328>(</span><span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> flags<span style=color:#1f2328>,</span> <span style=color:#cf222e>const</span> <span style=color:#cf222e>char</span> namefmt<span style=color:#1f2328>[],</span> <span style=color:#1f2328>...);</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>bool</span> <span style=color:#6639ba>kthread_queue_work</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> kthread_worker <span style=color:#0550ae>*</span>worker<span style=color:#1f2328>,</span> <span style=color:#cf222e>struct</span> kthread_work <span style=color:#0550ae>*</span>work<span style=color:#1f2328>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>至於 work 可能會包含幾個項目：</p><ol><li>crypto engine 初始化。</li><li>從 crypto request list 取出 request，並依據 request 的資訊進行 crypto engine 相關 register 的讀寫操作。</li><li>crypto engine 資源的釋放。(例如當前沒有 request 要處理時，可以先釋放相關資源)</li></ol><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>void</span> <span style=color:#6639ba>cherie_work</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> kthread_work <span style=color:#0550ae>*</span>work<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>long</span> flags<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>struct</span> cherie_request_state <span style=color:#0550ae>*</span>state<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> ahash_request <span style=color:#0550ae>*</span>req<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> crypto_async_request <span style=color:#0550ae>*</span>async_req<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> cherie_crypto_engine <span style=color:#0550ae>*</span>engine <span style=color:#0550ae>=</span> <span style=color:#6639ba>get_engine</span><span style=color:#1f2328>();</span>
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>spin_lock_irqsave</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>engine<span style=color:#0550ae>-&gt;</span>queue_lock<span style=color:#1f2328>,</span> flags<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>!</span>engine<span style=color:#0550ae>-&gt;</span>initialize<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>     <span style=color:#57606a>// do initialization
+</span></span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>// we can&#39;t fetch the next request if the current request isn&#39;t done.
+</span></span></span><span style=display:flex><span>	<span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>engine<span style=color:#0550ae>-&gt;</span>current_req<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>		<span style=color:#6639ba>spin_unlock_irqrestore</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>engine<span style=color:#0550ae>-&gt;</span>queue_lock<span style=color:#1f2328>,</span> flags<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>		<span style=color:#cf222e>return</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	async_req <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_dequeue_request</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>engine<span style=color:#0550ae>-&gt;</span>queue<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>spin_unlock_irqrestore</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>engine<span style=color:#0550ae>-&gt;</span>queue_lock<span style=color:#1f2328>,</span> flags<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>!</span>async_req<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>		<span style=color:#cf222e>return</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	req <span style=color:#0550ae>=</span> <span style=color:#6639ba>ahash_request_cast</span><span style=color:#1f2328>(</span>async_req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	state <span style=color:#0550ae>=</span> <span style=color:#6639ba>ahash_request_ctx</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>switch</span> <span style=color:#1f2328>(</span>state<span style=color:#0550ae>-&gt;</span>algo_op<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>case</span> <span style=color:#900;font-weight:700>ALGO_UPDATE</span><span style=color:#1f2328>:</span>
+</span></span><span style=display:flex><span>		<span style=color:#6639ba>cherie_do_request_update</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>		<span style=color:#cf222e>break</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>case</span> <span style=color:#900;font-weight:700>ALGO_FINAL</span><span style=color:#1f2328>:</span>
+</span></span><span style=display:flex><span>		<span style=color:#6639ba>cherie_do_request_final</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>		<span style=color:#cf222e>break</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>default</span><span style=color:#0550ae>:</span>
+</span></span><span style=display:flex><span>		<span style=color:#cf222e>break</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=status-interrupt-handling>Status Interrupt Handling</h3><p>由於是 asynchronous request 機制，因此在 crypto engine 計算完成、舉起 status interrupt signal 之後，透過 bottom half 方式呼叫 user 定義的 completion callback function 來結束此階段的 API call。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>irqreturn_t</span> <span style=color:#6639ba>cherie_crypto_engine_irq_thread_fn</span><span style=color:#1f2328>(</span><span style=color:#cf222e>int</span> irq<span style=color:#1f2328>,</span> <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>arg<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>long</span> flags<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> cherie_crypto_engine <span style=color:#0550ae>*</span>engine <span style=color:#0550ae>=</span> <span style=color:#6639ba>get_engine</span><span style=color:#1f2328>();</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>spin_lock_irqsave</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>engine<span style=color:#0550ae>-&gt;</span>queue_lock<span style=color:#1f2328>,</span> flags<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>engine<span style=color:#0550ae>-&gt;</span>current_req<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>		engine<span style=color:#0550ae>-&gt;</span>current_req<span style=color:#0550ae>-&gt;</span><span style=color:#6639ba>complete</span><span style=color:#1f2328>(</span>engine<span style=color:#0550ae>-&gt;</span>current_req<span style=color:#1f2328>,</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>		engine<span style=color:#0550ae>-&gt;</span>current_req <span style=color:#0550ae>=</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>spin_unlock_irqrestore</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>engine<span style=color:#0550ae>-&gt;</span>queue_lock<span style=color:#1f2328>,</span> flags<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>// add a work to process the next request
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>kthread_queue_work</span><span style=color:#1f2328>(</span>ctx<span style=color:#0550ae>-&gt;</span>kworker<span style=color:#1f2328>,</span> <span style=color:#0550ae>&amp;</span>ctx<span style=color:#0550ae>-&gt;</span>do_requests<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>return</span> IRQ_HANDLED<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>int</span> <span style=color:#6639ba>cherie_crypto_engine_probe</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> platform_device <span style=color:#0550ae>*</span>pdev<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>int</span> irq<span style=color:#1f2328>,</span> ret<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  irq <span style=color:#0550ae>=</span> <span style=color:#6639ba>platform_get_irq</span><span style=color:#1f2328>(</span>pdev<span style=color:#1f2328>,</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>irq <span style=color:#0550ae>&lt;</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>		<span style=color:#cf222e>return</span> irq<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	ret <span style=color:#0550ae>=</span> <span style=color:#6639ba>devm_request_threaded_irq</span><span style=color:#1f2328>(</span>dev<span style=color:#1f2328>,</span> irq<span style=color:#1f2328>,</span> cherie_crypto_engine_irq_handler<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>					cherie_crypto_engine_irq_thread_fn<span style=color:#1f2328>,</span> IRQF_TRIGGER_HIGH <span style=color:#0550ae>|</span> IRQF_ONESHOT<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>					<span style=color:#6639ba>dev_name</span><span style=color:#1f2328>(</span>dev<span style=color:#1f2328>),</span> ctx<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=implement-crypto-api>Implement Crypto API</h3><p>最後實作 Crypto API ，也就是在 <a href=https://yushuanhsieh.github.io/post/2022-02-15-linux-kernel-crypto/>overview</a> 中有提到的 transformation implementation。</p><p>通常來說，asynchronous request 回傳的 status code 有三種：0 代表成功、<code>-EINPROGRESS</code> 代表正在處理中、剩下的代表其他 error code。如果我們在實作 API 時，回傳了 <code>-EINPROGRESS</code>，那一定要在後續的流程中呼叫 user program 的 callback function，不然有可能 user program 就會陷入一直等待 callback 的迴圈中。</p><p>舉例來說，我們在 update API function 中，當 request 被加入到 queue 後，即回傳 -EINPROGRESS 狀態給 user program：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>int</span> <span style=color:#6639ba>cherie_crypto_engine_update</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> ahash_request <span style=color:#0550ae>*</span>req<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> ret<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> cherie_crypto_engine <span style=color:#0550ae>*</span>engine <span style=color:#0550ae>=</span> <span style=color:#6639ba>get_engine</span><span style=color:#1f2328>();</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> cherie_request_state <span style=color:#0550ae>*</span>state <span style=color:#0550ae>=</span> <span style=color:#6639ba>ahash_request_ctx</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	state<span style=color:#0550ae>-&gt;</span>algo_op <span style=color:#0550ae>=</span> ALGO_UPDATE<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	ret <span style=color:#0550ae>=</span> <span style=color:#6639ba>cherie_crypto_request_enqueue</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>kthread_queue_work</span><span style=color:#1f2328>(</span>ctx<span style=color:#0550ae>-&gt;</span>kworker<span style=color:#1f2328>,</span> <span style=color:#0550ae>&amp;</span>ctx<span style=color:#0550ae>-&gt;</span>do_requests<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>return</span> ret<span style=color:#1f2328>;</span> <span style=color:#57606a>// ret is -EINPROGRESS if the request was added to queue.
+</span></span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>那麼就要確保在 worker 執行任務過程中會呼叫 request→complete callback function，好讓 user program 知道他可以繼續執行下一個 API call。</p><h3 id=結論>結論</h3><p>本篇主要是說明在 Linux kernel 的 crypto subsystem 之下，運用 crypto queue 來處理多個 request 同時對一個 hardware crypto engine 的情境，並且搭配 worker 來實現 asynchronous request 流程。其中比較需要考量的是由於 worker 是唯一能與 crypto engine 互動的 thread，因此 worker 需要處理的任務和順序，是需要根據 Crypto API 流程和 crypto engine 本身的功能而設計的。</p><p>當然，如果不想這麼麻煩的話，在 Linux kernel v4.9.0 以上的版本，有提供抽象層 <a href=https://elixir.bootlin.com/linux/latest/source/include/crypto/engine.h>crypto/engine.h</a>，它包含上述所提及的 queue 和 worker 的機制以及流程控制等，可以讓硬體供應商更方便的將 crypto engine 整合到 Linux kernel 中。</p></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2022-03-30-malloc-optimization/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>GCC malloc + memset Optimization</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2022-05-27-c_volatile_keyword/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>C volatile Keyword</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

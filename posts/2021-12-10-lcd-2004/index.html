@@ -1,0 +1,225 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>LCD 2004 module with Rasp Pico — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>LCD 2004 module with Rasp Pico</h1><div class=post-meta><time datetime=2021-12-10>December 10, 2021</time>
+<span class=separator>·</span>
+<span class=reading-time>11 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/raspberry-pi/>Raspberry-Pi</a></div></header><div class=post-content><p>LCD 2004/1602 顯示模組應該是玩開發板的入門模組之一。網路上有不少文章和 sample code，不過大部分都是直接教你要怎麼呼叫 library 的 API 來控制模組，沒有說明 API 具體的運作流程和為什麼要這樣寫 code，因此就花了點時間整理相關 IC controller 的 datasheet 及 sample code 的對應關係，希望能讓入門玩家可以了解 sample code 實際上是如何操作 LCD 模組來實現字元顯示的目的。</p><h2 id=lcd-2004>LCD 2004</h2><p>首先，研究 LCD 2004 的 datasheet 來了解如何正確驅動此裝置。以我手邊的模組為例，此 LCD 模組的 IC controller 為 SPLC780D1 或是其他相同規格的 controller，所以也參考 SPLC780D1 的 datasheet，以獲得更完整的控制資訊。</p><h3 id=power-on-和初始化流程>Power On 和初始化流程</h3><p>SPLC780D1 controller 有兩種資料傳輸 interface：4-bit 和 8-Bit，而在 datasheet 有說明兩種設定的初始化流程。一開始 controller 會先執行 hardware reset 並接著執行使用者所編寫的 software 初始化流程，其中 software 初始化流程主要是進行相關顯示設置，包含：</p><ol><li>設定 4-bit 或是 8-bit interface (Function Set)</li><li>設定顯示器的行數和字型樣式 (Function Set)</li><li>設定 cursor (Display ON/OFF Control, Entry mode set)</li></ol><p>在上述設置完成後，即可以開始寫入想要顯示的資料。</p><p>如果單看 Instruction Table 可能不是這麼好理解，SPLC780D1 datasheet 有提供相關範例，讓使用者能參考初始化設定方式，並可依樣畫葫蘆來編寫程式：</p><p><img src=/posts/lcd2004_1.png alt></p><p>以上圖的 4-bit 初始化流程為範例，雖然有 DB0 - DB7 bit，但由於 4-bit mode 下只會使用到 DB7 - DB4，因此只看 DB7 - DB4 來編寫要輸入的值，同時對照 datasheet 的 instruction table 來理解 DB7 - DB4 各 bit 所代表的意思。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#cf222e>uint8_t</span> data<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>init</span><span style=color:#1f2328>()</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>//wait for hardware init
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>wait</span><span style=color:#1f2328>();</span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x2</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// set to 4-bit operation
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x2</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// set to 4-bit operation
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x0</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// and select 1-line display line and char font
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x0</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// display on
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0xE</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// cursor appears
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x0</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// increase address by one
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x6</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// shift the cursor to the right
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x5</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// write &#39;W&#39; char (upper 4 bit)
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0x7</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// write &#39;W&#39; char (lower 4 bit)
+</span></span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>此外，原先需要用 8 bit（DB0 - DB7）來完成一次動作，不過因為設定成 4-bit 模式，因此需要傳送兩次才能完成一個步驟。</p><h3 id=write-instruction--write-data>Write Instruction & Write Data</h3><p>而 DB0 - DB7 的資料還需要搭配正確的 RS 和 R/W 訊號，好讓其值可以傳送到 LCD 模組 IC controller 中對應的 register（instruction register / data register），像是剛剛初始化階段的參數設置就是使用 instruction register，而顯示在 LCD 的字元則是 data register。</p><p>同樣以剛剛 4-bit mode 的 code 為例子，將原先的 <code>write</code> function 改寫成能區分 instruction 和 data register。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>#define SELECT_INSTRUCTION 1
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define SELECT_DATA        0
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#cf222e>uint8_t</span> selector<span style=color:#1f2328>,</span> <span style=color:#cf222e>uint8_t</span> data<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>// Bus represents DB7 - DB0
+</span></span></span><span style=display:flex><span>	Bus <span style=color:#0550ae>=</span> <span style=color:#1f2328>((</span>data<span style=color:#0550ae>&lt;&lt;</span><span style=color:#0550ae>4</span><span style=color:#1f2328>)</span> <span style=color:#0550ae>&amp;</span> <span style=color:#0550ae>0xF0</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	RS_pin <span style=color:#0550ae>=</span> selector<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	RW_pin <span style=color:#0550ae>=</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>;</span> <span style=color:#57606a>// read = 1, write = 0
+</span></span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>init</span><span style=color:#1f2328>()</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>//wait for hardware init
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>wait</span><span style=color:#1f2328>();</span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span>SELECT_INSTRUCTION<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x2</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// set to 4-bit operation
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span>SELECT_INSTRUCTION<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x2</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// set to 4-bit operation
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span>SELECT_INSTRUCTION<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x0</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// and select 1-line display line and char font
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span>SELECT_INSTRUCTION<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x0</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// display on
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span>SELECT_INSTRUCTION<span style=color:#1f2328>,</span> <span style=color:#0550ae>0xE</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// cursor appears
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span>SELECT_INSTRUCTION<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x0</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// increase address by one
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span>SELECT_INSTRUCTION<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x6</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// shift the cursor to the right
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span>SELECT_DATA<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x5</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// write &#39;W&#39; char (upper 4 bit)
+</span></span></span><span style=display:flex><span>	<span style=color:#6639ba>write</span><span style=color:#1f2328>(</span>SELECT_DATA<span style=color:#1f2328>,</span> <span style=color:#0550ae>0x7</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// write &#39;W&#39; char (lower 4 bit)
+</span></span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=start-to-writeread>Start to Write/Read</h3><p>最後，我們需要傳送 Start 訊號（E），來告訴 LCD controller 可以開始接收資料和結束接收。參考 datasheet 的 4-bit timing diagram：</p><p><img src=/posts/lcd2004_2.png alt></p><p>可以看到 E (start signal) 所產生的方波對應到各訊號取值區間，因此我們調整 write function，加入 start signal 來產生方波：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>write</span><span style=color:#1f2328>(</span><span style=color:#cf222e>uint8_t</span> selector<span style=color:#1f2328>,</span> <span style=color:#cf222e>uint8_t</span> data<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>// Bus represents DB7 - DB0
+</span></span></span><span style=display:flex><span>	Bus <span style=color:#0550ae>=</span> <span style=color:#1f2328>((</span>data<span style=color:#0550ae>&lt;&lt;</span><span style=color:#0550ae>4</span><span style=color:#1f2328>)</span> <span style=color:#0550ae>&amp;</span> <span style=color:#0550ae>0xF0</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	RS_pin <span style=color:#0550ae>=</span> selector<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	RW_pin <span style=color:#0550ae>=</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>;</span> <span style=color:#57606a>// read = 1, write = 0
+</span></span></span><span style=display:flex><span>	E_pin <span style=color:#0550ae>=</span> <span style=color:#0550ae>1</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>delay</span><span style=color:#1f2328>(</span><span style=color:#0550ae>600</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// delay time should be longer than min required time
+</span></span></span><span style=display:flex><span>	E_pin <span style=color:#0550ae>=</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>delay</span><span style=color:#1f2328>(</span><span style=color:#0550ae>600</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>透過這些訊號控制和資料寫入，我們就可以實現最基本的顯示器控制功能。</p><h2 id=i2c-lcd-adapter>I2C LCD adapter</h2><p>如果直接拿此 LCD 顯示模組連結到開發板，會需要 16 個接腳， 對於接腳數量較少的開發板來說頗不方便，因此市面上就有針對這類型 LCD 顯示模組出了 I2C LCD adapter，只需要 4 個接腳（SDA、SCL、VDD、GND）即可透過 I2C protocol 操作 LCD 8 個訊號腳位。</p><p>不過，原始的 LCD 顯示模組需要 16 個接腳，但是 I2C LCD adapter 卻只能支援到 8 個，那麼這樣要怎麼控制 LCD 模組呢？這就用到我們在上述章節所提到的 4-bit interface，以下為 I2C LCD adapter 對應到 LCD 顯示模組的腳位：</p><p><img src=/posts/lcd2004_3.png alt></p><table><thead><tr><th>P0</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th></tr></thead><tbody><tr><td>RS</td><td>RW</td><td>E</td><td>BT</td><td>D4</td><td>D5</td><td>D6</td><td>D7</td></tr></tbody></table><p>可以看到 adapter 只連接 LCD 模組 D4 - D7 data 腳位，而其他 P0 - P3 腳位則留給 LCD 控制腳位 （RS、R/W、E）所用。這也意味著，如果我們要使用 I2C LCD adapter ，那麼我們勢必得要用 4-bit interface 來操作 LCD 模組。</p><blockquote><p>I2C 相關介紹可以參考：</p><ul><li><a href=http://wiki.csie.ncku.edu.tw/embedded/I2C>成大資工 wiki : I2C: Inter-Integrated Circuit</a></li><li><a href=https://makerpro.cc/2020/05/i2c-interface-part2/>【Maker電子學】I2C 界面解密</a></li></ul></blockquote><p>由於 Rasp Pico SDK 有提供 I2C primitive API ，因此就直接運用此 API 來寫一個新的 write function：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>#define SELECT_INSTRUCTION 1
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define SELECT_DATA        0
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> lcd_device
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>uint8_t</span> addr<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>i2c_inst_t</span> <span style=color:#0550ae>*</span>i2c<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>void</span> <span style=color:#6639ba>i2c_write_byte</span><span style=color:#1f2328>(</span><span style=color:#cf222e>i2c_inst_t</span> <span style=color:#0550ae>*</span>i2c<span style=color:#1f2328>,</span> <span style=color:#cf222e>uint8_t</span> addr<span style=color:#1f2328>,</span> <span style=color:#cf222e>uint8_t</span> val<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	  <span style=color:#57606a>// primitive I2C API of Pico SDK
+</span></span></span><span style=display:flex><span>    <span style=color:#6639ba>i2c_write_blocking</span><span style=color:#1f2328>(</span>i2c<span style=color:#1f2328>,</span> addr<span style=color:#1f2328>,</span> <span style=color:#0550ae>&amp;</span>val<span style=color:#1f2328>,</span> <span style=color:#0550ae>1</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>void</span> <span style=color:#6639ba>lcd_toggle_enable</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> lcd_device <span style=color:#0550ae>*</span>lcd<span style=color:#1f2328>,</span> <span style=color:#cf222e>uint8_t</span> val<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>sleep_us</span><span style=color:#1f2328>(</span>ENABLE_DELAY_US<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>i2c_write_byte</span><span style=color:#1f2328>(</span>lcd<span style=color:#0550ae>-&gt;</span>i2c<span style=color:#1f2328>,</span> lcd<span style=color:#0550ae>-&gt;</span>addr<span style=color:#1f2328>,</span> val <span style=color:#0550ae>|</span> LCD_ENABLE_BIT<span style=color:#1f2328>);</span> <span style=color:#57606a>// start E pulse
+</span></span></span><span style=display:flex><span>    <span style=color:#6639ba>sleep_us</span><span style=color:#1f2328>(</span>ENABLE_DELAY_US<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>i2c_write_byte</span><span style=color:#1f2328>(</span>lcd<span style=color:#0550ae>-&gt;</span>i2c<span style=color:#1f2328>,</span> lcd<span style=color:#0550ae>-&gt;</span>addr<span style=color:#1f2328>,</span> val <span style=color:#0550ae>&amp;</span> <span style=color:#0550ae>~</span>LCD_ENABLE_BIT<span style=color:#1f2328>);</span> <span style=color:#57606a>// end E pulse
+</span></span></span><span style=display:flex><span>    <span style=color:#6639ba>sleep_us</span><span style=color:#1f2328>(</span>ENABLE_DELAY_US<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>void</span> <span style=color:#6639ba>lcd_send_byte</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> lcd_device <span style=color:#0550ae>*</span>lcd<span style=color:#1f2328>,</span> <span style=color:#cf222e>uint8_t</span> val<span style=color:#1f2328>,</span> <span style=color:#cf222e>int</span> mode<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>		<span style=color:#57606a>// we use 4-bit interface to transfer data
+</span></span></span><span style=display:flex><span>		<span style=color:#57606a>// so we need to send hight-bit data first
+</span></span></span><span style=display:flex><span>    <span style=color:#cf222e>uint8_t</span> high <span style=color:#0550ae>=</span> mode <span style=color:#0550ae>|</span> <span style=color:#1f2328>(</span>val <span style=color:#0550ae>&amp;</span> <span style=color:#0550ae>0xF0</span><span style=color:#1f2328>)</span> <span style=color:#0550ae>|</span> LCD_BACKLIGHT<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>uint8_t</span> low <span style=color:#0550ae>=</span> mode <span style=color:#0550ae>|</span> <span style=color:#1f2328>((</span>val <span style=color:#0550ae>&lt;&lt;</span> <span style=color:#0550ae>4</span><span style=color:#1f2328>)</span> <span style=color:#0550ae>&amp;</span> <span style=color:#0550ae>0xF0</span><span style=color:#1f2328>)</span> <span style=color:#0550ae>|</span> LCD_BACKLIGHT<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#57606a>// The data can be sent before or after sending RS and RW signals.
+</span></span></span><span style=display:flex><span>    <span style=color:#57606a>// But data should be available before toggling LCD enable pin.
+</span></span></span><span style=display:flex><span>    <span style=color:#6639ba>i2c_write_byte</span><span style=color:#1f2328>(</span>high<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>lcd_toggle_enable</span><span style=color:#1f2328>(</span>lcd<span style=color:#1f2328>,</span> high<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>i2c_write_byte</span><span style=color:#1f2328>(</span>low<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>lcd_toggle_enable</span><span style=color:#1f2328>(</span>lcd<span style=color:#1f2328>,</span> low<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>lcd_clear</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> lcd_device <span style=color:#0550ae>*</span>lcd<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>lcd_send_byte</span><span style=color:#1f2328>(</span>lcd<span style=color:#1f2328>,</span> LCD_CLEARDISPLAY<span style=color:#1f2328>,</span> SELECT_INSTRUCTION<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>假設現在要執行 LCD 模組的 clear display instruction，參考 LCD 模組的 data sheet，我們需要傳送 D7 - D0 為 0000 0001 的 data bit，搭配 RS = 0 (instruction register)。</p><p>而因為現在是使用 I2C adapter 來傳送訊號給 LCD 模組，參考剛剛提到的 adapter 腳位對應表格，傳送的資料會變成：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>uint8_t</span> high <span style=color:#0550ae>=</span> <span style=color:#0550ae>0x0</span> <span style=color:#1f2328>(</span>RS<span style=color:#1f2328>)</span> <span style=color:#0550ae>|</span> <span style=color:#0550ae>0x0</span> <span style=color:#1f2328>(</span>DATA<span style=color:#1f2328>)</span> <span style=color:#0550ae>|</span> <span style=color:#0550ae>0x8</span> <span style=color:#1f2328>(</span>BT<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>uint8_t</span> low <span style=color:#0550ae>=</span> <span style=color:#0550ae>0x0</span> <span style=color:#1f2328>(</span>RS<span style=color:#1f2328>)</span> <span style=color:#0550ae>|</span> <span style=color:#1f2328>((</span><span style=color:#0550ae>0x1</span> <span style=color:#0550ae>&lt;&lt;</span> <span style=color:#0550ae>4</span><span style=color:#1f2328>)</span> <span style=color:#0550ae>&amp;</span> <span style=color:#0550ae>0xF0</span><span style=color:#1f2328>)</span> <span style=color:#1f2328>(</span>DATA<span style=color:#1f2328>)</span> <span style=color:#0550ae>|</span> <span style=color:#0550ae>0x8</span> <span style=color:#1f2328>(</span>BT<span style=color:#1f2328>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>另外一個要注意的點是：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// The data can be sent before or after sending RS and RW signals.
+</span></span></span><span style=display:flex><span><span style=color:#57606a>// But data should be available before toggling LCD enable pin.
+</span></span></span><span style=display:flex><span><span style=color:#6639ba>i2c_write_byte</span><span style=color:#1f2328>(</span>high<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#6639ba>lcd_toggle_enable</span><span style=color:#1f2328>(</span>lcd<span style=color:#1f2328>,</span> high<span style=color:#1f2328>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>之所以傳送資料會需要呼叫兩個 function，主要原因是 data 需要在 E pulse 開始之前就設置好，因此第一個 function 主要目的是傳送 data bit 和 RS bit，第二個 function 則是通知 LCD 可以開始取值。</p><blockquote><p>由於 I2C 通訊時需要知道 I2C bus 的 slave address，因此要先確認 I2C LCD adapter 的 address 位置。可以看 adapter 的 IC controller datasheet 來取得預設 address，例如型號 PCF8574 是 0x27，而 PCF8574A 則是 0x3F。</p></blockquote><h2 id=lcd-2004-sample-code-for-rasp-pico>LCD 2004 Sample code for Rasp Pico</h2><p><a href=https://github.com/YuShuanHsieh/lcd-2004a-i2c>https://github.com/YuShuanHsieh/lcd-2004a-i2c</a></p><h2 id=document>Document</h2><ol><li><a href=https://cdn-shop.adafruit.com/datasheets/TC2004A-01.pdf>LCD 2004A datasheet</a></li><li><a href=https://www.nxp.com/docs/en/data-sheet/PCF8574_PCF8574A.pdf>I2C remote 8-bit I/O expander data sheet</a></li><li><a href=https://www.crystalfontz.com/controllers/OriseTech/SPLC780D1/>SPLC780D1 LCD Controller Datasheet</a></li></ol></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2021-12-01-status-update/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>12/1 生日快樂</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2021-12-29-golang-slice-append/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>Golang slice append 實作細節</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

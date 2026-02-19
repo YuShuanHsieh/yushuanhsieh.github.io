@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Meetup on Cherie's Tech Blog</title><link>https://yushuanhsieh.github.io/categories/meetup/</link><description>Recent content in Meetup on Cherie's Tech Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 19 Nov 2019 08:00:00 +0800</lastBuildDate><atom:link href="https://yushuanhsieh.github.io/categories/meetup/index.xml" rel="self" type="application/rss+xml"/><item><title>GDG Hsinchu Meetup Sharing #3 Move from C to Go</title><link>https://yushuanhsieh.github.io/posts/2019-11-19-go-meetup-2/</link><pubDate>Tue, 19 Nov 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-11-19-go-meetup-2/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;這次又來挑戰在新竹分享啦！每次來工程師大本營分享主題都蠻緊張的，很怕會被下面的工程師夥伴慘電，但即使如此，還是非常希望可以在新竹開講，畢竟新竹很多軟韌體工程師，講起 Operating System 時候，共鳴點比較多～
+本次主題主要是想針對使用 C 的工程師來說明 Go 語言的特性，因此在內容上可能相對比較抽象，沒有太多 Coding 部分，絕大多數都是在 Go 是用什麼樣的方式來實現他的特色，例如 user-space scheduler。而這場參加的人數竟然有 20 幾位，算是 GDG Hsinchu 開辦以來人數最多的一次，由此可知大家對於偏底層的內容還是很感興趣，希望之後有機會可以討論到更深的主題！
+![study]({{ site.url }}/assets/images/go-meetup-2.jpg)&lt;/p&gt;
+&lt;h2 id="slides"&gt;Slides&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://www.slideshare.net/CherrieHsieh/move-from-c-to-go"&gt;Move from C to Go Slides&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="move-from-c-to-go---introduction"&gt;Move from C to Go - Introduction&lt;/h2&gt;
+&lt;p&gt;這個 section 其實就是大概介紹 Go 語言十週年慶和 Go 起源，個人覺得最重要的是關於 Go 之後未來的發展，包含：&lt;/p&gt;</description></item></channel></rss>

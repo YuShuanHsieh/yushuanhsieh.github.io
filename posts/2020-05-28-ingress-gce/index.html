@@ -1,0 +1,87 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>Introduction to ingress-gce controller — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>Introduction to ingress-gce controller</h1><div class=post-meta><time datetime=2020-05-28>May 28, 2020</time>
+<span class=separator>·</span>
+<span class=reading-time>8 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/google-cloud-platform/>Google Cloud Platform</a>
+<a href=https://yushuanhsieh.github.io/categories/kubernetes/>Kubernetes</a></div></header><div class=post-content><p>如果想要在 Google Cloud Platform 的 GKE 上使用 Ingress 功能，最簡單的方式就是用 GKE 本身預設提供的 <code>ingress-gce</code> controller。不過不知道大家在設定 ingress yaml 的時候，有沒有留意到 <code>ingress-gce</code> 規定 service type 只能是 <code>NodePort</code>，但是 <code>ingress-nginx</code> 卻沒有這種限制呢？</p><p>本篇文章會從 Google Cloud Platform 所提供的 load balancer 服務開始說明，並且結合 <code>ingress-gce</code> controller，讓大家瞭解兩者的運作方式和限制原因。</p><h2 id=google-cloud-platform-load-balancer>Google Cloud Platform Load Balancer</h2><p>首先來說明 Google Cloud Platform 的 external load balancer 的運作流程：</p><blockquote><p><img src=https://cloud.google.com/load-balancing/images/http-load-balancer-simple.svg alt>
+source: <a href=https://cloud.google.com/load-balancing/docs/https/ext-http-lb-simple>Setting up a simple external HTTP load balancer</a></p></blockquote><ol><li>user 向 server 發送 request 後，GCP 會將 package 的 dest. IP address 和 forwarding table 進行比對(match)，並將 network packages 轉送到比對成功的 forwarding rule 所指定的 proxy server。</li><li>Proxy server 取出 package 中的 URL 資訊，再根據 GCP 上設定的 URL map 來決定該將 package 轉發到哪一個 backend service。(routing)</li><li>最後，依據 backend service 的設定將 package 分配到對應 group 底下的 backend server。</li></ol><p>而實際對應到 GCP load balancer 設定，就會是：</p><p><img src=/posts/ingress-gce_3.png alt=hugo></p><p>如果是使用 GCP cloud console 的話，也可以切換到 advanced menu，就能看到上述所提到的各細節設定，包含 target proxy 和 forwarding rule 等。</p><p><img src=/posts/ingress-gce_4.png alt=hugo></p><h2 id=ingress-gce-with-gcp-load-balancer>Ingress-gce with GCP Load Balancer</h2><p>了解基本 GCP load balancer 運作方式之後，接著我們來看 <code>ingress-gce</code> 如何結合 GCP load balancer 來實現 ingress 功能。</p><p><code>ingress-gce</code> 是實現 Kubernetes ingress 抽象層的 controller，而實際負責管理 traffic 的 ingress server 當然就是 GCP load balancer。另外，<code>ingress-gce</code> controller 目前支援建立 L7 external / internal <strong>HTTP(S)</strong> Load Balancing，所以假如是只需要 L4(TCP/UDP) 的 load Balancing，就需要指定其他 ingress controller。</p><p><img src=/posts/ingress-gce_1.png alt=hugo></p><p>因此，當使用者部署或是更新 ingress resource 時，<code>ingress-gce</code> ingress controller 就會 call GCP compute load balancer API 來調整相關配置。</p><p>而在第一部分已經有簡單介紹過 GCP load balancer 所需要的各設定，那麼這些設定該怎麼跟 Kubernetes 的 ingress resource 和機制做整合呢？</p><h3 id=1-forwarding-rules>1. Forwarding Rules</h3><p>建立 forwarding rule 需要 <strong>(1) external IP address</strong> 和 <strong>(2) proxy server</strong>。</p><p>如果在 yaml annotation 沒有設定既有的 static external IP， <code>ingress-gce</code> controller 就會自動建立一個 global external IP，並且根據 yaml 內的 TLS 設定來決定要選擇 HTTP 或是 HTTPS proxy server。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>apiVersion: networking.k8s.io/v1beta1
+</span></span><span style=display:flex><span>kind: Ingress
+</span></span><span style=display:flex><span>metadata:
+</span></span><span style=display:flex><span>  name: my-ingress
+</span></span><span style=display:flex><span>  annotations:
+</span></span><span style=display:flex><span>    kubernetes.io/ingress.global-static-ip-name: &lt;static-address&gt;
+</span></span></code></pre></td></tr></table></div></div><p>仔細看 static IP 的設定，它是 <strong>global-static-ip-name</strong>，Global 這字非常重要，原因是 GCP 的 HTTP(s) load balancer 是比對 global forwarding table，因此就需要使用 global static IP， 假設既有的 static IP 是 regional static IP ，那它是不能被套用在設定上的。</p><h3 id=url-map>URL map</h3><p>URL map 相對來說就簡單理解，就是把 yaml 設定檔中的 host 和 path 組成 GCP load balancer 所需要的 URL map，舉例來說：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>spec:
+</span></span><span style=display:flex><span>  rules:
+</span></span><span style=display:flex><span>  - host: example.com
+</span></span><span style=display:flex><span>    http:
+</span></span><span style=display:flex><span>      paths:
+</span></span><span style=display:flex><span>      - path: /
+</span></span><span style=display:flex><span>        backend:
+</span></span><span style=display:flex><span>          serviceName: web-server
+</span></span><span style=display:flex><span>          servicePort: http
+</span></span><span style=display:flex><span>  - host: beta.example.com
+</span></span><span style=display:flex><span>    http:
+</span></span><span style=display:flex><span>      paths:
+</span></span><span style=display:flex><span>      - path: /
+</span></span><span style=display:flex><span>        backend:
+</span></span><span style=display:flex><span>          serviceName: beta-web-server
+</span></span><span style=display:flex><span>          servicePort: http
+</span></span></code></pre></td></tr></table></div></div><p>就會產生三個對應 mapping rules，分別是</p><ol><li><code>default</code></li><li><code>example.com/*</code></li><li><code>beta.example.com/*</code></li></ol><p>而這三個 rules 會分別對應到各自不同的 backend service。</p><h3 id=backend-service>Backend Service</h3><p>最後一步就是要將 kubernetes cluster 中的 nodes 對應到 GCP load balancer 的 backend service。Backend service 需要關聯到至少一個 <strong>Backend Group</strong>，這個 Backend Group 可以是:</p><ol><li>instance group</li><li>network endpoints group</li></ol><p>而在 <a href=https://cloud.google.com/kubernetes-engine/docs/concepts/ingress#container-native_load_balancing>GKE Ingress for HTTP(S) load balancing</a> 有提到，如果可以的話，盡可能地使用 <code>Network Endpoint Groups (NEGs)</code> 以提高 package 轉送效率，因此我們就以 network endpoints group 來做說明。</p><p>在 <strong>service</strong> yaml 加入<code>{"ingress": true}</code>：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>apiVersion: v1
+</span></span><span style=display:flex><span>kind: Service
+</span></span><span style=display:flex><span>metadata:
+</span></span><span style=display:flex><span>  name: neg-demo-svc
+</span></span><span style=display:flex><span>  annotations:
+</span></span><span style=display:flex><span>    cloud.google.com/neg: &#39;{&#34;ingress&#34;: true}&#39;
+</span></span><span style=display:flex><span>spec:
+</span></span><span style=display:flex><span>  type: NodePort
+</span></span><span style=display:flex><span>  selector:
+</span></span><span style=display:flex><span>    run: neg-demo-app
+</span></span><span style=display:flex><span>  ports:
+</span></span><span style=display:flex><span>  - port: 80
+</span></span><span style=display:flex><span>    protocol: TCP
+</span></span><span style=display:flex><span>    targetPort: 9376
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>source code from <a href=https://cloud.google.com/kubernetes-engine/docs/how-to/container-native-load-balancing>Using container-native load balancing</a></p></blockquote><p>這樣 <code>ingress-gce</code> controller 就會根據 <strong>service selector</strong> 所選到的 pods 來組成一個 network endpoints group。示意圖如下：</p><p><img src=/posts/ingress-gce_2.png alt=hugo></p><p>每個 endpoint 是由 node ID 和 pod IP 所組成，這樣在轉送 package 的時候，就可以直接送到 pod 內，而不需要透過 node 內的 iptable 再轉發到 pod 了。</p><h2 id=nodeport>NodePort</h2><p>回到文章一開始的問題，為什麼 <code>ingress-gce</code> controller 的 service 必須要是 <strong>NodePort</strong> type？</p><p>這原因很簡單，從上面描述可以知道 ingress server 就是 GCP load balancer，而 <code>ingress-gce</code> controller 根據 ingress resource 來更新 GCP load balancer 設定，但是 GCP load balancer 這個 ingress server 並不在我們 cluster 中，如果我們將 service type 設為 clusterIP，那麼外部的 ingress server 就無法解析出正確 IP 位置，也無法透過 <node ip>:<port> 方式來將 package 送到正確的 pod 中。</p><h2 id=recap>Recap</h2><p>最後，總結幾個重點：</p><ol><li>GKE default 的 ingress controller 是 <code>ingress-gce</code> 而 ingress server 是 GCP load balancer。</li><li>GCP load balancer 有幾個必備 components，包含：forwarding rules(static IP and proxy server)、URL map、backend service。當建立 ingress 時，controller 會根據 yaml 內容建立起對應的 load balancer component。</li><li>推薦在建立 cluster 時啟用 <code>VPC-native</code> 功能，並且設定 <code>NEGs(network endpoints group)</code>，有助於提升 package 轉送效率。</li></ol><h1 id=references>References</h1><ol><li><a href=https://www.hwchiu.com/ingress-1.html>Introduction to Kubernetes Ingress (Nginx)</a></li><li><a href=https://cloud.google.com/kubernetes-engine/docs/concepts/container-native-load-balancing>GCP Container-native load balancing</a></li></ol></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2020-05-19-transfer.sh/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>Side Project - Transfer.sh</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2020-06-01-string-to-slice/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>Go string to slice 議題</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

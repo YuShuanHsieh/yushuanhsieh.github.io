@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Operating System on Cherie's Tech Blog</title><link>https://yushuanhsieh.github.io/categories/operating-system/</link><description>Recent content in Operating System on Cherie's Tech Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 23 May 2021 08:00:00 +0800</lastBuildDate><atom:link href="https://yushuanhsieh.github.io/categories/operating-system/index.xml" rel="self" type="application/rss+xml"/><item><title>CSE 506 Lab 4 - Multiprocessor Support and Cooperative Multitasking</title><link>https://yushuanhsieh.github.io/posts/2021-05-23-lab4-multiprocessor/</link><pubDate>Sun, 23 May 2021 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2021-05-23-lab4-multiprocessor/</guid><description>&lt;p&gt;Lab 4 包含三個部分，其中 A 部分介紹 x86 架構的 multiprocessor 啟動與初始化流程，並且實作簡易的 round-robin process scheduling。而我認為從 bootstrap processor 啟動並初始化，到透過 bootstrap processor 把其他的 processor 啟動的整個過程相當重要，可以讓新手更具體地知道 multiprocessor 的運作方式。&lt;/p&gt;
+&lt;p&gt;JOS 實作 intel &lt;a href="https://en.wikipedia.org/wiki/MultiProcessor_Specification"&gt;MultiProcessor Specification(MPS)&lt;/a&gt; 標準，在看 source code 的時候，搭配這個文件來看會更加理解每項步驟的用意。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt;
+Multiprocessor 架構會依據設計而有所不同，以下所提到的內容皆以 x86 MPS 制定的規格為主。&lt;/p&gt;
+&lt;h2 id="multiprocessor"&gt;Multiprocessor&lt;/h2&gt;
+&lt;h3 id="architecture"&gt;Architecture&lt;/h3&gt;
+&lt;p&gt;Multiprocessor 架構下，每個 processor 有各自的 L1 cache 和 APIC，並且透過 ICC (interrupt controller communications) bus 進行溝通。&lt;/p&gt;</description></item><item><title>CSE 506 Lab 3 - Interrupts</title><link>https://yushuanhsieh.github.io/posts/2021-01-26-lab3_2/</link><pubDate>Tue, 26 Jan 2021 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2021-01-26-lab3_2/</guid><description>&lt;h2 id="閒聊"&gt;閒聊&lt;/h2&gt;
+&lt;p&gt;2020 年過去了，因為年底各種考試和工作， Lab3 下半部份延遲到現在才完成。雖然拖蠻久的，但是往好的方向看就是有在持續進行下去，沒有放棄就是好結局！最近心境上有蠻多變化的，其中本來對於目前工作內容很疑惑，覺得跟純軟生活落差太大，但是在工作中慢慢地發現自己對於 security 領域的認知嚴重不足，如果能好好學習 security 相關知識，對於自己和未來發展還是挺有幫助的，結合 security 與 embedded or cloud 去發展，是一個有趣又有挑戰性的目標，因此目前就朝著這方向努力，希望今年可以在 COSCUP 分享 security 相關議題。&lt;/p&gt;
+&lt;h2 id="lab-3-interrupts"&gt;Lab 3 Interrupts&lt;/h2&gt;
+&lt;p&gt;在開始實作 interrupt 之前，先結合上一篇 &lt;a href="https://yushuanhsieh.github.io/post/2020-11-25-lab3_1/"&gt;CSE 506 Lab 3 - User Environments(Processes)&lt;/a&gt; environment(process) 的觀念，綜觀一下 interrupt 結合 environment context switch 的 interrupt handle 過程。&lt;/p&gt;</description></item><item><title>CSE 506 Lab 3 - User Environments(Processes)</title><link>https://yushuanhsieh.github.io/posts/2020-11-25-lab3_1/</link><pubDate>Wed, 25 Nov 2020 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2020-11-25-lab3_1/</guid><description>&lt;h2 id="閒聊"&gt;閒聊&lt;/h2&gt;
+&lt;p&gt;之前在辦活動的時候，得知有朋友在 follow 我的 Blog ，真是讓我非常訝異，因為我一直是默默撰寫文章，而且雖然我有參與 Golang 和 GDG 社群，但是我寫的內容很常都跟 Golang 和 Google 技術沒什麼太大關係 XD 非常感謝各位的觀看，之前有近兩個月都沒更新，感覺有點罪惡，以後會盡量定期更新的。&lt;/p&gt;
+&lt;p&gt;目前除了自修 CSE 506 課程之外，還有學習 RISC-V instruction 以及 pipeline，因為過往經驗都是看 x86_64 instruction 居多，現在改看 RISC-V 還蠻不習慣的。另外就是還想學用 Rust 寫 kernel module，目前趨勢是有些 Kernel developers 嘗試將 Rust code 結合進 Linux kernel 中，再加上 Rust 的發展也蠻成熟，是時候抽空來學習一下。&lt;/p&gt;</description></item><item><title>CSE 506 Lab2 - Memory Management and Virtual Memory Mapping</title><link>https://yushuanhsieh.github.io/posts/2020-11-15-lab2_2/</link><pubDate>Sun, 15 Nov 2020 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2020-11-15-lab2_2/</guid><description>&lt;h2 id="閒聊"&gt;閒聊&lt;/h2&gt;
+&lt;p&gt;上次寫完 Lab 2 source code study 之後，一晃眼就過了近兩個月。中間被各種事物攔截，加上剛好有些機遇和機會，因此挪了一些時間去準備，等事情有比較明朗後再跟大家分享。此外，學校也開學了，這學期修了偏硬體架構的課程，包含 RISC-V 和架構效能分析等，單智君教授的教學內容很好，聲音也很溫柔，非常喜歡這位教授的課程。&lt;/p&gt;
+&lt;p&gt;這時間還遇上 Macbook 螢幕完全無法顯示的意外，經由朋友提醒，2016 年產的 13 吋 Macbook Pro 有螢幕背光災情，Apple 有提供免費召回維修的服務，因此花了一些時間送修。而 Apple 的服務也還不錯，整個螢幕換新，看來又可以撐好一陣子了 &amp;lt;3&lt;/p&gt;
+&lt;h2 id="lab-2"&gt;Lab 2&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/lab2.html"&gt;實驗說明文件&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="part-1-physical-page-management"&gt;Part 1: Physical Page Management&lt;/h2&gt;
+&lt;p&gt;Part 1 是實作 physical memory allocator。在 &lt;a href="https://yushuanhsieh.github.io/post/2020-09-12-lab2-1/"&gt;CSE 506 Lab2 - E820 Memory Map &amp;amp; Page Translation (1)&lt;/a&gt; 可以看到系統在執行 kernel code 前，有先在 bootstrap 階段建立 page translation 所需的 pml4 table，以確保 kernel code 可以正確地被執行，不過在 kernel code 運行階段，我們需要建立新的 pml4 table ，來讓我們可以有更多控制權。&lt;/p&gt;</description></item><item><title>CSE 506 Lab2 - E820 Memory Map &amp; Page Translation (1)</title><link>https://yushuanhsieh.github.io/posts/2020-09-12-lab2-1/</link><pubDate>Sat, 12 Sep 2020 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2020-09-12-lab2-1/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;之前是看 &lt;a href="https://www.cs.unc.edu/~porter/courses/comp790/s20/index.html"&gt;COMP790&lt;/a&gt; 的課程，但是實作起來發現有點問題，而且題目跟實際 source code 說明不太一樣。在花了很多時間釐清之後，發現原課程內容可能來自於 &lt;a href="https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/schedule.html"&gt;CSE 506: Lecture from Stony Brook University&lt;/a&gt;，仔細看了一下 CSE 506 的 Lab 課程，發現題目與 source code 相符程度較高，因此後續會改看 CSE 506 這系列課程。&lt;/p&gt;
+&lt;p&gt;這次 Lab 花了大概 20 小時來實作，主要原因是有些 source code 的註解是錯誤的，所以單看註解會產生很多疑問，必須實作和觀察才能釐清。這次實驗也讓我體會到，如果覺得哪邊有不太理解的地方，就直接做實驗來驗證，而不要單看註解來去試圖理解它上面的意思，因為如果註解不是正確的，那這些時間也就浪費了。&lt;/p&gt;
+&lt;p&gt;因為這次實驗要整理的內容蠻多的，擔心文章太長，所以會分成數篇來貼！&lt;/p&gt;
+&lt;h2 id="lab-實驗介紹"&gt;Lab 實驗介紹&lt;/h2&gt;
+&lt;p&gt;Lab 2 是實作 physical memory allocator 和 virtual memory allocator，其中最重要的是清楚 physical memory 與 virtual memory 之間的轉換，以及如何運用 Lab 2 的 &lt;code&gt;PageInfo&lt;/code&gt; c structure 把兩者 mapping 起來。&lt;/p&gt;</description></item><item><title>CSE 506 Lab1 - The Stack</title><link>https://yushuanhsieh.github.io/posts/2020-08-25-comp790-lab1/</link><pubDate>Tue, 25 Aug 2020 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2020-08-25-comp790-lab1/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;課程 &lt;a href="https://www.cs.unc.edu/~porter/courses/comp790/s20/index.html"&gt;Operating System Implementation&lt;/a&gt;，Lab1 &lt;a href="https://www.cs.unc.edu/~porter/courses/comp790/s20/lab1.html"&gt;x86 Assembly and Bootloader&lt;/a&gt; 是個簡單的實作開場(Lab 源自於 MIT 課程)，不過其中卻有蠻多學習的地方。這次來記錄一下 Lab 1 中的 &lt;strong&gt;The Stack&lt;/strong&gt; 實作部分，實作過程中除了需要用 gdb 之外，也需要搭配 asm code。&lt;/p&gt;
+&lt;h2 id="實作內容"&gt;實作內容&lt;/h2&gt;
+&lt;p&gt;在教學程式中，會呼叫 test_backtrace(5)，接著跑 recursion 直到碰到終止條件為止。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 1
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 2
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 3
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 4
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 5
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 6
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 7
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 8
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 9
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;10
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;11
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;12
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;13
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#cf222e"&gt;void&lt;/span&gt; &lt;span style="color:#6639ba"&gt;i386_init&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#cf222e"&gt;void&lt;/span&gt;&lt;span style="color:#1f2328"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#6639ba"&gt;test_backtrace&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#0550ae"&gt;5&lt;/span&gt;&lt;span style="color:#1f2328"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#cf222e"&gt;void&lt;/span&gt; &lt;span style="color:#6639ba"&gt;test_backtrace&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#cf222e"&gt;int&lt;/span&gt; x&lt;span style="color:#1f2328"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#6639ba"&gt;cprintf&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;entering test_backtrace %d&lt;/span&gt;&lt;span style="color:#0a3069"&gt;\n&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt; x&lt;span style="color:#1f2328"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#cf222e"&gt;if&lt;/span&gt; &lt;span style="color:#1f2328"&gt;(&lt;/span&gt;x &lt;span style="color:#0550ae"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#0550ae"&gt;0&lt;/span&gt;&lt;span style="color:#1f2328"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#6639ba"&gt;test_backtrace&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;x&lt;span style="color:#0550ae"&gt;-&lt;/span&gt;&lt;span style="color:#0550ae"&gt;1&lt;/span&gt;&lt;span style="color:#1f2328"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#cf222e"&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#6639ba"&gt;mon_backtrace&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#0550ae"&gt;0&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt; &lt;span style="color:#0550ae"&gt;0&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt; &lt;span style="color:#0550ae"&gt;0&lt;/span&gt;&lt;span style="color:#1f2328"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#6639ba"&gt;cprintf&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;leaving test_backtrace %d&lt;/span&gt;&lt;span style="color:#0a3069"&gt;\n&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt; x&lt;span style="color:#1f2328"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;我們的目標，就是實作 &lt;code&gt;mon_backtrace&lt;/code&gt;，追蹤進入 test_backtrace function 以及 recursion 的過程。&lt;/p&gt;</description></item><item><title>CSE 506 Lab 環境建置</title><link>https://yushuanhsieh.github.io/posts/2020-08-24-comp790-tool/</link><pubDate>Mon, 24 Aug 2020 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2020-08-24-comp790-tool/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;由於下學期要上計算機結構的課程，所以趁著開課之前來複習一下 OS。這次看的課程是 UNC Operating System Implementation，基本上這課程也是引用 MIT 知名的 JOS 實作，再加上清楚明瞭的 Slides，光是一堂課就能有蠻多地收穫。&lt;/p&gt;
+&lt;p&gt;這次先來記錄一下實作 Lab1 所遇到的一些問題和環境建立過程。不得不說這課程的環境建置說明沒有很清楚，所以浪費了一些時間在配置正確環境和編譯器。&lt;/p&gt;
+&lt;h2 id="環境建立"&gt;環境建立&lt;/h2&gt;
+&lt;p&gt;Host: MacPro macOS 10.15.6&lt;/p&gt;
+&lt;h3 id="tools"&gt;Tools&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;VSCode&lt;/li&gt;
+&lt;li&gt;Vagrant&lt;/li&gt;
+&lt;li&gt;VirtualBox&lt;/li&gt;
+&lt;li&gt;Ubuntu 16.04 64 bit&lt;/li&gt;
+&lt;li&gt;GNU binutils:2.19&lt;/li&gt;
+&lt;li&gt;GNU gcc:4.1.2&lt;/li&gt;
+&lt;li&gt;GNU GDB 7.7.1 (要下載 source code 並且修改檔案)&lt;/li&gt;
+&lt;li&gt;MIT版 Qemu &lt;code&gt;https://github.com/geofft/qemu.git -b 6.828-1.7.0&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="vagrant-configuration"&gt;Vagrant Configuration&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;config.vm.box &lt;span style="color:#0550ae"&gt;=&lt;/span&gt; &lt;span style="color:#0a3069"&gt;&amp;#34;ubuntu/xenial64&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; config.vm.provider &lt;span style="color:#0a3069"&gt;&amp;#34;virtualbox&amp;#34;&lt;/span&gt; &lt;span style="color:#cf222e"&gt;do&lt;/span&gt; &lt;span style="color:#1f2328"&gt;|&lt;/span&gt;vb&lt;span style="color:#1f2328"&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; vb.customize &lt;span style="color:#0550ae"&gt;[&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;modifyvm&amp;#34;&lt;/span&gt;, :id, &lt;span style="color:#0a3069"&gt;&amp;#34;--nested-hw-virt&amp;#34;&lt;/span&gt;, &lt;span style="color:#0a3069"&gt;&amp;#34;on&amp;#34;&lt;/span&gt;&lt;span style="color:#0550ae"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; end
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;end
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;環境配置是在 VM 中跑 Qemu + KVM ，因此在設定 configuration 時，要將 VritualBox 的 &lt;code&gt;nested-hw-virt&lt;/code&gt; 開啟。&lt;/p&gt;</description></item></channel></rss>

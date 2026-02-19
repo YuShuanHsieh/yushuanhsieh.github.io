@@ -1,0 +1,153 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>Gem5 Simulator - Simulation Mechanism — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>Gem5 Simulator - Simulation Mechanism</h1><div class=post-meta><time datetime=2022-06-27>June 27, 2022</time>
+<span class=separator>·</span>
+<span class=reading-time>8 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/gem5/>Gem5</a></div></header><div class=post-content><p>Gem5 是針對電腦系統架構所設計的模擬器，目前主要用於系統層面相關的研究，可以模擬出執行所需的 cycle 數、記憶體 access 數、cache miss 等。其中 Gem5 將各組件模擬模組化，並透過 C++ 後端和 python 前端設置的方式來實作，除了可以快速地置換和配置想要的組件之外，也方便研究人員自行新增想要的新設計。這篇文章主要介紹 Gem5 模擬系統運行的機制和相關 configuration 初始化原理。</p><blockquote><p>The gem5 simulator is a modular platform for computer-system architecture research, encompassing system-level architecture as well as processor microarchitecture.</p></blockquote><h2 id=simulate-mechanism>Simulate Mechanism</h2><p>Gem5 是一個 <a href=https://en.wikipedia.org/wiki/Event-driven_programming>event-driven</a> 模擬器，所以最主要是透過一個全域 (global) 的 mainEventQueue 和 main loop 來實現系統模擬，這也意味著所有的行為 (callback function) 都必須依照正確的順序加入到 event queue 中，最後的模擬結果才會如預期。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>/* file: src/sim/eventq.cc 
+</span></span></span><span style=display:flex><span><span style=color:#57606a>   global main queue. */</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>uint32_t</span> numMainEventQueues <span style=color:#0550ae>=</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>/* In most cases, we only use mainEventQueue[0] for system simulation */</span>
+</span></span><span style=display:flex><span>std<span style=color:#0550ae>::</span>vector<span style=color:#0550ae>&lt;</span>EventQueue <span style=color:#0550ae>*&gt;</span> mainEventQueue<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>__thread EventQueue <span style=color:#0550ae>*</span>_curEventQueue <span style=color:#0550ae>=</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>bool</span> inParallelMode <span style=color:#0550ae>=</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>;</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/posts/20220627_gem5_1.png alt></p><p>這邊以 CPU 的 fetch instruction 為例子， 一開始 gem5 初始化系統配置時，CPU 的 fetch event 會被加入到 event queue 中，因此在系統執行模擬時，會先執行 CPU 的 fetch event；而 CPU 會從 Icache 中取出當前要執行的 instruction，因此在執行 CPU fetch event handler 時，會在 event queue 中加入 Icache event，這樣 Icache event 就能夠在下一個流程執行。同理，如果此時 cache miss，則會需要從 memory 中讀取 instruction，因此 Icache event handler 會再把 memory event 加到 event queue 中，然後 memory event 會接續處理相關要求。</p><p><img src=/posts/20220627_gem5_2.png alt></p><p>上面機制可以處理電腦運作時的同步行為，不過我們常常會有一些非同步的事件，像是 I/O 和 interrupt 等，而 gem5 在每次 loop 中去偵測是否有非同步事件發生，如果有，則會從 poll queue 中取出這些非同步事件並處理，這個設計方式很像 <a href=https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop>javascript engine 的 event loop 和 callback queue 的概念</a>。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span>Event <span style=color:#0550ae>*</span>
+</span></span><span style=display:flex><span><span style=color:#6639ba>doSimLoop</span><span style=color:#1f2328>(</span>EventQueue <span style=color:#0550ae>*</span>eventq<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>   <span style=color:#57606a>// more code..
+</span></span></span><span style=display:flex><span>   <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>async_event <span style=color:#0550ae>&amp;&amp;</span> <span style=color:#6639ba>testAndClearAsyncEvent</span><span style=color:#1f2328>())</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>     <span style=color:#57606a>// Take the event queue lock in case any of the service
+</span></span></span><span style=display:flex><span>     <span style=color:#57606a>// routines want to schedule new events.
+</span></span></span><span style=display:flex><span>     std<span style=color:#0550ae>::</span>lock_guard<span style=color:#0550ae>&lt;</span>EventQueue<span style=color:#0550ae>&gt;</span> <span style=color:#6639ba>lock</span><span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>eventq<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>     <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>async_io<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>         async_io <span style=color:#0550ae>=</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>         pollQueue<span style=color:#1f2328>.</span><span style=color:#6639ba>service</span><span style=color:#1f2328>();</span>
+</span></span><span style=display:flex><span>     <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>     
+</span></span><span style=display:flex><span>     <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>async_exit<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>       async_exit <span style=color:#0550ae>=</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>       <span style=color:#6639ba>exitSimLoop</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;user interrupt received&#34;</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>     <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>   <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=event-queue-implementation>Event Queue Implementation</h3><p><img src=/posts/20220627_gem5_4.png alt></p><p>為了確保 event 能依據先後時間點和優先權順序來執行，Event queue 本身是以<strong>雙層 linked list</strong>的資料結構實作。其中第一層的 linked list 會根據各 event 的 <strong>timestamp + priority</strong> 數值排序，而當遇到多個 event 的 timestamp + priority 數值為相同時，則會使用第二層的 linked list 將 event 堆疊起來。這邊要注意的是，第一層的 event linked list 會從 head event 開始依序取出，但是第二層的 event linked list 則是以 last in first out 的順序取出。</p><h2 id=system-configuration--initialization>System Configuration & Initialization</h2><p>簡單介紹完 gem5 模擬運作機制後，我們從更細節來看 gem5 的機制實現方式，首先來看 gem5 如何根據 configuration 來建立起我們所需模擬的系統架構。</p><h3 id=configuration>Configuration</h3><p>Gem5 的系統設置是透過 python script 結合 C++ class 的方式來實作。一個簡單的範例如下：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#57606a># configs/learning_gem5/part1/simple.py</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>system <span style=color:#0550ae>=</span> System<span style=color:#1f2328>()</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a># Create a simple CPU</span>
+</span></span><span style=display:flex><span>system<span style=color:#0550ae>.</span>cpu <span style=color:#0550ae>=</span> TimingSimpleCPU<span style=color:#1f2328>()</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a># Create a memory bus, a system crossbar, in this case</span>
+</span></span><span style=display:flex><span>system<span style=color:#0550ae>.</span>membus <span style=color:#0550ae>=</span> SystemXBar<span style=color:#1f2328>()</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a># Hook the CPU ports up to the membus</span>
+</span></span><span style=display:flex><span>system<span style=color:#0550ae>.</span>cpu<span style=color:#0550ae>.</span>icache_port <span style=color:#0550ae>=</span> system<span style=color:#0550ae>.</span>membus<span style=color:#0550ae>.</span>cpu_side_ports
+</span></span><span style=display:flex><span>system<span style=color:#0550ae>.</span>cpu<span style=color:#0550ae>.</span>dcache_port <span style=color:#0550ae>=</span> system<span style=color:#0550ae>.</span>membus<span style=color:#0550ae>.</span>cpu_side_ports
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a># Create a process for a simple &#34;Hello World&#34; application</span>
+</span></span><span style=display:flex><span>process <span style=color:#0550ae>=</span> Process<span style=color:#1f2328>()</span>
+</span></span><span style=display:flex><span><span style=color:#57606a># Set the command</span>
+</span></span><span style=display:flex><span><span style=color:#57606a># cmd is a list which begins with the executable (like argv)</span>
+</span></span><span style=display:flex><span>process<span style=color:#0550ae>.</span>cmd <span style=color:#0550ae>=</span> <span style=color:#1f2328>[</span>binary<span style=color:#1f2328>]</span>
+</span></span><span style=display:flex><span><span style=color:#57606a># Set the cpu to use the process as its workload and create thread contexts</span>
+</span></span><span style=display:flex><span>system<span style=color:#0550ae>.</span>cpu<span style=color:#0550ae>.</span>workload <span style=color:#0550ae>=</span> process
+</span></span><span style=display:flex><span>system<span style=color:#0550ae>.</span>cpu<span style=color:#0550ae>.</span>createThreads<span style=color:#1f2328>()</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a># set up the root SimObject and start the simulation</span>
+</span></span><span style=display:flex><span>root <span style=color:#0550ae>=</span> Root<span style=color:#1f2328>(</span>full_system <span style=color:#0550ae>=</span> <span style=color:#cf222e>False</span><span style=color:#1f2328>,</span> system <span style=color:#0550ae>=</span> system<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#57606a># instantiate all of the objects we&#39;ve created above</span>
+</span></span><span style=display:flex><span>m5<span style=color:#0550ae>.</span>instantiate<span style=color:#1f2328>()</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>exit_event <span style=color:#0550ae>=</span> m5<span style=color:#0550ae>.</span>simulate<span style=color:#1f2328>()</span>
+</span></span></code></pre></td></tr></table></div></div><p>上述 configuration 所產生的架構為：</p><p><img src=/posts/20220627_gem5_3.png alt></p><p>其中 configuration 中的 root、system、membus、cpu，以及 mem_ctrl 都是 <strong>SimObject</strong>。SimObject 是 gem5 架構中最基本的 simulation objects，任何跟硬體相關的組件都會是由 SimObject class 擴充而成。SimObject 提供了相關 lifecycle (init、startup) 與 control 的 API，每個硬體元件 class 都會實作這些 API 來模擬硬體初始化和設定的行為，而 gem5 執行時就是透過呼叫這些 API 來建立硬體並組織出系統架構。</p><h3 id=simobject-initialization-apis>SimObject Initialization APIs</h3><ul><li>SimObject::init();</li><li>SimObject::regStats(); // regStats is typically used for complex stats.
+- SimObject::initState();
+- SimObject::loadState();</li><li>SimObject::resetStats();</li><li>SimObject::startup();</li><li>Drainable::drainResume();</li></ul><h3 id=eventmanager>EventManager</h3><p>此外，SimObject 結合 <code>EventManager</code> 的 API，讓研究人員在開發 gem5 的硬體組件時，可以透過呼叫 schedule、deschedule 等 API 將特定 event callback 加入到 event queue 中。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>/* EventManager implements APIs for event queue manipulation */</span>
+</span></span><span style=display:flex><span>class <span style=color:#900;font-weight:700>SimObject</span> <span style=color:#1f2328>:</span> public EventManager<span style=color:#1f2328>,</span> public Serializable<span style=color:#1f2328>,</span> public Drainable<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>                  public statistics<span style=color:#0550ae>::</span>Group<span style=color:#1f2328>,</span> public Named
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>舉例來說，AtomicSimpleCPU class 是從 SimObject 擴充而成，因此我們可以在想要的流程中呼叫 schedule 加入合適的 event。同時，這些 event queue 相關 API 也能成為我們觀察硬體執行順序的重要對象。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>void</span>
+</span></span><span style=display:flex><span>AtomicSimpleCPU<span style=color:#0550ae>::</span><span style=color:#6639ba>drainResume</span><span style=color:#1f2328>()</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>   <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>!</span>tickEvent<span style=color:#1f2328>.</span><span style=color:#6639ba>scheduled</span><span style=color:#1f2328>())</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>     <span style=color:#6639ba>schedule</span><span style=color:#1f2328>(</span>tickEvent<span style=color:#1f2328>,</span> <span style=color:#6639ba>nextCycle</span><span style=color:#1f2328>());</span>
+</span></span><span style=display:flex><span>   <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=recap>Recap</h2><ol><li>Gem5 系統模擬流程是由一個 main event queue 來實現，而我們在實作 gem5 所需的硬體組件時，需要合適地方將 event 加入到 event queue 中，以確保模擬順序如預期。</li><li>SimObject 是最基本的硬體組件 class，gem5 在將 configuration 中的系統架構初始化時，會呼叫 SimObject 相關 APIs 來實現各硬體組件的初始化過程。因此研究人員在客製化硬體組件時，需要實作這些 API 來達成目的。</li></ol></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2022-05-27-c_volatile_keyword/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>C volatile Keyword</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2024-01-21-status_update/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>近況更新</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

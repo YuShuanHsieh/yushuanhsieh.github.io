@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on Cherie's Tech Blog</title><link>https://yushuanhsieh.github.io/categories/python/</link><description>Recent content in Python on Cherie's Tech Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 17 Feb 2024 08:00:00 +0800</lastBuildDate><atom:link href="https://yushuanhsieh.github.io/categories/python/index.xml" rel="self" type="application/rss+xml"/><item><title>The issue of uploading a large-size file using HTTP formdata</title><link>https://yushuanhsieh.github.io/posts/2024-02-18-file_uploading/</link><pubDate>Sat, 17 Feb 2024 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2024-02-18-file_uploading/</guid><description>&lt;p&gt;接續&lt;a href="https://yushuanhsieh.github.io/post/2024-01-27-python_fastapi_formdata/"&gt;前面文章&lt;/a&gt;提及到，在上傳檔案的使用情境之下，因為 user request 數量增多，造成 service lead time 大幅提升的問題；而導致 lead time 增加的因素，根據實驗數據，主要是因為：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The different implementation methods of receiving the file&lt;/li&gt;
+&lt;li&gt;The concurrency model of language runtime&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;若要從根本來改善此問題，需要從兩個層面來著手：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Client side: user 如何傳送夾帶檔案內容的 request 到 server&lt;/li&gt;
+&lt;li&gt;Server side: server 如何依據 client 發送 request 的流程來處理此檔案&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;透過使用者訪談後，我們預期的使用情境，包含：&lt;/p&gt;</description></item><item><title>Python FastAPI FormData 效能議題</title><link>https://yushuanhsieh.github.io/posts/2024-01-27-python_fastapi_formdata/</link><pubDate>Fri, 26 Jan 2024 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2024-01-27-python_fastapi_formdata/</guid><description>&lt;p&gt;在實作檔案上傳並加解密的服務時，遇到了 user request 數量增多，造成 lead time 大幅提升的問題。服務本身是使用 Python + FastAPI framework 實作，在排除了網路頻寬問題和 server 效能問題後，懷疑是 Python 或 framework 導致延遲時間拉長，所以就決定從此地方著手進行 benchmark 實驗，來觀察瓶頸是發生在何處。&lt;/p&gt;
+&lt;p&gt;由於最終目的還是希望能找出改善的方式，而既然認為問題是出在 Python 和 framework 上，這次實驗就會先使用 FastAPI 與 aiohttp 寫的 HTTP API service 進行效能比較；此外也使用 Golang 實作的版本來測量不同語言之間的效能落差會到多少。&lt;/p&gt;
+&lt;p&gt;While implementing a file upload service with encryption and decryption, we encountered an issue where an increase in user requests significantly increased the lead time. The service is built using Python and the FastAPI framework. After ruling out network bandwidth and server performance issues, we suspect that the delay may be due to Python or the framework. Therefore, we decided to start with a benchmarking experiment in this area to identify where the bottleneck occurs.&lt;/p&gt;</description></item></channel></rss>

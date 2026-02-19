@@ -1,0 +1,314 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>Crypto Subsystem of Linux Kernel - Overview — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>Crypto Subsystem of Linux Kernel - Overview</h1><div class=post-meta><time datetime=2022-02-15>February 15, 2022</time>
+<span class=separator>·</span>
+<span class=reading-time>11 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/security/>Security</a>
+<a href=https://yushuanhsieh.github.io/categories/linux-kernel/>Linux Kernel</a></div></header><div class=post-content><p>介紹由應用層所發出的 crypto(cryptography) request，透過 system call 將 request 傳送到 Linux kernel 端，並經由 crypto subsystem 將 request 轉發給硬體算法引擎 (hardware crypto engine) 的流程。</p><h2 id=overview>Overview</h2><p>Crypto subsystem 是 Linux 系統中負責處理 crypto request 的子系統，除了包含流程控制機制之外，另一個重要特色就是提供演算法實作的抽象層，讓各家廠商能夠依據需求去客製化實作方式。其中一個常見例子就是廠商在硬體架構中加入用以加速特定演算法運算效率的硬體算法引擎，並且透過 crypto subsystem 將驅動硬體算法引擎的流程整合進 Linux 系統中，供其他 kernel module 或是應用層使用。</p><p>以下以 openSSL library 如何將 crypto request 傳送到 kernel crypto subsystem 為例子：</p><p><img src=/posts/crypto-api_1.png alt>
+<em>image from: <a href=https://szlin.me/2017/04/05/linux-kernel-%E5%AF%86%E7%A2%BC%E5%AD%B8%E6%BC%94%E7%AE%97%E6%B3%95%E5%AF%A6%E4%BD%9C%E6%B5%81%E7%A8%8B/>Linux Kernel 密碼學演算法實作流程</a></em></p><h3 id=cryptodev-engine><code>cryptodev</code> Engine</h3><p>在 Linux 系統中，想要實現應用層與硬體裝置的溝通，第一個想到的就是透過 <a href=https://linux-kernel-labs.github.io/refs/heads/master/labs/device_drivers.html>character/block device driver</a>，讓應用程式開啟表示此硬體裝置的抽象檔案，並且藉由讀寫行為與硬體裝置進行互動。而 <a href=https://github.com/cryptodev-linux/cryptodev-linux>Cryptodev-linux</a> 就是負責此角色，它提供中間層的服務，接收由應用層傳送過來的 crypto request，再呼叫 Linux kernel crypto Subsystem 的 crypto API 將 request 轉發給特定的硬體算法引擎。</p><p>Cryptodev-linux 為 <a href=https://www.kernel.org/doc/html/latest/driver-api/misc_devices.html>miscellaneous device</a> 類型的 kernel module，預設路徑是 <code>/dev/crypto</code>，使用 ioctl file operation <code>cryptodev_ioctl</code> 來接受應用端所傳遞過來的資料。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// https://github.com/cryptodev-linux/cryptodev-linux/blob/master/ioctl.c
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>const</span> <span style=color:#cf222e>struct</span> file_operations cryptodev_fops <span style=color:#0550ae>=</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>owner <span style=color:#0550ae>=</span> THIS_MODULE<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>open <span style=color:#0550ae>=</span> cryptodev_open<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>release <span style=color:#0550ae>=</span> cryptodev_release<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>unlocked_ioctl <span style=color:#0550ae>=</span> cryptodev_ioctl<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#ifdef CONFIG_COMPAT
+</span></span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>compat_ioctl <span style=color:#0550ae>=</span> cryptodev_compat_ioctl<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#endif </span><span style=color:#57606a>/* CONFIG_COMPAT */</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>poll <span style=color:#0550ae>=</span> cryptodev_poll<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>struct</span> miscdevice cryptodev <span style=color:#0550ae>=</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>minor <span style=color:#0550ae>=</span> MISC_DYNAMIC_MINOR<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>name <span style=color:#0550ae>=</span> <span style=color:#0a3069>&#34;crypto&#34;</span><span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>fops <span style=color:#0550ae>=</span> <span style=color:#0550ae>&amp;</span>cryptodev_fops<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>mode <span style=color:#0550ae>=</span> S_IRUSR<span style=color:#0550ae>|</span>S_IWUSR<span style=color:#0550ae>|</span>S_IRGRP<span style=color:#0550ae>|</span>S_IWGRP<span style=color:#0550ae>|</span>S_IROTH<span style=color:#0550ae>|</span>S_IWOTH<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>int</span> __init
+</span></span><span style=display:flex><span><span style=color:#6639ba>cryptodev_register</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> rc<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	rc <span style=color:#0550ae>=</span> <span style=color:#6639ba>misc_register</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>cryptodev<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span><span style=color:#6639ba>unlikely</span><span style=color:#1f2328>(</span>rc<span style=color:#1f2328>))</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>		<span style=color:#6639ba>pr_err</span><span style=color:#1f2328>(</span>PFX <span style=color:#0a3069>&#34;registration of /dev/crypto failed</span><span style=color:#0a3069>\n</span><span style=color:#0a3069>&#34;</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>		<span style=color:#cf222e>return</span> rc<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>return</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>應用端則是使用 <code>cryptodev.h</code> 定義好的 <code>struct crypt_op</code> 或是 <code>struct crypt_auth_op</code> 來組成指定 crypto request，並呼叫 ioctl system call 將 request 送給 Cryptodev-linux。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// https://github.com/cryptodev-linux/cryptodev-linux/blob/master/crypto/cryptodev.h
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> crypt_auth_op <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	__u32	ses<span style=color:#1f2328>;</span>		<span style=color:#57606a>/* session identifier */</span>
+</span></span><span style=display:flex><span>	__u16	op<span style=color:#1f2328>;</span>		<span style=color:#57606a>/* COP_ENCRYPT or COP_DECRYPT */</span>
+</span></span><span style=display:flex><span>	__u16	flags<span style=color:#1f2328>;</span>		<span style=color:#57606a>/* see COP_FLAG_AEAD_* */</span>
+</span></span><span style=display:flex><span>	__u32	len<span style=color:#1f2328>;</span>		<span style=color:#57606a>/* length of source data */</span>
+</span></span><span style=display:flex><span>	__u32	auth_len<span style=color:#1f2328>;</span>	<span style=color:#57606a>/* length of auth data */</span>
+</span></span><span style=display:flex><span>	__u8	__user <span style=color:#0550ae>*</span>auth_src<span style=color:#1f2328>;</span>	<span style=color:#57606a>/* authenticated-only data */</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>/* The current implementation is more efficient if data are
+</span></span></span><span style=display:flex><span><span style=color:#57606a>	 * encrypted in-place (src==dst). */</span>
+</span></span><span style=display:flex><span>	__u8	__user <span style=color:#0550ae>*</span>src<span style=color:#1f2328>;</span>	<span style=color:#57606a>/* data to be encrypted and authenticated */</span>
+</span></span><span style=display:flex><span>	__u8	__user <span style=color:#0550ae>*</span>dst<span style=color:#1f2328>;</span>	<span style=color:#57606a>/* pointer to output data. Must have
+</span></span></span><span style=display:flex><span><span style=color:#57606a>	                         * space for tag. For TLS this should be at least 
+</span></span></span><span style=display:flex><span><span style=color:#57606a>	                         * len + tag_size + block_size for padding */</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	__u8    __user <span style=color:#0550ae>*</span>tag<span style=color:#1f2328>;</span>    <span style=color:#57606a>/* where the tag will be copied to. TLS mode
+</span></span></span><span style=display:flex><span><span style=color:#57606a>                                 * doesn&#39;t use that as tag is copied to dst.
+</span></span></span><span style=display:flex><span><span style=color:#57606a>                                 * SRTP mode copies tag there. */</span>
+</span></span><span style=display:flex><span>	__u32	tag_len<span style=color:#1f2328>;</span>	<span style=color:#57606a>/* the length of the tag. Use zero for digest size or max tag. */</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>/* initialization vector for encryption operations */</span>
+</span></span><span style=display:flex><span>	__u8	__user <span style=color:#0550ae>*</span>iv<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	__u32   iv_len<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>Sample code for Cryptodev-linux ioctl:</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// setup data for your crypto request
+</span></span></span><span style=display:flex><span>cryp<span style=color:#1f2328>.</span>ses <span style=color:#0550ae>=</span> ctx<span style=color:#0550ae>-&gt;</span>sess<span style=color:#1f2328>.</span>ses<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>cryp<span style=color:#1f2328>.</span>iv <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>iv<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>cryp<span style=color:#1f2328>.</span>op <span style=color:#0550ae>=</span> COP_DECRYPT<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>cryp<span style=color:#1f2328>.</span>auth_len <span style=color:#0550ae>=</span> auth_size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>cryp<span style=color:#1f2328>.</span>auth_src <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>auth<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>cryp<span style=color:#1f2328>.</span>len <span style=color:#0550ae>=</span> size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>cryp<span style=color:#1f2328>.</span>src <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>ciphertext<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>cryp<span style=color:#1f2328>.</span>dst <span style=color:#0550ae>=</span> ciphertext<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>cryp<span style=color:#1f2328>.</span>flags <span style=color:#0550ae>=</span> COP_FLAG_AEAD_TLS_TYPE<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// call ioctl to pass a crypto request to `/dev/crypto`
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span><span style=color:#6639ba>ioctl</span><span style=color:#1f2328>(</span>ctx<span style=color:#0550ae>-&gt;</span>cfd<span style=color:#1f2328>,</span> CIOCAUTHCRYPT<span style=color:#1f2328>,</span> <span style=color:#0550ae>&amp;</span>cryp<span style=color:#1f2328>))</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>perror</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;ioctl(CIOCAUTHCRYPT)&#34;</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>return</span> <span style=color:#0550ae>-</span><span style=color:#0550ae>1</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>另外，Cryptodev-linux 也提供 session 機制，每個 crypto request 對應到一個 session，而 session 管理當前 crypto request 的狀態。例如，目前 session 在 initialized 的狀態，則表示此 crypto request 可執行 encrypt，透過此方式來確保 crypto request 會在正確的流程下運作。</p><h3 id=linux-kernel-crypto-subsystem>Linux Kernel Crypto Subsystem</h3><p>Crypto request 會透過 kernel crypto API 傳到 kernel crypto subsystem 中。以下為簡略的 crypto API 呼叫流程：</p><p><img src=/posts/crypto-api_2.png alt></p><h4 id=transformation-object--transformation-implementation>Transformation Object & Transformation Implementation</h4><p>首先 Crypto subsystem 有兩個重要元素：<strong>transformation object</strong> 和 <strong>transformation implementation</strong>。
+transformation object 在 API 中會簡寫為 <code>tfm</code>，又被稱作 cipher handler；而 transformation implementation 則是 transformation object 底層的實作內容，又被稱作 crypto algo，以之前例子來說就是 crypto engine 的演算法實作。之所以要區分成 object 和 implementation，最主要的原因是有可能多個 object 會使用同一個 implementation。舉例來說，A 和 B 使用者都要使用 hmac-sha256 算法，因此會新建立 A 和 B 兩個 transformation object 並包含 A 和 B 各自擁有的 key 值，但這兩個 object 有可能會使用同一個 transformation implementation 來呼叫同一個 crypto engine 進行算法運算。</p><blockquote><p>TFM: The transformation object (TFM) is an instance of a transformation implementation. There can be multiple transformation objects associated with a single transformation implementation. Each of those transformation objects is held by a crypto API consumer or another transformation. <em><a href=https://www.kernel.org/doc/html/latest/crypto/intro.html>https://www.kernel.org/doc/html/latest/crypto/intro.html</a></em></p></blockquote><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> crypto_tfm <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	u32 crt_flags<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> node<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>void</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>exit<span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> crypto_tfm <span style=color:#0550ae>*</span>tfm<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> crypto_alg <span style=color:#0550ae>*</span>__crt_alg<span style=color:#1f2328>;</span> <span style=color:#57606a>// crypto algorithm or transformation implementation
+</span></span></span><span style=display:flex><span>	<span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>__crt_ctx<span style=color:#1f2328>[]</span> CRYPTO_MINALIGN_ATTR<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>當有 crypto request 進來，會先根據 request 中指定的算法名稱，從已註冊的 crypto algorithm list 中取出適合的 crypto algorithm，並新建立 transformation object。之後， transformation object 會再被組成 crypto subsystem 所用的 cipher request。cipher request 有可能共用同一個 transformation object，舉例來說，hmac-sha256 的 transformation object 包含了 transformation implementation 和一個 key 值，而這個 transformation object 可以使用在多個 cipher request 的 messsage 上進行 hash 算法 (不同 plaintext 使用同一把 key 進行運算)。</p><p>當 cipher request 完成相關設值之後，接著實際呼叫 transformation object 的 transformation implementation 執行演算法運算。</p><p>此時會出現一個問題，就是當短時間有多個 request 進來時，我們該如何依序地處理 request？這點 crypto subsystem 也設計了方便的 <code>struct crypto_engine</code>，crypto engine 提供了 queue 管理機制，讓多個 request 能夠順序地轉發給對應的 crypto engine。當然如果我們有額外的需求，也可以自己實作其他機制來管理，不一定要使用 crypto engine。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> crypto_engine <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>char</span>			name<span style=color:#1f2328>[</span>ENGINE_NAME_LEN<span style=color:#1f2328>];</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>bool</span>			idling<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>bool</span>			busy<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>bool</span>			running<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>bool</span>			retry_support<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> list_head	list<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>spinlock_t</span>		queue_lock<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> crypto_queue	queue<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> device		<span style=color:#0550ae>*</span>dev<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>bool</span>			rt<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>// implement these three functions to trigger your hardware crypto engine
+</span></span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>prepare_crypt_hardware<span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> crypto_engine <span style=color:#0550ae>*</span>engine<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>unprepare_crypt_hardware<span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> crypto_engine <span style=color:#0550ae>*</span>engine<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>do_batch_requests<span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> crypto_engine <span style=color:#0550ae>*</span>engine<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> kthread_worker           <span style=color:#0550ae>*</span>kworker<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> kthread_work             pump_requests<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>void</span>				<span style=color:#0550ae>*</span>priv_data<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> crypto_async_request	<span style=color:#0550ae>*</span>cur_req<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=register-an-crypto-algorithm-transformation-implementation>Register an Crypto Algorithm (Transformation Implementation)</h4><p>介紹完 crypt API 流程後，可以知道要新增 transformation implementation 到 crypto subsystem，最重要的就是註冊 transformation implementation 到 crypto algorithm list 中。而 Crypto API 提供了相關註冊 API，以 stm32-cryp 為例：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> skcipher_alg <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>setkey<span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> crypto_skcipher <span style=color:#0550ae>*</span>tfm<span style=color:#1f2328>,</span> <span style=color:#cf222e>const</span> u8 <span style=color:#0550ae>*</span>key<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	              <span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> keylen<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>encrypt<span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> skcipher_request <span style=color:#0550ae>*</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>decrypt<span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> skcipher_request <span style=color:#0550ae>*</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>init<span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> crypto_skcipher <span style=color:#0550ae>*</span>tfm<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>void</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span>exit<span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> crypto_skcipher <span style=color:#0550ae>*</span>tfm<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> min_keysize<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> max_keysize<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> ivsize<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> chunksize<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> walksize<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> crypto_alg base<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>struct</span> skcipher_alg crypto_algs<span style=color:#1f2328>[]</span> <span style=color:#0550ae>=</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>base<span style=color:#1f2328>.</span>cra_name		<span style=color:#0550ae>=</span> <span style=color:#0a3069>&#34;ecb(aes)&#34;</span><span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>base<span style=color:#1f2328>.</span>cra_driver_name	<span style=color:#0550ae>=</span> <span style=color:#0a3069>&#34;stm32-ecb-aes&#34;</span><span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>base<span style=color:#1f2328>.</span>cra_priority	<span style=color:#0550ae>=</span> <span style=color:#0550ae>200</span><span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>base<span style=color:#1f2328>.</span>cra_flags		<span style=color:#0550ae>=</span> CRYPTO_ALG_ASYNC<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>base<span style=color:#1f2328>.</span>cra_blocksize	<span style=color:#0550ae>=</span> AES_BLOCK_SIZE<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>base<span style=color:#1f2328>.</span>cra_ctxsize	<span style=color:#0550ae>=</span> <span style=color:#cf222e>sizeof</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> stm32_cryp_ctx<span style=color:#1f2328>),</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>base<span style=color:#1f2328>.</span>cra_alignmask	<span style=color:#0550ae>=</span> <span style=color:#0550ae>0xf</span><span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>base<span style=color:#1f2328>.</span>cra_module	<span style=color:#0550ae>=</span> THIS_MODULE<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>init			<span style=color:#0550ae>=</span> stm32_cryp_init_tfm<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>min_keysize		<span style=color:#0550ae>=</span> AES_MIN_KEY_SIZE<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>max_keysize		<span style=color:#0550ae>=</span> AES_MAX_KEY_SIZE<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>setkey			<span style=color:#0550ae>=</span> stm32_cryp_aes_setkey<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>encrypt		<span style=color:#0550ae>=</span> stm32_cryp_aes_ecb_encrypt<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>.</span>decrypt		<span style=color:#0550ae>=</span> stm32_cryp_aes_ecb_decrypt<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>},</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>上述建立含有演算法實作的 transformation implementation 後，接著呼叫註冊 API：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span>ret <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_register_skciphers</span><span style=color:#1f2328>(</span>crypto_algs<span style=color:#1f2328>,</span> <span style=color:#6639ba>ARRAY_SIZE</span><span style=color:#1f2328>(</span>crypto_algs<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>ret<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#6639ba>dev_err</span><span style=color:#1f2328>(</span>dev<span style=color:#1f2328>,</span> <span style=color:#0a3069>&#34;Could not register algs</span><span style=color:#0a3069>\n</span><span style=color:#0a3069>&#34;</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>goto</span> err_algs<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>即可完成註冊。</p><p>另外，上面提及的 structure member 中， <code>cra_priority</code> 代表各 transformation implementation 的優先程度，舉例來說，AES-ECB 有註冊軟體和硬體兩種不同的 transformation implementation，優先程度較高的會先被採用。</p><blockquote><p>cra_priority</p><ul><li>Priority of this transformation implementation. In case multiple transformations with same cra_name are available to the Crypto API, the kernel will use the one with <strong>highest</strong> cra_priority.</li></ul></blockquote><h2 id=references>References</h2><ol><li><a href=https://docs.kernel.org/crypto/index.html>Linux Kernel Crypto API</a></li><li><a href=http://events17.linuxfoundation.org/sites/events/files/slides/brezillon-crypto-framework_0.pdf>An overview of the crypto subsystem - The Linux Foundation</a></li></ol></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2022-01-28-tfm_boot/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>Secure Boot using Trusted Firmware-M</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2022-02-26-crypto-subsystem_1/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>Crypto Subsystem of Linux Kernel - Asynchronous & Synchronous</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

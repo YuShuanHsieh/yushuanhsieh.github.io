@@ -1,0 +1,408 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>Implement Memory Allocator - Implicit Free List — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>Implement Memory Allocator - Implicit Free List</h1><div class=post-meta><time datetime=2020-01-19>January 19, 2020</time>
+<span class=separator>·</span>
+<span class=reading-time>16 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/c/>C</a></div></header><nav class=table-of-contents><h2>Table of Contents</h2><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#memory-allocator-要素>Memory allocator 要素</a></li><li><a href=#基本-implicit-free-list>基本 Implicit Free List</a><ul><li><a href=#block-format>Block format</a></li><li><a href=#aligning-blocks>Aligning blocks</a></li><li><a href=#初始化-allocator>初始化 allocator</a></li><li><a href=#allocate>Allocate</a></li><li><a href=#free>Free</a></li><li><a href=#traveling-all-blocks>Traveling all blocks</a></li><li><a href=#檢視>檢視</a><ul><li><a href=#1handling-arbitrary-request-sequences-o>1.Handling arbitrary request sequences (O)</a></li><li><a href=#2aligning-blocks-8-bytes-on-32-bit-and-16-bytes-on-64-bit-o>2.Aligning blocks (8 bytes on 32-bit and 16 bytes on 64-bit) (O)</a></li><li><a href=#3not-modifying-allocated-blocks-compaction-is-not-allowedo>3.Not modifying allocated blocks (compaction is not allowed)(O)</a></li><li><a href=#4how-does-free-know-an-allocated-blocks-size>4.How does <code>free</code> know an allocated block’s size?</a></li><li><a href=#5how-is-unallocated-space-represented>5.How is unallocated space represented?</a></li><li><a href=#6how-do-we-keep-track-of-free-blocks>6.How do we keep track of free blocks?</a></li><li><a href=#7how-do-we-choose-an-appropriate-free-block>7.How do we choose an appropriate free block?</a></li></ul></li></ul></li><li><a href=#改善-implicit-free-list>改善 Implicit Free List</a><ul><li><a href=#1-調整-header-格式>1. 調整 header 格式</a></li><li><a href=#2-改善---coalesce>2. 改善 - Coalesce</a></li><li><a href=#3-改善---當-block-為-unallocated-狀態時才加入-footer>3. 改善 - 當 block 為 unallocated 狀態時才加入 footer</a></li></ul></li><li><a href=#advantges>Advantges</a></li><li><a href=#problems>Problems</a><ul><li><a href=#花費較多時間在找尋適合的-block>花費較多時間在找尋適合的 block</a></li></ul></li><li><a href=#實作>實作</a></li><li><a href=#note>Note</a><ul><li><a href=#sbrk-is-deprecated>sbrk() is deprecated</a></li><li><a href=#minimum-alignment-of-allocation>Minimum alignment of allocation</a></li></ul></li></ul></nav></nav><div class=post-content><h2 id=前言>前言</h2><p>由<a href=https://yushuanhsieh.github.io/c/memory%20allocator/stack-memory-allocator/>前篇</a>文章可以知道，使用 stack data structure 是最簡單的 memory allocator 入門寫法，但是卻會造成一些問題，例如不能任意順序 free 等。既然如此，我們就換成 list 來實作 memory allocator，解決使用 stack 實作的問題。</p><p>除了實作之外，也會討論到幾個實作 allocator 上遇到的問題，例如 sbrk，以及 minimum alignment。</p><h2 id=memory-allocator-要素>Memory allocator 要素</h2><p>在實作之前，先歸納一下 allocator 需求。 <a href=https://www.tenlong.com.tw/products/9780134092669>Computer Systems(book)</a> 與 <a href=https://my.eng.utah.edu/~cs4400/>CS 4400 – Computer Systems</a> 說明幾個 allocator 要素，包含：</p><ol><li>Handling arbitrary request sequences</li><li>Aligning blocks (8 bytes on 32-bit and 16 bytes on 64-bit)</li><li>Not modifying allocated blocks (compaction is not allowed)</li><li>How does <code>free</code> know an allocated block’s size?</li><li>How is unallocated space represented?</li><li>How do we keep track of free blocks?</li><li>How do we choose an appropriate free block?</li></ol><p>依照上列條件，可以知道 stack 形態的 allocator 其實並不能滿足基本 allocator 需求(例如：arbitrary request sequences)，因此後續在實作 implicit free list 的時候，也會根據上列來一一檢視是否有達成需求。</p><h2 id=基本-implicit-free-list>基本 Implicit Free List</h2><p>起初概念，將一個連續性記憶體分成好幾個 blocks ，使用 block header 來標示每個 block 的 size 和 allocated 狀態，並且透過 header 的 size 得知道下一個 block 的初始位置，如此一來就可以遍歷所有的 blocks。</p><h3 id=block-format>Block format</h3><p>Block size 應包含 header + payload size (除了最後一個用為終止線的 block 之外)，例如：header struct 是 8 bytes 而要 allocate 的 data size 是 16 bytes，那 block size = 8 + 16(尚未考慮 alignment)。<strong>Block size 數字會影響後續進行合併 (coalesce) 計算</strong>，所以很重要。</p><p>![study]({{ site.url }}/assets/images/memory-allocator-1.png)</p><h3 id=aligning-blocks>Aligning blocks</h3><p>malloc 應該遵守 alignment 規定：<strong>8 bytes on 32-bit and 16 bytes on 64-bit</strong>。(其原因在下方補充內容中會提及)，所以當我們在計算 block size 時，要加入 alignment 條件，即：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>#define HEADER_SIZE 8
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define ALIGNMENT 16
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define ALIGN(size) (((size) + (ALIGNMENT-1)) &amp; ~(ALIGNMENT-1))
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>size_t</span> <span style=color:#6639ba>block_size</span><span style=color:#1f2328>(</span><span style=color:#cf222e>size_t</span> payload_size<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>return</span> <span style=color:#6639ba>ALIGN</span><span style=color:#1f2328>(</span>HEADER_SIZE <span style=color:#0550ae>+</span> payload_size<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>重點：align 所有 block size，而不是只有 payload size。</strong></p><p>另外一個重點，<strong>malloc return 的 payload address 必須符合 16-byte-aligned</strong>，因此必要時應調整第一個 header 的起始位置，讓 <code>payload address & 0xF</code> 等於 0。</p><p>e.g.
+整個 heap 的起始位置是: 0xc000
+第一個 header 的起始位置應為：0xc000 + 8
+如此一來， payload 的起始位置就會為：0xc008 + 8(header size)</p><h3 id=初始化-allocator>初始化 allocator</h3><p>首先，先跟 kernel 索取需要的空間大小 (sbrk or mmap)，然後建立一個 header 包含可使用的 bytes 數量，以及最後一個代表終止 header。</p><p>![study]({{ site.url }}/assets/images/memory-allocator-3.png)</p><p>假設 header struct size 是 8 byte，那圖示中總共的 heap 需求空間就是 128 + 8 header size。</p><h3 id=allocate>Allocate</h3><p>如果需要一個 size 為 16 bytes 的空間，則會從第一個 block 開始查找有沒有適合的空block，如果有的話，則將該 block 的 <code>allocated</code> 改成 1。</p><p>![study]({{ site.url }}/assets/images/memory-allocator-4.png)</p><p>假如 block 的 size > allocate 所需求的 size + Header size，則會計算出剩餘的 size 大小，並且新建一個 header 在 block 後方位置(將原先的 block 拆分成兩個)。</p><p>最後回傳 block address + header size bytes 的memory 位置(payload 的起始位置)。</p><h3 id=free>Free</h3><p>當執行 free 的時候，只要將 object address - header size bytes 來找到 header address，並且將 header 的 allocated 設為 0 即可。</p><p>![study]({{ site.url }}/assets/images/memory-allocator-5.png)</p><p>當然這樣會導致原先一個大 block 被拆分成很多零碎的小 blocks，進而造成 <strong>external fragmentation</strong> 問題。後面會說明將這些因為 free 行為而產生的零碎 blocks 合併(coalesce)的方式。</p><h3 id=traveling-all-blocks>Traveling all blocks</h3><p>從頭開始遍歷所有的 blocks，然後在 block size 為 0 的地方終止。</p><p>![study]({{ site.url }}/assets/images/memory-allocator-6.png)</p><h3 id=檢視>檢視</h3><p>完成了基本版的 implicit free list 後，來檢視一下一開始提及的條件是否有滿足：</p><h4 id=1handling-arbitrary-request-sequences-o>1.Handling arbitrary request sequences (O)</h4><p>從實作方式可以得知 free 和 allocate 不受順序限制。</p><h4 id=2aligning-blocks-8-bytes-on-32-bit-and-16-bytes-on-64-bit-o>2.Aligning blocks (8 bytes on 32-bit and 16 bytes on 64-bit) (O)</h4><h4 id=3not-modifying-allocated-blocks-compaction-is-not-allowedo>3.Not modifying allocated blocks (compaction is not allowed)(O)</h4><h4 id=4how-does-free-know-an-allocated-blocks-size>4.How does <code>free</code> know an allocated block’s size?</h4><p>使用 block header 來得知 size。</p><h4 id=5how-is-unallocated-space-represented>5.How is unallocated space represented?</h4><p>用 block 中的 allocated 來標示此 block 目前狀態。</p><h4 id=6how-do-we-keep-track-of-free-blocks>6.How do we keep track of free blocks?</h4><p>使用 block chain 結合 header 中的 allocated 來追蹤所有 free blocks。</p><h4 id=7how-do-we-choose-an-appropriate-free-block>7.How do we choose an appropriate free block?</h4><p>透過遍歷所有 blocks 找出適合 size 的 block。</p><h2 id=改善-implicit-free-list>改善 Implicit Free List</h2><p>上面提到基本的 implicit free list 作法，接下來說明幾種可以改善的方向：</p><h3 id=1-調整-header-格式>1. 調整 header 格式</h3><p>![study]({{ site.url }}/assets/images/memory-allocator-7.png)</p><p>原先的 header struct 是</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>typedef</span> <span style=color:#cf222e>struct</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>size_t</span> size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>size_t</span> allocated<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span> block_header<span style=color:#1f2328>;</span>
+</span></span></code></pre></td></tr></table></div></div><p>但是由於 alignment 關係，一開始的幾個 bit 值皆為 0 ，因此可以直接使用這些 bit 來表示 allocated 值即可。(e.g. alignment 為 8 bytes，則 0-2 bits 皆為 0)</p><h3 id=2-改善---coalesce>2. 改善 - Coalesce</h3><p>在基本版本的 implicit free list 中，有可能因為 allocate 和 free 的連續操作，造成原先大塊的 block 被拆分成小塊的 blocks，進而導致再次 allocate 大 size 的 object 時會找不到適合的 block。</p><p>![study]({{ site.url }}/assets/images/memory-allocator-9.png)</p><p>為了解決這個問題，在 free object 步驟時，需要適時合併前後空的 block，以回復成較大的 block。</p><p>![study]({{ site.url }}/assets/images/memory-allocator-10.png)</p><p>但在合併時會有一個問題，從 block header 中可以知道下一個 block 的 size 和 allocated 狀態，但該如何知道上一個 block header 的值呢？我們可以在 <strong>block 尾端加入 footer</strong>，然後即可透過 <code>(char *)header - FOOTER_SIZE</code> 的方式來取得前一個 block 的狀態。</p><p>![study]({{ site.url }}/assets/images/memory-allocator-8.png)</p><h3 id=3-改善---當-block-為-unallocated-狀態時才加入-footer>3. 改善 - 當 block 為 unallocated 狀態時才加入 footer</h3><p>雖然在 block 尾端加入 footer 是一個不錯的辦法，但是卻會減少可以分配的空間，所以我們調整一下方式，改成只有當 block 為 unallocated 狀態時才加入 footer 值，而 footer 與 payload 空間共用，這樣就不會造成浪費。</p><p>![study]({{ site.url }}/assets/images/memory-allocator-11.png)</p><h2 id=advantges>Advantges</h2><p>Implicit free list 最大的優點就是易於實作，邏輯相較起來比較簡單。</p><h2 id=problems>Problems</h2><h3 id=花費較多時間在找尋適合的-block>花費較多時間在找尋適合的 block</h3><p>由於 implicit free list 是 allocated 以及 unallocated blocks 混雜在一起，因此在找尋適合大小的 block 時會花費比較多時間。此外，如果我們是使用 first fit 策略(找到第一個有足夠大小的 block 即返回)，那就有可能造成額外的 external fragmenation 問題。但如果改用 best fit策略(找到最適合的大小 block)，那就要遍歷所有的 blocks 進行 size 比較，因此而花費更多尋找時間。</p><h2 id=實作>實作</h2><p>實作部分可以參考 <a href=https://github.com/YuShuanHsieh/allocator-example/blob/master/free_list/mm.c>Github allocator-example</a>，這其實是 <a href=https://my.eng.utah.edu/~cs4400/>CS 4400 – Computer Systems</a> 的程式作業XD 而實作結合了上面所提到的三個改善方式。可以透過 <code>make test60</code> 來進行測試。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">109
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">110
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">111
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">112
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">113
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">114
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">115
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">116
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">117
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">118
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">119
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">120
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">121
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">122
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">123
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">124
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">125
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">126
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">127
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">128
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">129
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">130
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">131
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">132
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">133
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">134
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">135
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">136
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">137
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">138
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">139
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">140
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">141
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">142
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">143
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">144
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">145
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">146
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">147
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">148
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">149
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">150
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">151
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">152
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">153
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">154
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">155
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">156
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">157
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">158
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">159
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">160
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">161
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">162
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">163
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">164
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">165
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">166
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">167
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">168
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">169
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">170
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">171
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">172
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">173
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">174
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">175
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">176
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">177
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">178
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">179
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">180
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">181
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">182
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">183
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;stdint.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;stdio.h&gt; </span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;unistd.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;errno.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;stdbool.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;stdint.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;sys/mman.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&#34;mm.h&#34;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>typedef</span> <span style=color:#cf222e>uint64_t</span> header<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#define HEADER_SIZE sizeof(header)
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define ALIGNMENT 16
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define ALIGN(size) (((size) + (ALIGNMENT-1)) &amp; ~(ALIGNMENT-1))
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define BLOCK_SIZE(header_ptr) (*(uint64_t *) header_ptr &amp; ~0xF)
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define BLOCK_ALLOCATED(header_ptr) (*(uint64_t *) header_ptr &amp; 1)
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define BLOCK_FOOTER(header_ptr) ((char *)(header_ptr) + BLOCK_SIZE(header_ptr) - HEADER_SIZE)
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define PREV_BLOCK_ALLOCATED(header_ptr) ((*(uint64_t *) header_ptr &amp; 2) &gt;&gt; 1)
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define NEXT_BLOCK(header_ptr)((char *)(header_ptr) + BLOCK_SIZE(header_ptr))
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>area<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>header<span style=color:#1f2328>,</span> <span style=color:#cf222e>int</span> size<span style=color:#1f2328>,</span> <span style=color:#cf222e>bool</span> allocated<span style=color:#1f2328>,</span> <span style=color:#cf222e>bool</span> prev_allocated<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#0550ae>*</span><span style=color:#1f2328>(</span><span style=color:#cf222e>uint64_t</span> <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>header <span style=color:#0550ae>=</span> size <span style=color:#0550ae>|</span> allocated <span style=color:#0550ae>|</span> <span style=color:#1f2328>(</span>prev_allocated <span style=color:#0550ae>&lt;&lt;</span> <span style=color:#0550ae>1</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>set_footer</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>footer<span style=color:#1f2328>,</span> <span style=color:#cf222e>int</span> size<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#0550ae>*</span><span style=color:#1f2328>(</span><span style=color:#cf222e>uint64_t</span> <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>footer <span style=color:#0550ae>=</span> size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>mm_init</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>heap<span style=color:#1f2328>,</span> <span style=color:#cf222e>size_t</span> heap_size<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span> 
+</span></span><span style=display:flex><span>  area <span style=color:#0550ae>=</span> heap <span style=color:#0550ae>+</span> HEADER_SIZE<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  heap_size <span style=color:#0550ae>=</span> heap_size <span style=color:#0550ae>-</span> <span style=color:#0550ae>2</span> <span style=color:#0550ae>*</span> HEADER_SIZE<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span>area<span style=color:#1f2328>,</span> heap_size<span style=color:#1f2328>,</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>true</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span><span style=color:#6639ba>NEXT_BLOCK</span><span style=color:#1f2328>(</span>area<span style=color:#1f2328>),</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>true</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>true</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span><span style=color:#6639ba>find_free_block</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>heap<span style=color:#1f2328>,</span> <span style=color:#cf222e>size_t</span> size<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>bool</span> allocated<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>size_t</span> block_size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>block <span style=color:#0550ae>=</span> heap<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>while</span><span style=color:#1f2328>(</span><span style=color:#0550ae>1</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>        allocated <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>        block_size <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>block_size <span style=color:#0550ae>==</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>        <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#cf222e>return</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#1f2328>}</span> <span style=color:#cf222e>else</span> <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>allocated <span style=color:#0550ae>==</span> <span style=color:#6639ba>true</span> <span style=color:#0550ae>||</span> block_size <span style=color:#0550ae>&lt;</span> size<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>        <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>            block <span style=color:#0550ae>=</span> <span style=color:#6639ba>NEXT_BLOCK</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#1f2328>}</span> <span style=color:#cf222e>else</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#cf222e>return</span> block<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>print_fragment</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>heap<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>head <span style=color:#0550ae>=</span> heap<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>size_t</span> fragment_size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>bool</span> allocated<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>while</span><span style=color:#1f2328>(</span><span style=color:#0550ae>1</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>{</span>  
+</span></span><span style=display:flex><span>        fragment_size <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>head<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>        allocated <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>head<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#cf222e>if</span><span style=color:#1f2328>(</span>fragment_size <span style=color:#0550ae>==</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>        <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#cf222e>break</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#6639ba>printf</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34; [%zu, %d] &#34;</span><span style=color:#1f2328>,</span> fragment_size<span style=color:#1f2328>,</span> allocated<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>        head <span style=color:#0550ae>=</span> <span style=color:#6639ba>NEXT_BLOCK</span><span style=color:#1f2328>(</span>head<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>printf</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;</span><span style=color:#0a3069>\n</span><span style=color:#0a3069>&#34;</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span><span style=color:#6639ba>mm_malloc</span><span style=color:#1f2328>(</span><span style=color:#cf222e>size_t</span> size<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>size <span style=color:#0550ae>==</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>return</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>int</span> aligned_size <span style=color:#0550ae>=</span> <span style=color:#6639ba>ALIGN</span><span style=color:#1f2328>(</span>size <span style=color:#0550ae>+</span> HEADER_SIZE<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>block <span style=color:#0550ae>=</span> <span style=color:#6639ba>find_free_block</span><span style=color:#1f2328>(</span>area<span style=color:#1f2328>,</span> aligned_size<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>block <span style=color:#0550ae>==</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>      <span style=color:#6639ba>printf</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;space is not enough </span><span style=color:#0a3069>\n</span><span style=color:#0a3069>&#34;</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>      <span style=color:#cf222e>return</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>size_t</span> block_size <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>size_t</span> remainder_size <span style=color:#0550ae>=</span> block_size <span style=color:#0550ae>-</span> aligned_size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>remainder_size <span style=color:#0550ae>&gt;</span> <span style=color:#6639ba>ALIGN</span><span style=color:#1f2328>(</span>HEADER_SIZE<span style=color:#1f2328>))</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>,</span> aligned_size<span style=color:#1f2328>,</span> <span style=color:#6639ba>true</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>PREV_BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span><span style=color:#6639ba>NEXT_BLOCK</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>),</span> remainder_size<span style=color:#1f2328>,</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>true</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span> <span style=color:#cf222e>else</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>next_header <span style=color:#0550ae>=</span> <span style=color:#6639ba>NEXT_BLOCK</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>,</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>),</span> <span style=color:#6639ba>true</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>PREV_BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span>next_header<span style=color:#1f2328>,</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>next_header<span style=color:#1f2328>),</span> <span style=color:#6639ba>BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>next_header<span style=color:#1f2328>),</span> <span style=color:#6639ba>true</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>return</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span><span style=color:#1f2328>)(</span>block<span style=color:#1f2328>)</span> <span style=color:#0550ae>+</span> HEADER_SIZE<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>coalesce_blocks</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>block<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>size_t</span> size<span style=color:#1f2328>,</span> prev_size<span style=color:#1f2328>,</span> next_size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>bool</span> prev <span style=color:#0550ae>=</span> <span style=color:#6639ba>PREV_BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>bool</span> next <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span><span style=color:#6639ba>NEXT_BLOCK</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    size <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>prev <span style=color:#0550ae>==</span> <span style=color:#6639ba>false</span> <span style=color:#0550ae>&amp;&amp;</span> next <span style=color:#0550ae>==</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>      <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>prev_footer <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>block <span style=color:#0550ae>-</span> HEADER_SIZE<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>      prev_size <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>prev_footer<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>      next_size <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span><span style=color:#6639ba>NEXT_BLOCK</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>prev_header <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>block <span style=color:#0550ae>-</span> prev_size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>      <span style=color:#cf222e>int</span> new_size <span style=color:#0550ae>=</span> prev_size <span style=color:#0550ae>+</span> next_size <span style=color:#0550ae>+</span> size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>      <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span>prev_header<span style=color:#1f2328>,</span> new_size<span style=color:#1f2328>,</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>PREV_BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>prev_header<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>      <span style=color:#6639ba>set_footer</span><span style=color:#1f2328>(</span><span style=color:#6639ba>BLOCK_FOOTER</span><span style=color:#1f2328>(</span>prev_header<span style=color:#1f2328>),</span> new_size<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      block <span style=color:#0550ae>=</span> prev_header<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span> <span style=color:#cf222e>else</span> <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>prev <span style=color:#0550ae>==</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>      <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>prev_footer <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>block <span style=color:#0550ae>-</span> HEADER_SIZE<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>      prev_size <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>prev_footer<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>      <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>prev_header <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>block <span style=color:#0550ae>-</span> prev_size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#cf222e>int</span> new_size <span style=color:#0550ae>=</span> prev_size <span style=color:#0550ae>+</span> size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>      <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span>prev_header<span style=color:#1f2328>,</span> new_size<span style=color:#1f2328>,</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>PREV_BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>prev_header<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>      <span style=color:#6639ba>set_footer</span><span style=color:#1f2328>(</span><span style=color:#6639ba>BLOCK_FOOTER</span><span style=color:#1f2328>(</span>prev_header<span style=color:#1f2328>),</span> new_size<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      block <span style=color:#0550ae>=</span> prev_header<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span> <span style=color:#cf222e>else</span> <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>next <span style=color:#0550ae>==</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>      next_size <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span><span style=color:#6639ba>NEXT_BLOCK</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#cf222e>int</span> new_size <span style=color:#0550ae>=</span> next_size <span style=color:#0550ae>+</span> size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>      <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>,</span> new_size<span style=color:#1f2328>,</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>PREV_BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>      <span style=color:#6639ba>set_footer</span><span style=color:#1f2328>(</span><span style=color:#6639ba>BLOCK_FOOTER</span><span style=color:#1f2328>(</span>block<span style=color:#1f2328>),</span> new_size<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>      
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span> <span style=color:#cf222e>else</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>mm_free</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>payload<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>payload <span style=color:#0550ae>==</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>      <span style=color:#cf222e>return</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>header <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>payload <span style=color:#0550ae>-</span> HEADER_SIZE<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span>header<span style=color:#1f2328>,</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>header<span style=color:#1f2328>),</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>,</span> <span style=color:#6639ba>PREV_BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>header<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>footer <span style=color:#0550ae>=</span> <span style=color:#6639ba>BLOCK_FOOTER</span><span style=color:#1f2328>(</span>header<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>set_footer</span><span style=color:#1f2328>(</span>footer<span style=color:#1f2328>,</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>header<span style=color:#1f2328>));</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>next <span style=color:#0550ae>=</span> <span style=color:#6639ba>NEXT_BLOCK</span><span style=color:#1f2328>(</span>header<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>set_header</span><span style=color:#1f2328>(</span>next<span style=color:#1f2328>,</span> <span style=color:#6639ba>BLOCK_SIZE</span><span style=color:#1f2328>(</span>next<span style=color:#1f2328>),</span> <span style=color:#6639ba>BLOCK_ALLOCATED</span><span style=color:#1f2328>(</span>next<span style=color:#1f2328>),</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>coalesce_blocks</span><span style=color:#1f2328>(</span>header<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=note>Note</h2><h3 id=sbrk-is-deprecated>sbrk() is deprecated</h3><p>網路上會看到很多範例使用 sbrk ，來延伸 heap 大小，不過卻被人詬病是比較不好的做法，原因是延伸後的 memory range 可能會被使用到 (shared memory)。不過這樣的情形是有機率會出現在 virtual memory 有限的 32 bit 架構上，但對於 virtual memory 很充足的 64 bit 架構來說，每個 process 會有各自的 memory space，不太會發生這樣情形。</p><p>針對將 sbrk 換成 mmap 的建議，在<a href=https://www.openbsd.org/papers/eurobsdcon2009/otto-malloc.pdf>A new malloc(3) for OpenBSD</a> 中有提出不錯的看法，而<strong>Predictability</strong> 是其中一個重要因素，使用 mmap 能夠獲得隨意位置的可用 memory，相對於 sbrk 所產生的連續性記憶位置，更能夠降低因連續位置而造成的潛在問題，例如記憶體位置預測攻擊等。</p><h3 id=minimum-alignment-of-allocation>Minimum alignment of allocation</h3><p>聽到 <code>alignment</code> 這個詞，可能第一個聯想到 <a href=https://en.wikipedia.org/wiki/Data_structure_alignment>Data structure alignment</a>，由於 CPU 設計，為了讓 CPU 在讀取或寫入 data 時有較好地表現，因此需要 alignment。</p><p>而 malloc 也需要 alignment，不過跟上述所提到的 alignment 目的有所不同。以 C libs 的 malloc 來說，64 bits 架構下為 16 bytes alignment，這聽起來有些奇怪，因為依照 Data structure alignment 的概念，64 bits 其實只需要 8 bytes 就好，為何需要到 16 bytes alignment？</p><p>在 <a href=http://www.erahm.org/2016/03/24/minimum-alignment-of-allocation-across-platforms/>Minimum alignment of allocation across platforms</a> 文章中有提到此問題，文章中提及過去因為 minimum allocation size 而導致的 crash bug，並且查找各大平台的 minimum alignment 需求皆為 16 bytes alignment on 64-bit，其原因主要是有益於執行效率，例如使用到 SSE instructions 就需要 16-byte-aligned data。</p></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2019-12-30-2019-review/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>2019 年度回顧</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2020-01-21-golang-router/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>Go HTTP Routers - Chi/Echo/Gin/gorilla mux 實作細節與比較</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

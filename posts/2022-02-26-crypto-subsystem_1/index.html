@@ -1,0 +1,175 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>Crypto Subsystem of Linux Kernel - Asynchronous & Synchronous — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>Crypto Subsystem of Linux Kernel - Asynchronous & Synchronous</h1><div class=post-meta><time datetime=2022-02-26>February 26, 2022</time>
+<span class=separator>·</span>
+<span class=reading-time>9 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/security/>Security</a>
+<a href=https://yushuanhsieh.github.io/categories/linux-kernel/>Linux Kernel</a></div></header><div class=post-content><p>在 crypto subsystem 中，crypto API 分成 asynchronous (異步) 和 synchronous (同步) 兩種機制。</p><p>最早版本的 crypto API 其實只有 synchronous crypto API，但隨著要處理的資料量增加，運算和資料傳輸時間也可能大幅拉長，此時 synchronous crypto API 有可能讓處理流程陷入較長時間的等待，因此後來引入了 asynchronous crypto API，供使用者依據自己的使用場景來選擇適合的機制。</p><p>而 asynchronous 與 synchronous crypto API 在命名設計上有所區別，asynchronous 會在前綴多加一個 <code>a</code> 字，反之 synchronous 則是 <code>s</code> 字，以 hash 為例：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// asynchronous API
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>crypto_ahash_digest</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> ahash_request <span style=color:#0550ae>*</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// synchronous API
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>crypto_shash_digest</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> shash_desc <span style=color:#0550ae>*</span>desc<span style=color:#1f2328>,</span> <span style=color:#cf222e>const</span> u8 <span style=color:#0550ae>*</span>data<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>                        <span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> len<span style=color:#1f2328>,</span> u8 <span style=color:#0550ae>*</span>out<span style=color:#1f2328>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>除了命名之外，由於兩種機制的處理流程不同，因此所需的參數也會有所不同。</p><p>以下同樣以 hash crypto algorithm 為例子，說明 synchronous 和 asynchronous crypto API 的差異和使用情境。</p><h2 id=synchronous-hash-api>Synchronous hash API</h2><p>API document: <a href=https://docs.kernel.org/crypto/api-digest.html#synchronous-message-digest-api>https://docs.kernel.org/crypto/api-digest.html#synchronous-message-digest-api</a></p><p>API 呼叫流程：
+<img src=/posts/crypto-subsystem-2_1.png alt></p><p>Synchronous hash API 中有一個重要的參數 <code>struct shash_desc *desc</code> ，它是 state handler，用以保存運算流程中所需的狀態數值。例如，在 API 的呼叫流程中，<code>crypto_shash_update()</code> 可以被多次呼叫，讓使用者可以放入多組需要進行運算的 message，而當 crypto engine 運算完一組 message 後，可能有些中間狀態是需要被保存起來的，這些狀態數值就會放在 state handler 中。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> shash_desc <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> crypto_shash <span style=color:#0550ae>*</span>tfm<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#57606a>// store required state for crypto engine
+</span></span></span><span style=display:flex><span>	<span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>__ctx<span style=color:#1f2328>[]</span> <span style=color:#6639ba>__aligned</span><span style=color:#1f2328>(</span>ARCH_SLAB_MINALIGN<span style=color:#1f2328>);</span> 
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>因此當使用者在呼叫 API 前，會需要自己分配一塊足夠大小的記憶體，以讓 crypto engine 能夠存放這些狀態。在 transformation implementation 中會設定好 crypto engine 所需的狀態儲存空間大小，使用者只需要呼叫特定 API 即可取得。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> crypto_shash <span style=color:#0550ae>*</span>hash<span style=color:#1f2328>;</span> <span style=color:#57606a>// transformation object or called cipher handler
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> shash_desc <span style=color:#0550ae>*</span>desc<span style=color:#1f2328>;</span> <span style=color:#57606a>// state handler
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>hash <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_alloc_shash</span><span style=color:#1f2328>(</span>name<span style=color:#1f2328>,</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>);</span> <span style=color:#57606a>// create a transformation object
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// get a required desc size for crypto engine via `crypto_shash_descsize` API
+</span></span></span><span style=display:flex><span>size <span style=color:#0550ae>=</span> <span style=color:#cf222e>sizeof</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> shash_desc<span style=color:#1f2328>)</span> <span style=color:#0550ae>+</span> <span style=color:#6639ba>crypto_shash_descsize</span><span style=color:#1f2328>(</span>hash<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>desc <span style=color:#0550ae>=</span> <span style=color:#6639ba>kmalloc</span><span style=color:#1f2328>(</span>size<span style=color:#1f2328>,</span> GFP_KERNEL<span style=color:#1f2328>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>建立好 shash_desc 之後，接著執行初始化的 API，這個 API 主要會呼叫 transformation implementation 的 init function，用意是讓對應的 crypto engine 能夠進行初始化或是重置等，以準備接下來的運算行為。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>int</span> rc<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>rc <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_shash_init</span><span style=color:#1f2328>(</span>desc<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// error handling
+</span></span></span></code></pre></td></tr></table></div></div><p>初始化完成後，就可以將呼叫 update API 來對指定的 message 進行 hash 運算。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span>rc <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_shash_update</span><span style=color:#1f2328>(</span>desc<span style=color:#1f2328>,</span> message<span style=color:#1f2328>,</span> message_len<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// error handling
+</span></span></span></code></pre></td></tr></table></div></div><p>最後，呼叫 final 來取得 hash 結果。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span>u8 result<span style=color:#1f2328>[</span>DIGEST_SIZE<span style=color:#1f2328>];</span>
+</span></span><span style=display:flex><span>rc <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_shash_final</span><span style=color:#1f2328>(</span>desc<span style=color:#1f2328>,</span> result<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// error handling
+</span></span></span></code></pre></td></tr></table></div></div><p>基本上 synchronous API 使用方式跟一般應用端的 crypto library 很相似，只要順序的呼叫對應流程的 API，並且針對返回的結果進行 error handling 即可。</p><p>Synchronous crypto API 用起來雖然直覺，但是卻不適用於一些場景，除了一開始有提到 synchronous 機制會造成 block 之外，另一個可能的問題是，當需要處理的資料為不連續記憶體區段時，synchronous crypto API 就不是這麼好用。可以看到之前所提及的例子，其中 crypto_shash_update 的輸入參數 message 為一段連續記憶體的 buffer，假設目前有好幾段資料，那就必須要呼叫 crypto_shash_update 多次，才能夠傳入所有的資料。</p><h2 id=asynchronous-hash-api>Asynchronous hash API</h2><p>Asynchronous crypto API 提供了非同步的機制和引入 <a href=http://www.wowotech.net/memory_management/scatterlist.html>struct scatterlist</a> ，來改善上述所提到的問題。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> ahash_request <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> crypto_async_request base<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>int</span> nbytes<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> scatterlist <span style=color:#0550ae>*</span>src<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	u8 <span style=color:#0550ae>*</span>result<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>/* This field may only be used by the ahash API code. */</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>priv<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>__ctx<span style=color:#1f2328>[]</span> CRYPTO_MINALIGN_ATTR<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>crypto_ahash_digest</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> ahash_request <span style=color:#0550ae>*</span>req<span style=color:#1f2328>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>從 API 中可以看到參數一率改成 <code>struct ahash_request</code> ，ahash_request 結構中包含重要的成員 struct scatterlist *，struct scatterlist 用來描述一段連續 physical memory 區段，而它可以是 chain 的形式，這也意味著能夠將多個 physical memory 區段串連成一個 list。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>typedef</span> <span style=color:#6639ba>void</span> <span style=color:#1f2328>(</span><span style=color:#0550ae>*</span><span style=color:#cf222e>crypto_completion_t</span><span style=color:#1f2328>)(</span><span style=color:#cf222e>struct</span> crypto_async_request <span style=color:#0550ae>*</span>req<span style=color:#1f2328>,</span> <span style=color:#cf222e>int</span> err<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> crypto_async_request <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> list_head list<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>crypto_completion_t</span> complete<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>data<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> crypto_tfm <span style=color:#0550ae>*</span>tfm<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	u32 flags<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>另外，struct crypto_async_request 則是包含一個 callback function crypto_completion_t， 當運算完成之後，則會透過此 callback 來通知使用者接續處理完成的流程。</p><p><img src=/posts/crypto-subsystem-2_2.png alt></p><p>由於是 asynchronous 非同步機制，因此 crypto engine 在處理 request 時，行為和流程也和 synchronous 同步機制有蠻大的差異，其中常見的實作方式加入 request queue 來管理多個 request，當使用者呼叫 update API 發送 request 時，則會將 request 加入到 queue 中，並直接回傳處理中 (-EINPROGRESS) 的狀態訊息。</p><p>以下為簡單的 asynchronous hash API 使用例子：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>const</span> u32 result_len <span style=color:#0550ae>=</span> <span style=color:#0550ae>16</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> crypto_ahash <span style=color:#0550ae>*</span>tfm<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> ahash_request <span style=color:#0550ae>*</span>req<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>u8 <span style=color:#0550ae>*</span>result<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>result <span style=color:#0550ae>=</span> <span style=color:#6639ba>kmalloc</span><span style=color:#1f2328>(</span>result_len<span style=color:#1f2328>,</span> GFP_NOFS<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>tfm <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_alloc_ahash</span><span style=color:#1f2328>(</span><span style=color:#0550ae>0</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>,</span> CRYPTO_ALG_ASYNC<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>req <span style=color:#0550ae>=</span> <span style=color:#6639ba>ahash_request_alloc</span><span style=color:#1f2328>(</span>tfm<span style=color:#1f2328>,</span> GFP_NOFS<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// set callback function
+</span></span></span><span style=display:flex><span><span style=color:#6639ba>ahash_request_set_callback</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>,</span> CRYPTO_TFM_REQ_MAY_SLEEP<span style=color:#1f2328>,</span> callback_fn<span style=color:#1f2328>,</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// set input data
+</span></span></span><span style=display:flex><span><span style=color:#6639ba>ahash_request_set_crypt</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>,</span> sc<span style=color:#1f2328>,</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>32</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>err <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_ahash_init</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>err <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_ahash_update</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>err <span style=color:#0550ae>==</span> <span style=color:#0550ae>-</span>EINPROGRESS<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>//
+</span></span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>err <span style=color:#0550ae>=</span> <span style=color:#6639ba>crypto_ahash_final</span><span style=color:#1f2328>(</span>req<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>err <span style=color:#0550ae>==</span> <span style=color:#0550ae>-</span>EINPROGRESS<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#57606a>//
+</span></span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>其他注意事項：</p><ol><li>雖然命為 asynchronous hash API ，但實際上對應到的 crypto engine 實作方式不一定就都會以非同步的方式來處理，具體流程還是要依照各家廠商的實作內容為主。</li><li>如果使用者使用 asynchronous hash API，但是實際上對應的 transformation implementation 卻是 synchronous 型態，crypto subsystem 會主動進行相關的資料轉換，因此也是可以正常運作的。</li></ol></blockquote><h2 id=結論>結論</h2><p>簡單介紹 asynchronous 和 synchronous crypto API 以及與 crypto engine 的溝通流程，表面上看起來 asynchronous 機制更有彈性，不過對於廠商來說，實際上要實作哪種機制可能會受到硬體或是其他實作層面的限制，因此還是要多方參考後才能知道哪種方式比較好。</p><h2 id=references>References</h2><ol><li><a href=https://docs.kernel.org/crypto/index.html>Linux Kernel Crypto API</a></li><li><a href=http://events17.linuxfoundation.org/sites/events/files/slides/brezillon-crypto-framework_0.pdf>An overview of the crypto subsystem - The Linux Foundation</a></li></ol></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2022-02-15-linux-kernel-crypto/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>Crypto Subsystem of Linux Kernel - Overview</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2022-03-30-malloc-optimization/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>GCC malloc + memset Optimization</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Web on Cherie's Tech Blog</title><link>https://yushuanhsieh.github.io/categories/web/</link><description>Recent content in Web on Cherie's Tech Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 15 Jan 2021 08:00:00 +0800</lastBuildDate><atom:link href="https://yushuanhsieh.github.io/categories/web/index.xml" rel="self" type="application/rss+xml"/><item><title>Security model of password managers</title><link>https://yushuanhsieh.github.io/posts/2021-01-15-security_module/</link><pubDate>Fri, 15 Jan 2021 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2021-01-15-security_module/</guid><description>&lt;h2 id="閒聊"&gt;閒聊&lt;/h2&gt;
+&lt;p&gt;這篇算是接續上次 Meetup 分享會的內容，由於有人提出 password manager 的相關疑問，覺得會不會因為使用 password manager 導致所有隱私資料被看光。與其猜測，不如來看看他們所提出的 security 方案，這篇以 1password 為例，整理其中 security white paper 所提到的保存資料方式，來檢視是不是能夠防止資料被盜取。&lt;/p&gt;
+&lt;h2 id="master-password--secret-key--vault"&gt;Master Password / Secret Key / Vault&lt;/h2&gt;
+&lt;p&gt;在說明 security model 之前，要先了解幾個基本的要素：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Master password (your password)&lt;/li&gt;
+&lt;li&gt;Secret key (account + 26 bytes random data)&lt;/li&gt;
+&lt;li&gt;Vault (sensitive data)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src="https://yushuanhsieh.github.io/posts/password_1.png" alt="password_1"&gt;&lt;/p&gt;</description></item><item><title>GDG Hsinchu 12 月 Meetup - Improve Your Web Authentication Security</title><link>https://yushuanhsieh.github.io/posts/2020-12-23-web_auth/</link><pubDate>Wed, 23 Dec 2020 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2020-12-23-web_auth/</guid><description>&lt;h2 id="閒聊"&gt;閒聊&lt;/h2&gt;
+&lt;p&gt;12 月份完成好幾項目標，其中一項就是催生 GDG Hsinchu 12 月份的 Meetup 線下聚會。這次活動跟著 Google 在 12 月時舉辦的 Chrome Dev Summit 2020 一同推出，取自 CDS 中的部分 SMS-OTP 內容，並結合既有的 password-based authentication 與未來有可能普及的 FIDO 2 認證機制，整理出一份 Web Authentication Security 的技術分享。其中對我來說，比較有趣的地方在於理解機制的實現原理，包含資料溝通和驗證，以及可能會產生的安全問題。其實標準規範對於開發者來說相當重要，透過分析 protocol 的行為，可以讓開發者在開發整合性功能的時候，更清楚這些 library 要在什麼時機點使用，以及為什麼要使用這些 functions，這也是我每次進行技術分享時，最希望能夠帶給與會者的內容。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://yushuanhsieh.github.io/posts/gdg_meetup.jpg" alt="GDG Hsinchu 202012"&gt;&lt;/p&gt;</description></item><item><title>Side Project for daily study trello</title><link>https://yushuanhsieh.github.io/posts/2019-06-15-side-project/</link><pubDate>Fri, 14 Jun 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-06-15-side-project/</guid><description>&lt;p&gt;![study]({{ site.url }}/assets/images/side-project.png)&lt;/p&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;用 Trello 紀錄自己的每日學習進度也好一陣子了，雖然 Trello board 搭配 plugin &lt;code&gt;Calendar&lt;/code&gt; 很好用，但是卻有資訊分散在各張卡的問題。因此為了便於在月末寫當月學習報告，以及整理所有曾經讀過的 article/post link，就開發了一個小工具 &lt;code&gt;trello-transform&lt;/code&gt; 來從 trello cards 中擷取資訊。其實這個 side project 寫了有一段時間了，之前曾經立志要寫一個有前後端的小網站，這樣不會寫 code 的人也可以使用，但是後來就有點擱置了 XD 原因是我把這個功能寫成一個小框架，以因應每個人紀錄習慣不同，不過這樣的調整就需要會寫一點 code 並知道如何修改，對於不會寫 code 的人來說，可能便利性就沒這麼高。另外就是寫成網頁反而不利於我寫 blog，基於這個 side project 本來就是希望先滿足自己需求，因此後來目標就改成就先以 cli tool 實作為主。&lt;/p&gt;
+&lt;p&gt;現在這個 side project 成為我每個月必使用的工具，用來擷取學習日誌和 links，除了寫 blog 之外，後續還可以很方便地回顧之前看過的文章，可以說是目前寫過最實用的 project XD &lt;/p&gt;</description></item><item><title>Tail Recursion in Go</title><link>https://yushuanhsieh.github.io/posts/2019-06-22-tail-recuriosn-optimization/</link><pubDate>Fri, 14 Jun 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-06-22-tail-recuriosn-optimization/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;最近在實驗效能分析時，有使用到 Tail Recursion 寫法，因此也好奇在 Go 中是否有跟 C 一樣進行 Tail Recursion optimization 優化。在文章中，首先會用 C asm 來說明 tail call optimization，接著 dump Go asm code 來觀察結果。&lt;/p&gt;
+&lt;h2 id="tail-call"&gt;Tail Call&lt;/h2&gt;
+&lt;p&gt;在說明 Tail Recursion Optimization 之前，先來說說 &lt;a href="https://en.wikipedia.org/wiki/Tail_call"&gt;Tail Call&lt;/a&gt;。 Tail Call 概念很簡單，就是在 function 的最後語句執行另一個 function call。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c" data-lang="c"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#cf222e"&gt;int&lt;/span&gt; &lt;span style="color:#6639ba"&gt;search&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#cf222e"&gt;int&lt;/span&gt; data&lt;span style="color:#1f2328"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#cf222e"&gt;return&lt;/span&gt; &lt;span style="color:#6639ba"&gt;advanced_search&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;data&lt;span style="color:#1f2328"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;要注意的是， &lt;code&gt;Tail Call&lt;/code&gt; 意指最後的行為只允許使用 function call，所以以下的寫法就不是 &lt;code&gt;Tail Call&lt;/code&gt;，因為它需要先進行 &lt;code&gt;2 * 1 + funcB(a-1)&lt;/code&gt; 的運算，才能返回。&lt;/p&gt;</description></item><item><title>2019/05月份自我學習回顧</title><link>https://yushuanhsieh.github.io/posts/2019-06-04-study-201906/</link><pubDate>Tue, 04 Jun 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-06-04-study-201906/</guid><description>&lt;p&gt;![study]({{ site.url }}/assets/images/study-201906.png)&lt;/p&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;五月的時候，團隊來了一位經驗豐富的瑞典人，而剛好有這個機會跟他合作，除了跟他練練英文口說能力之外，順便學習一下他的程式經驗。瑞典人是一位懂很多層面的工程師，從韌體到 Web Front-end 都有實務經驗，而且為人也不錯，會很認真地看每個 Pull Request，並給予架構上或是程式寫法上的回饋，能有這樣的同事真的很開心，即使在當個碼農趕專案，也會覺得從中學習到不少。&lt;/p&gt;
+&lt;p&gt;五月份確實蠻忙的，因此在中旬的時候，一度對於下班學習覺得有點力不從心，但靜下心來思考後，發現其實只是因為自己上班全程精神專注，導致下了班會不想去進修，進而逐漸拉長滑手機和躺在床上發呆的時間。於是，在察覺到自己有這個狀況之後，就開始明確訂出每日學習目標，之前都是很隨興地安排，不會強迫自己要唸到怎樣的進度，不過如果開始怠惰的話，明確的進度才會讓自己不會偷懶，甚至知道哪邊有出現進度落後，而需要做改善。&lt;/p&gt;
+&lt;p&gt;在經過這樣小調整之後，學習的動力又回來了，因此在五月下旬時候又恢復到每天都有進度，而不是像中旬一樣，讀個三四天就想休息一天。&lt;/p&gt;
+&lt;h2 id="學習回顧"&gt;學習回顧&lt;/h2&gt;
+&lt;p&gt;五月份學習以&lt;strong&gt;離散數學&lt;/strong&gt;和 &lt;strong&gt;Linux&lt;/strong&gt; 為主，離散數學除了看韓永楷教授的線上課程之外，還有買一本離散數學課本來練習習題。至於 Linux 目前是以 Jserv 教授的系統核心設計課程為主，不過 Jserv 每次線上課程的內容都蠻多的，所以之後還是需要反覆地看以及實驗，才能夠真正地理解，不然只光看直播其實不太能吸收這麼多資訊。&lt;/p&gt;
+&lt;h3 id="離散數學"&gt;離散數學&lt;/h3&gt;
+&lt;p&gt;目前離散數學課程聽到 13 peg solitaire，進度蠻慢的，不過因為有邊搭配習題練習，所以這個速度也還是能接受。這次學習花比較多時間在實際證明上，因為在學的時候對於證明題總是輕忽，想說考試不太會考，但是現在自主學習沒有考試壓力，再加上理解這些內容，感覺更能讓自己去思考背後原理，每次練習完都蠻有收穫的。&lt;/p&gt;
+&lt;h3 id="linux-核心設計"&gt;Linux 核心設計&lt;/h3&gt;
+&lt;p&gt;本月份有兩次直播課程，包含 &lt;code&gt;Linux 核心設計: 朝向硬即時的核心變革&lt;/code&gt; 和 &lt;code&gt;Linux 核心設計: 檔案系統概念及實作手法&lt;/code&gt;，線上講座內容都很多而且也比較偏理論說明，所以上完後一定要再花時間去實作和實驗，才能&amp;quot;大略略&amp;quot;了解這個功能在 Linux Kernel 的作用。不過因為要看的東西太多了，所以先從檔案系統開始實驗， Real-Time 部分預計在六月會再重新複習一次。&lt;/p&gt;</description></item><item><title>2019/04月份自我學習回顧</title><link>https://yushuanhsieh.github.io/posts/2019-05-04-study-201904/</link><pubDate>Sat, 04 May 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-05-04-study-201904/</guid><description>&lt;p&gt;![study]({{ site.url }}/assets/images/golang.jpg)&lt;/p&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;不知不覺又過了一個月了，本來想說一週要產出一篇文章，結果發現技術文章真的蠻容易難產的，主要原因是我希望能盡可能地從根本去探討這些技術背後運作模式和原理，因此會花費大量時間在整理內容和實驗上。不過部分原因也可能是因為資歷不夠，所以這些內容要思考很久，才會下筆去寫，希望之後慢慢熟稔之後可以加快產出速度。&lt;/p&gt;
+&lt;p&gt;上個月曾經提到，我會開始複習大學 CS 基礎課程，因為工作後會隨著時間漸漸地把這些基礎原理忘掉，所以這個月就從離散數學開始看起。說到數學，我覺得現在的我把數學當作一種訓練自己思考邏輯的方式，雖然他對我來說真的有點挑戰性，但是在了解這些數學是如何解出最終解的過程中，其實蠻有樂趣，會讓我很訝異原來可以透過這樣子的方式去找答案。當然我在大學時期也很討厭上課，之所有會有這樣體悟，真的是要等待我出社會累積經歷後，才會認知到這樣邏輯訓練很有助於工作效率。&lt;/p&gt;
+&lt;p&gt;除了念書之外，4月份我也去擔任志工協助 Golang Taipei 的擺攤宣傳。在參加活動上我是超級菜逼八，不過真的蠻有意思，可以認識到不同社群的人，能夠互相交流。雖然目前因為工作關係定居在新竹，但還是希望自己能夠多多參與這樣的活動，看看別人如何推廣技術社群也是一種學習！&lt;/p&gt;
+&lt;h2 id="學習回顧"&gt;學習回顧&lt;/h2&gt;
+&lt;p&gt;本月份學習其實蠻雜的，包含 C、Linux、離散數學、還有一些 Go。之所以會這麼雜，是因為我四月份的上班時間都是在寫 Go 和研讀相關文章，我希望在下班時間可以學一點理論知識，會讓我覺得不這麼像碼農。有些人會來信問我，學習這麼發散，那不就等於什麼都不會？但我認為不是這樣子的，每個技術其實背後原理都是互相關聯，而且最重要的是必須讓自己在腦內建立起關鍵字，讓自己在需要這類知識時，可以快速反應到該如何去找相關知識，以及可以聯想到關聯的應用技術，這樣在解決問題時就會快上許多。&lt;/p&gt;
+&lt;p&gt;還有另一個原因是，因為專案上使用到 Cgo ，就很自然地想要看一下 C 語言 XD&lt;/p&gt;
+&lt;h2 id="學習日誌"&gt;學習日誌&lt;/h2&gt;
+&lt;p&gt;4月份有 5 天沒有唸書，因為去參加活動，還有氣管過敏有點變嚴重，不知道是不是換季關係 (?)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;2019/4/2 - cgo - how it works&lt;/li&gt;
+&lt;li&gt;2019/4/2 - 你所不知道的 C 語言：指標篇 (3)&lt;/li&gt;
+&lt;li&gt;2019/4/3 - 你所不知道的 C 語言：指標篇上 - (4)&lt;/li&gt;
+&lt;li&gt;2019/4/4 - 你所不知道的 C 語言：指標篇 (下) -1&lt;/li&gt;
+&lt;li&gt;2019/4/4 - gRPC - The process of Dial()&lt;/li&gt;
+&lt;li&gt;2019/4/5 - gRPC - Name Resolver &amp;amp; Load-Balancer&lt;/li&gt;
+&lt;li&gt;2019/4/6 - New Post - gRPC Client 與 Server 連線流程&lt;/li&gt;
+&lt;li&gt;2019/4/7 - 你所不知道的 C 語言：指標篇 (下) - 2&lt;/li&gt;
+&lt;li&gt;2019/4/8 - 你所不知道的 C 語言：指標篇 (下) -3&lt;/li&gt;
+&lt;li&gt;2019/4/9 - Discrete mathematics - Logical operators_review&lt;/li&gt;
+&lt;li&gt;2019/4/10 - Discrete mathematics - Logical operators, Tautology and contradiction &amp;amp; Logical equivalence&lt;/li&gt;
+&lt;li&gt;2019/4/11 - Linux 核心設計: 記憶體管理 (直播)&lt;/li&gt;
+&lt;li&gt;2019/4/12 - Discrete mathematics - Implication&lt;/li&gt;
+&lt;li&gt;2019/4/14 - Linux 核心設計: 記憶體管理 (2)&lt;/li&gt;
+&lt;li&gt;2019/4/14 - Golang Weekly Study&lt;/li&gt;
+&lt;li&gt;2019/4/15 - Article: Golang Race Detection、The Go Memory Model&lt;/li&gt;
+&lt;li&gt;2019/4/15 - Discrete mathematics - Puzzle&lt;/li&gt;
+&lt;li&gt;2019/4/16 - 惡血，矽谷獨角獸的醫療騙局&lt;/li&gt;
+&lt;li&gt;2019/4/19 - Golang Weekly Study (Advanced Test)&lt;/li&gt;
+&lt;li&gt;2019/4/19 - Discrete mathematics - Predicate&lt;/li&gt;
+&lt;li&gt;2019/4/20 - cgo compile problems solved (include header, dynamic libs, and uint test with .so)&lt;/li&gt;
+&lt;li&gt;2019/4/21 - Discrete mathematics - Quantifiers, propositional function&lt;/li&gt;
+&lt;li&gt;2019/4/22 - 你所不知道的C語言: Stream I/O, EOF 和例外處理&lt;/li&gt;
+&lt;li&gt;2019/4/25 - Discrete mathematics - functional examples&lt;/li&gt;
+&lt;li&gt;2019/4/26 - Golang project refactor (enhance concurrency part)&lt;/li&gt;
+&lt;li&gt;2019/4/27 - Dig into Cgo process and overhead&lt;/li&gt;
+&lt;li&gt;2019/4/28 - dotGo 2019 video&lt;/li&gt;
+&lt;li&gt;2019/4/28 - Cgo dump pre-compile files&lt;/li&gt;
+&lt;li&gt;2019/4/29 - GopherChina - Go concurrency in practice&lt;/li&gt;
+&lt;li&gt;2019/4/30 - Discrete mathematics - Mathematical arguments and functional proposition with De Morgen&amp;rsquo;s Law&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="articles"&gt;Articles&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/grpc/grpc/blob/master/doc/naming.md"&gt;gRPC Name Resolution&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/grpc/grpc/blob/master/doc/load-balancing.md"&gt;Load Balance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://yushuanhsieh.github.io/Web/gRPC-Dial"&gt;gRPC Client 與 Server 連線流程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.catb.org/esr/structure-packing/#_padding"&gt;The Lost Art of Structure Packing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://scene-si.org/2019/04/15/next-level-go-testing/"&gt;Next level Go testing&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>grpc-go source code trace - gRPC client 與 server 建立連線過程</title><link>https://yushuanhsieh.github.io/posts/2019-04-05-grpc-dial/</link><pubDate>Fri, 05 Apr 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-04-05-grpc-dial/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;其實一開始的目的是想要研究 gRPC 的 retry 機制，不過在了解 retry 之前勢必要先說明整個 gRPC client 與 server 建立連線的過程，因此就先用 source code trace 的方式簡單說明在呼叫 &lt;code&gt;grpc.Dial&lt;/code&gt; 後所執行的連線流程，包含 gRPC 實現 load-balancing 的機制。&lt;/p&gt;
+&lt;h2 id="packages"&gt;packages&lt;/h2&gt;
+&lt;p&gt;grpc-go v1.19.1&lt;/p&gt;
+&lt;h2 id="grpcdial-的背後"&gt;grpc.Dial 的背後&lt;/h2&gt;
+&lt;p&gt;以下是 client 向 server 連線的基本方式。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;conn&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#1f2328"&gt;err&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#0550ae"&gt;:=&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#1f2328"&gt;grpc&lt;/span&gt;&lt;span style="color:#1f2328"&gt;.&lt;/span&gt;&lt;span style="color:#6639ba"&gt;Dial&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#1f2328"&gt;serverIpAddress&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#1f2328"&gt;grpc&lt;/span&gt;&lt;span style="color:#1f2328"&gt;.&lt;/span&gt;&lt;span style="color:#6639ba"&gt;WithInsecure&lt;/span&gt;&lt;span style="color:#1f2328"&gt;())&lt;/span&gt;&lt;span style="color:#fff"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#fff"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#cf222e"&gt;func&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#6639ba"&gt;Dial&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#1f2328"&gt;target&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#cf222e"&gt;string&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#1f2328"&gt;opts&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#0550ae"&gt;...&lt;/span&gt;&lt;span style="color:#1f2328"&gt;DialOption&lt;/span&gt;&lt;span style="color:#1f2328"&gt;)&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#0550ae"&gt;*&lt;/span&gt;&lt;span style="color:#1f2328"&gt;ClientConn&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#cf222e"&gt;error&lt;/span&gt;&lt;span style="color:#1f2328"&gt;)&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#1f2328"&gt;{&lt;/span&gt;&lt;span style="color:#fff"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#cf222e"&gt;return&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#6639ba"&gt;DialContext&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#1f2328"&gt;context&lt;/span&gt;&lt;span style="color:#1f2328"&gt;.&lt;/span&gt;&lt;span style="color:#6639ba"&gt;Background&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(),&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#1f2328"&gt;target&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt;&lt;span style="color:#fff"&gt; &lt;/span&gt;&lt;span style="color:#1f2328"&gt;opts&lt;/span&gt;&lt;span style="color:#0550ae"&gt;...&lt;/span&gt;&lt;span style="color:#1f2328"&gt;)&lt;/span&gt;&lt;span style="color:#fff"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;}&lt;/span&gt;&lt;span style="color:#fff"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;首先， Client 需要透過 &lt;strong&gt;Name Resolver&lt;/strong&gt; 解析 Dial 中的 &lt;code&gt;target string&lt;/code&gt; 來取得 Server 正確的 IP Addresses 和 port，以利後續建立 connection。例如使用 DNS Name Resolver，就可以透過 &lt;code&gt;conn, err := grpc.Dial(&amp;quot;dns:///your.target.name:8888&amp;quot;)&lt;/code&gt; 這種 Domain name 的方式來發送 RPCs。&lt;/p&gt;</description></item><item><title>2019/03月份自我學習回顧</title><link>https://yushuanhsieh.github.io/posts/2019-04-04-study-201903/</link><pubDate>Wed, 03 Apr 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-04-04-study-201903/</guid><description>&lt;p&gt;![study]({{ site.url }}/assets/images/golang-meetup.jpeg)&lt;/p&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;最近這一個月工作慢慢步上軌道，心情有比較踏實些。剛開始來的時候，實在不太確定自己能幫上什麼忙，不過這個月漸漸地有任務可以做，並且也和其他組員一起合作開發，感覺在團隊中可以發揮自己的價值:) 另外，這個月比較大的轉變是完全負責 back-end ，之前還想說可能會接觸到 React ，所以花了一些時間在看 React 原理，不過目前確定會都以 Go 和 Device application 開發為主，因此後續就會把學習重心放在 Back-end。話雖如此，自己還是有加入公司的 front-end 學習群，跟著裡面的大神們一起念 React Core ，畢竟過去一年蠻大比例是使用 JavaScript 開發，要放棄也是蠻可惜的。&lt;/p&gt;
+&lt;h2 id="學習回顧"&gt;學習回顧&lt;/h2&gt;
+&lt;h3 id="go"&gt;Go&lt;/h3&gt;
+&lt;p&gt;這次很難得地可以參加Go Taipei 社群，分享使用 Go 的開發經驗，過程中花蠻多時間在整理簡報，除了擷取 Practical Go 中實際碰過的案例，也找了些其他跟專案維護相關的文章一並分享。原本以為應該不會太難的，沒想到實際整理起來卻花了快一個禮拜的時間，自己也從各種 references 中發掘更多討論相關議題的文章，收穫良多。在實際分享過後，反而會更積極地參加活動，因為這些分享都是工程師利用私下時間來整理的，如果能踴躍支持，就是給予他們最大的鼓勵吧XD&lt;/p&gt;
+&lt;p&gt;另外，由於專案中使用到 gRPC ，所以也花了時間在這部分的 source code 研究，特別是在 client retry 部分，想了解在不使用 iinterceptor 的情況下，能不能滿足目前需要 retry 的場景。此外還有 Http 這些標準 package 的複習等，尤其是公司蠻重視 test 這塊，所以也花時間在看 Httptest 和 Httptrace 等。&lt;/p&gt;</description></item><item><title>Golang - Request test using net/http/httptrace</title><link>https://yushuanhsieh.github.io/posts/2019-03-14-http-trace/</link><pubDate>Thu, 14 Mar 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-03-14-http-trace/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;在撰寫 HTTP request test 測試程式時，除了測試 response 結果是否如預期之外，我們還需要知道過程中需要耗費多少時間（request latency）。市面上有一些 libraries (e.g &lt;code&gt;opencensus&lt;/code&gt;) 能提供相關的 HTTP 事件 trace，不過仔細看會發現他們大多也是整合 golang 本身提供的 &lt;code&gt;httptrace&lt;/code&gt; 來實現追蹤功能，因此我們就直接來了解 &lt;code&gt;httptrace&lt;/code&gt; 的運作原理和應用方式，再結合 &lt;code&gt;http/httptest&lt;/code&gt;，讓 handler test 更完整。&lt;/p&gt;
+&lt;h2 id="request-處理流程"&gt;Request 處理流程&lt;/h2&gt;
+&lt;p&gt;在說明 &lt;code&gt;httptrace&lt;/code&gt; 之前，由於 request test 中是藉由 http package 來發起的 ，所以先來了解一下 golang 中，透過 &lt;code&gt;http&lt;/code&gt; package 的 client 處理 http request 的流程。&lt;/p&gt;</description></item><item><title>Functional options pattern in GO</title><link>https://yushuanhsieh.github.io/posts/2019-03-10-functional-options/</link><pubDate>Sun, 10 Mar 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-03-10-functional-options/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;之所以使用 &lt;code&gt;Functional options&lt;/code&gt; 的契機，是因為用到 gRPC 的 New Server API，發現他是用 &lt;code&gt;functional options&lt;/code&gt; 來讓使用者調整 Server 預設配置，這樣的作法不但兼具了擴充性和可用性，也能避免一些使用者誤用。而除了看 source code 來學習如何實作之外，也找起相關文章，進而發現原來早在 2014 年就有人發表過類似教學文，實在是太孤陋寡聞了～&lt;/p&gt;
+&lt;p&gt;![study-2019-02]({{ site.url }}/assets/images/functional-options.png)&lt;/p&gt;
+&lt;p&gt;趁著這次機會，把相關文章的重點整理出來，讓大家在寫類似 API 時，也能做個參考。&lt;/p&gt;
+&lt;h2 id="self-referential-functions"&gt;Self-Referential Functions&lt;/h2&gt;
+&lt;p&gt;首先要提到的是由 &lt;code&gt;Rob Pike&lt;/code&gt; 所整理出 &lt;code&gt;self-referential functions&lt;/code&gt; 的&lt;a href="https://commandcenter.blogspot.com/2014/01/self-referential-functions-and-design.html"&gt;文章&lt;/a&gt;，此 Pattern 方式可用於:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;有效地處理繁多且複雜的 setting options&lt;/li&gt;
+&lt;li&gt;需要保留之前所設定的 option&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;以下為文章中的實作例子：&lt;/p&gt;</description></item><item><title>2019/02月份自我學習回顧</title><link>https://yushuanhsieh.github.io/posts/2019-03-03-study-2019-02/</link><pubDate>Sun, 03 Mar 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-03-03-study-2019-02/</guid><description>&lt;p&gt;![study-2019-02]({{ site.url }}/assets/images/study-2019-02.png)&lt;/p&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;這個月大多在適應新的生活環境，第一次來新竹工作，不意外地在新手村落腳。在還沒來新竹之前，就聽聞過新竹可能是個比台北無聊的地方，那時候覺得反正我生活也很宅，不是 coding 就是買化妝品，只要有舒適的套房和康是美就可以存活了，但是實際上沒有我想的這麼簡單XD 畢竟新竹的社群活動真的少很多，讓假日少了一些樂趣。既然沒有實體活動，只能在線上多參與一些活動或是多看別人分享的文章了。&lt;/p&gt;
+&lt;p&gt;本月份學習內容除了加強 React 之外，也開始加入多一點 Golang 內容，不意外的話，之後工作使用語言應該會是 JavaScript 和 Golang，所以先安排階段性的練習，在之後專案中也能比較快上手。&lt;/p&gt;
+&lt;h2 id="學習回顧"&gt;學習回顧&lt;/h2&gt;
+&lt;h3 id="react"&gt;React&lt;/h3&gt;
+&lt;p&gt;React 在大致上用過一輪主流的 libs 後，開始慢慢把學習重心放在 source code 研究。例如 build form 常用的 &lt;code&gt;formlik&lt;/code&gt;，看一下他是怎樣透過簡單的 &lt;code&gt;loadash.toPath&lt;/code&gt; function 取得 value，讓 formlik 可以用在複雜的 nested form 上。另外也研究 &lt;code&gt;react-bootsrap&lt;/code&gt; 和 &lt;code&gt;material UI&lt;/code&gt; 中 styled component 架構，希望對於往後開發相關 component 有幫助。&lt;/p&gt;</description></item><item><title>React Hooks with memoizedState</title><link>https://yushuanhsieh.github.io/posts/2019-02-27-react-hooks/</link><pubDate>Wed, 27 Feb 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-02-27-react-hooks/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;React Hooks 自從正式 release 後，就出現很多相關教學文章，所以這篇不是講如何實作，而是說他如何在 stateless functional component 中保存當前 state。 此外，最近也開始嘗試把 class component 轉換成使用 hooks 的 components，但過程中還是需要蠻多調整，包含之前有使用一些 lifecycle functions ，藉此機會順便檢視是否真的必要使用這些 functions，是否可以透過其他架構方式來簡化。&lt;/p&gt;
+&lt;h2 id="usestate"&gt;useState&lt;/h2&gt;
+&lt;p&gt;以下是我們使用 useState function 的基本範例：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;5
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;6
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#cf222e"&gt;function&lt;/span&gt; &lt;span style="color:#1f2328"&gt;Example&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#1f2328"&gt;props&lt;/span&gt;&lt;span style="color:#1f2328"&gt;)&lt;/span&gt; &lt;span style="color:#1f2328"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#cf222e"&gt;const&lt;/span&gt; &lt;span style="color:#1f2328"&gt;[&lt;/span&gt;&lt;span style="color:#1f2328"&gt;state&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt; &lt;span style="color:#1f2328"&gt;setState&lt;/span&gt;&lt;span style="color:#1f2328"&gt;]&lt;/span&gt; &lt;span style="color:#0550ae"&gt;=&lt;/span&gt; &lt;span style="color:#1f2328"&gt;useState&lt;/span&gt;&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;&lt;span style="color:#1f2328"&gt;initialState&lt;/span&gt;&lt;span style="color:#1f2328"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#cf222e"&gt;return&lt;/span&gt; &lt;span style="color:#1f2328"&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#57606a"&gt;/// ReactElement
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#1f2328"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;依照 functional component 邏輯，我們應該每次都會新建一個 state，導致 state 值無法保存。不過透過 React Hooks，我們卻可以在每次 render 時得到上次更新後的 state 值，這是為什麼呢？&lt;/p&gt;</description></item><item><title>2019/01月份自我學習回顧</title><link>https://yushuanhsieh.github.io/posts/2019-02-03-study-2019-01/</link><pubDate>Sun, 03 Feb 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-02-03-study-2019-01/</guid><description>&lt;p&gt;又到了每個月檢討念書進度的日子了，這次 2019 新的一年有蠻多人生大轉變，像是離職換了一個新的工作環境，以及脫離媽寶身份，跑去新竹生活等。 Moxa 算是我轉職後第一份的正式工作，而在這一年中其實學到很多經驗，但是也對一些流程和開發方式有些疑問。我很想要根據這些問題提出自己的見解，可惜經驗少，又沒有其他公司經驗可以參考，因此總有很想要提出改善，卻又不知道該如何改善的感覺。&lt;/p&gt;
+&lt;p&gt;而在年底時，剛好有這個機會可以去趨勢工作，在考量趨勢科技是一家成熟軟體公司的情況下，雖然目前開發經驗還累積不足，但還是決定前往了。我不能説決定是不是正確的，但是我覺得人生就是充滿各種契機，只要在過程中很努力的學習，相信最後都還是值得的結果。&lt;/p&gt;
+&lt;p&gt;話又說回來，這次學習主軸又拉回前端，並且參雜一點 Network 理論。這次學習是以 React 以及相關 lib 為主，而 network 則是清大開放課程的 &lt;strong&gt;區域網路&lt;/strong&gt;，之前上完這位教授的網路概論，覺得收穫良多，所以繼續上教授的另一門課程。&lt;/p&gt;
+&lt;p&gt;此外，這次在學習紀錄上則是採用 &lt;strong&gt;91哥&lt;/strong&gt; 所提到的 &lt;code&gt;Trello&lt;/code&gt; + &lt;code&gt;Calendar Plugin&lt;/code&gt;，不過比較不方便的是因為每天紀錄都要開一張卡，寫 blog 時不好統整，因此又自己寫了一個小工具，可以讓這些 Card 擷取並轉換成自己的格式。&lt;/p&gt;
+&lt;p&gt;![12-study]({{ site.url }}/assets/images/study-2019-01.png)&lt;/p&gt;
+&lt;h2 id="學習回顧"&gt;學習回顧&lt;/h2&gt;
+&lt;h3 id="react"&gt;React&lt;/h3&gt;
+&lt;p&gt;由於已經學習過一個框架，所以在學習另一個框架的時候，就把重點擺在它的實作原理和在應用時應該要注意的事項。像是 Lifecycle 一定要知道（React 16 版本）還有 render 時的流程，要如何避免它會 over render。甚至當這些畫面沒有如你預期更新時。可能是哪些流程出了問題等。&lt;/p&gt;</description></item><item><title>工作 - Redux State 被異常更新除錯紀錄</title><link>https://yushuanhsieh.github.io/posts/2019-01-23-redux-problems/</link><pubDate>Wed, 23 Jan 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-01-23-redux-problems/</guid><description>&lt;h2 id="問題"&gt;問題：&lt;/h2&gt;
+&lt;p&gt;今天收到 back-end 同事回饋，說是在新版本的 APP UI 中出現不正常行為。由於我們的 menu 必須根據 Embedded System 中的 Applcation 來增減，因此就使用 menu state 來讓其他 component 也可以透過 dispatch 控制 menu 項目。&lt;/p&gt;
+&lt;p&gt;menu state 中有一個 property 是用來記錄 menu 的縮放，結果現在這個縮放行為會在使用者按 menu item 時出現異常，property value 會回到原始狀態 (initial state)。&lt;/p&gt;
+&lt;h2 id="找出原因"&gt;找出原因：&lt;/h2&gt;
+&lt;p&gt;當同事回報這個問題時，第一個想到的就是在 menu state 被 re-create，才會引發 re-render 行為，進而讓 menu 回到沒有縮放的初始狀態。&lt;/p&gt;</description></item><item><title>使用 React-Redux 注意事項和運作原理</title><link>https://yushuanhsieh.github.io/posts/2019-01-17-react-and-redux/</link><pubDate>Thu, 17 Jan 2019 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2019-01-17-react-and-redux/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;網路上有很多關於如何使用 &lt;code&gt;redux&lt;/code&gt; and &lt;code&gt;react-redux&lt;/code&gt; 的教學文章，所以在這邊就不寫如何去應用，而是會著重在一些可能會忽略的細節以及大概的 實作原理。其實這些細節都寫在官網上，不過一般在教學文章內較少著墨，所以特別摘錄出來，讓大家在使用 &lt;code&gt;react-redux&lt;/code&gt; 時能注意到可能會發生的問題。&lt;/p&gt;
+&lt;h2 id="mapstatetoprops-issues"&gt;&lt;code&gt;mapStateToProps&lt;/code&gt; Issues&lt;/h2&gt;
+&lt;p&gt;首先來談談在建立 connectHOC 常用到的 &lt;code&gt;mapStateToProps&lt;/code&gt;，由於這個
+function 關係到 component props，所以就容易產生沒有發生 render 或是 render 次數過多的問題。&lt;/p&gt;
+&lt;h3 id="1-render-沒有被觸發"&gt;1. render() 沒有被觸發&lt;/h3&gt;
+&lt;p&gt;關於這部分，官網也有提出相關內容：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;By default, React Redux decides whether the contents of the object returned from mapStateToProps are different using === comparison &lt;strong&gt;(a &amp;ldquo;shallow equality&amp;rdquo; check)&lt;/strong&gt; on each fields of the returned object.&lt;/p&gt;</description></item><item><title>9月份自我學習日誌回顧</title><link>https://yushuanhsieh.github.io/posts/2018-10-05-study-9/</link><pubDate>Fri, 05 Oct 2018 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-10-05-study-9/</guid><description>&lt;h2 id="9月份目標"&gt;9月份目標&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;把 Effective Go 看完&lt;/li&gt;
+&lt;li&gt;複習 JavaScript 概念，釐清各細節&lt;/li&gt;
+&lt;li&gt;工作上用到的 Protocol 相關知識&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="目標回顧"&gt;目標回顧&lt;/h2&gt;
+&lt;h3 id="1-把-effective-go-看完"&gt;1. 把 Effective Go 看完&lt;/h3&gt;
+&lt;p&gt;已看完，印象比較深刻的部分包含：&lt;/p&gt;
+&lt;h4 id="the-difference-between"&gt;&lt;a href="https://golang.org/doc/effective_go.html?#allocation_new"&gt;The difference between &lt;code&gt;new&lt;/code&gt; and &lt;code&gt;make&lt;/code&gt;&lt;/a&gt;&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;New&lt;/code&gt; - It&amp;rsquo;s a built-in function that allocates memory, but unlike its namesakes in some other languages it does not initialize the memory, it only zeros it.&lt;/p&gt;</description></item><item><title>Node.js Addons N-API example (v10.11.0)</title><link>https://yushuanhsieh.github.io/posts/2018-09-24-node-js-napi/</link><pubDate>Mon, 24 Sep 2018 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-09-24-node-js-napi/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;由於專案需要整合 &lt;a href="https://nodered.org/"&gt;Node-RED&lt;/a&gt; ，我們必須開發自己的 Node 來讓用戶可以直接透過視覺化方式來建立簡單邏輯，又我們的 SDK 是 C 版本，因此有這機會可以接觸 Node.js 所提供的 C/C++ Addons 功能。另外，自己寫 server-side 都是使用 Golang，所以這也是難得的機會可以試試 Node.js。&lt;/p&gt;
+&lt;p&gt;目前網路上使用 Node.js &lt;code&gt;N-API v10.x&lt;/code&gt; 版本的範例並不多，初期在使用時也因為對於原理不熟悉，因而踩過一些坑，希望這篇文章能講述基本概念，讓其他使用者能避免也踩到相同的坑。&lt;/p&gt;
+&lt;h2 id="相關技術"&gt;相關技術&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;C&lt;/li&gt;
+&lt;li&gt;Node.js N-API 與v8一些原理知識&lt;/li&gt;
+&lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="how-cc-addons-work-with-javascript"&gt;How C/C++ Addons Work With JavaScript&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;C/C++ Addons&lt;/strong&gt; Node.js Addons are dynamically-linked shared objects, written in C++, that can be loaded into Node.js using the require() function, and used just as if they were an ordinary Node.js module.&lt;/p&gt;</description></item><item><title>Angular Schematics</title><link>https://yushuanhsieh.github.io/posts/2018-08-05-angular-schematics/</link><pubDate>Sun, 05 Aug 2018 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-08-05-angular-schematics/</guid><description>&lt;h2 id="前言"&gt;前言：&lt;/h2&gt;
+&lt;p&gt;最近專案需要提供工具讓外部人員一同參與 Web App 的開發，由於我們的 Web App 已經有基本架構和開發方式，為了讓外部人員能夠更方便的 follow 架構，所以就決定使用 Schematics 來創建專屬樣板，讓協作開發人員可以迅速地建立專案用的 component page，然後他們只需要修改部分程式碼即可。&lt;/p&gt;
+&lt;h2 id="angular-schematics"&gt;Angular Schematics&lt;/h2&gt;
+&lt;p&gt;因為我們使用 Angular 框架，所以就使用 Angular Schematics 來建立樣板。Schematics 是一個改善 workflow 的工具，而透過 Angular Schematics ，我們可以模組化地調整專案現有檔案，例如在專案內新增指定檔案，或是修改既有檔案的內容等，減少手動調整 effort 和錯誤發生。&lt;/p&gt;
+&lt;p&gt;如同圖片所示，我們使用 Schematics 將要修改的部分（橘色方塊）apply 在 staging area，當所有內容調整完成，再 apply 到既有的專案中。（為什麼要有 staging area，主要是因為
+Schematics 中可能有不只一個修改步驟，透過先應用在 staging area ，可以避免中間有錯誤發生，而導致直接影響到既有專案） &lt;img src="https://static1.squarespace.com/static/5618e3e3e4b0b6c3336cd921/t/5b1019b5352f53e4588abea8/1527781833021/GIF1.gif?format=1500w" alt="Schematics are atomic"&gt;
+Image source：http://recurship.com/blog/2018/5/31/xfvrq9aauqkayhkd4kzp7gsbfg2bfl&lt;/p&gt;</description></item><item><title>Redux Anti Pattern</title><link>https://yushuanhsieh.github.io/posts/2018-07-15-redux-anti-pattern/</link><pubDate>Sun, 15 Jul 2018 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-07-15-redux-anti-pattern/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;這篇文章是基於 &lt;a href="https://blog.mgechev.com/2017/12/07/redux-anti-patterns-race-conditions-state-management-duplication/"&gt;Redux Anti-Patterns - Part 1. State Management&lt;/a&gt; 所進行的探討，包含在專案內是否有犯類似的錯誤，以及後續該如何改善。文章會結合目前專案所使用的 Redux(ngrx)，並檢視使用 Ngrx 是否能避免這些錯誤發生。&lt;/p&gt;
+&lt;h2 id="1-state-duplication"&gt;1. State Duplication&lt;/h2&gt;
+&lt;h3 id="問題點"&gt;問題點&lt;/h3&gt;
+&lt;p&gt;錯誤的建立 state 導致 state 內部 property 或是與其他 state 內容重複。文章內以 session 為例子：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#cf222e"&gt;interface&lt;/span&gt; &lt;span style="color:#1f2328"&gt;Store&lt;/span&gt; &lt;span style="color:#1f2328"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#1f2328"&gt;sessions&lt;/span&gt;: &lt;span style="color:#cf222e"&gt;Session&lt;/span&gt;&lt;span style="color:#1f2328"&gt;[];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#57606a"&gt;/** The currentSession would be a part of sessions*/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#1f2328"&gt;currentSession&lt;/span&gt;: &lt;span style="color:#cf222e"&gt;Session&lt;/span&gt;&lt;span style="color:#1f2328"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="解決方式"&gt;解決方式&lt;/h3&gt;
+&lt;p&gt;如上面的例子，將 &lt;code&gt;currentSession&lt;/code&gt; 改成 index 檢索，所以我們實際取用資料時，還是使用 &lt;code&gt;sessions&lt;/code&gt; 內的資料，而不是複製一份到 currentSession。&lt;/p&gt;</description></item><item><title>CSS Typed Object Model</title><link>https://yushuanhsieh.github.io/posts/2018-06-24-css-typed-om/</link><pubDate>Sun, 24 Jun 2018 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-06-24-css-typed-om/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;Chrome 66 版本全新支援 &lt;code&gt;CSS Typed Object Model&lt;/code&gt;，透過這種新型的 CSS Typed OM，可以有效提升使用 JavaScript 操作 CSSOM 屬性的效率。雖然目前僅有 Chrome 支援（ Firefox 據說在努力中， Edge 目前沒下文），不過既然此方式能對網頁呈現效能有所提升，讓開發者和使用者都因此受惠，未來想必會成為主流方式。&lt;/p&gt;
+&lt;h2 id="cssom--css-typed-object-model"&gt;CSSOM &amp;amp; CSS Typed Object Model&lt;/h2&gt;
+&lt;h3 id="cssom"&gt;CSSOM&lt;/h3&gt;
+&lt;p&gt;傳統的 CSSOM 是使用 string 格式來進行 style 修改或是讀取等行為，當開發者傳遞一個 string 內容給 CSSOM 時，它會再解析 string 成真正需要的數值。這樣一來一往需要蠻大的成本，再加上開發者傳送 string 時不好偵錯，以及不方便開發者進行一些數值的運算等，讓傳統 CSSOM 似乎不太適合樣式操作。&lt;/p&gt;</description></item><item><title>The Main Flow of Rendering Engines</title><link>https://yushuanhsieh.github.io/posts/2018-06-23-browser-render-engine/</link><pubDate>Sat, 23 Jun 2018 12:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-06-23-browser-render-engine/</guid><description>&lt;h2 id="前言"&gt;前言：&lt;/h2&gt;
+&lt;p&gt;最近在寫 CSS Animation 部分，於是比較深入的看瀏覽器渲染流程，希望在進行 Animation 時可以更加地流暢。&lt;/p&gt;
+&lt;h2 id="the-main-flow-of-rendering-engines"&gt;The Main Flow of Rendering Engines&lt;/h2&gt;
+&lt;p&gt;在寫 HTML 的時候，我們很理所當然地寫出這樣的頁面：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 1
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 2
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 3
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 4
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 5
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 6
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 7
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 8
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 9
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;10
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;11
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#57606a"&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#0550ae"&gt;html&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#0550ae"&gt;head&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#1f2328"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#0550ae"&gt;meta&lt;/span&gt; &lt;span style="color:#1f2328"&gt;charset&lt;/span&gt;&lt;span style="color:#0550ae"&gt;=&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;UTF-8&amp;#34;&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#1f2328"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#0550ae"&gt;link&lt;/span&gt; &lt;span style="color:#1f2328"&gt;rel&lt;/span&gt;&lt;span style="color:#0550ae"&gt;=&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;stylesheet&amp;#34;&lt;/span&gt; &lt;span style="color:#1f2328"&gt;href&lt;/span&gt;&lt;span style="color:#0550ae"&gt;=&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;styles.css&amp;#34;&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#1f2328"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#0550ae"&gt;title&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;My Website&lt;span style="color:#1f2328"&gt;&amp;lt;/&lt;/span&gt;&lt;span style="color:#0550ae"&gt;title&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;&amp;lt;/&lt;/span&gt;&lt;span style="color:#0550ae"&gt;head&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#0550ae"&gt;body&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; My Website
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#1f2328"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#0550ae"&gt;script&lt;/span&gt; &lt;span style="color:#1f2328"&gt;src&lt;/span&gt;&lt;span style="color:#0550ae"&gt;=&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;./main.js&amp;#34;&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span style="color:#0550ae"&gt;script&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;&amp;lt;/&lt;/span&gt;&lt;span style="color:#0550ae"&gt;body&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;&amp;lt;/&lt;/span&gt;&lt;span style="color:#0550ae"&gt;html&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;這時候就會有個疑問，那瀏覽器是如何讀懂這些檔案？又如何將頁面呈現在我們眼前呢？首先，瀏覽器要渲染出網頁頁面，需要幾個主要步驟：&lt;/p&gt;</description></item><item><title>Angular - Reactive Form</title><link>https://yushuanhsieh.github.io/posts/2018-06-14-angular-reactive-form/</link><pubDate>Thu, 14 Jun 2018 12:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-06-14-angular-reactive-form/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;在建立表單的部份，Angular 與 AngularJS 最大的不同就是多了 &lt;code&gt;Reactive Form&lt;/code&gt; 的方式。由於 Reactive Form 比起一般 Template-Driven Form 更具彈性且好掌控，所以就來大致介紹一下與 Reactive Form 相關的流程機制。&lt;/p&gt;
+&lt;h2 id="formcontrol"&gt;FormControl&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;FormControl&lt;/code&gt; 是 reactive form 中最基本且必要的角色。它是一個&lt;strong&gt;完全獨立的 Instance&lt;/strong&gt;，裡面包含了 value / validators / status 等重要 member variables。想像一下，如果我們需要一個輸入暱稱的 input 欄位，而 formControl 的任務就是要儲存使用者所輸入的暱稱，以及操作內部的 Validators 對輸入的暱稱字元進行驗證。&lt;/p&gt;
+&lt;h3 id="formcontrol-運作流程"&gt;FormControl 運作流程&lt;/h3&gt;
+&lt;p&gt;下圖簡單地介紹 FormControl 的內部機制，首先在建立 FormControl Instance 時，我們可以透過 constructor 初始化 value 和設置想要的 validators function。舉例來說，我們提供給使用者修改暱稱的欄位，需要在欄位上先填好使用者原本的暱稱，以及設置好暱稱驗證方式。&lt;/p&gt;</description></item><item><title>Angular - ng-template &amp; ng-container</title><link>https://yushuanhsieh.github.io/posts/2018-05-29-angular-6-ngtemplate/</link><pubDate>Tue, 29 May 2018 12:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-05-29-angular-6-ngtemplate/</guid><description>&lt;h2 id="前言"&gt;前言：&lt;/h2&gt;
+&lt;p&gt;昨天剛好在看 Angular CDK Overlay &lt;a href="https://material.angular.io/cdk/overlay/overview"&gt;(Overlay Document)&lt;/a&gt; 這部分，因為 Overlay 是 CDK 中 Portal 的ㄧ種，而 Portal 又和 Angular 中的 Template 機制有關係，這才發現自己對於 Angular 的 &lt;code&gt;ng-template&lt;/code&gt; 和 &lt;code&gt;ng-container&lt;/code&gt; 概念不是很清楚，所以特別再看了一下這部分的實作原理和應用方式。&lt;/p&gt;
+&lt;h2 id="ng-template"&gt;&lt;code&gt;&amp;lt;ng-template&amp;gt;&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;在說明 &lt;code&gt;ng-template&lt;/code&gt;之前，先從我們很常用到的 &lt;code&gt;*ngIf&lt;/code&gt; 來說起，在 Angular 中 &lt;code&gt;*&lt;/code&gt; 星號代表 &lt;code&gt;ng-template&lt;/code&gt; 的 sugar syntax，讓開發者簡化語法。所以下面的語法：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#0550ae"&gt;div&lt;/span&gt; &lt;span style="color:#f6f8fa;background-color:#82071e"&gt;*&lt;/span&gt;&lt;span style="color:#1f2328"&gt;ngIf&lt;/span&gt;&lt;span style="color:#0550ae"&gt;=&lt;/span&gt;&lt;span style="color:#0a3069"&gt;&amp;#34;condition&amp;#34;&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;Hello World!&lt;span style="color:#1f2328"&gt;&amp;lt;/&lt;/span&gt;&lt;span style="color:#0550ae"&gt;div&lt;/span&gt;&lt;span style="color:#1f2328"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;實際上就是下面語法的縮寫：&lt;/p&gt;</description></item><item><title>Understanding Router in Angular 6</title><link>https://yushuanhsieh.github.io/posts/2018-05-24-angular-6-router/</link><pubDate>Thu, 24 May 2018 12:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-05-24-angular-6-router/</guid><description>&lt;h2 id="前言"&gt;前言：&lt;/h2&gt;
+&lt;p&gt;這陣子在看 Reactive Extension (Rx) 和 Angular ，而 Angular 中常使用的 Router 內就有些 Observable Type 的 instance，因此就打算從這邊深入了解一下 Angular Router 的流程和 Observable 應用方式。&lt;/p&gt;
+&lt;h2 id="router-navigation"&gt;Router Navigation&lt;/h2&gt;
+&lt;h3 id="overview"&gt;Overview&lt;/h3&gt;
+&lt;p&gt;![router.png]({{ site.url }}/assets/images/router.png)&lt;/p&gt;
+&lt;p&gt;首先，先來說一下大致流程，當使用者點擊設有 &lt;code&gt;routerLink&lt;/code&gt; attribute 超連結時（或是在 component 裡面 trigger router navigation），設置的連結會先經過分析步驟，然後透過 Router 找出對應的 Component，再將此 Component 呈現在設置好 &lt;code&gt;&amp;lt;router-outlet&amp;gt;&amp;lt;/router-outlet&amp;gt;&lt;/code&gt; 的地方。&lt;/p&gt;</description></item><item><title>How Does JavaScript Engine (V8) Optimize JavaScript code - Fast Property Access</title><link>https://yushuanhsieh.github.io/posts/2018-05-16-javascript-optimization-property/</link><pubDate>Wed, 16 May 2018 12:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-05-16-javascript-optimization-property/</guid><description>&lt;h1 id="properties-access-in-v8"&gt;Properties Access in V8&lt;/h1&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;傳統的 JavaScript 引擎，在抓取 object 內的 property 位置時，常常是利用 object 內的 &lt;code&gt;hash table&lt;/code&gt; 來取得對應 property (通常稱為 dictionary )。不過這樣需要花費搜尋時間，相對來說效率就不是太好。也因此在現代的 JavaScript 引擎，會根據 object 內的 property 架構來進行不同方式的效能處理，避免一直使用 hash table，而是改採其他更有效率的結構，來達成快速得到 property 的目的。&lt;/p&gt;
+&lt;h2 id="property-definition-in-v8"&gt;Property definition in V8&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Property: 命名不為 indexed integer 的 property。
+&lt;code&gt;const student = {id: 'B123456'}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Elements: 命名為 indexed integer 的 property。
+&lt;code&gt;const students = {1: 'student1', 2: 'student2'}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;為了有效率地讀取 property，V8 會使用不同的方式來儲存 property 位置。首先會依據 property 的命名方式，如同上一篇有提到，V8 將 indexed integer property 視為 &lt;code&gt;elements&lt;/code&gt;，elements 和 一般 property 就會以不同架構來處理。在這邊僅討論一般命名之 property。&lt;/p&gt;</description></item><item><title>How Does JavaScript Engine (V8) Optimize JavaScript code - Elements</title><link>https://yushuanhsieh.github.io/posts/2018-05-15-javascript-optimization-elements/</link><pubDate>Tue, 15 May 2018 12:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-05-15-javascript-optimization-elements/</guid><description>&lt;h1 id="前言"&gt;前言&lt;/h1&gt;
+&lt;p&gt;JavaScript 是種弱型態語言，而 JavaScript Engine (V8) 透過對於 JavaScript object 的型態強化來提升 JavaScript 執行效率。&lt;/p&gt;
+&lt;h1 id="elements-kinds-in-v8"&gt;Elements Kinds in V8&lt;/h1&gt;
+&lt;h2 id="what-is-elements"&gt;What is &lt;code&gt;Elements&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;JavaScript 的 object 可以有任意個 property，而這些 property 的命名又可以是任意字元，例如：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#cf222e"&gt;const&lt;/span&gt; &lt;span style="color:#1f2328"&gt;student&lt;/span&gt; &lt;span style="color:#0550ae"&gt;=&lt;/span&gt; &lt;span style="color:#1f2328"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#1f2328"&gt;id&lt;/span&gt;&lt;span style="color:#0550ae"&gt;:&lt;/span&gt; &lt;span style="color:#0550ae"&gt;1234&lt;/span&gt;&lt;span style="color:#1f2328"&gt;,&lt;/span&gt; &lt;span style="color:#57606a"&gt;// property name is a string
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#0550ae"&gt;1&lt;/span&gt;&lt;span style="color:#0550ae"&gt;:&lt;/span&gt; &lt;span style="color:#0550ae"&gt;2&lt;/span&gt; &lt;span style="color:#57606a"&gt;// property name is an integer
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#1f2328"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在 V8 引擎中，將這些整數命名(integer names)的 property 稱為 &lt;code&gt;Elements&lt;/code&gt;。其中最常見的就是透過 JavaScript Array contructor 所產生 object 的 property。&lt;/p&gt;</description></item><item><title>JavaScript - Pass Params Into Functions</title><link>https://yushuanhsieh.github.io/posts/2018-05-07-javascript-basic-concept/</link><pubDate>Mon, 07 May 2018 12:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-05-07-javascript-basic-concept/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;這篇文章起源於我為了瞭解瀏覽器的運作原理，以利針對瀏覽器進行效能優化時，所延伸出來的基礎文章。剛開始學習切入點是 Chrome 的 V8 JavaScript Engine，看到有一位作者仔細地說明 V8 Engine 如何 Compile JavaScript 的流程，進而引發我對 JavaScript Memory Allocation 的興趣。此外，剛好最近也在用 TypeScript 寫類 static type object，所以想更清楚知道使用 TypeScript 這個 pre-processor，在瀏覽器中會怎樣提高 JavaScript Compile 的性能。&lt;/p&gt;
+&lt;p&gt;以下內容會使用 &lt;code&gt;ECMA-262&lt;/code&gt; 的標準來做探討。&lt;/p&gt;
+&lt;h2 id="call-by-value--call-by-sharing"&gt;Call by value &amp;amp; Call by sharing&lt;/h2&gt;
+&lt;p&gt;在 &lt;code&gt;ECMA-262&lt;/code&gt;的實作規範中，JavaScript 主要採用 &lt;code&gt;Call by sharing&lt;/code&gt; 和 &lt;code&gt;Call by value&lt;/code&gt; 的方式來傳遞參數。&lt;/p&gt;</description></item><item><title>Cypress &amp; Cucumber Introduction</title><link>https://yushuanhsieh.github.io/posts/2018-01-29-cypress-basic-usage/</link><pubDate>Mon, 29 Jan 2018 12:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-01-29-cypress-basic-usage/</guid><description>&lt;h1 id="cypress-e2e-testing-framework"&gt;Cypress E2E Testing Framework&lt;/h1&gt;
+&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;No more async hell&lt;/strong&gt;&lt;br&gt;
+Cypress automatically retries the query until the element is found.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Real time reloads&lt;/strong&gt;&lt;br&gt;
+Cypress automatically reloads whenever you make changes to your tests.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Spies, stubs, and clocks&lt;/strong&gt;&lt;br&gt;
+Verify and control the behavior of functions, server responses, or timers.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Run with native browsers&lt;/strong&gt;&lt;br&gt;
+Keep fast, consistent and reliable tests.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="運作方式"&gt;運作方式&lt;/h2&gt;
+&lt;p&gt;![Screen Shot 2018-01-27 at 20.34.59.png]({{ site.url }}/assets/images/Cypress-usage-process.png)&lt;/p&gt;</description></item><item><title>AngularJS - angular-formly study notes</title><link>https://yushuanhsieh.github.io/posts/2018-01-06-angular-formly-basic-usage/</link><pubDate>Fri, 05 Jan 2018 12:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2018-01-06-angular-formly-basic-usage/</guid><description>&lt;h2 id="angular-formly-運作原理"&gt;Angular formly 運作原理&lt;/h2&gt;
+&lt;p&gt;將 form 中的每個 field 獨立出來寫成共用 template，並供整個 app 使用。使用者先在 angular-formly 中進行 configuration，包含設定 type 和 wrapper ，接著只要在 component 的 controller 中建立指定 type 的 field objects 之後，angular-formly 就會結合之前設定好的 field template 和 objects， render 出完整的表單。
+![study.png]({{ site.url }}/assets/images/angular-formly-usage-1.png)&lt;/p&gt;
+&lt;h4 id="angular-formly-field-render-source-code"&gt;Angular-formly field render source code&lt;/h4&gt;
+&lt;p&gt;Angular-formly 套用 field template 的順序流程：&lt;/p&gt;</description></item><item><title>AngularJS - Two way data binding</title><link>https://yushuanhsieh.github.io/posts/2017-12-08-two-way-binding/</link><pubDate>Fri, 08 Dec 2017 21:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2017-12-08-two-way-binding/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;最近開始接觸前端技術，預計以Angular和NodeJS為主。之前其實有稍微點一些網頁相關技能，不過大概都才Lv.1，知道大概怎麼使用，卻不太清楚背後的原理和概念。所以這次在學習的時候，會著重在框架理論和實作方式上，希望自己除了能應用這些框架之外，還可以了解這些框架背後的原理，並且進而有能力比較各框架之間的好壞。雖然Angular目前已經出到v5.1.0，但起點會從Angular1開始學起，之後文章預計會去比較新版的Angular和Angular1有怎樣的差異，以及新版的運作方式可以帶來怎樣的好處。&lt;/p&gt;
+&lt;p&gt;Angular1主打特色之一包含 Two-way data binding (這邊先不在意這種方式帶來怎樣的壞處xD)，這篇文章紀錄 Two-way data binding 的原理和實現方式，以及對網站來說會帶來怎樣的影響。文章將不會示範如何去應用 Two-way data binding，因為我覺得隨便 Google 就可以找到很多例子，就不特別介紹了。&lt;/p&gt;
+&lt;h2 id="one-way-data-binding--two-way-data-binding"&gt;One-way data binding &amp;amp; Two-way data binding&lt;/h2&gt;
+&lt;h3 id="one-way-data-binding"&gt;One-way data binding&lt;/h3&gt;
+&lt;p&gt;Angular 官方給的 One-way data binding 說明是指 template system 結合 model data 所產出的結果網頁，也就是說，我們會按照 template engine 要求來編寫一份 template file，然後當 browser 接收到資料時（可能是透過Ajax），就會透過 Template engine 將 data 放入指定的欄位中，並 render 出完整的 HTML file。
+&lt;img src="https://docs.angularjs.org/img/One_Way_Data_Binding.png" alt="One-way data binding"&gt;&lt;/p&gt;</description></item></channel></rss>

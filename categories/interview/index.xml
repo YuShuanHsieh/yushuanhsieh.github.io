@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Interview on Cherie's Tech Blog</title><link>https://yushuanhsieh.github.io/categories/interview/</link><description>Recent content in Interview on Cherie's Tech Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 03 Sep 2021 08:00:00 +0800</lastBuildDate><atom:link href="https://yushuanhsieh.github.io/categories/interview/index.xml" rel="self" type="application/rss+xml"/><item><title>台積電 SRE 面試心得</title><link>https://yushuanhsieh.github.io/posts/2021-09-04-tsmc-sre-interview/</link><pubDate>Fri, 03 Sep 2021 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2021-09-04-tsmc-sre-interview/</guid><description>&lt;p&gt;又好一陣子沒有更新 blog 了，先簡單聊一下概況。五月底的時候有一次轉換到新公司的機會，不過和既有公司商量後，雙方同意內轉到研發單位的軟韌體部門，因此就繼續留在現在的公司。也因為剛轉換部門，很多新的流程和產品需要學習，就暫時把心力都放在跟公司產品相關的技術進修，期望自己能快一點跟上腳步。目前轉到新部門約過了三個月的時間，一切適應良好，工作任務也可以在期限內順利完成，同事相處也都很融洽，過的很開心。&lt;/p&gt;
+&lt;p&gt;在七月中的時候，接到台積電的 SRE 主動面試邀約，直到最近才結束整個面試流程。整個面試流程覺得收穫良多，所以在此簡單記錄一下。面試一共會有專業項目三關 + 人資一關，由於主管希望面試者能有較充足的準備，因此專業項目每一關的間隔時間預定是兩個禮拜，如果有需求需要加快面試速度也是可以調整時程。現在疫情期間，除了測驗要去廠區之外，其他面試一率都是視訊面試。&lt;/p&gt;
+&lt;h2 id="第一關專長簡介和專業問題-60-分鐘"&gt;第一關：專長簡介和專業問題 (60 分鐘)&lt;/h2&gt;
+&lt;p&gt;一面的流程會分成四個部分：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;(主管) 部門介紹&lt;/li&gt;
+&lt;li&gt;(主管) 整體面試流程介紹&lt;/li&gt;
+&lt;li&gt;面試者專長簡介和簡答題&lt;/li&gt;
+&lt;li&gt;Q &amp;amp; A&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;主管在介紹完部門和面試流程後，會請面試者介紹自己擅長的領域。這邊比較特別的是，主管有說明已完整看過我的履歷，所以希望我能只就自己專業領域和擅長方向介紹即可，而他會根據我所說的內容進行提問。而我回答我比較擅長的方向是：Golang 和 Web backend。&lt;/p&gt;
+&lt;p&gt;主管提問內容包含：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;sorting algorithm / BST / stack / queue / binary tree / hash map 具體實作和相關 time complexity&lt;/li&gt;
+&lt;li&gt;HTTP protocol 流程和 package format&lt;/li&gt;
+&lt;li&gt;cookie&lt;/li&gt;
+&lt;li&gt;Linux 環境的操作 (包含查看記憶體、 network package、service port、process)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;自認在 Linux 這一塊沒有回答的很好，知道用哪些工具去查看，但是問到更細節的部分就不太了解。不過主管說這樣問是想了解面試者的程度在哪裡，所以不會就說不會就好。&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,158 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>TH02 sensor device driver — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>TH02 sensor device driver</h1><div class=post-meta><time datetime=2021-02-10>February 10, 2021</time>
+<span class=separator>·</span>
+<span class=reading-time>9 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/linux-kernel/>Linux Kernel</a></div></header><div class=post-content><p>馬上就要過年了，最近在整理物品的時候，突然找到一年前為了玩板子而亂買的 Grove sensor，回想當時雖然對於韌體很感興趣，不過由於工作關係，因此把大部分進修時間都花在 Web 議題，沒能完成 sensor 韌體，留下一個遺憾。而既然這次被我找出來，近期工作又是都以 FPGA 板子居多，對於相關概念已有基本認知，覺得是時候把它實作出來，了結一年前給自己的課題。</p><p><img src=/posts/i2c-driver_4.png alt></p><h2 id=硬體>硬體</h2><ul><li>Grove Temperature&amp;Humidity Sensor (High-Accuracy & Mini)</li><li>Raspberry Pi 3 Model B (Linux kernel 5.4.x)</li></ul><p><img src=/posts/i2c-driver_5.png alt></p><h2 id=技術>技術</h2><ul><li>I2C linux driver</li><li>linux Industrial I/O subsystem</li><li>device tree</li></ul><p>由於買的 sensor 有支援 I2C bus protocol，因此這次實作的 driver 就會基於 I2C driver 架構上實作。搭配 iio (Industrial I/O) subsystem 來讓 user space 能夠透過 file system 來讀取溫度和濕度。</p><h2 id=overview>Overview</h2><p><img src=/posts/i2c-driver_1.png alt></p><p>首先來看概略運作流程： application 透過 sysfs 與 industrial I/O device 進行互動，在 iio device driver 接收到 read 指令後，將對應的操作行為藉由 I2C bus adapter 與 I2C device 進行溝通。</p><p>其中我們需要實作的部分包含：</p><ul><li>Th02 device</li><li>Th02 device driver</li><li>iio device driver</li></ul><p>之所以採用 Industrial I/O subsystem，是因為此 framework 提供便利的機制，在註冊 iio device driver 後，會根據設定在 file system 中生成代表各 sensor info 的 file node，如此一來就可以藉由常見的寫入、讀取行為來操作 sensor (當然也不只有 iio subsystem 能夠實現這機制，也可以透過其他方法實現)。</p><h2 id=th02-device>Th02 Device</h2><p>Device 和 device driver 是相生相依的關係，但 I2C device 無法像 PCI or USB device 一樣在 runtime 時被主動 detect 且生成對應之 device instance，因此我們需要透過外在方式來產生(<a href=https://www.kernel.org/doc/html/latest/i2c/instantiating-devices.html>How to instantiate I2C devices</a>)。</p><p>本次實作中是使用 device tree overlays 機制來宣告 Th02 device tree node，並透過 dynamic loading 方式來註冊 device。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#0550ae>/</span>dts<span style=color:#0550ae>-</span>v1<span style=color:#0550ae>/</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#0550ae>/</span>plugin<span style=color:#0550ae>/</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#0550ae>/</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    compatible <span style=color:#0550ae>=</span> <span style=color:#0a3069>&#34;brcm,bcm2837&#34;</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    fragment<span style=color:#f6f8fa;background-color:#82071e>@</span><span style=color:#0550ae>0</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>        target <span style=color:#0550ae>=</span> <span style=color:#0550ae>&lt;&amp;</span>i2c1<span style=color:#0550ae>&gt;</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>        __overlay__ <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            th02<span style=color:#f6f8fa;background-color:#82071e>@</span><span style=color:#0550ae>40</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>              compatible <span style=color:#0550ae>=</span> <span style=color:#0a3069>&#34;cherie,th02&#34;</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>              reg <span style=color:#0550ae>=</span> <span style=color:#0550ae>&lt;</span><span style=color:#0550ae>0x40</span><span style=color:#0550ae>&gt;</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>              status <span style=color:#0550ae>=</span> <span style=color:#0a3069>&#34;okay&#34;</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>            <span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>        <span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>本次實作使用 Raspi 3B 板子，其中有兩組 I2C BUS：<code>i2c0</code> for GPU (GPIO 0, GPIO 1) 和 <code>i2c1</code> for CPU (GPIO 2, GPIO 3)，一般 i2c sensor 設備使用 <code>i2c1</code> bus 即可。</p><p>而代表 I2C device 的抽象結構，在 linux kernel 正式名稱叫做 <code>i2c_client</code>：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> i2c_client <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>short</span> flags<span style=color:#1f2328>;</span>		<span style=color:#57606a>/* div., see below		*/</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#define I2C_CLIENT_PEC		0x04	</span><span style=color:#57606a>/* Use Packet Error Checking */</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define I2C_CLIENT_TEN		0x10	</span><span style=color:#57606a>/* we have a ten bit chip address */</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>					<span style=color:#57606a>/* Must equal I2C_M_TEN below */</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#define I2C_CLIENT_SLAVE	0x20	</span><span style=color:#57606a>/* we are the slave */</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define I2C_CLIENT_HOST_NOTIFY	0x40	</span><span style=color:#57606a>/* We want to use I2C host notify */</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define I2C_CLIENT_WAKE		0x80	</span><span style=color:#57606a>/* for board_info; true iff can wake */</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define I2C_CLIENT_SCCB		0x9000	</span><span style=color:#57606a>/* Use Omnivision SCCB protocol */</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>					<span style=color:#57606a>/* Must match I2C_M_STOP|IGNORE_NAK */</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>unsigned</span> <span style=color:#cf222e>short</span> addr<span style=color:#1f2328>;</span>		<span style=color:#57606a>/* chip address - NOTE: 7bit	*/</span>
+</span></span><span style=display:flex><span>					<span style=color:#57606a>/* addresses are stored in the	*/</span>
+</span></span><span style=display:flex><span>					<span style=color:#57606a>/* _LOWER_ 7 bits		*/</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>char</span> name<span style=color:#1f2328>[</span>I2C_NAME_SIZE<span style=color:#1f2328>];</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> i2c_adapter <span style=color:#0550ae>*</span>adapter<span style=color:#1f2328>;</span>	<span style=color:#57606a>/* the adapter we sit on	*/</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> device dev<span style=color:#1f2328>;</span>		<span style=color:#57606a>/* the device structure		*/</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> init_irq<span style=color:#1f2328>;</span>			<span style=color:#57606a>/* irq set at initialization	*/</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>int</span> irq<span style=color:#1f2328>;</span>			<span style=color:#57606a>/* irq issued by device		*/</span>
+</span></span><span style=display:flex><span>	<span style=color:#cf222e>struct</span> list_head detected<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#if IS_ENABLED(CONFIG_I2C_SLAVE)
+</span></span></span><span style=display:flex><span>	<span style=color:#cf222e>i2c_slave_cb_t</span> slave_cb<span style=color:#1f2328>;</span>	<span style=color:#57606a>/* callback for slave mode	*/</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#endif
+</span></span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>可以看到其 structure 包含 adapter (I2C bus) 和 general device struct。以 Th02 sensor 為例，i2c_client 就是 Th02 sensor 的抽象設備層，其中 sensor 接在 I2C1 bus 上，此 bus 在 raspi 3B 是指 bcm2835-i2c bus driver。另外，我們所撰寫的 device tree node 描述則會在 struct device。</p><p><img src=/posts/i2c-driver_2.png alt></p><h2 id=th02-device-driver>Th02 Device Driver</h2><p>註冊好 device，接下來就是實作 I2C device driver 來進行 I2C device initialization。Th02 device driver 最重要的職責就是在 I2C device initialization 階段生成 iio device driver，並且建立起 iio device driver 與 i2c client 的關聯，如此一來 iio device driver 就能針對指定 i2c client 下指令。</p><p>我們利用 device struct 的 private_data，將 i2c_client 放入 iio device driver 的 device private_data 中，即可在後續流程中使用。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// custom struct th02_device
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> iio_dev <span style=color:#0550ae>*</span>th02_iio <span style=color:#0550ae>=</span> <span style=color:#6639ba>devm_iio_device_alloc</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>client<span style=color:#0550ae>-&gt;</span>dev<span style=color:#1f2328>,</span> <span style=color:#cf222e>sizeof</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> th02_device<span style=color:#1f2328>));</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/posts/i2c-driver_3.png alt></p><p>其中可以注意到，透過 <code>devm_iio_device_alloc</code> 生成 iio device driver(struct iio_dev)， iio device driver 的 device->parent 會指向 I2C device，這意味著也可以使用 container_of 的方式來取得 i2c_client。</p><h2 id=iio-device-driver>iio device driver</h2><p>最後一個步驟就是實作 iio device driver，包含：</p><ol><li>設定 <code>iio_chan_spec</code>，以讓 iio subSystem 來建立 file node 供 user space 操作</li><li>實作 <code>iio_info.read_raw</code> function</li></ol><p>由於 Th02 sensor 只提供濕度和溫度的測量，因此設定為：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>const</span> <span style=color:#cf222e>struct</span> iio_chan_spec th02_channels<span style=color:#1f2328>[]</span> <span style=color:#0550ae>=</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>		<span style=color:#1f2328>.</span>type <span style=color:#0550ae>=</span> IIO_TEMP<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>		<span style=color:#1f2328>.</span>info_mask_separate <span style=color:#0550ae>=</span> <span style=color:#6639ba>BIT</span><span style=color:#1f2328>(</span>IIO_CHAN_INFO_PROCESSED<span style=color:#1f2328>),</span>
+</span></span><span style=display:flex><span>	<span style=color:#1f2328>},</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>{</span> <span style=color:#1f2328>.</span>type <span style=color:#0550ae>=</span> IIO_HUMIDITYRELATIVE<span style=color:#1f2328>,</span>
+</span></span><span style=display:flex><span>		<span style=color:#1f2328>.</span>info_mask_separate <span style=color:#0550ae>=</span> <span style=color:#6639ba>BIT</span><span style=color:#1f2328>(</span>IIO_CHAN_INFO_PROCESSED<span style=color:#1f2328>),</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>從 <code>IIO_HUMIDITYRELATIVE</code> 和 <code>IIO_TEMP</code> 就可以看到 iio system 將常見的測量類別都已定義好，對開發者來說相當方便。</p><p>再來就是根據 Th02 sensor document 來實作 <code>iio_info.read_raw</code>，完成讀取濕度、溫度等流程。以讀取溫度為例，其流程為：</p><ol><li>Set START (D0) and TEMP (D4) in CONFIG (register 0x03) to begin a new conversion, i.e., write CONFIG with 0x11</li><li>Poll RDY (D0) in STATUS (register 0) until it is low (=0)</li><li>Read the upper and lower bytes of the temperature value from DATAh and DATAl (registers 0x01 and 0x02)</li></ol><p>Linux kernel 已有封裝好的 function <code>i2c_master_send</code> 與 <code>i2c_master_recv</code> 可供使用，因此搭配上面 document 流程就能夠透過 i2c bus protocol 下達正確指令。</p><p>以 read status 為例，要先寫入 Th02 <code>STATUS</code> address pointer，接著再進行 status value 的讀取。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>int</span> <span style=color:#6639ba>read_status</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> i2c_client <span style=color:#0550ae>*</span>client<span style=color:#1f2328>,</span> u8 <span style=color:#0550ae>*</span>status<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>int</span> ret<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    u8 reg <span style=color:#0550ae>=</span> TH02_STATUS<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    ret <span style=color:#0550ae>=</span> <span style=color:#6639ba>i2c_master_send</span><span style=color:#1f2328>(</span>client<span style=color:#1f2328>,</span> <span style=color:#0550ae>&amp;</span>reg<span style=color:#1f2328>,</span> <span style=color:#0550ae>1</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>ret <span style=color:#0550ae>&lt;</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#6639ba>dev_err</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>client<span style=color:#0550ae>-&gt;</span>dev<span style=color:#1f2328>,</span> <span style=color:#0a3069>&#34;%s: failed to send data</span><span style=color:#0a3069>\n</span><span style=color:#0a3069>&#34;</span><span style=color:#1f2328>,</span> __func__<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#cf222e>return</span> ret<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>    ret <span style=color:#0550ae>=</span> <span style=color:#6639ba>i2c_master_recv</span><span style=color:#1f2328>(</span>client<span style=color:#1f2328>,</span> status<span style=color:#1f2328>,</span> <span style=color:#0550ae>1</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>ret <span style=color:#0550ae>&lt;</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#6639ba>dev_err</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>client<span style=color:#0550ae>-&gt;</span>dev<span style=color:#1f2328>,</span> <span style=color:#0a3069>&#34;%s: failed to receive data</span><span style=color:#0a3069>\n</span><span style=color:#0a3069>&#34;</span><span style=color:#1f2328>,</span> __func__<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#cf222e>return</span> ret<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>return</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=source-code>Source code</h2><p>完整 source code 可以參考：
+<a href=https://github.com/YuShuanHsieh/th02_device_driver>https://github.com/YuShuanHsieh/th02_device_driver</a></p><p>已在 raspi 3B 板子上測試過，如果在使用時出現 error，可以看看 i2c bus 是否有 enable，並且是否有載入 industrialio module。</p><h2 id=結論>結論</h2><p>老實說有蠻多內容想講的，包含 iio system、i2c structure 等。不過這幾個內容都相當龐大，如果都打出來怕有點偏離主題，因此只提及實作的部分，後續再來整理各細節。網路上可以找到相當多 Linux kernel 解析，不過看來看去其實蠻抽象的，希望用實際例子能讓這些抽象概念具現化，像是 i2c adapter ，如果根據板子深入研究，就可以發現實作 adapter 的 driver，如此一來就可以很清楚地了解實際是如何運作的。</p></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2021-01-26-lab3_2/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>CSE 506 Lab 3 - Interrupts</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2021-02-18-l1-cache-arm/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>L1 Cache architecture in ARM</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

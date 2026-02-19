@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>DevOps on Cherie's Tech Blog</title><link>https://yushuanhsieh.github.io/categories/devops/</link><description>Recent content in DevOps on Cherie's Tech Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 04 Sep 2020 08:00:00 +0800</lastBuildDate><atom:link href="https://yushuanhsieh.github.io/categories/devops/index.xml" rel="self" type="application/rss+xml"/><item><title>Vault Initialization and Keys Security</title><link>https://yushuanhsieh.github.io/posts/2020-09-04-vault-security/</link><pubDate>Fri, 04 Sep 2020 08:00:00 +0800</pubDate><guid>https://yushuanhsieh.github.io/posts/2020-09-04-vault-security/</guid><description>&lt;h2 id="預備知識"&gt;預備知識&lt;/h2&gt;
+&lt;p&gt;在閱讀下方內容之前，建議先對 Vault 架構有個基本了解，相關官方文章如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://www.vaultproject.io/docs/internals/architecture"&gt;Vault Architecture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.vaultproject.io/docs/internals/rotation"&gt;Vault Key Rotation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.vaultproject.io/docs/concepts/seal"&gt;Vault Seal/Unseal&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;另外， &lt;code&gt;Barrier&lt;/code&gt; 這個元件在 Vault 相當重要，在 &lt;a href="https://www.vaultproject.io/docs/internals/architecture"&gt;Vault Architecture&lt;/a&gt; 頁面中有提及，可以先了解其用意，再來看它是如何被實現。&lt;/p&gt;
+&lt;h2 id="問題"&gt;問題&lt;/h2&gt;
+&lt;p&gt;Vault 在進行 unseal 流程時，其中最重要的就是將加密過的 master key 解密，接著再利用 master key 解出 encryption Key，並且建立起 barrier 防護，讓 storage backend 的資料可以安全地來往於 Vault server 與 storage backend 之間。&lt;/p&gt;</description></item></channel></rss>

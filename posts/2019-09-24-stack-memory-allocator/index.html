@@ -1,0 +1,222 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>Implement Memory Allocator — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>Implement Memory Allocator</h1><div class=post-meta><time datetime=2019-09-24>September 24, 2019</time>
+<span class=separator>·</span>
+<span class=reading-time>9 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/c/>C</a></div></header><nav class=table-of-contents><h2>Table of Contents</h2><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#原因>原因</a><ul><li><a href=#1-為什麼一定要有-dynamic-memory-allocation>1. 為什麼一定要有 dynamic memory allocation</a></li><li><a href=#example-for-user-space-memory-allocator>Example for User-Space Memory Allocator</a></li></ul></li><li><a href=#implement-memory-allocator>Implement Memory Allocator</a><ul><li><a href=#stack-based-allocator>Stack-Based Allocator</a></li><li><a href=#advantages>Advantages</a></li><li><a href=#disadvantages>Disadvantages</a></li><li><a href=#implementation>Implementation</a><ul><li><a href=#init-allocator>Init allocator</a></li><li><a href=#allocate-method>allocate method</a></li><li><a href=#deallocate-method>deallocate method</a></li></ul></li></ul></li><li><a href=#references>References</a></li></ul></nav></nav><div class=post-content><h2 id=前言>前言</h2><p>在很多程式語言都會看到 memory allocator，也可以看到陸續發表的 allocator 實作方式，例如 microsoft <a href=https://github.com/microsoft/mimalloc>mimalloc</a>。與其用看 source code 的方式來了解其原理，倒不如從基本學起，並且從實作過程中了解到為什麼他們要這樣設計 allocator。</p><h2 id=原因>原因</h2><p>在程式開始執行時，我們可以預期會有兩塊 default memory space (system stack, heap) 分配，其中 system stack 負責存放 function return address 或是 local variable 等，而 processor 的 stack pointer 會指向 system stack 的初始位置(可能往下長或往上長)。另外的 heap 則是供 dynamic memory allocation 使用。</p><blockquote><p>Dynamic Memory Allocation: The mechanism by which storage/memory/cells can be allocated to variables during the run time</p></blockquote><p>(圖待補)</p><h3 id=1-為什麼一定要有-dynamic-memory-allocation>1. 為什麼一定要有 dynamic memory allocation</h3><p>為了節省記憶體使用。很多時候，要等到執行當下才能夠確定是否需要此記憶體空間。最簡單的例子就是 array <code>int char[255];</code> ，如果一開始就 allocate 很大一塊 array space，結果實際使用卻不需要這麼多，就顯得有些浪費。</p><p>既然 dynamic memory allocation 如此重要，那我們就需要一個工具管理這塊 heap 空間，讓這有限的空間可以被有效運用，而這也就是 Memory Allocator 的職責所在。</p><p>有效運用這詞感覺很抽象，簡單來說就是如果隨意將 object 配置 在 heap 任意處，一開始可能用得很開心，等到後來會造成 fragmentation 問題，太多散布的小空間導致 size 較大的 object 無法被分配。</p><p>另外，要善用記憶體，除了分配在適當的位置之外，還需要妥善地被釋放掉。例如我們在 C 中手動 <code>free</code> 掉佔用的記憶體，或著是其他高階語言有提供 garbage collection 機制，都是此類的體現。</p><h3 id=example-for-user-space-memory-allocator>Example for User-Space Memory Allocator</h3><p>當我們使用特定程式語言開發應用程式時，該語言其實就有對應的 user space memory allocator。舉例來說，C 程式常常使用 malloc，其 default memory allocator 實作就是 <code>ptmalloc</code>；而 Go 程式則是 <code>TCMalloc</code> 改良版。</p><h2 id=implement-memory-allocator>Implement Memory Allocator</h2><h3 id=stack-based-allocator>Stack-Based Allocator</h3><p>以上概述了一些觀念，接下來就實做簡單的 memory allocator 來加深印象。首先最簡單又最常用的莫過於 Stack-Based Allocator。例如 system stack 就是這類型的 allocator。</p><p>在一些情況下，我們可以自己實作 stack allocator 來因應自己的應用場景。例如在 <code>Game Engine Architecture</code> 這本書中有提到，簡單 single thread 關卡制的遊戲，很適合使用這類 memory allocator。當一個關卡開始時，allocate 該關卡資源，玩家前往下一個關卡，只需要把 stack pointer 退回到初始點，然後 allocate 下一個關卡的資源就好。</p><p>這樣聽起來很基本，不過想想，如果這種可預期的 memory allocation 行為，可以使用更單純的 allocator 來處理，對於效能上就能有顯著地提升。</p><p>當然 stack allocator 還有更多變化用法，例如 <code>double-end stack allocator</code>。一樣是舉遊戲開發為例子:</p><p><img src=https://i.imgur.com/s8ohZP1.png alt></p><p>當玩家在破 A 關卡的時候，可以先將壓縮過的關卡 B load 到 stack 的另一端，然後玩家破完 A 關後，就可以直接將關卡 A pop 掉，解壓縮關卡 B 並 allocate 到一端 stack，接著關卡 C 依序處理。</p><h3 id=advantages>Advantages</h3><ol><li>避免 external fragmentation
+由於是連續性地 allocate 或 free 記憶體，因此不會出現 external fragmentation 的狀況。</li></ol><blockquote><p>External fragmentation arises when free memory is separated into small blocks and is interspersed by allocated memory.</p></blockquote><p><img src=https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/External_Fragmentation.svg/900px-External_Fragmentation.svg.png alt=resource></p><p>至於 internal fragmentation 部分，就要看具體實作方式，如果在 push 階段 allocate 固定 size 但是實際 object 大小不一時，就會產生 internal fragmentation，但是如果這個 allocator 是用在特定情況下，且 memory usage 已妥善計算過，那就可以避免此狀況發生。</p><ol start=2><li>實作簡單</li></ol><h3 id=disadvantages>Disadvantages</h3><ol><li><p>必須依照特定順序 Free objects。
+畢竟是 stack 結構，所以要依照 LIFO 順序來 free 資源。</p></li><li><p>Resource Contention
+因為實作方式簡單(當然也可以做到很複雜啦&mldr;)，所以無可避免就會有 resource contention 問題，更不用說如果 multi-thread 一起使用，並且同時 free 資源的情況下，很容易就會順序出錯。所以前面才說這是用於簡單線性遊戲，這樣就可以少去這類問題。</p></li></ol><h3 id=implementation>Implementation</h3><p>最後就來實作 stack allocator。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> allocate_state <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>struct</span> allocate_state <span style=color:#0550ae>*</span>next<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span>addr<span style=color:#1f2328>;</span> <span style=color:#57606a>// record the start address for validation.
+</span></span></span><span style=display:flex><span>  <span style=color:#cf222e>size_t</span> n<span style=color:#1f2328>;</span> <span style=color:#57606a>// record the size of allocated object.
+</span></span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> stackAllocator <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span>top_addr<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span>bottom_addr<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>size_t</span> length<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>struct</span> allocate_state <span style=color:#0550ae>*</span>head<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>pthread_mutex_t</span> mu<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// A fake resource for test
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> game_resource <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>int</span> level<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>char</span> name<span style=color:#1f2328>[</span><span style=color:#0550ae>50</span><span style=color:#1f2328>];</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>extern</span> <span style=color:#cf222e>bool</span> <span style=color:#6639ba>init_allocator</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> stackAllocator <span style=color:#0550ae>*</span>allocator<span style=color:#1f2328>,</span> <span style=color:#cf222e>size_t</span> length<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>extern</span> <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span><span style=color:#6639ba>allocate</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> stackAllocator <span style=color:#0550ae>*</span>allocator<span style=color:#1f2328>,</span> <span style=color:#cf222e>size_t</span> n<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>extern</span> <span style=color:#cf222e>bool</span> <span style=color:#6639ba>deallocate</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> stackAllocator <span style=color:#0550ae>*</span>allocator<span style=color:#1f2328>,</span> <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>addr<span style=color:#1f2328>);</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=init-allocator>Init allocator</h4><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>bool</span> <span style=color:#6639ba>init_allocator</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> stackAllocator <span style=color:#0550ae>*</span>allocator<span style=color:#1f2328>,</span> <span style=color:#cf222e>size_t</span> length<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span>addr<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  allocator<span style=color:#0550ae>-&gt;</span>length <span style=color:#0550ae>=</span> length<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  allocator<span style=color:#0550ae>-&gt;</span>head <span style=color:#0550ae>=</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>pthread_mutex_init</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>allocator<span style=color:#0550ae>-&gt;</span>mu<span style=color:#1f2328>,</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#57606a>// Allocate a memory pool.
+</span></span></span><span style=display:flex><span>  addr <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span><span style=color:#6639ba>mmap</span><span style=color:#1f2328>(</span><span style=color:#6639ba>NULL</span><span style=color:#1f2328>,</span> allocator<span style=color:#0550ae>-&gt;</span>length<span style=color:#1f2328>,</span> PROT_READ<span style=color:#0550ae>|</span>PROT_WRITE<span style=color:#1f2328>,</span> MAP_SHARED<span style=color:#0550ae>|</span>MAP_ANONYMOUS<span style=color:#1f2328>,</span> <span style=color:#0550ae>-</span><span style=color:#0550ae>1</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>addr <span style=color:#0550ae>==</span> MAP_FAILED<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>perror</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;init allocator&#34;</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>return</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  allocator<span style=color:#0550ae>-&gt;</span>top_addr <span style=color:#0550ae>=</span> addr<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  allocator<span style=color:#0550ae>-&gt;</span>bottom_addr <span style=color:#0550ae>=</span> allocator<span style=color:#0550ae>-&gt;</span>top_addr <span style=color:#0550ae>+</span> allocator<span style=color:#0550ae>-&gt;</span>length<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>return</span> <span style=color:#6639ba>true</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=allocate-method>allocate method</h4><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span><span style=color:#6639ba>allocate</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> stackAllocator <span style=color:#0550ae>*</span>allocator<span style=color:#1f2328>,</span> <span style=color:#cf222e>size_t</span> n<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>pthread_mutex_lock</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>allocator<span style=color:#0550ae>-&gt;</span>mu<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>char</span> <span style=color:#0550ae>*</span>temp <span style=color:#0550ae>=</span> allocator<span style=color:#0550ae>-&gt;</span>top_addr<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>temp <span style=color:#0550ae>+</span> n <span style=color:#0550ae>&gt;=</span> allocator<span style=color:#0550ae>-&gt;</span>bottom_addr<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>DEBUG</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;No more space for allocation&#34;</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    temp <span style=color:#0550ae>=</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>goto</span> unlock<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>  allocator<span style=color:#0550ae>-&gt;</span>top_addr <span style=color:#0550ae>+=</span> n<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>size_t</span> size <span style=color:#0550ae>=</span> <span style=color:#cf222e>sizeof</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> allocate_state<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  allocator<span style=color:#0550ae>-&gt;</span>bottom_addr <span style=color:#0550ae>-=</span> size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>struct</span> allocate_state<span style=color:#0550ae>*</span> state <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> allocate_state <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span> allocator<span style=color:#0550ae>-&gt;</span>bottom_addr<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  state<span style=color:#0550ae>-&gt;</span>next <span style=color:#0550ae>=</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  state<span style=color:#0550ae>-&gt;</span>addr <span style=color:#0550ae>=</span> temp<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  state<span style=color:#0550ae>-&gt;</span>n <span style=color:#0550ae>=</span> n<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>allocator<span style=color:#0550ae>-&gt;</span>head <span style=color:#0550ae>==</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    allocator<span style=color:#0550ae>-&gt;</span>head <span style=color:#0550ae>=</span> state<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>else</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    state<span style=color:#0550ae>-&gt;</span>next <span style=color:#0550ae>=</span> allocator<span style=color:#0550ae>-&gt;</span>head<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    allocator<span style=color:#0550ae>-&gt;</span>head <span style=color:#0550ae>=</span> state<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#900;font-weight:700>unlock</span><span style=color:#1f2328>:</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>pthread_mutex_unlock</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>allocator<span style=color:#0550ae>-&gt;</span>mu<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>return</span> temp<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=deallocate-method>deallocate method</h4><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>bool</span> <span style=color:#6639ba>deallocate</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> stackAllocator <span style=color:#0550ae>*</span>allocator<span style=color:#1f2328>,</span> <span style=color:#cf222e>void</span> <span style=color:#0550ae>*</span>addr<span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>bool</span> result <span style=color:#0550ae>=</span> <span style=color:#6639ba>false</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>pthread_mutex_lock</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>allocator<span style=color:#0550ae>-&gt;</span>mu<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>allocator<span style=color:#0550ae>-&gt;</span>head <span style=color:#0550ae>==</span> <span style=color:#6639ba>NULL</span><span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>DEBUG</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;allocate state is null&#34;</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>goto</span> unlock<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>if</span> <span style=color:#1f2328>(</span>allocator<span style=color:#0550ae>-&gt;</span>head<span style=color:#0550ae>-&gt;</span>addr <span style=color:#0550ae>!=</span> addr<span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6639ba>DEBUG</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;addrsss mismatched: target %p state %p&#34;</span><span style=color:#1f2328>,</span> addr<span style=color:#1f2328>,</span> allocator<span style=color:#0550ae>-&gt;</span>head<span style=color:#0550ae>-&gt;</span>addr<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>goto</span> unlock<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  allocator<span style=color:#0550ae>-&gt;</span>top_addr <span style=color:#0550ae>-=</span> allocator<span style=color:#0550ae>-&gt;</span>head<span style=color:#0550ae>-&gt;</span>n<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>size_t</span> size <span style=color:#0550ae>=</span> <span style=color:#cf222e>sizeof</span><span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> allocate_state<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>  allocator<span style=color:#0550ae>-&gt;</span>bottom_addr <span style=color:#0550ae>+=</span> size<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  allocator<span style=color:#0550ae>-&gt;</span>head <span style=color:#0550ae>=</span> allocator<span style=color:#0550ae>-&gt;</span>head<span style=color:#0550ae>-&gt;</span>next<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  result <span style=color:#0550ae>=</span> <span style=color:#6639ba>true</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#900;font-weight:700>unlock</span><span style=color:#1f2328>:</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>pthread_mutex_unlock</span><span style=color:#1f2328>(</span><span style=color:#0550ae>&amp;</span>allocator<span style=color:#0550ae>-&gt;</span>mu<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>return</span> result<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=references>References</h2><ol><li><a href=https://techtalk.intersec.com/2014/09/memory-part-6-optimizing-the-fifo-and-stack-allocators>Memory – Part 6: Optimizing the FIFO and Stack allocators</a></li><li><a href=https://en.wikipedia.org/wiki/Memory_management>Memory management</a></li><li>Game Engine Architecture</li><li><a href="https://www.youtube.com/watch?v=LIb3L4vKZ7U">std::allocator is to allocation what std::vector is to vexation</a></li><li><a href=https://techtalk.intersec.com/2013/10/memory-part-4-intersecs-custom-allocators>Memory – Part 4: Intersec’s custom allocators</a></li></ol></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2019-09-07-201908-study/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>2019/08月份自我學習回顧</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2019-10-05-study/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>2019/09 月份自我學習回顧</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

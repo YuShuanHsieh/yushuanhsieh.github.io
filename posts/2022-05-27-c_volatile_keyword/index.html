@@ -1,0 +1,200 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>C volatile Keyword — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>C volatile Keyword</h1><div class=post-meta><time datetime=2022-05-26>May 26, 2022</time>
+<span class=separator>·</span>
+<span class=reading-time>7 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/c/>C</a></div></header><div class=post-content><p>我們在開發 device driver 或是 embedded system applications 時很常用到 <code>volatile</code> 來宣告定義變數，藉此提示 compiler 此變數可能會被硬體或是 interrupt function 修改，因此當 compiler 進行 code optimization 時，要確保涉及到 <code>volatile</code> 變數的操作不會被更動到。（舉例來說，當 compiler 在進行分析時，發現此變數涉及的操作只有讀取但沒有寫入時，就有可能調整執行順序，以改善程式效能）。雖然這對開發者來說可能是很基本的知識，但我們最近還是踩到了小坑，因此這篇再一次的透過 C11 標準來複習 volatile 定義，並且說明可能會有的疑問。</p><h2 id=c11-標準下的-volatile>C11 標準下的 volatile</h2><p>首先，先從 C11 標準來了解 volatile 修飾字 (<a href="https://www.phoronix.com/scan.php?page=news_item&amp;px=Linux-Kernel-C89-To-C11">Linux Kernel Moving Ahead With Going From C89 To C11 Code</a>)。</p><blockquote><p>5.1.2.3 Program execution</p><p><strong>Accessing a volatile object</strong>, modifying an object, modifying a file, or calling a function
+that does any of those operations are all <strong>side effects</strong>. which are changes in the state of the execution environment.</p><p>The presence of a sequence point between the evaluation of expressions A and B implies that every value computation and side effect associated with A is sequenced before every value computation and side effect associated with B.</p></blockquote><p>5.1.2.3 這段比較重要的地方在於 side effects 定義與須遵守的執行順序。</p><blockquote><p>6.7.3 Type qualifiers</p><p>If an attempt is made to refer to an object defined with a volatile-qualified type through use of an lvalue with non-volatile-qualified type, <strong>the behavior is undefined</strong>.</p></blockquote><p>這邊 undefined behavior 如以下例子：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>test</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span> <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#57606a>// example: 1
+</span></span></span><span style=display:flex><span>    <span style=color:#cf222e>volatile</span> <span style=color:#cf222e>int</span> number <span style=color:#0550ae>=</span> <span style=color:#0550ae>2</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>volatile</span> <span style=color:#cf222e>int</span> <span style=color:#0550ae>*</span>number_ptr <span style=color:#0550ae>=</span> <span style=color:#0550ae>&amp;</span>number<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>int</span> copy_number <span style=color:#0550ae>=</span> <span style=color:#0550ae>*</span>number_ptr<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    copy_number <span style=color:#0550ae>=</span> <span style=color:#0550ae>30</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>return</span> copy_number<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>進行 -O2 編譯後 (x86_64 gcc 12.1)，可以看到在經過 lvalue conversion 後， volatile qualifier 被移除。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#900;font-weight:700>test</span><span style=color:#1f2328>:</span>
+</span></span><span style=display:flex><span>  mov     DWORD PTR <span style=color:#1f2328>[</span>rsp<span style=color:#0550ae>-</span><span style=color:#0550ae>4</span><span style=color:#1f2328>],</span> <span style=color:#0550ae>2</span>
+</span></span><span style=display:flex><span>  mov     eax<span style=color:#1f2328>,</span> DWORD PTR <span style=color:#1f2328>[</span>rsp<span style=color:#0550ae>-</span><span style=color:#0550ae>4</span><span style=color:#1f2328>]</span>
+</span></span><span style=display:flex><span>  mov     eax<span style=color:#1f2328>,</span> <span style=color:#0550ae>30</span>
+</span></span><span style=display:flex><span>  ret
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>An object that has volatile-qualified type may be modified in ways unknown to the implementation or have other unknown side effects. Therefore any expression referring to such an object shall be evaluated strictly according to the rules of the abstract machine, as described in 5.1.2.3. What constitutes an access to an object that has volatile-qualified type is <strong>implementation-defined</strong>.</p><p>A volatile declaration may be used to describe an object corresponding to a <strong>memory-mapped input/output port</strong> or an object <strong>accessed by an asynchronously interrupting function</strong>. Actions on objects so declared shall <strong>not be ‘‘optimized out’’ by an implementation</strong> or reordered except as permitted by the rules for evaluating expressions.</p></blockquote><h2 id=valitile-qualifiers-in-gnu-gcc>valitile qualifiers in GNU GCC</h2><p>在 C11 標準中可以看到一些是由 compiler 定義的內容，因此 compiler 就會針對這部分進行實作補充說明。以 GNU GCC 為例，像是 an access to an object that has volatile-qualified type，GNU GCC 的文件就有針對這部分描述具體實作方式 <a href=https://gcc.gnu.org/onlinedocs/gcc/Volatiles.html#Volatiles>6.46 When is a Volatile Object Accessed?</a>。</p><h3 id=volatile-declaration>volatile declaration</h3><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// Example 1:
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> s <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>volatile</span> <span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span> <span style=color:#57606a>// only a is a volatile-qualified object
+</span></span></span><span style=display:flex><span>  <span style=color:#cf222e>int</span> b<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// Example 2:
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>struct</span> z <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>int</span> b<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>// all members of the aggregate type are volatile-qualified
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>volatile</span> <span style=color:#cf222e>struct</span> z example<span style=color:#1f2328>;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=volatile-qualified-type-casting>volatile-qualified type casting</h3><p>volatile-qualified type casting 規則曾經在 GNU GCC 4.x 版本上產生爭議。在 <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=22278">gcc -O2 discards cast to volatile</a> 中提到，當經過 <code>-O2</code> code optimization 後，object 的 volatile qualifer 遺失，造成編譯出來的程式發生問題，其主要原因在於 pointer to volatile-qualified type 和 pointer to non-volatile-qualified type 轉換的實作差異，此問題已在後續版本中修復。</p><h4 id=pointer-to-volatile-qualified-type---pointer-to-non-volatile-qualified-type>pointer to volatile-qualified type -> pointer to non-volatile-qualified type</h4><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> data <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>int</span> b<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>volatile_test</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>volatile</span> <span style=color:#cf222e>struct</span> data d <span style=color:#0550ae>=</span> <span style=color:#1f2328>{</span><span style=color:#0550ae>10</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>volatile</span> <span style=color:#cf222e>struct</span> data <span style=color:#0550ae>*</span>d_ptr <span style=color:#0550ae>=</span> <span style=color:#0550ae>&amp;</span>d<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#57606a>// warning: discards &#39;volatile&#39;
+</span></span></span><span style=display:flex><span>  <span style=color:#cf222e>struct</span> data <span style=color:#0550ae>*</span>non_d_ptr <span style=color:#0550ae>=</span> <span style=color:#1f2328>(</span><span style=color:#cf222e>struct</span> data <span style=color:#0550ae>*</span><span style=color:#1f2328>)</span>d_ptr<span style=color:#1f2328>;</span> 
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=pointer-to-non-volatile-qualified-type---pointer-to-volatile-qualified-type>pointer to non-volatile-qualified type -> pointer to volatile-qualified type</h4><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> data <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>int</span> b<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>volatile_test</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>struct</span> data d <span style=color:#0550ae>=</span> <span style=color:#1f2328>{</span><span style=color:#0550ae>10</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>struct</span> data <span style=color:#0550ae>*</span>d_ptr <span style=color:#0550ae>=</span> <span style=color:#0550ae>&amp;</span>d<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>volatile</span> <span style=color:#cf222e>struct</span> data <span style=color:#0550ae>*</span>non_d_ptr <span style=color:#0550ae>=</span> d_ptr<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>return</span> non_d_ptr<span style=color:#0550ae>-&gt;</span>a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>在 x86_64 gcc 12.1 編譯(-O2)後，其 mechine code 如下，可以知道有正確地轉換為 volatile-qualified type。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>volatile_test:
+</span></span><span style=display:flex><span>  mov     DWORD PTR <span style=color:#0550ae>[</span>rsp-12<span style=color:#0550ae>]</span>, <span style=color:#0550ae>10</span>
+</span></span><span style=display:flex><span>  mov     eax, DWORD PTR <span style=color:#0550ae>[</span>rsp-12<span style=color:#0550ae>]</span>
+</span></span><span style=display:flex><span>  ret
+</span></span></code></pre></td></tr></table></div></div><p>但 x86_64 gcc 4.6.4 編譯(-O2)後，其 mechine code 顯示並沒有透過 load 行為取得值，volatile qualifer 遺失。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>volatile_test:
+</span></span><span style=display:flex><span>  mov     eax, <span style=color:#0550ae>10</span>
+</span></span><span style=display:flex><span>  ret
+</span></span></code></pre></td></tr></table></div></div><h2 id=bug>Bug</h2><p>前面複習了 volatile，但是實際上我們產生 bug 的根本原因與 volatile 定義或實作方式並沒有太大關係，主要在於 GNU GCC 在 code optimization 階段，進行 local variable allocation 時，會以 register 為主，而如果剛好定義了一個 volatile-qualified object，其大小能放在 register，此時也會造成 volatile qualifer 的遺失。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> data <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>volatile</span> <span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>int</span> b<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>volatile_test</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>   
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>struct</span> data data <span style=color:#0550ae>=</span> <span style=color:#1f2328>{</span><span style=color:#0550ae>10</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>return</span> data<span style=color:#1f2328>.</span>a <span style=color:#0550ae>+</span> data<span style=color:#1f2328>.</span>a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>在 x86_64 gcc 12.1 編譯(-O2)後，其 mechine code 為：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>volatile_test:
+</span></span><span style=display:flex><span>  mov     eax, <span style=color:#0550ae>20</span>
+</span></span><span style=display:flex><span>  ret
+</span></span></code></pre></td></tr></table></div></div><p>此 mechine code 跟我們預期的行為不符合，因為 data.a 有 volatile 修飾字，應該要讀取 data.a 地址的值，而不是直接取預設值相加成 20。</p><p>但只要多加一個 member，將其 structure 的大小變成 12 byte，那麼這個變數就會被 allocate 在 stack 上，其編譯出來的結果就會是正確的。</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>struct</span> data <span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>volatile</span> <span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>int</span> b<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>int</span> c<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>volatile_test</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>   
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>struct</span> data data <span style=color:#0550ae>=</span> <span style=color:#1f2328>{</span><span style=color:#0550ae>10</span><span style=color:#1f2328>,</span> <span style=color:#0550ae>20</span><span style=color:#1f2328>};</span>
+</span></span><span style=display:flex><span>    <span style=color:#cf222e>return</span> data<span style=color:#1f2328>.</span>a <span style=color:#0550ae>+</span> data<span style=color:#1f2328>.</span>a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>在 x86_64 gcc 12.1 編譯(-O2)後，其 mechine code 為：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>volatile_test:
+</span></span><span style=display:flex><span>  mov     DWORD PTR <span style=color:#0550ae>[</span>rsp-12<span style=color:#0550ae>]</span>, <span style=color:#0550ae>10</span>
+</span></span><span style=display:flex><span>  mov     eax, DWORD PTR <span style=color:#0550ae>[</span>rsp-12<span style=color:#0550ae>]</span>
+</span></span><span style=display:flex><span>  mov     edx, DWORD PTR <span style=color:#0550ae>[</span>rsp-12<span style=color:#0550ae>]</span>
+</span></span><span style=display:flex><span>  add     eax, edx
+</span></span><span style=display:flex><span>  ret
+</span></span></code></pre></td></tr></table></div></div><p>可以看到在 <code>return data.a + data.a;</code> 部分，會讀取 2 次 data.a 地址的值，符合我們預期結果。</p><h2 id=references>References</h2><ol><li><a href=https://gcc.gnu.org/onlinedocs/gcc/Volatiles.html#Volatiles>6.46 When is a Volatile Object Accessed?</a></li><li><a href=https://gcc.gnu.org/onlinedocs/gcc-9.1.0/gcc/Qualifiers-implementation.html>4.10 Qualifiers</a></li></ol></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2022-04-20-crypto_subsystem_async/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>Crypto Subsystem of Linux Kernel - Asynchronous Request Handling Mechanism</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2022-06-27-gem5_simulation/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>Gem5 Simulator - Simulation Mechanism</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>

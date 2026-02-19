@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Game on Cherie's Tech Blog</title><link>https://yushuanhsieh.github.io/categories/game/</link><description>Recent content in Game on Cherie's Tech Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 15 Sep 2017 14:18:11 +0100</lastBuildDate><atom:link href="https://yushuanhsieh.github.io/categories/game/index.xml" rel="self" type="application/rss+xml"/><item><title>Discussing the Action Manager in Cocos2d-x</title><link>https://yushuanhsieh.github.io/posts/2017-09-15-cocos-action-manager/</link><pubDate>Fri, 15 Sep 2017 14:18:11 +0100</pubDate><guid>https://yushuanhsieh.github.io/posts/2017-09-15-cocos-action-manager/</guid><description>&lt;p&gt;&lt;strong&gt;[前言]&lt;/strong&gt;&lt;br&gt;
+前陣子才剛從英國完成論文返回台灣。因為忙論文 / 忙搬家 / 忙調作息，所以好些時間沒有更新相關知識，覺得自己好像停滯了&amp;hellip;明天就是轉職人生的開始，趕緊來繼續惡補Cocos2d-x知識。API使用方式和理解固然很重要，不過我也相當喜歡探討一些運作流程和結構方式，所以文章內容也會比較著重在這部分。這次來看的是有關於node-&amp;gt;runAction(Action* action);之前我寫遊戲時使用完全不同的方式來讓遊戲像素變動，因此會比較想了解引擎是如何讓node根據我們設定的動作來變化。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;[涉及Class]&lt;/strong&gt;&lt;br&gt;
+&lt;code&gt;ActionManager&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;UT_hash_handle&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;[Cocos2d-x Main Loop]&lt;/strong&gt;&lt;br&gt;
+在討論ActionManager之前，先來看一下Cocos2d-x的遊戲主循環：&lt;br&gt;
+![Layout Screenshot]({{ site.url }}/assets/images/mainloop.png)&lt;br&gt;
+從圖中可以看到main loop中透過Schedule先將特定物件(在這邊為nodes)的圖像數據update，然後再繪製出調整後的nodes，這樣就能夠呈現出物品移動的視覺效果了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;[Action Manager]&lt;/strong&gt;&lt;br&gt;
+要讓node產生變化ActionManager和Schedule是非常重要的兩個Class，ActionManager負責管理所有nodes的actions，Schedule則是負責所有物件的update排程。當Director初始化的時候，會產生出ActionManager，並將ActionManager預先排入Schedule中，這樣每次在遊戲迴圈中，就會執行ActionManager 的update function來執行其底下所管理的動作。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3
+&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-c++" data-lang="c++"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;_scheduler &lt;span style="color:#0550ae"&gt;=&lt;/span&gt; &lt;span style="color:#cf222e"&gt;new&lt;/span&gt; &lt;span style="color:#1f2328"&gt;(&lt;/span&gt;std&lt;span style="color:#0550ae"&gt;::&lt;/span&gt;nothrow&lt;span style="color:#1f2328"&gt;)&lt;/span&gt; Scheduler&lt;span style="color:#1f2328"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;_actionManager &lt;span style="color:#0550ae"&gt;=&lt;/span&gt; &lt;span style="color:#cf222e"&gt;new&lt;/span&gt; &lt;span style="color:#1f2328"&gt;(&lt;/span&gt;std&lt;span style="color:#0550ae"&gt;::&lt;/span&gt;nothrow&lt;span style="color:#1f2328"&gt;)&lt;/span&gt; ActionManager&lt;span style="color:#1f2328"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;_scheduler&lt;span style="color:#0550ae"&gt;-&amp;gt;&lt;/span&gt;scheduleUpdate&lt;span style="color:#1f2328"&gt;(&lt;/span&gt;_actionManager&lt;span style="color:#1f2328"&gt;,&lt;/span&gt; Scheduler&lt;span style="color:#0550ae"&gt;::&lt;/span&gt;PRIORITY_SYSTEM&lt;span style="color:#1f2328"&gt;,&lt;/span&gt; &lt;span style="color:#6639ba"&gt;false&lt;/span&gt;&lt;span style="color:#1f2328"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#57606a"&gt;/* Scheduler::PRIORITY_SYSTEM 高優先權 */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;至於ActionManager是如何管理各個node的動作呢？當使用者寫node-&amp;gt;runAction(Action* action);的時候，其實就是把node和指定動作一起加入到ActionManager中。&lt;/p&gt;</description></item></channel></rss>

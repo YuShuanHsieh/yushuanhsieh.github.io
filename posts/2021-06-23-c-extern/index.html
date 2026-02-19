@@ -1,0 +1,193 @@
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A technical blog about software engineering, system design, and modern development practices."><meta name=author content="Cherie Hsieh"><title>C extern keyword — Cherie's Tech Blog</title><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><link rel=stylesheet href="/css/style.css?v=1771486583"></head><body><header class=site-header><div class=header-inner><a href=https://yushuanhsieh.github.io/ class=site-logo><span class=logo-icon>⟨/⟩</span>
+<span class=logo-text>Cherie's Tech Blog</span></a><nav class=site-nav><a href=/ class=nav-link>Home</a>
+<a href=/posts/ class=nav-link>Posts</a>
+<a href=/categories/ class=nav-link>Categories</a>
+<a href=/about/ class=nav-link>About</a></nav><button class=mobile-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span></button></div></header><main class=site-main><article class=single-post><header class=post-header><h1 class=post-title>C extern keyword</h1><div class=post-meta><time datetime=2021-06-23>June 23, 2021</time>
+<span class=separator>·</span>
+<span class=reading-time>8 min read</span></div><div class=post-categories><a href=https://yushuanhsieh.github.io/categories/c/>C</a></div></header><div class=post-content><p>最近在參與面試的時候，我方考了 <code>extern</code> 關鍵字，雖然這個關鍵字很常用，但是很少有應試者答的完整。因為自己也是韌體新手，因此就參照 ISO/IEC 9899:2011(C11) 的標準，把 <code>extern</code> 的定義和用法紀錄一下。</p><h2 id=declaration--definition>Declaration & Definition</h2><p>在討論 extern 之前，先釐清 C 的 declaration 和 definition 差異性。在 C11: 6.7 Declarations 中有提到：</p><blockquote><p><strong>Declaration</strong></p><p>A declaration specifies the interpretation and attributes of a set of identifiers.</p><p><strong>Definition</strong></p><p>A definition of an identifier is a declaration for that identifier that:</p><ul><li>for an object, causes storage to be reserved for that object;</li><li>for a function, includes the function body;</li><li>for an enumeration constant or typedef name, is the (only) declaration of the identifier.</li></ul></blockquote><p>其中明顯的差異，除了 function definition 會包含 body <code>{ }</code> 之外，對 variable 來說，declaration 僅是標示了 variable 的名稱和特性，definition 才會真正分配對應的儲存空間。</p><p>此外，相同 variable 可以多次 declaration，但是 definition 只能有一次。舉例來說：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// parent.h
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#ifndef _PARENT_H
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define _PARENT_H
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>extern</span> <span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span> <span style=color:#57606a>// declaration
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>print_parent</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#endif
+</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// parent.c
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;stdio.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&#34;parent.h&#34;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> a <span style=color:#0550ae>=</span> <span style=color:#0550ae>1</span><span style=color:#1f2328>;</span> <span style=color:#57606a>// definition
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>print_parent</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span> <span style=color:#6639ba>printf</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;parent %d&#34;</span><span style=color:#1f2328>,</span>a<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// child.c
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;stdio.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&#34;parent.h&#34;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> a <span style=color:#0550ae>=</span> <span style=color:#0550ae>2</span><span style=color:#1f2328>;</span> <span style=color:#57606a>// definition
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>print_child</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span><span style=color:#6639ba>printf</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;child %d&#34;</span><span style=color:#1f2328>,</span>a<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>gcc 時會出現：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>/usr/bin/ld: /tmp/ccSHHFEz.o:<span style=color:#0550ae>(</span>.data+0x0<span style=color:#0550ae>)</span>: multiple definition of <span style=color:#0a3069>`</span>a<span style=color:#f6f8fa;background-color:#82071e>&#39;</span><span style=color:#1f2328>;</span> /tmp/ccjpc0mC.o:<span style=color:#0550ae>(</span>.data+0x0<span style=color:#0550ae>)</span>: first defined here
+</span></span><span style=display:flex><span>collect2: error: ld returned <span style=color:#0550ae>1</span> <span style=color:#6639ba>exit</span> status
+</span></span></code></pre></td></tr></table></div></div><p>由於在 <code>parent.c</code> 和 <code>child.c</code> 皆有 <code>a definition</code>，因此 gnu gcc 在 link 階段會產生重複 definition 的錯誤訊息。</p><p>我們把 child.c code 改成：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;stdio.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&#34;parent.h&#34;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>extern</span> <span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span> <span style=color:#57606a>// declaration
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>print_child</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>printf</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;child %d&#34;</span><span style=color:#1f2328>,</span>a<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>即使在 <code>parent.h</code> 和 <code>child.c</code> 都有 <code>extern int a;</code>，但因為兩者都是 declaration，因此可以正確 compile。</p><p>在 C11: 6.2.2 Linkages of identifiers 提到：</p><blockquote><p>An identifier declared in different scopes or in the same scope more than once can be made to refer to the same object or function by a process called linkage.</p></blockquote><p>根據以上敘述，就能知道上述例子可以 compile 成功的原因，及即使在多個 source file 有相同命名的 variable declaration，在 link 階段會將他們關聯為同一個物件。</p><p>我們透過觀察 link map <code>(gcc -Wl,-M)</code> 來查看 <code>variable a</code> link 狀況：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#57606a># section, memory, size</span>
+</span></span><span style=display:flex><span> .data 0x0000000000004010 0x0 /tmp/ccALo656.o <span style=color:#57606a># child.o</span>
+</span></span><span style=display:flex><span> .data 0x0000000000004010 0x4 /tmp/cc3dGS27.o <span style=color:#57606a># parent.o</span>
+</span></span><span style=display:flex><span>       0x0000000000004010     a
+</span></span></code></pre></td></tr></table></div></div><p>由於 <code>a</code> definition 是在 parent.c，因此可以看到 0x4 的空間分配，並且 child.o 和 parent.o 的 variable <code>a</code> 會連結成相同物件。</p><h2 id=linkages-of-identifiers>Linkages of identifiers</h2><p>
+由於 <code>extern</code> 關鍵字與 Linkages 有關係，因此也來複習一下 Linkages：</p><ol><li><strong>external linkage</strong>：一個 identifier 具有 external linkage 屬性時，同一個 program 中不同 translation unit 如果包含此 identifier，則會視為同一個物件。</li><li><strong>internal linkage</strong>：反之，如果是 internal linkage，則同一個 translation unit 的 同名 identifier 會視為同一個物件。</li><li><strong>no linkage</strong>：像是 function 的參數或是 local 變數，則歸類為 no linkage 屬性。</li></ol><p>例子：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#cf222e>int</span> external_var <span style=color:#0550ae>=</span> <span style=color:#0550ae>2</span><span style=color:#1f2328>;</span> <span style=color:#57606a>// external linkage
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>int</span> internal_var <span style=color:#0550ae>=</span> <span style=color:#0550ae>1</span><span style=color:#1f2328>;</span> <span style=color:#57606a>// internal linkage
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>add</span><span style=color:#1f2328>(</span><span style=color:#cf222e>int</span> a<span style=color:#1f2328>,</span> <span style=color:#cf222e>int</span> b<span style=color:#1f2328>)</span> <span style=color:#57606a>// no linkage
+</span></span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>return</span> a <span style=color:#0550ae>+</span> b<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=extern-keyword><code>extern</code> keyword</h2><p>結合上述的資訊，現在來看 <code>extern</code> 關鍵字有什麼特性：</p><h3 id=1>1.</h3><blockquote><p>extern declarations, which don&rsquo;t change the linkage of an identifier if a previous declaration established it (<a href=https://en.cppreference.com/w/c/language/extern>more</a>).</p><p>If the prior declaration specifies internal or external linkage, the linkage of the identifier at the later declaration is the same as the linkage specified at the prior declaration. If no prior declaration is visible, or if the prior declaration specifies no linkage, then the identifier has external linkage (C11: 6.2.2 Linkages of identifiers).</p></blockquote><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a>// example from https://en.cppreference.com/w/c/language/extern
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>static</span> <span style=color:#cf222e>int</span> i4 <span style=color:#0550ae>=</span> <span style=color:#0550ae>2</span><span style=color:#1f2328>;</span> <span style=color:#57606a>// definition, internal linkage
+</span></span></span><span style=display:flex><span><span style=color:#cf222e>extern</span> <span style=color:#cf222e>int</span> i4<span style=color:#1f2328>;</span>     <span style=color:#57606a>// declaration, refers to the internal linkage definition
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=2>2.</h3><blockquote><p>A variable declaration that uses extern and has no initializer is <strong>not a definition</strong>.</p></blockquote><p>參考一開始所給的例子，即使在不同 tranlation unit 中有 <code>extern int a;</code>，但因為都沒有 initializer，所以只是 declaration，在 link 階段會將這些同名 declaration 連結成同一個物件。</p><h3 id=3>3.</h3><blockquote><p><code>extern</code> is a <strong>storage-class</strong> specifiers. Items declared with the extern specifier have global lifetimes.</p></blockquote><p>在 C11 中，<code>extern</code> 其實是 storage-class specifiers，也就是標示生命週期和 linkage 類型。</p><blockquote><p>The <strong>storage-class specifiers</strong> determine two independent properties of the names they declare: storage duration and linkage. (<a href=https://en.cppreference.com/w/c/language/storage_duration>more</a>)</p></blockquote><p>預設情況下，使用 extern 代表此 identifer 具有 <code>global lifetime</code> 和 <code>external linkage</code> 兩個屬性。</p><h2 id=tentative-definitions>Tentative definitions</h2><p>先看以下的例子：</p><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a># parent.h
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#ifndef _PARENT_H
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#define _PARENT_H
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>print_parent</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#57606a>#endif
+</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a># parent.c
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;stdio.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&#34;parent.h&#34;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> a <span style=color:#0550ae>=</span> <span style=color:#0550ae>1</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>print_parent</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>printf</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;parent %d&#34;</span><span style=color:#1f2328>,</span>a<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#f7f7f7;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#57606a># child.c
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&lt;stdio.h&gt;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span><span style=color:#57606a>#include</span> <span style=color:#57606a>&#34;parent.h&#34;</span><span style=color:#57606a>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> a<span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>void</span> <span style=color:#6639ba>print_child</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>printf</span><span style=color:#1f2328>(</span><span style=color:#0a3069>&#34;child %d&#34;</span><span style=color:#1f2328>,</span>a<span style=color:#1f2328>);</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#cf222e>int</span> <span style=color:#6639ba>main</span><span style=color:#1f2328>(</span><span style=color:#cf222e>void</span><span style=color:#1f2328>)</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>print_parent</span><span style=color:#1f2328>();</span>
+</span></span><span style=display:flex><span>  <span style=color:#6639ba>print_child</span><span style=color:#1f2328>();</span>
+</span></span><span style=display:flex><span>  <span style=color:#cf222e>return</span> <span style=color:#0550ae>0</span><span style=color:#1f2328>;</span>
+</span></span><span style=display:flex><span><span style=color:#1f2328>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>即使在多處 declare <code>int a;</code>，但可以正確 compile，且最後output 會是 <code>parent 1child 1</code>，也就是 parent 和 child 的 translation unit 都是使用同一個 a 變數。其中最主要的原因是 <code>int a;</code> 是一個 <strong>tentative definition</strong>。</p><p>在 C11: 6.9.2 External object definitions 提到：</p><blockquote><p>A declaration of an identifier for an object that has file scope <strong>without an initializer</strong>, and <strong>without a storage-class specifier</strong> or with the storage-class specifier static, constitutes a
+tentative definition.</p></blockquote><p>Tentative definition 是 C 特別的規則 (C++ 無此規則)，compiler 會合併相同命名的 tentative definition 成一個 definition，所以實作上可以透過此方式來達到多個 translation unit 使用同一個變數的目的。此用意主要是能兼容早先沒有 <code>extern</code> keyword 的 c 程式。</p><h2 id=結語>結語</h2><p><code>exten</code> 是 storage-class specifiers 的一種，其涉及到 storage duration 和 linkage。實務上我們用 <code>extern</code> 來達成不同 translation unit 共用同一個 global variable 的目的，而在了解 <code>extern</code> 背後運作原理後，對於 variable definition 也會有更清楚的認知～</p></div><footer class=post-footer><div class=post-nav><a href=https://yushuanhsieh.github.io/posts/2021-05-23-lab4-multiprocessor/ class="post-nav-link prev"><span class=label>← Previous</span>
+<span class=title>CSE 506 Lab 4 - Multiprocessor Support and Cooperative Multitasking</span>
+</a><a href=https://yushuanhsieh.github.io/posts/2021-06-19-pico-memory/ class="post-nav-link next"><span class=label>Next →</span>
+<span class=title>Boot Flow of Raspberry Pi Pico</span></a></div></footer></article></main><footer class=site-footer><div class=footer-inner><p class=footer-copyright>&copy; 2026 Cherie's Tech Blog. All rights reserved.</p><p class=footer-powered>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></p></div></footer></body></html>
